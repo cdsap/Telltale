@@ -1,0 +1,82 @@
+name: 'Experiment Report'
+inputs:
+  api-key:
+    required: true
+  url:
+    required: true
+  task:
+    required: true
+  max-builds:
+    required: false
+    default: 200
+  experiment-id:
+    required: true
+  tags:
+    required: true
+  profile:
+    required: true
+  gh_token:
+    required: true
+  taskpathreport:
+    required: true
+  processreport:
+    required: true
+  kotlinreport:
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-java@v3
+      with:
+        distribution: zulu
+        java-version: 11.0.4
+    - name: Execute CompareGEBuilds
+      id : compareBuilds
+      run: |
+           curl -L https://github.com/cdsap/CompareGEBuilds/releases/download/v.0.2.2/buildsComparison --output buildsComparison
+           chmod 0757 buildsComparison
+           #process tags
+           tags="${{ inputs.tags }}"
+           arrayTags=(${tags//,/ })
+           tagsParsed=""
+           variants=""
+           for val in "${arrayTags[@]}";
+           do
+              tagsParsed="$tagsParsed --variants=$val"
+           done
+           profile=""
+           if [ "${{ inputs.profile }}" == "true" ]
+           then
+             profile="--profile"
+           else
+             profile=""
+           fi
+           taskpathreport=""
+           if [ "${{ inputs.taskpathreport }}" == "false" ]
+           then
+             taskpathreport="--no-task-path-report"
+           fi
+           processreport=""
+           if [ "${{ inputs.processreport }}" == "false" ]
+           then
+             processreport="--no-process-report"
+           fi
+           kotlinreport=""
+           if [ "${{ inputs.kotlinreport }}" == "false" ]
+           then
+             kotlinreport="--no-kotlin-build-report"
+           fi
+           ./buildsComparison --url=${{ inputs.url }} $taskpathreport $processreport $kotlinreport $profile --tasks=${{ inputs.task }} --max-builds=${{ inputs.max-builds }}  $tagsParsed --experiment-id=${{ inputs.experiment-id }}  --api-key=${{ inputs.api-key }}
+           CONTENT=$(cat results_experiment)
+           echo "$CONTENT" >> $GITHUB_STEP_SUMMARY
+      shell: bash
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-comparison-reports
+        path: |
+          results_experiment
+          build_comparison.csv
+        if-no-files-found: error

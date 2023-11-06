@@ -1,0 +1,78 @@
+name: 'GE Experiment Runner with Gradle Profiler'
+description: 'Executes with Gradle Profiler a scenario defined'
+inputs:
+  task:
+    description: ""
+    required: true
+  warmups:
+    description: "Number of build warmups"
+    required: false
+    default: 1
+  iterations:
+    description: "Number of iterations"
+    required: false
+    default: 5
+  class:
+    description: "Class to apply the abi change"
+    required: false
+  variant:
+    description: "variant of the experiment, represents the branch"
+    required: true
+  experiment-id:
+    description: ""
+    required: true
+  api-key:
+    description: ""
+    required: true
+  repository:
+    required: true
+  jdk:
+    required: false
+    default: 17
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v3
+      with:
+        repository: ${{ inputs.repository }}
+        ref: ${{ inputs.variant }}
+    - uses: actions/setup-java@v3
+      with:
+        distribution: zulu
+        java-version: ${{ inputs.jdk }}
+    - uses: sdkman/sdkman-action@master
+      id: sdkman
+      with:
+        candidate: gradleprofiler
+        version: 0.19.0
+    - name: Execute Gradle build
+      id : geapix
+      run: |
+           unzip  ${{ steps.sdkman.outputs.file }}
+           if [ -z "${{ inputs.class }}" ]
+           then
+               echo $'assemble { \n title= "assemble" \n tasks = ["${{ inputs.task }}"] \n cleanup-tasks = ["clean"] \n gradle-args = ["-Dscan.tag.${{ inputs.variant }}", "-Dscan.tag.experiment", "-Dscan.tag.${{inputs.experiment-id}}_variant_experiment_${{ inputs.variant }}", "-Dscan.tag.${{inputs.experiment-id}}"] \n}' > scenario
+           else
+               echo $'assemble { \n title= "assemble" \n tasks = ["${{ inputs.task }}"] \n cleanup-tasks = ["clean"] \n apply-abi-change-to = [${{ inputs.class }}] \n gradle-args = ["-Dscan.tag.${{ inputs.variant }}", "-Dscan.tag.${{inputs.experiment-id}}_variant_experiment_${{ inputs.variant }}", "-Dscan.tag.experiment", "-Dscan.tag.${{inputs.experiment-id}}"] \n}' > scenario
+           fi
+           gradle-profiler-0.19.0/bin/gradle-profiler --benchmark --scenario-file scenario assemble --warmups ${{ inputs.warmups }} --iterations ${{ inputs.iterations }}
+           TABLE_OUTPUT="<table><tr><td>Build</td><td></td></tr>"
+           while read line
+           do
+            IN=$line
+            set -- "$IN"
+            IFS=","; declare -a Array=($*)
+            TABLE_OUTPUT="$TABLE_OUTPUT<tr><td>${Array[0]}</td><td>${Array[1]}</td></tr>"
+           done < <(tail -n +2 profile-out/benchmark.csv)
+           echo "$TABLE_OUTPUT</table>" >> $GITHUB_STEP_SUMMARY
+
+
+      shell: bash
+      env:
+        GRADLE_ENTERPRISE_ACCESS_KEY: ${{ inputs.api-key }}
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: profiler-${{inputs.variant}}
+        path: |
+          profile-out/*

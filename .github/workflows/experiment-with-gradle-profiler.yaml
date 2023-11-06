@@ -1,0 +1,80 @@
+name: Experiment with Gradle Profiler
+on:
+  workflow_dispatch:
+    inputs:
+      repository:
+        required: true
+      variantA:
+        required: true
+      variantB:
+        required: true
+      task:
+        required: true
+      class:
+        description: "List of classes separated by ',' to be applied as abi scenario"
+        required: false
+      iterations:
+        required: false
+      taskpathreport:
+        description: "Include experiment results by task path"
+        type: choice
+        required: true
+        default: 'true'
+        options:
+          - true
+          - false
+      processreport:
+        description: "Include Gradle/Kotlin process in the experiment results"
+        type: choice
+        required: true
+        default: 'true'
+        options:
+          - true
+          - false
+      kotlinreport:
+        description: "Include Kotlin Build reports in the experiment results"
+        type: choice
+        required: true
+        default: 'true'
+        options:
+          - true
+          - false
+
+run-name: "profile-${{ github.event.inputs.repository }}-${{ github.event.inputs.variantA }}-${{ github.event.inputs.variantB }}-${{ github.event.inputs.task }}"
+
+jobs:
+    runners:
+      strategy:
+        matrix:
+          version: ["${{ github.event.inputs.variantA }}","${{ github.event.inputs.variantB }}"]
+      runs-on: "ubuntu-latest"
+      steps:
+         - uses: actions/checkout@v3
+         - uses: ./.github/workflows/runner-gradle-profiler
+           with:
+             task: "${{ github.event.inputs.task }}"
+             iterations: ${{ github.event.inputs.iterations }}
+             experiment-id: "profile-${{github.run_number}}"
+             variant: ${{ matrix.version }}
+             class: ${{ github.event.inputs.class }}
+             api-key: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
+             repository: ${{ github.event.inputs.repository }}
+         - uses: actions/checkout@v3
+    report:
+      runs-on: "ubuntu-latest"
+      needs: [ runners]
+      steps:
+         - uses: actions/checkout@v3
+         - uses: ./.github/workflows/report
+           with:
+             task: "${{ github.event.inputs.task }}"
+             experiment-id: "profile-${{github.run_number}}"
+             tags: "${{ github.event.inputs.variantA }},${{ github.event.inputs.variantB }}"
+             api-key: ${{ secrets.GE_API_KEY }}
+             url: ${{ secrets.GE_URL }}
+             profile: true
+             gh_token: ${{secrets.GITHUB_TOKEN}}
+             taskpathreport: ${{ github.event.inputs.taskpathreport }}
+             processreport: ${{ github.event.inputs.processreport }}
+             kotlinreport: ${{ github.event.inputs.kotlinreport }}
+         - uses: actions/checkout@v3

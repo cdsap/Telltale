@@ -1,0 +1,108 @@
+name: Experiment
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository:
+        required: true
+        default: "cdsap/KspVsKapt"
+      variantA:
+        required: true
+        default: "lint-4-1-different-process"
+      variantB:
+        required: true
+        default: "lint-2-1-different-process"
+      task:
+        default: "lintDemoRelease"
+        required: true
+      iterations:
+        default: 1
+        required: true
+      taskpathreport:
+        description: "Include experiment results by task path"
+        type: choice
+        required: true
+        default: 'true'
+        options:
+          - true
+          - false
+      processreport:
+        description: "Include Gradle/Kotlin process in the experiment results"
+        type: choice
+        required: true
+        default: 'true'
+        options:
+          - true
+          - false
+      kotlinreport:
+        description: "Include Kotlin Build reports in the experiment results"
+        type: choice
+        required: true
+        default: 'true'
+        options:
+          - true
+          - false
+
+
+run-name: "${{ github.event.inputs.repository }}-${{ github.event.inputs.variantA }}-${{ github.event.inputs.variantB }}-${{ github.event.inputs.task }}"
+
+jobs:
+    iterations:
+      name: Generate versions
+      runs-on: ubuntu-latest
+      steps:
+         - id: calculate_iterations
+           run: |
+            iterations=" ["
+            for i in {1..${{ github.event.inputs.iterations }}}
+            do
+              if [ $i == 1 ]
+              then
+                iterations="$iterations \"$i\""
+              else
+                iterations="$iterations  , \"$i\""
+              fi
+            done
+            iterations="$iterations ]"
+            echo "iterations=$iterations" >> $GITHUB_OUTPUT
+            echo $GITHUB_OUTPUT
+      outputs:
+         iterations: ${{ steps.calculate_iterations.outputs.iterations }}
+
+    execution:
+      needs: [iterations]
+      strategy:
+        matrix:
+          variant: ["${{ github.event.inputs.variantA }}","${{ github.event.inputs.variantB }}"]
+          runs:   ${{ fromJson(needs.iterations.outputs.iterations) }}
+      runs-on: "ubuntu-latest"
+      steps:
+         - uses: actions/checkout@v3
+         - uses: ./.github/workflows/runner
+           with:
+             task: "${{ github.event.inputs.task }}"
+             experiment-id: "no-profile-${{github.run_number}}"
+             variant: ${{ matrix.variant }}
+             run-id: ${{ matrix.runs }}
+             api-key: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
+             repository: ${{ github.event.inputs.repository }}
+         - uses: actions/checkout@v3
+    report:
+      runs-on: "ubuntu-latest"
+      needs: [ execution]
+      steps:
+         - uses: actions/checkout@v3
+         - uses: ./.github/workflows/report
+           with:
+             task: "${{ github.event.inputs.task }}"
+             experiment-id: "no-profile-${{github.run_number}}"
+             tags: "${{ github.event.inputs.variantA }},${{ github.event.inputs.variantB }}"
+             api-key: ${{ secrets.GE_API_KEY }}
+             url: ${{ secrets.GE_URL }}
+             gh_token: ${{secrets.GITHUB_TOKEN}}
+             profile: false
+             taskpathreport: ${{ github.event.inputs.taskpathreport }}
+             processreport: ${{ github.event.inputs.processreport }}
+             kotlinreport: ${{ github.event.inputs.kotlinreport }}
+
+         - uses: actions/checkout@v3
