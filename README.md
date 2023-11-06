@@ -1,8 +1,9 @@
 ## Telltale
 Sample showing how to build a functional Experimentation Framework on GitHub Actions for Gradle-Based Builds connected to Develocity.
+Example:
+* Experiment with Ksp in the repository nowinandroid: https://github.com/cdsap/Telltale/actions/runs/6765292564
 
-
-## How works
+## Usage
 The repository contains `workflow_dispatch` actions that orchestrate the execution, data extraction and publication of the
 results of the experiments.
 
