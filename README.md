@@ -1,5 +1,8 @@
 # Telltale
-Experimentation framework for Gradle Builds
+Telltale is an experimentation framework for Gradle builds that automates the creation of experimental environments, the execution of different experiment variants, and the visualization of experiment results.
+
+<img alt="Summary" src="resources/experiment_diagram.png"/>
+
 
 ## Table of Contents
 

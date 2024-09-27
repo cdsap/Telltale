@@ -67,7 +67,7 @@ jobs:
       - name: Run Gradle Profiler
         uses: ./.github/workflows/runner-gradle-profiler
         with:
-          api-key: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
+          api-key: ${{ secrets.DV_ACCESS_KEY }}
           repository: ${{ github.event.inputs.repository }}
           variant-prefix: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && 'varianta_' || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && 'variantb_' }}
           extra-args: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantB }}
@@ -97,8 +97,8 @@ jobs:
           task: "${{ github.event.inputs.task }}"
           experiment-id: "profiler-${{ github.repository_owner }}-${{ github.run_number }}"
           tags: "varianta_${{ github.event.inputs.variantA }},variantb_${{ github.event.inputs.variantB }}"
-          api-key: ${{ secrets.GE_API_KEY }}
-          url: ${{ secrets.GE_URL }}
+          api-key: ${{ secrets.DV_API_KEY }}
+          url: ${{ secrets.DV_URL }}
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           profile: true
           taskpathreport: ${{ fromJson(github.event.inputs.extra_report_args).taskpath_report }}
