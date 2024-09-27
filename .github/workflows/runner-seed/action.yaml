@@ -1,0 +1,141 @@
+name: 'Experiment Runner. Seed build populating cache'
+description: 'Runs experiments with various Gradle caching strategies.'
+
+inputs:
+  task:
+    description: 'The Gradle task to be executed.'
+    required: true
+  variant:
+    description: 'The variant to be used, representing the branch.'
+    required: true
+  variant-prefix:
+    description: 'Prefix for the variant used in tagging.'
+    required: true
+  experiment-id:
+    description: 'Unique identifier for the experiment.'
+    required: true
+  api-key:
+    description: 'API key for accessing Develocity or related services.'
+    required: true
+  repository:
+    description: 'GitHub repository to check out.'
+    required: true
+  run-id:
+    description: 'Run identifier for tagging the build scan.'
+    required: true
+  jdk_version:
+    description: 'Java version to use (default is 17).'
+    required: false
+    default: 17
+  jdk_vendor:
+    description: 'JDK vendor to use (default is zulu).'
+    required: false
+    default: 'zulu'
+  mode:
+    description: 'Mode of execution relative to caching.'
+    required: true
+  extra-args:
+    description: 'Extra arguments to pass to the Gradle command.'
+    required: true
+  cache-url:
+    description: 'URL for the cache node if applicable.'
+    required: false
+  cache-exclude-script:
+    description: 'Script for excluding specific caches.'
+    required: false
+
+outputs:
+  cache-excludes:
+    description: 'Cache exclusion logic output.'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.repository }}
+        ref: ${{ inputs.variant }}
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: ${{ inputs.jdk_vendor }}
+        java-version: ${{ inputs.jdk_version }}
+
+    - name: Set Gradle Cache Excludes
+      id: set-cache-excludes
+      run: |
+        BUILD_CACHE_ENTRY="caches/build-cache-1"
+        TRANSFORM_CACHE_ENTRY="caches/**/transforms"
+        MODULES_CACHE_ENTRY="caches/modules-*/*"
+        JAR_CACHE_ENTRY="caches/jars-*/*"
+
+        case "${{ inputs.mode }}" in
+          "dependencies cache")
+            echo "GRADLE_HOME_CACHE_EXCLUDES=$BUILD_CACHE_ENTRY" >> $GITHUB_ENV
+            ;;
+          "dependencies cache - transforms cache")
+            echo "GRADLE_HOME_CACHE_EXCLUDES=$TRANSFORM_CACHE_ENTRY" >> $GITHUB_ENV
+            ;;
+          "remote task cache")
+            echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$BUILD_CACHE_ENTRY\n$MODULES_CACHE_ENTRY\n$JAR_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
+            ;;
+          "local task cache")
+            echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$MODULES_CACHE_ENTRY\n$JAR_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
+            ;;
+          "local task cache + dependencies cache")
+            echo "GRADLE_HOME_CACHE_EXCLUDES=''" >> $GITHUB_ENV
+            ;;
+          "remote task cache + dependencies cache")
+            echo "GRADLE_HOME_CACHE_EXCLUDES='$BUILD_CACHE_ENTRY'" >> $GITHUB_ENV
+            ;;
+          "remote task cache - transforms cache")
+            echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$BUILD_CACHE_ENTRY\n$MODULES_CACHE_ENTRY\n$JAR_CACHE_ENTRY\n$TRANSFORM_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
+            ;;
+          "local task cache - transforms cache")
+            echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$TRANSFORM_CACHE_ENTRY\n$MODULES_CACHE_ENTRY\n$JAR_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
+            ;;
+          "local task cache + dependencies cache - transforms cache")
+            echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$TRANSFORM_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
+            ;;
+          "remote task cache + dependencies cache - transforms cache")
+            echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$BUILD_CACHE_ENTRY\n$TRANSFORM_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
+            ;;
+          "no caching")
+            echo "GRADLE_HOME_CACHE_EXCLUDES=**" >> $GITHUB_ENV
+            ;;
+          *)
+            echo "Unknown mode: ${{ inputs.mode }}"
+            exit 1
+            ;;
+        esac
+        echo "cache-excludes=$GRADLE_HOME_CACHE_EXCLUDES" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Setup Gradle
+      if: github.event.inputs.mode != 'no caching'
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        cache-write-only: true
+        cache-overwrite-existing: true
+        add-job-summary: 'never'
+        gradle-home-cache-excludes: ${{ env.GRADLE_HOME_CACHE_EXCLUDES }}
+      env:
+        GRADLE_BUILD_ACTION_CACHE_KEY_JOB_INSTANCE: ${{ inputs.experiment-id }}-${{ inputs.variant }}
+
+    - name: Execute Gradle Build
+      id: gradle-build
+      run: |
+        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} \
+          -Dscan.tag.seed_${{ inputs.variant-prefix }}${{ inputs.variant }} \
+          -Dscan.tag.seed-"${{ inputs.mode }}" \
+          -Dscan.tag.seed \
+          -Dscan.tag.seed_${{ inputs.experiment-id }}
+      shell: bash
+      env:
+        DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
+        CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
+
+    - name: Finalize Step
+      uses: actions/checkout@v4

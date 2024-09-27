@@ -1,80 +1,111 @@
 name: Experiment with Gradle Profiler
+
 on:
   workflow_dispatch:
     inputs:
       repository:
+        description: "GitHub repository to run the experiment"
         required: true
+        default: "cdsap/ExperimentGradle8.9"
       variantA:
+        description: "Experiment branch name for variant A"
         required: true
+        default: "gradle_8_9_no_caching_transforms"
       variantB:
+        description: "Experiment branch name for variant B"
         required: true
+        default: "gradle_8_9_no_caching_transforms"
       task:
+        description: "Gradle task to be executed"
         required: true
+        default: ":core:model:compileKotlin"
       class:
-        description: "List of classes separated by ',' to be applied as abi scenario"
+        description: "List of classes separated by ',' to be applied as ABI scenario"
         required: false
       iterations:
+        description: "Number of iterations for the experiment"
         required: false
-      taskpathreport:
-        description: "Include experiment results by task path"
-        type: choice
-        required: true
-        default: 'true'
-        options:
-          - true
-          - false
-      processreport:
-        description: "Include Gradle/Kotlin process in the experiment results"
-        type: choice
-        required: true
-        default: 'true'
-        options:
-          - true
-          - false
-      kotlinreport:
-        description: "Include Kotlin Build reports in the experiment results"
-        type: choice
-        required: true
-        default: 'true'
-        options:
-          - true
-          - false
+        default: 5
+      os_args:
+        description: "Operating system configurations for variants"
+        type: string
+        default: "{variantA:'ubuntu-latest',variantB:'ubuntu-latest'}"
+        required: false
+      java_args:
+        description: "JDK vendor and version for each variant"
+        type: string
+        default: "{javaVersionVariantA:'17',javaVersionVariantB:'17',javaVendorVariantA:'zulu',javaVendorVariantB:'zulu'}"
+        required: false
+      extra_build_args:
+        description: "Extra build arguments for each variant"
+        type: string
+        default: "{extraArgsVariantA:' ',extraArgsVariantB:' '}"
+        required: false
+      extra_report_args:
+        description: "Configuration for generating reports"
+        type: string
+        default: "{report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',only_cacheable_outcome:'false',threshold_task_duration:'1000'}"
+        required: false
 
-run-name: "profile-${{ github.event.inputs.repository }}-${{ github.event.inputs.variantA }}-${{ github.event.inputs.variantB }}-${{ github.event.inputs.task }}"
+run-name: "profiler-${{ github.event.inputs.repository }}-${{ github.event.inputs.variantA }}-${{ github.event.inputs.variantB }}-${{ github.event.inputs.task }}"
 
 jobs:
-    runners:
-      strategy:
-        matrix:
-          version: ["${{ github.event.inputs.variantA }}","${{ github.event.inputs.variantB }}"]
-      runs-on: "ubuntu-latest"
-      steps:
-         - uses: actions/checkout@v3
-         - uses: ./.github/workflows/runner-gradle-profiler
-           with:
-             task: "${{ github.event.inputs.task }}"
-             iterations: ${{ github.event.inputs.iterations }}
-             experiment-id: "profile-${{github.run_number}}"
-             variant: ${{ matrix.version }}
-             class: ${{ github.event.inputs.class }}
-             api-key: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
-             repository: ${{ github.event.inputs.repository }}
-         - uses: actions/checkout@v3
-    report:
-      runs-on: "ubuntu-latest"
-      needs: [ runners]
-      steps:
-         - uses: actions/checkout@v3
-         - uses: ./.github/workflows/report
-           with:
-             task: "${{ github.event.inputs.task }}"
-             experiment-id: "profile-${{github.run_number}}"
-             tags: "${{ github.event.inputs.variantA }},${{ github.event.inputs.variantB }}"
-             api-key: ${{ secrets.GE_API_KEY }}
-             url: ${{ secrets.GE_URL }}
-             profile: true
-             gh_token: ${{secrets.GITHUB_TOKEN}}
-             taskpathreport: ${{ github.event.inputs.taskpathreport }}
-             processreport: ${{ github.event.inputs.processreport }}
-             kotlinreport: ${{ github.event.inputs.kotlinreport }}
-         - uses: actions/checkout@v3
+  runners:
+    name: Experiment Runner
+    strategy:
+      matrix:
+        config:
+          - variant: ${{ github.event.inputs.variantA }}
+            index: 0
+          - variant: ${{ github.event.inputs.variantB }}
+            index: 1
+    runs-on: "${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.os_args).variantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.os_args).variantB }}"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run Gradle Profiler
+        uses: ./.github/workflows/runner-gradle-profiler
+        with:
+          api-key: ${{ secrets.DV_ACCESS_KEY }}
+          repository: ${{ github.event.inputs.repository }}
+          variant-prefix: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && 'varianta_' || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && 'variantb_' }}
+          extra-args: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantB }}
+          jdk_version: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.java_args).javaVersionVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.java_args).javaVersionVariantB }}
+          jdk_vendor: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.java_args).javaVendorVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.java_args).javaVendorVariantB }}
+          task: "${{ github.event.inputs.task }}"
+          iterations: ${{ github.event.inputs.iterations }}
+          experiment-id: "profiler-${{ github.repository_owner }}-${{ github.run_number }}"
+          variant: ${{ matrix.config.variant }}
+          class: ${{ github.event.inputs.class }}
+          cache-url: ${{ secrets.CI_URL_CACHE_NODE }}
+          warmups: 1
+
+      - uses: actions/checkout@v4
+
+  report:
+    name: Generate Report
+    runs-on: ubuntu-latest
+    needs: [runners]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run Report Generation
+        uses: ./.github/workflows/report
+        with:
+          task: "${{ github.event.inputs.task }}"
+          experiment-id: "profiler-${{ github.repository_owner }}-${{ github.run_number }}"
+          tags: "varianta_${{ github.event.inputs.variantA }},variantb_${{ github.event.inputs.variantB }}"
+          api-key: ${{ secrets.DV_API_KEY }}
+          url: ${{ secrets.DV_URL }}
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          profile: true
+          taskpathreport: ${{ fromJson(github.event.inputs.extra_report_args).taskpath_report }}
+          tasktypereport: ${{ fromJson(github.event.inputs.extra_report_args).tasktype_report }}
+          processreport: ${{ fromJson(github.event.inputs.extra_report_args).process_report }}
+          kotlinreport: ${{ fromJson(github.event.inputs.extra_report_args).kotlin_build_report }}
+          resourceusagereport: ${{ fromJson(github.event.inputs.extra_report_args).resource_usage_report }}
+          onlycacheableoutcome: ${{ fromJson(github.event.inputs.extra_report_args).only_cacheable_outcome }}
+          thresholdtaskduration: ${{ fromJson(github.event.inputs.extra_report_args).threshold_task_duration }} 
+      - uses: actions/checkout@v4
