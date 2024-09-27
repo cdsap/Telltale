@@ -1,78 +1,122 @@
-name: 'GE Experiment Runner with Gradle Profiler'
-description: 'Executes with Gradle Profiler a scenario defined'
+name: 'Experiment Runner with Gradle Profiler'
+description: 'Executes a scenario defined with Gradle Profiler'
+
 inputs:
   task:
-    description: ""
+    description: 'Gradle task to execute in the scenario'
     required: true
   warmups:
-    description: "Number of build warmups"
+    description: 'Number of build warmups before measuring performance'
     required: false
     default: 1
   iterations:
-    description: "Number of iterations"
+    description: 'Number of iterations to run for performance measurement'
     required: false
     default: 5
   class:
-    description: "Class to apply the abi change"
+    description: 'Class to apply the ABI change, if applicable'
     required: false
   variant:
-    description: "variant of the experiment, represents the branch"
+    description: 'Branch or variant of the experiment'
+    required: true
+  variant-prefix:
+    description: 'Prefix for the variant used in tagging'
     required: true
   experiment-id:
-    description: ""
+    description: 'Unique identifier for the experiment'
     required: true
   api-key:
-    description: ""
+    description: 'API key for accessing Develocity or related services'
     required: true
   repository:
+    description: 'GitHub repository to check out'
     required: true
-  jdk:
-    required: false
+  jdk_version:
+    description: 'Java version to use (default is 17)'
+    required: true
     default: 17
+  jdk_vendor:
+    description: 'JDK vendor to use (default is zulu)'
+    required: true
+    default: 'zulu'
+  extra-args:
+    description: 'Extra arguments to pass to the Gradle command'
+    required: true
+  cache-url:
+    description: 'URL for the cache node, if applicable'
+    required: true
+
 runs:
   using: 'composite'
   steps:
-    - uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v4
       with:
         repository: ${{ inputs.repository }}
         ref: ${{ inputs.variant }}
-    - uses: actions/setup-java@v3
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
       with:
-        distribution: zulu
-        java-version: ${{ inputs.jdk }}
-    - uses: sdkman/sdkman-action@master
+        distribution: ${{ inputs.jdk_vendor }}
+        java-version: ${{ inputs.jdk_version }}
+
+    - name: Setup Gradle Profiler
+      uses: sdkman/sdkman-action@master
       id: sdkman
       with:
         candidate: gradleprofiler
-        version: 0.19.0
-    - name: Execute Gradle build
-      id : geapix
+        version: 0.20.0
+
+    - name: Execute Gradle Build with Profiler
+      id: geapix
       run: |
-           unzip  ${{ steps.sdkman.outputs.file }}
-           if [ -z "${{ inputs.class }}" ]
-           then
-               echo $'assemble { \n title= "assemble" \n tasks = ["${{ inputs.task }}"] \n cleanup-tasks = ["clean"] \n gradle-args = ["-Dscan.tag.${{ inputs.variant }}", "-Dscan.tag.experiment", "-Dscan.tag.${{inputs.experiment-id}}_variant_experiment_${{ inputs.variant }}", "-Dscan.tag.${{inputs.experiment-id}}"] \n}' > scenario
-           else
-               echo $'assemble { \n title= "assemble" \n tasks = ["${{ inputs.task }}"] \n cleanup-tasks = ["clean"] \n apply-abi-change-to = [${{ inputs.class }}] \n gradle-args = ["-Dscan.tag.${{ inputs.variant }}", "-Dscan.tag.${{inputs.experiment-id}}_variant_experiment_${{ inputs.variant }}", "-Dscan.tag.experiment", "-Dscan.tag.${{inputs.experiment-id}}"] \n}' > scenario
-           fi
-           gradle-profiler-0.19.0/bin/gradle-profiler --benchmark --scenario-file scenario assemble --warmups ${{ inputs.warmups }} --iterations ${{ inputs.iterations }}
-           TABLE_OUTPUT="<table><tr><td>Build</td><td></td></tr>"
-           while read line
-           do
-            IN=$line
-            set -- "$IN"
-            IFS=","; declare -a Array=($*)
-            TABLE_OUTPUT="$TABLE_OUTPUT<tr><td>${Array[0]}</td><td>${Array[1]}</td></tr>"
-           done < <(tail -n +2 profile-out/benchmark.csv)
-           echo "$TABLE_OUTPUT</table>" >> $GITHUB_STEP_SUMMARY
+        unzip ${{ steps.sdkman.outputs.file }}
+        EXTRA_ARG=""
 
+        # Set EXTRA_ARG based on the provided input
+        if [ -z "${{ inputs.extra-args }}" ] || [ -z "$(echo "${{ inputs.extra-args }}" | tr -d '[:space:]')" ]; then
+          EXTRA_ARG="-Pfoo"
+        else
+          EXTRA_ARG="${{ inputs.extra-args }}"
+        fi
 
+        # Generate scenario file based on provided inputs
+        if [ -z "${{ inputs.class }}" ]; then
+          echo "assemble {
+            title = \"assemble\"
+            tasks = [\"${{ inputs.task }}\"]
+            cleanup-tasks = [\"clean\"]
+            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
+          }" > scenario
+        else
+          echo "assemble {
+            title = \"assemble\"
+            tasks = [\"${{ inputs.task }}\"]
+            cleanup-tasks = [\"clean\"]
+            apply-abi-change-to = [${{ inputs.class }}]
+            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
+          }" > scenario
+        fi 
+
+        # Execute the Gradle Profiler
+        gradle-profiler-0.20.0/bin/gradle-profiler --benchmark --scenario-file scenario assemble --warmups ${{ inputs.warmups }} --iterations ${{ inputs.iterations }}
+
+        # Generate table output from benchmark results
+        TABLE_OUTPUT="<table><tr><td>Build</td><td>Time</td></tr>"
+        while read line; do
+          IFS="," read -r -a Array <<< "$line"
+          TABLE_OUTPUT="$TABLE_OUTPUT<tr><td>${Array[0]}</td><td>${Array[1]}</td></tr>"
+        done < <(tail -n +2 profile-out/benchmark.csv)
+        echo "$TABLE_OUTPUT</table>" >> $GITHUB_STEP_SUMMARY
       shell: bash
       env:
-        GRADLE_ENTERPRISE_ACCESS_KEY: ${{ inputs.api-key }}
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v3
+        DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
+        CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
+
+    - name: Archive Profiler Artifacts
+      uses: actions/upload-artifact@v4
       with:
-        name: profiler-${{inputs.variant}}
+        name: profiler-${{ inputs.variant-prefix }}${{ inputs.variant }}
         path: |
           profile-out/*

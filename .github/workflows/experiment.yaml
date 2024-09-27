@@ -4,105 +4,232 @@ on:
   workflow_dispatch:
     inputs:
       repository:
+        description: "GitHub repository to run the experiment"
         required: true
-        default: "cdsap/KspVsKapt"
+        default: "cdsap/ExperimentGradle8.9"
       variantA:
+        description: "Experiment branch name for variant A"
         required: true
-        default: "lint-4-1-different-process"
+        default: "gradle_8_9_no_caching_transforms"
       variantB:
+        description: "Experiment branch name for variant B"
         required: true
-        default: "lint-2-1-different-process"
+        default: "gradle_8_9_no_caching_transforms"
       task:
-        default: "lintDemoRelease"
+        description: "Gradle task to be executed"
         required: true
+        default: ":core:model:compileKotlin"
       iterations:
-        default: 1
+        description: "Number of iterations for the experiment"
         required: true
-      taskpathreport:
-        description: "Include experiment results by task path"
+        default: 10
+      mode:
+        description: "Type of execution relative to caching"
         type: choice
         required: true
-        default: 'true'
+        default: 'dependencies cache'
         options:
-          - true
-          - false
-      processreport:
-        description: "Include Gradle/Kotlin process in the experiment results"
-        type: choice
+          - 'no caching'
+          - 'dependencies cache'
+          - 'dependencies cache - transforms cache'
+          - 'local task cache'
+          - 'local task cache + dependencies cache'
+          - 'local task cache - transforms cache'
+          - 'local task cache + dependencies cache - transforms cache'
+          - 'remote task cache'
+          - 'remote task cache + dependencies cache'
+          - 'remote task cache - transforms cache'
+          - 'remote task cache + dependencies cache - transforms cache'
+      os_args:
+        description: "Operating system configurations for variants"
+        type: string
+        default: "{variantA:'ubuntu-latest',variantB:'ubuntu-latest'}"
         required: true
-        default: 'true'
-        options:
-          - true
-          - false
-      kotlinreport:
-        description: "Include Kotlin Build reports in the experiment results"
-        type: choice
+      java_args:
+        description: "JDK vendor and version for each variant"
+        type: string
+        default: "{javaVersionVariantA:'17',javaVersionVariantB:'17',javaVendorVariantA:'zulu',javaVendorVariantB:'zulu'}"
         required: true
-        default: 'true'
-        options:
-          - true
-          - false
+      extra_build_args:
+        description: "Extra build arguments for each variant"
+        type: string
+        default: "{extraArgsVariantA:' ',extraArgsVariantB:' '}"
+        required: true
+      extra_report_args:
+        description: "Configuration for generating reports"
+        type: string
+        default: "{report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',only_cacheable_outcome:'false',threshold_task_duration:'1000'}"
+        required: true
 
-
-run-name: "${{ github.event.inputs.repository }}-${{ github.event.inputs.variantA }}-${{ github.event.inputs.variantB }}-${{ github.event.inputs.task }}"
+run-name: "${{ github.event.inputs.repository }}-${{ github.event.inputs.mode }}-${{ github.event.inputs.variantA }}-${{ github.event.inputs.variantB }}-${{ github.event.inputs.task }}"
 
 jobs:
-    iterations:
-      name: Generate versions
-      runs-on: ubuntu-latest
-      steps:
-         - id: calculate_iterations
-           run: |
-            iterations=" ["
-            for i in {1..${{ github.event.inputs.iterations }}}
-            do
-              if [ $i == 1 ]
-              then
-                iterations="$iterations \"$i\""
-              else
-                iterations="$iterations  , \"$i\""
-              fi
-            done
-            iterations="$iterations ]"
-            echo "iterations=$iterations" >> $GITHUB_OUTPUT
-            echo $GITHUB_OUTPUT
-      outputs:
-         iterations: ${{ steps.calculate_iterations.outputs.iterations }}
+  iterations:
+    name: Generate Iterations
+    runs-on: ubuntu-latest
+    steps:
+      - id: calculate_iterations
+        run: |
+          iterations="["
+          for i in {1..${{ github.event.inputs.iterations }}}
+          do
+            if [ $i == 1 ]; then
+              iterations="$iterations \"$i\""
+            else
+              iterations="$iterations, \"$i\""
+            fi
+          done
+          iterations="$iterations ]"
+          echo "iterations=$iterations" >> $GITHUB_OUTPUT
+    outputs:
+      iterations: ${{ steps.calculate_iterations.outputs.iterations }}
 
-    execution:
-      needs: [iterations]
-      strategy:
-        matrix:
-          variant: ["${{ github.event.inputs.variantA }}","${{ github.event.inputs.variantB }}"]
-          runs:   ${{ fromJson(needs.iterations.outputs.iterations) }}
-      runs-on: "ubuntu-latest"
-      steps:
-         - uses: actions/checkout@v3
-         - uses: ./.github/workflows/runner
-           with:
-             task: "${{ github.event.inputs.task }}"
-             experiment-id: "no-profile-${{github.run_number}}"
-             variant: ${{ matrix.variant }}
-             run-id: ${{ matrix.runs }}
-             api-key: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
-             repository: ${{ github.event.inputs.repository }}
-         - uses: actions/checkout@v3
-    report:
-      runs-on: "ubuntu-latest"
-      needs: [ execution]
-      steps:
-         - uses: actions/checkout@v3
-         - uses: ./.github/workflows/report
-           with:
-             task: "${{ github.event.inputs.task }}"
-             experiment-id: "no-profile-${{github.run_number}}"
-             tags: "${{ github.event.inputs.variantA }},${{ github.event.inputs.variantB }}"
-             api-key: ${{ secrets.GE_API_KEY }}
-             url: ${{ secrets.GE_URL }}
-             gh_token: ${{secrets.GITHUB_TOKEN}}
-             profile: false
-             taskpathreport: ${{ github.event.inputs.taskpathreport }}
-             processreport: ${{ github.event.inputs.processreport }}
-             kotlinreport: ${{ github.event.inputs.kotlinreport }}
+  seed:
+    name: Seed Job
+    if: github.event.inputs.mode != 'no caching'
+    needs: [iterations]
+    strategy:
+      matrix:
+        config:
+          - variant: ${{ github.event.inputs.variantA }}
+            index: 0
+          - variant: ${{ github.event.inputs.variantB }}
+            index: 1
+    runs-on: "${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.os_args).variantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.os_args).variantB }}"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/runner-seed
+        with:
+          cache-exclude-script: "${{ env.cache_exclude_content }}"
+          task: "${{ github.event.inputs.task }}"
+          mode: "${{ github.event.inputs.mode }}"
+          experiment-id: "${{ github.run_number }}"
+          variant: ${{ matrix.config.variant }}
+          run-id: 1
+          api-key: ${{ secrets.DV_ACCESS_KEY }}
+          repository: ${{ github.event.inputs.repository }}
+          variant-prefix: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && 'varianta_' || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && 'variantb_' }}
+          extra-args: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantB }}
+          jdk_version: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.java_args).javaVersionVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.java_args).javaVersionVariantB }}
+          jdk_vendor: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.java_args).javaVendorVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.java_args).javaVendorVariantB }}
+          cache-url: ${{ secrets.CI_URL_CACHE_NODE }}
+      - uses: actions/checkout@v4
+    outputs:
+      iterations: ${{ needs.iterations.outputs.iterations }}
+      skip: ${{ github.event.inputs.mode == 'no caching' }}
 
-         - uses: actions/checkout@v3
+  execution-caching:
+    name: Execution with Caching
+    if: github.event.inputs.mode != 'no caching'
+    needs: [seed]
+    runs-on: "${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.os_args).variantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.os_args).variantB }}"
+    strategy:
+      matrix:
+        runs: ${{ fromJson(needs.seed.outputs.iterations) }}
+        config:
+          - variant: ${{ github.event.inputs.variantA }}
+            index: 0
+          - variant: ${{ github.event.inputs.variantB }}
+            index: 1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Conditionally Wait for Seed Job
+        if: ${{ github.event.inputs.mode != 'no caching' }}
+        run: echo "Waiting for seed job to complete"
+      - uses: ./.github/workflows/runner
+        with:
+          task: "${{ github.event.inputs.task }}"
+          mode: "${{ github.event.inputs.mode }}"
+          experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
+          execution-number: ${{ github.run_number }}
+          variant: ${{ matrix.config.variant }}
+          api-key: ${{ secrets.DV_ACCESS_KEY }}
+          cache-excludes: ${{ steps.seed.outputs.cache-excludes }}
+          cache-url: ${{ secrets.CI_URL_CACHE_NODE }}
+          repository: ${{ github.event.inputs.repository }}
+          variant-prefix: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && 'varianta_' || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && 'variantb_' }}
+          extra-args: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantB }}
+          jdk_version: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.java_args).javaVersionVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.java_args).javaVersionVariantB }}
+          jdk_vendor: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.java_args).javaVendorVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.java_args).javaVendorVariantB }}
+      - uses: actions/checkout@v4
+
+  execution-no-caching:
+    name: Execution without Caching
+    if: github.event.inputs.mode == 'no caching'
+    needs: [iterations]
+    runs-on: "${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.os_args).variantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.os_args).variantB }}"
+    strategy:
+      matrix:
+        runs: ${{ fromJson(needs.iterations.outputs.iterations) }}
+        config:
+          - variant: ${{ github.event.inputs.variantA }}
+            index: 0
+          - variant: ${{ github.event.inputs.variantB }}
+            index: 1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Conditionally Wait for Seed Job
+        if: ${{ github.event.inputs.mode != 'no caching' }}
+        run: echo "Waiting for seed job to complete"
+      - uses: ./.github/workflows/runner
+        with:
+          task: "${{ github.event.inputs.task }}"
+          mode: "${{ github.event.inputs.mode }}"
+          experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
+          execution-number: ${{ github.run_number }}
+          variant: ${{ matrix.config.variant }}
+          api-key: ${{ secrets.DV_ACCESS_KEY }}
+          repository: ${{ github.event.inputs.repository }}
+          variant-prefix: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && 'varianta_' || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && 'variantb_' }}
+          extra-args: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantB }}
+          jdk_version: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.java_args).javaVersionVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.java_args).javaVersionVariantB }}
+          jdk_vendor: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.java_args).javaVendorVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.java_args).javaVendorVariantB }}
+      - uses: actions/checkout@v4
+
+  report-no-caching:
+    name: Report for No Caching
+    if: fromJson(github.event.inputs.extra_report_args).report_enabled == 'true'
+    runs-on: ubuntu-latest
+    needs: [execution-no-caching]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/report
+        with:
+          task: "${{ github.event.inputs.task }}"
+          experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
+          tags: "varianta_${{ github.event.inputs.variantA }},variantb_${{ github.event.inputs.variantB }}"
+          api-key: ${{ secrets.DV_API_KEY }}
+          url: ${{ secrets.DV_URL }}
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          profile: false
+          taskpathreport: fromJson(github.event.inputs.extra_report_args).taskpath_report
+          tasktypereport: fromJson(github.event.inputs.extra_report_args).tasktype_report
+          processreport: fromJson(github.event.inputs.extra_report_args).process_report
+          kotlinreport: fromJson(github.event.inputs.extra_report_args).kotlin_build_report
+          resourceusagereport: fromJson(github.event.inputs.extra_report_args).resource_usage_report
+          onlycacheableoutcome: fromJson(github.event.inputs.extra_report_args).only_cacheable_outcome
+          thresholdtaskduration: ${{ fromJson(github.event.inputs.extra_report_args).threshold_task_duration }} 
+
+  report:
+    name: Report with Caching
+    if: fromJson(github.event.inputs.extra_report_args).report_enabled == 'true'
+    runs-on: ubuntu-latest
+    needs: [execution-caching]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/report
+        with:
+          task: "${{ github.event.inputs.task }}"
+          experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
+          tags: "varianta_${{ github.event.inputs.variantA }},variantb_${{ github.event.inputs.variantB }}"
+          api-key: ${{ secrets.DV_API_KEY }}
+          url: ${{ secrets.DV_URL }}
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          profile: false
+          taskpathreport: ${{ fromJson(github.event.inputs.extra_report_args).taskpath_report }}
+          tasktypereport: ${{ fromJson(github.event.inputs.extra_report_args).tasktype_report }}
+          processreport: ${{ fromJson(github.event.inputs.extra_report_args).process_report }}
+          kotlinreport: ${{ fromJson(github.event.inputs.extra_report_args).kotlin_build_report }}
+          resourceusagereport: ${{ fromJson(github.event.inputs.extra_report_args).resource_usage_report }}
+          onlycacheableoutcome: ${{ fromJson(github.event.inputs.extra_report_args).only_cacheable_outcome }}
+          thresholdtaskduration: ${{ fromJson(github.event.inputs.extra_report_args).threshold_task_duration }} 

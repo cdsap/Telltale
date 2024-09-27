@@ -1,36 +1,88 @@
-name: 'Experiment runner'
+name: 'Experiment Runner'
+
 inputs:
   task:
+    description: 'The Gradle task to execute'
     required: true
   variant:
+    description: 'The variant to use for the experiment'
+    required: true
+  variant-prefix:
+    description: 'Prefix for the variant used in tagging'
     required: true
   experiment-id:
+    description: 'Unique identifier for the experiment'
     required: true
   api-key:
+    description: 'API key for accessing Develocity or related services'
     required: true
   repository:
+    description: 'GitHub repository to check out'
     required: true
   run-id:
+    description: 'Run identifier for tagging the build scan'
     required: true
-  jdk:
+  jdk_version:
+    description: 'Java version to use (default is 17)'
     required: false
     default: 17
+  jdk_vendor:
+    description: 'JDK vendor to use (default is zulu)'
+    required: false
+    default: 'zulu'
+  execution-number:
+    description: 'Execution number used for caching purposes'
+    required: true
+  mode:
+    description: 'Mode of execution relative to caching'
+    required: true
+  extra-args:
+    description: 'Extra arguments to pass to the Gradle command'
+    required: true
+  cache-url:
+    description: 'URL for the cache node if applicable'
+    required: false
+  cache-excludes:
+    description: 'Patterns to exclude from cache'
+    required: true
 
 runs:
   using: 'composite'
   steps:
-    - uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v4
       with:
         repository: ${{ inputs.repository }}
         ref: ${{ inputs.variant }}
-    - uses: actions/setup-java@v3
+
+    - name: Setup Java
+      uses: actions/setup-java@v4
       with:
-        distribution: oracle
-        java-version: ${{ inputs.jdk }}
-    - name: Execute Gradle build
-      id : gradle-build
+        distribution: ${{ inputs.jdk_vendor }}
+        java-version: ${{ inputs.jdk_version }}
+
+    - name: Setup Gradle (Cache Mode)
+      if: github.event.inputs.mode != 'no caching'
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        cache-read-only: true
+        add-job-summary: 'never'
+        gradle-home-cache-excludes: ${{ inputs.cache-excludes }}
+      env:
+        GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
+        GRADLE_BUILD_ACTION_CACHE_KEY_JOB_INSTANCE: ${{ inputs.execution-number }}-${{ inputs.variant }}
+
+    - name: Execute Gradle Build
+      id: gradle-build
       run: |
-           ./gradlew ${{ inputs.task }}  -Dscan.tag.${{ inputs.run-id }} -Dscan.tag.${{ inputs.variant }} -Dscan.tag.experiment -Dscan.tag.${{inputs.experiment-id}} -Dscan.tag.${{inputs.experiment-id}}_variant_experiment_${{ inputs.variant }}
+        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} \
+          -Dscan.tag.${{ inputs.run-id }} \
+          -Dscan.tag.${{ inputs.variant-prefix }}${{ inputs.variant }} \
+          -Dscan.tag."${{ inputs.mode }}" \
+          -Dscan.tag.experiment \
+          -Dscan.tag.${{ inputs.experiment-id }}
       shell: bash
       env:
-        GRADLE_ENTERPRISE_ACCESS_KEY: ${{ inputs.api-key }}
+        DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
+        GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
+        CI_URL_CACHE_NODE: ${{ inputs.cache-url }}

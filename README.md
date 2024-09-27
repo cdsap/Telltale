@@ -1,123 +1,115 @@
-## Telltale
-Sample showing how to build a functional Experimentation Framework on GitHub Actions for Gradle-Based Builds connected to Develocity.
+# Telltale
+Experimentation framework for Gradle Builds
 
-Example:
-* Experiment with Ksp in the repository nowinandroid: https://github.com/cdsap/Telltale/actions/runs/6765292564
+## Table of Contents
+
+- [Overview](#overview)
+- [Workflows](#workflows)
+  - [Experiment](#experiment)
+  - [Experiment with Gradle Profiler](#experiment-with-gradle-profiler)
+- [Setup](#setup)
+- [Usage](#usage)
+- [License](#license)
+
+## Overview
+This repository contains GitHub Actions workflows that serve as an experimentation framework for comparing two variants executing Gradle builds.
+These workflows are designed to automate the testing and reporting of Gradle builds within different caching and execution modes. They help in understanding the performance impact of various configurations by running experiments on specified branches and comparing the results.
+There are different phases in the workflow experiment execution:
+<img alt="Summary" src="resources/experiment_execution.png"/>
+
+
+## Workflows
+
+### Experiment
+
+This workflow executes Gradle tasks across two specified variants (branches) with different caching configurations. It helps to compare performance between different execution modes.
+
+- **Inputs**:
+  - `repository`: The GitHub repository where the experiment will run.
+  - `variantA` and `variantB`: Branch names for the experiment.
+  - `task`: The Gradle task to execute.
+  - `iterations`: Number of iterations for each experiment run.
+  - `mode`: The type of caching to apply during the experiment. 
+    - **Description**: Specifies the level and type of caching used during the experiment to evaluate its impact on performance. Caching modes can be adjusted to test different scenarios including no caching, dependency caching, task caching (local or remote), and combinations with transform caches.
+    - **Options**:
+      - `dependencies cache`: Caches dependencies only, without caching task outputs.
+      - `dependencies cache - transforms cache`: Caches dependencies, excluding transforms cache.
+      - `local task cache`: Enables caching of task outputs locally.
+      - `local task cache + dependencies cache`: Combines local task caching with dependency caching.
+      - `local task cache - transforms cache`: Caches task outputs locally, excluding transforms.
+      - `local task cache + dependencies cache - transforms cache`: Combines local task, dependency caching, and excludes transforms.
+      - `remote task cache`: Uses a remote server to cache task outputs.
+      - `remote task cache + dependencies cache`: Combines remote task caching with dependency caching.
+      - `remote task cache - transforms cache`: Caches task outputs remotely, excluding transforms.
+      - `remote task cache + dependencies cache - transforms cache`: Combines remote task, dependency caching, and excludes transforms.
+      - `no caching`: Disables all forms of caching.
+      
+  - `os_args`: OS configurations for each variant.
+    - **Description**: Defines the operating system settings for each variant, specifying which OS image to use during the workflow execution. This is useful for testing builds across different environments.
+    - **Format**: A JSON string specifying the OS for each variant.
+    - **Example**: `{variantA:'ubuntu-latest',variantB:'ubuntu-latest'}`
+
+  - `java_args`: JDK versions and vendors for each variant.
+    - **Description**: Specifies the Java Development Kit (JDK) versions and vendors for each variant, allowing for testing with different Java runtime environments.
+    - **Format**: A JSON string with Java version and vendor settings for each variant.
+    - **Example**: `{javaVersionVariantA:'17',javaVersionVariantB:'17',javaVendorVariantA:'zulu',javaVendorVariantB:'zulu'}`
+
+  - `extra_build_args`: Additional Gradle arguments for each variant.
+    - **Description**: Allows you to pass extra arguments to the Gradle command for each variant, providing flexibility to modify the build configuration as needed.
+    - **Format**: A JSON string with extra arguments for each variant.
+    - **Example**: `{extraArgsVariantA:'--no-daemon',extraArgsVariantB:'--no-daemon --parallel'}`
+
+  - `extra_report_args`: Configuration for generating reports.
+    - **Description**: Configures which reports to generate after the experiment, allowing you to enable or disable specific types of reports such as task path reports, process reports, Kotlin build reports, and resource usage reports.
+    - **Format**: A JSON string with boolean flags for each report type.
+    - **Options**:
+      - `report_enabled`: Enable or disable report generation (`true` or `false`).
+      - `tasktype_report`: Include task type reports.
+      - `taskpath_report`: Include task path reports.
+      - `kotlin_build_report`: Include Kotlin build reports. Requires [Kotlin Build Reports](https://blog.jetbrains.com/kotlin/2022/06/introducing-kotlin-build-reports/).
+      - `process_report`: Include process-related reports. Requires [InfoKotlinProcess](https://github.com/cdsap/InfoKotlinProcess) and [InfoGradleProcess](https://github.com/cdsap/InfoGradleProcess).
+      - `resource_usage_report`: Include resource usage reports. Requires builds using Develocity 2024.2.
+      - `only_cacheable_outcome`: Include only cacheable outcomes in the report.
+      - `threshold_task_duration`: Threshold of task duration(ms) for the task path report. Default 1000.
+    - **Example**: `{report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',only_cacheable_outcome:'false'}`
+
+### Experiment with Gradle Profiler
+
+Instead of using agents based on the iterations of the experiment, Gradle Profiler experiment uses gradle-profiler to orchestrae the execution of the experiment, enabling benchmarking of build scenarios with customizable iterations and ABI changes. Generates a report based on the results.
+
+- **Inputs**:
+  - `repository`: The GitHub repository where the experiment will run.
+  - `variantA` and `variantB`: Branch names for the experiment.
+  - `task`: The Gradle task to execute.
+  - `iterations`: Number of iterations for each experiment run.
+  - `class`: Classes to apply ABI changes.      
+  - `os_args`, `java_args`, `extra_build_args`, `extra_report_args`: Additional configuration options for OS, Java versions, build arguments, and report settings.
+
+### Report
+If `extra_report_args` defines `report_enabled:'true`, a report will be generated at the end of the variant experiments. The report is generated with https://github.com/cdsap/BuildExperimentResults:
+
+<img alt="Summary" src="resources/summary.png"/>
+
+## Setup
+
+To use these workflows, ensure the following prerequisites are met:
+
+1. Clone this repository
+
+2. If you are using Develocity to publish the builds, add the following repository secrects in Repository:
+   - `DV_ACCESS_KEY`: Access key for [Develocity](https://docs.gradle.com/develocity/gradle-plugin/current/#authenticating) access.
+   - `DV_URL`: URL of the Develocity server.
+
+3. If you want to use the CLI BuildExperimentResults, you need to add the API token access
+   - `DV_API_KEY`: [API access](https://docs.gradle.com/develocity/api-manual/#access_control) key used in report generation.
 
 ## Usage
-The repository contains `workflow_dispatch` actions that orchestrate the execution, data extraction and publication of the
-results of the experiments.
 
-<img alt="Summary" src="resources/dispatcher.png" width="200"/>
+1. Trigger any of the workflows via the GitHub Actions tab in your repository.
+2. Select the desired input parameters, such as branches, tasks, iterations, and caching modes.
+3. Monitor the workflow's progress in the GitHub Actions logs.
+4. Review generated reports and artifacts for insights into build performance and caching effects.
 
+## License
 
-The experiment is composed by two variants represented by a branch name. Given a requested task, Telltale will
-execute for each variant the type of experiment with N iterations. When all the builds are finsihed it
-will extract the results of the experiment and will report a summary:
-
-![Summary](resources/summary.png)
-
-## Types of experiment
-Telltale supports two type of experiments:
-* Default Experiments
-* Experiments with Gradle Profiler
-
-### Default Experiments
-`experiment.yaml`
-
-Each variant is executed with the action  `.github/workflows/runner`. Based on the number of iterations, it will create N
-runners for each variant. For instance, for a experiment
-with 8 iterations, it will create 16 jobs:
-![Pagan no profile](resources/experiment.png)
-
-
-### Experiments with Gradle Profiler
-`experiment-with-gradle-profiler.yaml`
-
-Each variant is executed with the action `.github/workflows/runner-gradle-profiler`.
-We can include a list of classes to apply `abi-changes` scenario in the Gradle Profiler execution.
-We create two different runs, representing each variant, executing N times the requested build. The default warmpups of this
-experiment is 2.
-
-## Extracting and Publishing results
-Once both variants have executed all the jobs, Telltale will execute `.github/workflows/runner`.
-This action, uses the CLI [CompareGEBuilds](https://github.com/cdsap/CompareGEBuilds) that retrieves and aggregates the data
-for both variants:
-```
-./buildsComparison --experiment-id profile-154 --variants lint-4-1 --variants lint-2-1 \
-    --requested-task lintDemoRelease --api-key $GE_API \
-    --url $GE_URL
-```
-
-The CLI generates a text report with the results of the experiment added as summary report of the action:
-![Results](resources/results_experiment.png)
-
-Additionally, an artifact with name `build-comparison-reports` is published with the results of the experiment in csv format:
-```
-type,metric,mean_experiment_no_parallel,mean_experiment_max_workers,mean_unit,p50_experiment_no_parallel,p50_experiment_max_workers,p50_unit,p90_experiment_no_parallel,p50_experiment_max_workers,p90_unit
-Build,Build time,568397,606158,ms,535056,588790,ms,688251,707314,ms
-Task Type,org.jetbrains.kotlin.gradle.tasks.KotlinCompile,6196,3909,ms,3943,2012,ms,16277,5391,ms
-Task Type,com.google.gms.googleservices.GoogleServicesTask,41,19,ms,21,17,ms,40,30,ms
-Task Type,com.android.build.gradle.tasks.MergeResources,259,204,ms,36,24,ms,763,506,ms
-Task Type,com.android.build.gradle.tasks.ExtractDeepLinksTask,8,4,ms,8,4,ms,14,8,ms
-Task Type,com.android.build.gradle.internal.res.ParseLibraryResourcesTask,117,56,ms,18,12,ms,42,24,ms
-Task Type,com.android.build.gradle.tasks.ProcessLibraryManifest,28,16,ms,18,11,ms,32,20,ms
-...
-```
-## Metrics
-Telltale provides a report of the variants under experimentation based on the Develocity API information of the builds:
-* Build duration
-* Duration grouped by Task Type
-* Duration by Task Path
-
-### Gradle and Kotlin process metrics
-Adding experiment metrics for each variant of the Kotlin and Gradle process.
-* Gradle Process metrics
-    * Requires https://github.com/cdsap/InfoGradleProcess
-* Gradle Process metrics
-  * Requires https://github.com/cdsap/InfoKotlinProcess
-
-![Process](resources/process.png)
-
-### Kotlin Build reports
-Provides detailed metrics of the Kotlin compiler for each variant
-* Kotlin Build Report group by metric
-  * Requires https://blog.jetbrains.com/kotlin/2022/06/introducing-kotlin-build-reports/
-* Kotlin Build Report group by task path
-  * Requires https://blog.jetbrains.com/kotlin/2022/06/introducing-kotlin-build-reports/
-
-![Kotlin Build Reports](resources/kotlin_build_reports.png)
-
-## Notes
-* The repository under experiment must apply the GE plugin
-* After forking the repository you need to define the secrets:
-  * GE_URL: Develocty URL instance
-  * GRADLE_ENTERPRISE_ACCESS_KEY: Access key required to publish Build scans
-  * GE_API_KEY: Token required to retrieve GE API data
-* The summary of task path/type metrics provides data of cacheable tasks. If you require a complete report of the tasks independent of the cacheable state you can generate it with
-  the CLI [TaskReport](https://github.com/cdsap/TaskReport):
-```
-./taskreport --api-key=$GE_API_KEY --url=$GE_URL --max-builds=200 --project=nowinandroid --requested-task=:core:network:packageDemoDebugAssets  \N
-             --tags=profile-175_variant_experiment_big_experiment_executed_no_cache
-
-```
-
-## Other CI providers
-Telltale uses GitHub Actions as runner component to schedule the experiments as example. You can follow the same approach in different
-CI providers:
-* Default Experiment
-  * Based on the desired iterations, create N executions of the task under investigation for each runner in an isolated runner.
-* Gradle Profiler Experiment
-  * Given a Gradle profile scenario, execute each variant in a different runner
-* Tag your builds with the parameters of the experiment:
-```
--Dscan.tag.${{ inputs.run-id }} -Dscan.tag.${{ inputs.variant }} \
--Dscan.tag.experiment -Dscan.tag.${{inputs.experiment-id}} \
--Dscan.tag.${{inputs.experiment-id}}_variant_experiment_${{ inputs.variant }}
-```
-* The GECompare CLI will retrieve the results of the experiment:
-```
-./buildsComparison --experiment-id profile-154 --variants lint-4-1 --variants lint-2-1 \
---requested-task lintDemoRelease --api-key $GE_API \
---url $GE_URL
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
