@@ -105,7 +105,6 @@ jobs:
           mode: "${{ github.event.inputs.mode }}"
           experiment-id: "${{ github.run_number }}"
           variant: ${{ matrix.config.variant }}
-          run-id: 1
           api-key: ${{ secrets.DV_ACCESS_KEY }}
           repository: ${{ github.event.inputs.repository }}
           variant-prefix: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && 'varianta_' || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && 'variantb_' }}

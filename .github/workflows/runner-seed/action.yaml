@@ -20,9 +20,6 @@ inputs:
   repository:
     description: 'GitHub repository to check out.'
     required: true
-  run-id:
-    description: 'Run identifier for tagging the build scan.'
-    required: true
   jdk_version:
     description: 'Java version to use (default is 17).'
     required: false
