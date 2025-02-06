@@ -73,7 +73,7 @@ runs:
             echo "GRADLE_HOME_CACHE_EXCLUDES=$BUILD_CACHE_ENTRY" >> $GITHUB_ENV
             ;;
           "dependencies cache - transforms cache")
-            echo "GRADLE_HOME_CACHE_EXCLUDES=$TRANSFORM_CACHE_ENTRY" >> $GITHUB_ENV
+            echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$BUILD_CACHE_ENTRY\n$TRANSFORM_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
             ;;
           "remote task cache")
             echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$BUILD_CACHE_ENTRY\n$MODULES_CACHE_ENTRY\n$JAR_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
