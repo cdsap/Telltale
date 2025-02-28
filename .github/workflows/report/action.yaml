@@ -66,7 +66,7 @@ runs:
       id: compareBuilds
       run: |
         # Download and set permissions for the CompareGEBuilds binary
-        curl -L https://github.com/cdsap/CompareGEBuilds/releases/download/v0.4.1/build-experiment-results --output build-experiment-results
+        curl -L https://github.com/cdsap/CompareGEBuilds/releases/download/v0.5.0/build-experiment-results --output build-experiment-results
         chmod 0757 build-experiment-results
 
         # Parse and format tags input into the required format
@@ -119,7 +119,7 @@ runs:
         ./build-experiment-results --url=${{ inputs.url }} $tasktypereport $resourceusagereport $onlycacheableoutcome $taskpathreport $processreport $kotlinreport $thresholdtaskduration $profile --max-builds=${{ inputs.max-builds }} $tagsParsed --experiment-id=${{ inputs.experiment-id }} --api-key=${{ inputs.api-key }}
 
         # Output the results to the GitHub step summary
-        CONTENT=$(cat results_experiment)
+        CONTENT=$(cat experiment_results_summary_gha)
         echo "$CONTENT" >> $GITHUB_STEP_SUMMARY
       shell: bash
 
@@ -128,6 +128,6 @@ runs:
       with:
         name: build-comparison-reports
         path: |
-          results_experiment
-          build_comparison.csv
+          experiment_results.html
+          experiment_results.csv
         if-no-files-found: error
