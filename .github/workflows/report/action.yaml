@@ -116,7 +116,7 @@ runs:
         thresholdtaskduration="--threshold-task-duration ${{ inputs.thresholdtaskduration }}"
 
         # Execute the comparison with the appropriate arguments
-        ./build-experiment-results --url=${{ inputs.url }} $tasktypereport $resourceusagereport $onlycacheableoutcome $taskpathreport $processreport $kotlinreport $thresholdtaskduration $profile --max-builds=${{ inputs.max-builds }} $tagsParsed --experiment-id=${{ inputs.experiment-id }} --api-key=${{ inputs.api-key }}
+        ./build-experiment-results --url=${{ inputs.url }} $tasktypereport $resourceusagereport $onlycacheableoutcome $taskpathreport $processreport $kotlinreport $thresholdtaskduration $profile --max-builds=${{ inputs.max-builds }} $tagsParsed  --api-key=${{ inputs.api-key }}
 
         # Output the results to the GitHub step summary
         CONTENT=$(cat experiment_results_summary_gha)
