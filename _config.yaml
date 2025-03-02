@@ -1,3 +1,4 @@
-title: Telltale Experiments
-description: A collection of experiments on the Telltale platform
+title: Telltale
 theme: jekyll-theme-minimal
+baseurl: "/Telltale" # Ensure this matches your repo name
+url: "https://cdsap.github.io"
