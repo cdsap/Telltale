@@ -1,0 +1,34 @@
+---
+layout: default
+title: My Exsperiments
+---
+
+<div class="wrapper">
+  <section>
+    <div class="tag-cloud">
+      {% for tag in site.tags %}
+        <a href="#{{ tag[0] }}" class="tag">{{ tag[0] }}</a>
+      {% endfor %}
+    </div>
+
+    <div class="experiments-grid">
+      {% for post in site.posts %}
+      <div class="experiment-card">
+        <div class="card-content">
+          <h2>{{ post.title }}</h2>
+          <p class="meta">{{ post.date | date: "%B %d, %Y" }}</p>
+          <div class="description">
+            <p>{{ post.description }}</p>
+          </div>
+          <div class="tags">
+            {% for tag in post.tags %}
+              <span class="tag">{{ tag }}</span>
+            {% endfor %}
+          </div>
+          <a href="{{ post.report_link }}" class="report-link">View Report →</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</div> 
