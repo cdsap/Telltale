@@ -156,10 +156,10 @@ runs:
         if [ ! -f "$EXPERIMENT_FILE" ]; then
           echo "---" > "$EXPERIMENT_FILE"
           echo "layout: post" >> "$EXPERIMENT_FILE"
-          echo "title: \"Experiment 100: Neural Network Performance\"" >> "$EXPERIMENT_FILE"
-          echo "date: 2024-03-19" >> "$EXPERIMENT_FILE"
+          echo "title: \"Experiment ${{ inputs.experiment-id }}\"" >> "$EXPERIMENT_FILE"
+          echo "date: $TIMESTAMP" >> "$EXPERIMENT_FILE"
           echo "report_link: /Telltale/reports/$EXPERIMENT_FILE_HTML" >> "$EXPERIMENT_FILE"
-          echo "description: \"Investigation of neural network performance under different hyperparameters\"" >> "$EXPERIMENT_FILE"
+          echo "description: \"Task ${{ inputs.task }}\"" >> "$EXPERIMENT_FILE"
           echo "---" >> "$EXPERIMENT_FILE"
         fi
 
