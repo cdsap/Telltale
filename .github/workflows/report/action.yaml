@@ -165,7 +165,6 @@ runs:
 
     - name: Commit and push to gh-pages
       run: |
-        cd gh-pages-branch
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add _posts
