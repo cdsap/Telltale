@@ -227,6 +227,8 @@ jobs:
           url: ${{ secrets.DV_URL }}
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           profile: false
+          repository: ${{ github.event.inputs.repository }}
+          run_id: ${{ github.run_id }}
           taskpathreport: ${{ fromJson(github.event.inputs.extra_report_args).taskpath_report }}
           tasktypereport: ${{ fromJson(github.event.inputs.extra_report_args).tasktype_report }}
           processreport: ${{ fromJson(github.event.inputs.extra_report_args).process_report }}
