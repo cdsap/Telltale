@@ -151,16 +151,16 @@ runs:
         EXPERIMENT_FILE_HTML="${TIMESTAMP}-${GITHUB_SHA::8}-experiment.html"
 
         cp temp-results/experiment_results.html "reports/$EXPERIMENT_FILE_HTML"
-        if [ ! -f $EXPERIMENT_FILE ]; then
-          cat > $EXPERIMENT_FILE <<EOL
-            ---
-            layout: post
-            title: "Experiment 100: Neural Network Performance"
-            date: 2024-03-19
-            report_link: /Telltale/reports/$EXPERIMENT_FILE_HTML
-            description: "Investigation of neural network performance under different hyperparameters"
-            ---
-          EOL
+        if [ ! -f "$EXPERIMENT_FILE" ]; then
+          cat > "$EXPERIMENT_FILE" <<EOL
+---
+layout: post
+title: "Experiment 100: Neural Network Performance"
+date: 2024-03-19
+report_link: /Telltale/reports/$EXPERIMENT_FILE_HTML
+description: "Investigation of neural network performance under different hyperparameters"
+---
+EOL
         fi
       shell: bash
 
