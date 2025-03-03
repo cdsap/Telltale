@@ -1,0 +1,8 @@
+title: Telltale
+description: Experimentation Framework for Gradle Builds
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+baseurl: "/Telltale"
+url: "https://cdsap.github.io" 
