@@ -141,7 +141,7 @@ runs:
     - name: Download experiment results
       uses: actions/download-artifact@v4
       with:
-        name: experiment-results
+        name: build-comparison-reports
         path: temp-results
 
     - name: Update gh-pages content
