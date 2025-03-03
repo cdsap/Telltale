@@ -176,5 +176,5 @@ runs:
         git config user.name "inaki"
         git add _posts
         git add reports
-        git commit -m "Add experiment results for ${GITHUB_SHA::8}"
+        git commit -m "Add experiment results for ${{ inputs.experiment-id }}"
         git push https://x-access-token:${{ inputs.gh_token }}@github.com/cdsap/Telltale.git gh-pages
