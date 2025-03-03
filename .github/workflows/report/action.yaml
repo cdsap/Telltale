@@ -145,23 +145,22 @@ runs:
         path: temp-results
 
     - name: Update gh-pages content
-      shell: bash    
+      shell: bash
       run: |
         TIMESTAMP=$(date +%Y-%m-%d)
         EXPERIMENT_FILE="_posts/${TIMESTAMP}-${GITHUB_SHA::8}-experiment.md"
         EXPERIMENT_FILE_HTML="${TIMESTAMP}-${GITHUB_SHA::8}-experiment.html"
 
         cp temp-results/experiment_results.html "reports/$EXPERIMENT_FILE_HTML"
+
         if [ ! -f "$EXPERIMENT_FILE" ]; then
-          cat > "$EXPERIMENT_FILE" <<EOL
----
-layout: post
-title: "Experiment 100: Neural Network Performance"
-date: 2024-03-19
-report_link: /Telltale/reports/$EXPERIMENT_FILE_HTML
-description: "Investigation of neural network performance under different hyperparameters"
----
-EOL
+          echo "---" > "$EXPERIMENT_FILE"
+          echo "layout: post" >> "$EXPERIMENT_FILE"
+          echo "title: \"Experiment 100: Neural Network Performance\"" >> "$EXPERIMENT_FILE"
+          echo "date: 2024-03-19" >> "$EXPERIMENT_FILE"
+          echo "report_link: /Telltale/reports/$EXPERIMENT_FILE_HTML" >> "$EXPERIMENT_FILE"
+          echo "description: \"Investigation of neural network performance under different hyperparameters\"" >> "$EXPERIMENT_FILE"
+          echo "---" >> "$EXPERIMENT_FILE"
         fi
 
     - name: Commit and push to gh-pages
