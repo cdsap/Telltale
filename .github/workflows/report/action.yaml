@@ -138,13 +138,19 @@ runs:
         ref: gh-pages
         path: .
 
+    - name: Download experiment results
+      uses: actions/download-artifact@v4
+      with:
+        name: experiment-results
+        path: temp-results
+
     - name: Update gh-pages content
       run: |
         TIMESTAMP=$(date +%Y-%m-%d)
         EXPERIMENT_FILE="_posts/${TIMESTAMP}-${GITHUB_SHA::8}-experiment.md"
         EXPERIMENT_FILE_HTML="${TIMESTAMP}-${GITHUB_SHA::8}-experiment.html"
 
-        cp experiment_results.html "reports/$EXPERIMENT_FILE_HTML"
+        cp temp-results/experiment_results.html "reports/$EXPERIMENT_FILE_HTML"
         if [ ! -f $EXPERIMENT_FILE ]; then
           cat > $EXPERIMENT_FILE <<EOL
             ---
@@ -163,7 +169,8 @@ runs:
         cd gh-pages-branch
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add .
+        git add _posts
+        git add reports
         git commit -m "Add experiment results for ${GITHUB_SHA::8}"
         git push origin gh-pages
       shell: bash
