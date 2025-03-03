@@ -145,6 +145,7 @@ runs:
         path: temp-results
 
     - name: Update gh-pages content
+      shell: bash    
       run: |
         TIMESTAMP=$(date +%Y-%m-%d)
         EXPERIMENT_FILE="_posts/${TIMESTAMP}-${GITHUB_SHA::8}-experiment.md"
@@ -162,7 +163,6 @@ description: "Investigation of neural network performance under different hyperp
 ---
 EOL
         fi
-      shell: bash
 
     - name: Commit and push to gh-pages
       run: |
