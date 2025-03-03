@@ -163,16 +163,11 @@ runs:
           echo "---" >> "$EXPERIMENT_FILE"
         fi
 
-    - name: Commit and push to gh-pages
+    - name: Push Experiment Results
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
         git add _posts
         git add reports
         git commit -m "Add experiment results for ${GITHUB_SHA::8}"
-        git push origin gh-pages
-      shell: bash
-
-    - name: Cleanup
-      run: rm -rf gh-pages-branch
-      shell: bash
+        git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/cdsap/Telltale.git gh-pages
