@@ -155,16 +155,16 @@ runs:
       run: |
         TIMESTAMP=$(date +%Y-%m-%d)
         EXPERIMENT_FILE="_posts/${TIMESTAMP}-${GITHUB_SHA::8}-experiment.md"
-        EXPERIMENT_FILE_HTML="${TIMESTAMP}-${GITHUB_SHA::8}-experiment.html"
-
-        cp temp-results/experiment_results.html "reports/$EXPERIMENT_FILE_HTML"
+        html_file=$(ls temp-results/*.html | head -n 1)
+        html_filename=$(basename "$html_file")   
+        cp temp-results/experiment_results* "reports/"
 
         if [ ! -f "$EXPERIMENT_FILE" ]; then
           echo "---" > "$EXPERIMENT_FILE"
           echo "layout: post" >> "$EXPERIMENT_FILE"
           echo "title: \"Experiment ${{ inputs.experiment-id }}\"" >> "$EXPERIMENT_FILE"
           echo "date: $TIMESTAMP" >> "$EXPERIMENT_FILE"
-          echo "report_link: /Telltale/reports/$EXPERIMENT_FILE_HTML" >> "$EXPERIMENT_FILE"
+          echo "report_link: /Telltale/reports/$html_filename" >> "$EXPERIMENT_FILE"
           echo "description: \"Task ${{ inputs.task }}\"" >> "$EXPERIMENT_FILE"
           echo "---" >> "$EXPERIMENT_FILE"
         fi
