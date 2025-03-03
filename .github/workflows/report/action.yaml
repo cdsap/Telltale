@@ -171,4 +171,4 @@ runs:
         git add _posts
         git add reports
         git commit -m "Add experiment results for ${GITHUB_SHA::8}"
-        git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/cdsap/Telltale.git gh-pages
+        git push https://x-access-token:${{ inputs.gh_token }}@github.com/cdsap/Telltale.git gh-pages
