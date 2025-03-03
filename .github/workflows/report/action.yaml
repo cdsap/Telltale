@@ -166,8 +166,8 @@ runs:
     - name: Push Experiment Results
       shell: bash    
       run: |
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git config --global user.name "github-actions[bot]"
+        git config user.email inaki.seri@gmail.com
+        git config user.name "inaki"
         git add _posts
         git add reports
         git commit -m "Add experiment results for ${GITHUB_SHA::8}"
