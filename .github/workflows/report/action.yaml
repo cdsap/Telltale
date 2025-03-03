@@ -154,7 +154,7 @@ runs:
       shell: bash
       run: |
         TIMESTAMP=$(date +%Y-%m-%d)
-        EXPERIMENT_FILE="_posts/${TIMESTAMP}-${GITHUB_SHA::8}-experiment.md"
+        EXPERIMENT_FILE="_posts/${TIMESTAMP}-${{ inputs.experiment-id }}-experiment.md"
         html_file=$(ls temp-results/*.html | head -n 1)
         html_filename=$(basename "$html_file")   
         cp temp-results/experiment_results* "reports/"
