@@ -210,6 +210,8 @@ jobs:
           thresholdtaskduration: ${{ fromJson(github.event.inputs.extra_report_args).threshold_task_duration }} 
 
   report:
+    permissions:
+      contents: write
     name: Report with Caching
     if: fromJson(github.event.inputs.extra_report_args).report_enabled == 'true'
     runs-on: ubuntu-latest
