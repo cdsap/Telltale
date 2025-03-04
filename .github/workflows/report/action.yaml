@@ -50,9 +50,8 @@ inputs:
     required: true
     default: 1000
   repository:
-    description: 'Repository name'
+    description: 'GitHub repository to check out'
     required: true
-    default: 'Telltale'
   run_id:
     description: 'Run ID'
     required: false
