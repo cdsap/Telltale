@@ -162,10 +162,10 @@ runs:
         if [ ! -f "$EXPERIMENT_FILE" ]; then
           echo "---" > "$EXPERIMENT_FILE"
           echo "layout: post" >> "$EXPERIMENT_FILE"
-          echo "title: \"Experiment ${{ inputs.experiment-id }}\"" >> "$EXPERIMENT_FILE"
+          echo "title: \"${{ inputs.repository }}-${{ inputs.task }}\"" >> "$EXPERIMENT_FILE"
           echo "date: $TIMESTAMP" >> "$EXPERIMENT_FILE"
           echo "report_link: /Telltale/reports/$html_filename" >> "$EXPERIMENT_FILE"
-          echo "description: \"Task ${{ inputs.task }}\"" >> "$EXPERIMENT_FILE"
+          echo "description: \"Variants ${{ inputs.tags }}\"" >> "$EXPERIMENT_FILE"
           echo "---" >> "$EXPERIMENT_FILE"
         fi
 
