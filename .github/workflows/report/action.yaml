@@ -123,7 +123,21 @@ runs:
         thresholdtaskduration="--threshold-task-duration ${{ inputs.thresholdtaskduration }}"
 
         # Execute the comparison with the appropriate arguments
-        ./build-experiment-results --url=${{ inputs.url }} $tasktypereport $resourceusagereport $onlycacheableoutcome $taskpathreport $processreport $kotlinreport $thresholdtaskduration $profile --max-builds=${{ inputs.max-builds }} $tagsParsed --repository ${{ inputs.repository }} --experiment-id=${{ inputs.experiment-id }} --experiment-run-id=${{ inputs.run_id }} --api-key=${{ inputs.api-key }}
+        URL="${{ inputs.url }}"
+        MAX_BUILDS="${{ inputs.max-builds }}"
+        REPOSITORY="${{ inputs.repository }}"
+        EXPERIMENT_ID="${{ inputs.experiment-id }}"
+        RUN_ID="${{ inputs.run_id }}"
+        API_KEY="${{ inputs.api-key }}"
+
+        ./build-experiment-results --url="$URL" \
+          $tasktypereport $resourceusagereport $onlycacheableoutcome $taskpathreport $processreport \
+          $kotlinreport $thresholdtaskduration $profile \
+          --max-builds="$MAX_BUILDS" $tagsParsed \
+          --repository="$REPOSITORY" \
+          --experiment-id="$EXPERIMENT_ID" \
+          --experiment-run-id="$RUN_ID" \
+          --api-key="$API_KEY"
 
         # Output the results to the GitHub step summary
         CONTENT=$(cat experiment_results_summary_gha)
@@ -165,7 +179,7 @@ runs:
           echo "title: \"${{ inputs.repository }}-${{ inputs.task }}\"" >> "$EXPERIMENT_FILE"
           echo "date: $TIMESTAMP" >> "$EXPERIMENT_FILE"
           echo "report_link: /Telltale/reports/$html_filename" >> "$EXPERIMENT_FILE"
-          echo "description: \"Variants ${{ inputs.tags }}\"" >> "$EXPERIMENT_FILE"
+          echo "description: \"Variants: ${{ inputs.tags }}\"" >> "$EXPERIMENT_FILE"
           echo "---" >> "$EXPERIMENT_FILE"
         fi
 
