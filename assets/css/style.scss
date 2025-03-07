@@ -1,5 +1,133 @@
 @import "minima";
 
+// Custom color variables
+$primary-color: #6200ee;
+$secondary-color: #03dac6;
+$background-light: #f8f9fa;
+$border-color: #e1e4e8;
+$text-muted: #6c757d;
+
+// Header styling
+.site-header {
+  border-bottom: 2px solid $primary-color;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+// Post styling
+.post {
+  margin-bottom: 2em;
+  padding: 25px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  
+  h1 {
+    color: $primary-color;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+  }
+
+  .post-meta {
+    color: $text-muted;
+    font-size: 0.9em;
+    margin-bottom: 1.5em;
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 0.5em;
+  }
+}
+
+// Report button styling
+.view-report {
+  display: inline-block;
+  padding: 12px 24px;
+  background: $primary-color;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: darken($primary-color, 10%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+}
+
+// Tags styling
+.post-tags {
+  margin-top: 1em;
+  
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    margin-right: 8px;
+    background: $background-light;
+    border-radius: 16px;
+    font-size: 0.85em;
+    color: $text-muted;
+    
+    &:hover {
+      background: darken($background-light, 5%);
+    }
+  }
+}
+
+// Home page post list
+.post-list {
+  list-style: none;
+  padding: 0;
+  
+  > li {
+    margin-bottom: 1.5em;
+    padding: 20px;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: $background-light;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    
+    h3 {
+      margin-bottom: 0.5em;
+      
+      a {
+        color: $primary-color;
+        text-decoration: none;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// Experiment results table
+.experiment-results {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  
+  th, td {
+    padding: 12px;
+    border: 1px solid $border-color;
+  }
+  
+  th {
+    background: $background-light;
+    font-weight: 600;
+  }
+  
+  tr:nth-child(even) {
+    background: $background-light;
+  }
+}
+
 // Add any custom CSS below this line
 .experiment-list {
   list-style: none;
@@ -33,27 +161,4 @@
   background-color: #fff;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-}
-
-// Your custom styles below
-.post {
-  margin-bottom: 2em;
-  padding: 20px;
-  
-  h1 {
-    margin-bottom: 0.5em;
-  }
-}
-
-.view-report {
-  display: inline-block;
-  padding: 10px 20px;
-  background: #0366d6;
-  color: white;
-  text-decoration: none;
-  border-radius: 3px;
-  
-  &:hover {
-    background: #0056b3;
-  }
 } 
