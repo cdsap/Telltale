@@ -98,7 +98,7 @@ jobs:
         with:
           task: "${{ github.event.inputs.task }}"
           experiment-id: "profiler-${{ github.repository_owner }}-${{ github.run_number }}"
-          tags: "${{ github.repository_owner }}-${{ github.run_number }}_varianta_${{ github.event.inputs.variantA }},${{ github.repository_owner }}-${{ github.run_number }}_variantb_${{ github.event.inputs.variantB }}"
+          tags: "profiler-${{ github.repository_owner }}-${{ github.run_number }}_varianta_${{ github.event.inputs.variantA }},profiler-${{ github.repository_owner }}-${{ github.run_number }}_variantb_${{ github.event.inputs.variantB }}"
           api-key: ${{ secrets.DV_API_KEY }}
           url: ${{ secrets.DV_URL }}
           gh_token: ${{ secrets.GITHUB_TOKEN }}

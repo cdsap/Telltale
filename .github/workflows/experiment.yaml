@@ -196,11 +196,13 @@ jobs:
         with:
           task: "${{ github.event.inputs.task }}"
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
-          tags: "varianta_${{ github.event.inputs.variantA }},variantb_${{ github.event.inputs.variantB }}"
+          tags: "${{ github.repository_owner }}-${{ github.run_number }}_varianta_${{ github.event.inputs.variantA }},${{ github.repository_owner }}-${{ github.run_number }}_variantb_${{ github.event.inputs.variantB }}"
           api-key: ${{ secrets.DV_API_KEY }}
           url: ${{ secrets.DV_URL }}
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           profile: false
+          repository: ${{ github.event.inputs.repository }}
+          run_id: ${{ github.run_id }}      
           taskpathreport: fromJson(github.event.inputs.extra_report_args).taskpath_report
           tasktypereport: fromJson(github.event.inputs.extra_report_args).tasktype_report
           processreport: fromJson(github.event.inputs.extra_report_args).process_report
