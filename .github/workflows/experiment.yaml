@@ -201,6 +201,7 @@ jobs:
           url: ${{ secrets.DV_URL }}
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           profile: false
+          mode: "${{ github.event.inputs.mode }}"
           repository: ${{ github.event.inputs.repository }}
           run_id: ${{ github.run_id }}      
           taskpathreport: fromJson(github.event.inputs.extra_report_args).taskpath_report
@@ -229,6 +230,7 @@ jobs:
           url: ${{ secrets.DV_URL }}
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           profile: false
+          mode: "${{ github.event.inputs.mode }}"
           repository: ${{ github.event.inputs.repository }}
           run_id: ${{ github.run_id }}
           taskpathreport: ${{ fromJson(github.event.inputs.extra_report_args).taskpath_report }}

@@ -55,6 +55,9 @@ inputs:
   run_id:
     description: 'Run ID'
     required: false
+  mode:
+    description: 'Mode of the experiment'
+    required: false
 
 runs:
   using: 'composite'
@@ -72,7 +75,7 @@ runs:
       id: compareBuilds
       run: |
         # Download and set permissions for the CompareGEBuilds binary
-        curl -L https://github.com/cdsap/CompareGEBuilds/releases/download/v0.5.4/build-experiment-results --output build-experiment-results
+        curl -L https://github.com/cdsap/CompareGEBuilds/releases/download/v0.5.6/build-experiment-results --output build-experiment-results
         chmod 0757 build-experiment-results
 
         # Parse and format tags input into the required format
@@ -171,6 +174,11 @@ runs:
         html_file=$(ls temp-results/*.html | head -n 1)
         html_filename=$(basename "$html_file")   
         cp temp-results/experiment_results* "reports/"
+        if [ "${{ inputs.profile }}" == "true" ]; then
+          tagsreport="gradle-profiler"
+        else
+          tagsreport="${{ inputs.mode }}"
+        fi
 
         if [ ! -f "$EXPERIMENT_FILE" ]; then
           VARIANTS="${{ inputs.tags }}"
@@ -181,6 +189,7 @@ runs:
           echo "date: $TIMESTAMP" >> "$EXPERIMENT_FILE"
           echo "report_link: /Telltale/reports/$html_filename" >> "$EXPERIMENT_FILE"
           echo "description: \"Variants: ${VARIANTS//${EXPERIMENT_ID}_/}\"" >> "$EXPERIMENT_FILE"
+          echo "tags: $tagsreport" >> "$EXPERIMENT_FILE"
           echo "---" >> "$EXPERIMENT_FILE"
         fi
 
