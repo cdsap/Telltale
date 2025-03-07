@@ -189,7 +189,7 @@ runs:
           echo "date: $TIMESTAMP" >> "$EXPERIMENT_FILE"
           echo "report_link: /Telltale/reports/$html_filename" >> "$EXPERIMENT_FILE"
           echo "description: \"Variants: ${VARIANTS//${EXPERIMENT_ID}_/}\"" >> "$EXPERIMENT_FILE"
-          echo "tags: $tagsreport" >> "$EXPERIMENT_FILE"
+          echo "tags: \"$tagsreport\"" >> "$EXPERIMENT_FILE"
           echo "---" >> "$EXPERIMENT_FILE"
         fi
 
