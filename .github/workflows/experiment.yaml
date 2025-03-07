@@ -186,6 +186,8 @@ jobs:
       - uses: actions/checkout@v4
 
   report-no-caching:
+    permissions:
+      contents: write
     name: Report for No Caching
     if: fromJson(github.event.inputs.extra_report_args).report_enabled == 'true'
     runs-on: ubuntu-latest
