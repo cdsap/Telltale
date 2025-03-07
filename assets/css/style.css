@@ -70,27 +70,40 @@
   text-align: center;
 }
 
-.tag {
-  display: inline-block;
-  padding: 4px 10px;
-  margin: 4px;
-  background: #f1f8ff;
-  border: 1px solid #267CB9;
-  border-radius: 15px;
-  color: #267CB9;
-  font-size: 0.85em;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.tag:hover {
-  background: #267CB9;
-  color: white;
-  text-decoration: none;
-}
-
 .tags {
-  margin: 15px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: #f0f0f0;
+  color: #666;
+  border-radius: 16px;
+  font-size: 0.85em;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid #e0e0e0;
+  
+  &:hover {
+    background: #e8e8e8;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    color: #333;
+  }
+}
+
+.post-tags {
+  margin-top: 12px;
+}
+
+.post-list .tag {
+  font-size: 0.8em;
+  padding: 3px 10px;
 }
 
 /* Responsive adjustments */
