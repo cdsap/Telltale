@@ -43,4 +43,25 @@ $text-muted: #6c757d;
 .post-list .tag {
   font-size: 0.8em;
   padding: 3px 10px;
+}
+
+.site-footer {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid $border-color;
+  text-align: center;
+  
+  .footer-links {
+    font-size: 0.9em;
+    color: $text-muted;
+    
+    a {
+      color: $primary-color;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 } 

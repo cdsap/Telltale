@@ -10,12 +10,12 @@ title: Experiments
     {% for post in site.posts %}
     <li>
       <h3>
-        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        {{ post.title }}
       </h3>
       <span class="post-meta">{{ post.date | date: "%B %-d, %Y" }}</span>
       <p>{{ post.description }}</p>
       {% if post.tags %}
-      <div class="post-tags">
+      <div class="tags">
         {% for tag in post.tags %}
         <span class="tag">{{ tag }}</span>
         {% endfor %}
@@ -28,3 +28,11 @@ title: Experiments
     {% endfor %}
   </ul>
 </div> 
+<footer class="site-footer">
+  <div class="footer-links">
+    <p>
+      Powered by <a href="https://gradle.com/develocity" target="_blank">Develocity</a> | 
+      <a href="https://github.com/cdsap/Telltale" target="_blank">Telltale</a>
+    </p>
+  </div>
+</footer>
