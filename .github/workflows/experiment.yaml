@@ -58,7 +58,7 @@ on:
       extra_report_args:
         description: "Configuration for generating reports"
         type: string
-        default: "{report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',only_cacheable_outcome:'false',threshold_task_duration:'1000'}"
+        default: "{experiment_title:''report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',only_cacheable_outcome:'false',threshold_task_duration:'1000'}"
         required: true
 
 run-name: "${{ github.event.inputs.repository }}-${{ github.event.inputs.mode }}-${{ github.event.inputs.variantA }}-${{ github.event.inputs.variantB }}-${{ github.event.inputs.task }}"
@@ -206,6 +206,7 @@ jobs:
           mode: "${{ github.event.inputs.mode }}"
           repository: ${{ github.event.inputs.repository }}
           run_id: ${{ github.run_id }}      
+          experiment_title: fromJson(github.event.inputs.extra_report_args).experiment_title
           taskpathreport: fromJson(github.event.inputs.extra_report_args).taskpath_report
           tasktypereport: fromJson(github.event.inputs.extra_report_args).tasktype_report
           processreport: fromJson(github.event.inputs.extra_report_args).process_report
@@ -235,6 +236,7 @@ jobs:
           mode: "${{ github.event.inputs.mode }}"
           repository: ${{ github.event.inputs.repository }}
           run_id: ${{ github.run_id }}
+          experiment_title: fromJson(github.event.inputs.extra_report_args).experiment_title
           taskpathreport: ${{ fromJson(github.event.inputs.extra_report_args).taskpath_report }}
           tasktypereport: ${{ fromJson(github.event.inputs.extra_report_args).tasktype_report }}
           processreport: ${{ fromJson(github.event.inputs.extra_report_args).process_report }}

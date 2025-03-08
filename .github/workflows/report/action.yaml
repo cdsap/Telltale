@@ -58,6 +58,9 @@ inputs:
   mode:
     description: 'Mode of the experiment'
     required: false
+  experiment_title:
+    description: 'Title of the experiment'
+    required: false
 
 runs:
   using: 'composite'
@@ -179,16 +182,21 @@ runs:
         else
           tagsreport="${{ inputs.mode }}"
         fi
+        if [ "${{ inputs.experiment_title }}" != "" ]; then
+          EXPERIMENT_TITLE="${{ inputs.experiment_title }}"
+        else
+          EXPERIMENT_TITLE="${{ inputs.repository }}-${{ inputs.task }}"
+        fi
 
         if [ ! -f "$EXPERIMENT_FILE" ]; then
           VARIANTS="${{ inputs.tags }}"
           EXPERIMENT_ID="${{ inputs.experiment-id }}"
           echo "---" > "$EXPERIMENT_FILE"
           echo "layout: post" >> "$EXPERIMENT_FILE"
-          echo "title: \"${{ inputs.repository }}-${{ inputs.task }}\"" >> "$EXPERIMENT_FILE"
+          echo "title: \"$EXPERIMENT_TITLE\"" >> "$EXPERIMENT_FILE"
           echo "date: $TIMESTAMP" >> "$EXPERIMENT_FILE"
           echo "report_link: /Telltale/reports/$html_filename" >> "$EXPERIMENT_FILE"
-          echo "description: \"Variants: ${VARIANTS//${EXPERIMENT_ID}_/}\"" >> "$EXPERIMENT_FILE"
+          echo "description: \"variants: ${VARIANTS//${EXPERIMENT_ID}_/}\"" >> "$EXPERIMENT_FILE"
           echo "tags: \"$tagsreport\"" >> "$EXPERIMENT_FILE"
           echo "---" >> "$EXPERIMENT_FILE"
         fi
