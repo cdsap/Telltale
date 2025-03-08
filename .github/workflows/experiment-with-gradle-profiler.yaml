@@ -105,7 +105,7 @@ jobs:
           profile: true
           repository: ${{ github.event.inputs.repository }}
           run_id: ${{ github.run_id }}  
-          experiment_title: fromJson(github.event.inputs.extra_report_args).experiment_title        
+          experiment_title: ${{ fromJson(github.event.inputs.extra_report_args).experiment_title }}
           taskpathreport: ${{ fromJson(github.event.inputs.extra_report_args).taskpath_report }}
           tasktypereport: ${{ fromJson(github.event.inputs.extra_report_args).tasktype_report }}
           processreport: ${{ fromJson(github.event.inputs.extra_report_args).process_report }}
