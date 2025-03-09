@@ -135,13 +135,13 @@ runs:
         fi
 
         if [ "${{ inputs.open-ai-request }}" == "true" ]; then
-          openai_request="--openai-request"
+          openai_request="--open-ai-request"
         else
-          openai_request="--no-openai-request"
+          openai_request="--no-open-ai-request"
         fi
 
         if [ "${{ inputs.open-ai-api-key }}" != "" ]; then
-          openai_api_key="--openai-api-key ${{ inputs.open-ai-api-key }}"
+          openai_api_key="--open-ai-key ${{ inputs.open-ai-api-key }}"
         else
           openai_api_key=""
         fi
@@ -219,9 +219,6 @@ runs:
             echo "Title file not found."
         fi
         
-
-
-
         cp temp-results/experiment_results* "reports/"
         if [ "${{ inputs.profile }}" == "true" ]; then
           tagsreport="gradle-profiler"
