@@ -61,6 +61,15 @@ inputs:
   experiment_title:
     description: 'Title of the experiment'
     required: false
+  open-ai-request: 
+    description: 'OpenAI request'
+    required: true
+    default: false
+  open-ai-api-key:
+    description: 'OpenAI API key'
+    required: false
+    default: ""
+
 
 runs:
   using: 'composite'
@@ -125,6 +134,18 @@ runs:
           onlycacheableoutcome="--no-only-cacheable-outcome"
         fi
 
+        if [ "${{ inputs.open-ai-request }}" == "true" ]; then
+          openai_request="--openai-request"
+        else
+          openai_request="--no-openai-request"
+        fi
+
+        if [ "${{ inputs.open-ai-api-key }}" != "" ]; then
+          openai_api_key="--openai-api-key ${{ inputs.open-ai-api-key }}"
+        else
+          openai_api_key=""
+        fi
+
         thresholdtaskduration="--threshold-task-duration ${{ inputs.thresholdtaskduration }}"
 
         # Execute the comparison with the appropriate arguments
@@ -137,7 +158,7 @@ runs:
      
         ./build-experiment-results --url="$URL" \
           $tasktypereport $resourceusagereport $onlycacheableoutcome $taskpathreport $processreport \
-          $kotlinreport $thresholdtaskduration $profile \
+          $kotlinreport $thresholdtaskduration $profile $openai_request $openai_api_key \
           --max-builds="$MAX_BUILDS" $tagsParsed \
           --repository="$REPOSITORY" \
           --experiment-id="$EXPERIMENT_ID" \
@@ -176,6 +197,31 @@ runs:
         EXPERIMENT_FILE="_posts/${TIMESTAMP}-${{ inputs.experiment-id }}-experiment.md"
         html_file=$(ls temp-results/*.html | head -n 1)
         html_filename=$(basename "$html_file")   
+
+        analysis_file=$(ls temp-results/experiment_results_openai_analysis_* 2>/dev/null | head -n 1)
+        title_file=$(ls temp-results/experiment_results_openai_title_* 2>/dev/null | head -n 1)
+
+        # Initialize empty variables
+        analysis_content=""
+        title_content=""
+
+        # Check if the analysis file exists before reading it
+        if [[ -f "$analysis_file" ]]; then
+            analysis_content=$(cat "$analysis_file")
+        else
+            echo "Analysis file not found."
+        fi
+
+        # Check if the title file exists before reading it
+        if [[ -f "$title_file" ]]; then
+            title_content=$(cat "$title_file")
+        else
+            echo "Title file not found."
+        fi
+        
+
+
+
         cp temp-results/experiment_results* "reports/"
         if [ "${{ inputs.profile }}" == "true" ]; then
           tagsreport="gradle-profiler"
@@ -188,6 +234,12 @@ runs:
           EXPERIMENT_TITLE="${{ inputs.repository }}-${{ inputs.task }}"
         fi
 
+        if [[ -n "$title_content" ]]; then
+           DESCRIPTION="\"$title_content\""
+        else
+           DESCRIPTION= "\"variants: ${VARIANTS//${EXPERIMENT_ID}_/}\""
+        fi
+
         if [ ! -f "$EXPERIMENT_FILE" ]; then
           VARIANTS="${{ inputs.tags }}"
           EXPERIMENT_ID="${{ inputs.experiment-id }}"
@@ -196,9 +248,10 @@ runs:
           echo "title: \"$EXPERIMENT_TITLE\"" >> "$EXPERIMENT_FILE"
           echo "date: $TIMESTAMP" >> "$EXPERIMENT_FILE"
           echo "report_link: /Telltale/reports/$html_filename" >> "$EXPERIMENT_FILE"
-          echo "description: \"variants: ${VARIANTS//${EXPERIMENT_ID}_/}\"" >> "$EXPERIMENT_FILE"
+          echo "description: $DESCRIPTION" >> "$EXPERIMENT_FILE"
           echo "tags: \"$tagsreport\"" >> "$EXPERIMENT_FILE"
           echo "---" >> "$EXPERIMENT_FILE"
+          echo "$analysis_content" >> "$EXPERIMENT_FILE"
         fi
 
     - name: Push Experiment Results
