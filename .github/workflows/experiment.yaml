@@ -215,7 +215,7 @@ jobs:
           onlycacheableoutcome: ${{ fromJson(github.event.inputs.extra_report_args).only_cacheable_outcome }}
           thresholdtaskduration: ${{ fromJson(github.event.inputs.extra_report_args).threshold_task_duration }} 
           open-ai-request: ${{ fromJson(github.event.inputs.extra_report_args).open_ai_request }}
-          open-ai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          open-ai-api-key: ${{ secrets.OPEN_API_KEY }}
 
 
   report:
@@ -248,4 +248,4 @@ jobs:
           onlycacheableoutcome: ${{ fromJson(github.event.inputs.extra_report_args).only_cacheable_outcome }}
           thresholdtaskduration: ${{ fromJson(github.event.inputs.extra_report_args).threshold_task_duration }} 
           open-ai-request: ${{ fromJson(github.event.inputs.extra_report_args).open_ai_request }}
-          open-ai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          open-ai-api-key: ${{ secrets.OPEN_API_KEY }}
