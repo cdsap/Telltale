@@ -10,7 +10,7 @@ title: Experiments
     {% for post in site.posts %}
     <li>
       <h3>
-        {{ post.title }}
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
       </h3>
       <span class="post-meta">{{ post.date | date: "%B %-d, %Y" }}</span>
       <p>{{ post.description }}</p>
@@ -21,9 +21,14 @@ title: Experiments
         {% endfor %}
       </div>
       {% endif %}
-      {% if post.report_link %}
-      <a href="{{ post.report_link }}" class="view-report">View Report</a>
-      {% endif %}
+      <div class="post-links">
+        {% if post.report_link %}
+        <a href="{{ post.report_link }}" class="report-link">📊 View Report</a>
+        {% endif %}
+        {% if post.log_link %}
+        <a href="{{ post.log_link }}" class="log-link">📝 View Log</a>
+        {% endif %}
+      </div>
     </li>
     {% endfor %}
   </ul>
