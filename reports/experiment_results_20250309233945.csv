@@ -1,0 +1,17 @@
+Category,Metric,varianta_main Mean,variantb_gradle_8_13 Mean,varianta_main P50,variantb_gradle_8_13 P50,varianta_main P90,variantb_gradle_8_13 P90,Unit
+Build,Build time,41093,42111,41160,41772,41551,44324,ms
+Task Type,org.jetbrains.kotlin.gradle.plugin.diagnostics.CheckKotlinGradlePluginConfigurationErrors,3,3,4,3,7,8,ms
+Task Type,org.gradle.plugin.devel.tasks.GeneratePluginDescriptors,39,37,39,37,45,45,ms
+Task Type,org.gradle.language.jvm.tasks.ProcessResources,42,43,42,43,49,60,ms
+Task Type,org.jetbrains.kotlin.gradle.tasks.KotlinCompile,8533,8761,8422,8586,12072,12792,ms
+Task Type,org.gradle.api.tasks.compile.JavaCompile,3,3,4,4,5,6,ms
+Task Type,org.gradle.api.DefaultTask,0,0,0,0,1,1,ms
+Task Type,org.gradle.api.tasks.bundling.Jar,94,96,94,93,111,123,ms
+Task Path,:build-logic:convention:compileKotlin,11896,12404,11915,12087,12170,14008,ms
+Task Path,:core:model:compileKotlin,5170,5119,5145,5117,5339,5309,ms
+All processes cpu,Max,96.7,96.9,97.0,97.0,97,98,%
+All processes memory,Max,4.14,4.17,4.08,4.05,4.68,4.56,Gb
+Build process cpu,Max,83.5,82.3,83.0,82.0,89,88,%
+Build processes memory,Max,1.87,1.89,1.8,1.78,2.4,2.27,Gb
+Build child processes cpu,Max,87.2,87.7,87.0,87.0,89,90,%
+Build child processes memory,Max,1.24,1.25,1.24,1.25,1.26,1.27,Gb
