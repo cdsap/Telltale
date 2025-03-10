@@ -1,0 +1,2 @@
+The comparison of Gradle build performance between variant A (main_g1) and variant B (main_parallel) reveals several key differences. Overall, variant B has a faster build time, with a mean time of 200.6 seconds compared to variant A's 215.5 seconds, a difference of 6.9%. The most time-consuming tasks across both variants are 'L8DexDesugarLibTask', 'DexMergingTask', and 'KspTaskJvm'. In terms of CPU and memory usage, both variants showed similar CPU usage, but variant A had a higher memory usage. 
+

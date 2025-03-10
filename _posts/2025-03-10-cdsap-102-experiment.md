@@ -1,0 +1,38 @@
+---
+layout: post
+title: "cdsap/Experiment_Gradle_8_13-assembleDebug"
+date: 2025-03-10
+report_link: /Telltale/reports/experiment_results_20250310162852.html
+description: "The comparison of Gradle build performance between variant A (main_g1) and variant B (main_parallel) reveals several key differences. Overall, variant B has a faster build time, with a mean time of 200.6 seconds compared to variant A's 215.5 seconds, a difference of 6.9%. The most time-consuming tasks across both variants are 'L8DexDesugarLibTask', 'DexMergingTask', and 'KspTaskJvm'. In terms of CPU and memory usage, both variants showed similar CPU usage, but variant A had a higher memory usage. "
+tags: "dependencies cache"
+---
+[📊 View Full Report]({{ page.report_link }}){: .report-link}
+
+
+# Build Time Comparison
+
+The overall build times for variant A (main_g1) and variant B (main_parallel) were 215.5 seconds and 200.6 seconds respectively. This represents a 6.9% faster build time for variant B. The P50 build times were 216.2 seconds for variant A and 200.6 seconds for variant B, while the P90 build times were 224.9 seconds and 206.8 seconds respectively.
+
+# Task Type Differences Between Variants
+
+The three most time-consuming tasks for both variants were 'L8DexDesugarLibTask', 'DexMergingTask', and 'KspTaskJvm'. 
+
+For 'L8DexDesugarLibTask', variant A had a mean time of 13.0 seconds, P50 of 77ms, and P90 of 39.9 seconds. In comparison, variant B had a mean time of 11.9 seconds, P50 of 78ms, and P90 of 36.4 seconds. This represents a 8.5% faster execution time for variant B.
+
+For 'DexMergingTask', variant A had a mean time of 10.1 seconds, P50 of 1.4 seconds, and P90 of 41.3 seconds. Variant B had a mean time of 8.9 seconds, P50 of 1.1 seconds, and P90 of 37.8 seconds. This represents a 11.9% faster execution time for variant B.
+
+For 'KspTaskJvm', variant A had a mean time of 3.7 seconds, P50 of 3.0 seconds, and P90 of 6.3 seconds. Variant B had a mean time of 3.5 seconds, P50 of 2.9 seconds, and P90 of 6.3 seconds. This represents a 5.4% faster execution time for variant B.
+
+# Statistical Patterns
+
+The tasks with significant timing variations (>10% difference) between the two variants were 'DexMergingTask', 'CheckAarMetadataTask', and 'ProcessApplicationManifest'. 
+
+For 'DexMergingTask', variant B performed 11.9% faster than variant A. For 'CheckAarMetadataTask', variant B performed 18.9% faster. For 'ProcessApplicationManifest', variant B performed 7.8% faster.
+
+# CPU and Memory Usage Analysis
+
+For all processes, both variants had a maximum CPU usage of 100%. Variant A had a maximum memory usage of 10.8GB, while variant B had a maximum memory usage of 9.6GB, representing a 11.1% lower memory usage for variant B.
+
+For the main Gradle process, variant A had a maximum CPU usage of 93.5% and memory usage of 5.4GB. Variant B had a maximum CPU usage of 92.5% and memory usage of 5.2GB.
+
+For the build child processes, variant A had a maximum CPU usage of 90.8% and memory usage of 4.4GB. Variant B had a maximum CPU usage of 92.6% and memory usage of 3.4GB, representing a 22.9% lower memory usage for variant B.
