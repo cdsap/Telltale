@@ -248,6 +248,7 @@ runs:
           echo "description: $DESCRIPTION" >> "$EXPERIMENT_FILE"
           echo "tags: \"$tagsreport\"" >> "$EXPERIMENT_FILE"
           echo "---" >> "$EXPERIMENT_FILE"
+          echo "[📊 View Full Report]({{ page.report_link }}){: .report-link}" >> "$EXPERIMENT_FILE"
           echo "$analysis_content" >> "$EXPERIMENT_FILE"
         fi
 
