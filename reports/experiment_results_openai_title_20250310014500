@@ -1,0 +1,2 @@
+The comparison between the two Gradle build variants, 'varianta_main' and 'variantb_gradle_8_13', reveals slight differences in build times, task execution times, and resource usage. The overall build times are almost identical, with 'varianta_main' taking slightly longer on average. The most time-consuming tasks in both variants are 'KotlinCompile', 'GeneratePluginDescriptors', and 'ProcessResources'. CPU and memory usage are also similar, with 'varianta_main' using slightly more resources in some cases.
+

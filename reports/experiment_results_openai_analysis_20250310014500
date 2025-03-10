@@ -1,0 +1,31 @@
+
+
+# Build Time Comparison
+
+The mean build time for 'varianta_main' was 41.987 seconds, while for 'variantb_gradle_8_13' it was 41.906 seconds. This represents a negligible difference of 0.19%.
+
+The P50 (median) build times were 41.528 seconds for 'varianta_main' and 41.461 seconds for 'variantb_gradle_8_13', a difference of 0.16%.
+
+The P90 build times were 44.244 seconds for 'varianta_main' and 44.671 seconds for 'variantb_gradle_8_13', a difference of 0.96%.
+
+# Task Type Differences Between Variants
+
+The top 3 most time-consuming tasks for both variants were 'KotlinCompile', 'GeneratePluginDescriptors', and 'ProcessResources'.
+
+- 'KotlinCompile' took 8.856 seconds on average in 'varianta_main' and 8.734 seconds in 'variantb_gradle_8_13', a difference of 1.38%. The P50 times were 8.473 seconds and 8.578 seconds respectively, and the P90 times were 14.296 seconds and 12.454 seconds.
+
+- 'GeneratePluginDescriptors' took 41ms on average in 'varianta_main' and 36ms in 'variantb_gradle_8_13', a difference of 13.89%. The P50 times were 39ms and 37ms respectively, and the P90 times were 64ms and 40ms.
+
+- 'ProcessResources' took 49ms on average in 'varianta_main' and 40ms in 'variantb_gradle_8_13', a difference of 22.45%. The P50 times were 46ms and 41ms respectively, and the P90 times were 73ms and 46ms.
+
+# Statistical Patterns
+
+The tasks with significant timing variations (>10% difference) between the variants were 'GeneratePluginDescriptors' and 'ProcessResources'. The P50 and P90 measurements for these tasks were consistently higher in 'varianta_main' than in 'variantb_gradle_8_13'.
+
+# CPU and Memory Usage Analysis
+
+Overall system usage was slightly higher in 'varianta_main' than in 'variantb_gradle_8_13', with max CPU usage of 96.7% vs 96.1% and max memory usage of 4.04GB vs 4.02GB.
+
+The main Gradle process used slightly less CPU in 'varianta_main' (82.8% vs 83.2%), but more memory (1.76GB vs 1.74GB).
+
+Build child processes used more CPU in 'varianta_main' (87.6% vs 86.3%), but similar amounts of memory (1.25GB in both cases).
