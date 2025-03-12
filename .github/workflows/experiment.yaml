@@ -58,7 +58,7 @@ on:
       extra_report_args:
         description: "Configuration for generating reports"
         type: string
-        default: "{experiment_title:'', open_ai_request:'true', report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',only_cacheable_outcome:'false',threshold_task_duration:'1000'}"
+        default: "{experiment_title:'', open_ai_request:'true', report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',gc_report:'false',only_cacheable_outcome:'false',threshold_task_duration:'1000'}"
         required: true
 
 run-name: "${{ github.event.inputs.repository }}-${{ github.event.inputs.mode }}-${{ github.event.inputs.variantA }}-${{ github.event.inputs.variantB }}-${{ github.event.inputs.task }}"
@@ -210,6 +210,7 @@ jobs:
           taskpathreport: ${{ fromJson(github.event.inputs.extra_report_args).taskpath_report }}
           tasktypereport: ${{ fromJson(github.event.inputs.extra_report_args).tasktype_report }}
           processreport: ${{ fromJson(github.event.inputs.extra_report_args).process_report }}
+          gcreport: ${{ fromJson(github.event.inputs.extra_report_args).gc_report }}
           kotlinreport: ${{ fromJson(github.event.inputs.extra_report_args).kotlin_build_report }}
           resourceusagereport: ${{ fromJson(github.event.inputs.extra_report_args).resource_usage_report }}
           onlycacheableoutcome: ${{ fromJson(github.event.inputs.extra_report_args).only_cacheable_outcome }}
@@ -243,6 +244,7 @@ jobs:
           taskpathreport: ${{ fromJson(github.event.inputs.extra_report_args).taskpath_report }}
           tasktypereport: ${{ fromJson(github.event.inputs.extra_report_args).tasktype_report }}
           processreport: ${{ fromJson(github.event.inputs.extra_report_args).process_report }}
+          gcreport: ${{ fromJson(github.event.inputs.extra_report_args).gc_report }}
           kotlinreport: ${{ fromJson(github.event.inputs.extra_report_args).kotlin_build_report }}
           resourceusagereport: ${{ fromJson(github.event.inputs.extra_report_args).resource_usage_report }}
           onlycacheableoutcome: ${{ fromJson(github.event.inputs.extra_report_args).only_cacheable_outcome }}

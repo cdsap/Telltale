@@ -87,7 +87,7 @@ runs:
       id: compareBuilds
       run: |
         # Download and set permissions for the CompareGEBuilds binary
-        curl -L https://github.com/cdsap/CompareGEBuilds/releases/download/v0.5.7/build-experiment-results --output build-experiment-results
+        curl -L https://github.com/cdsap/CompareGEBuilds/releases/download/v0.5.8/build-experiment-results --output build-experiment-results
         chmod 0757 build-experiment-results
 
         # Parse and format tags input into the required format
@@ -134,6 +134,11 @@ runs:
           onlycacheableoutcome="--no-only-cacheable-outcome"
         fi
 
+        gcreport="--gc-report"  
+        if [ "${{ inputs.gcreport }}" == "false" ]; then
+          gcreport="--no-gc-report"
+        fi 
+
         if [ "${{ inputs.open-ai-request }}" == "true" ]; then
           openai_request="--open-ai-request"
         else
@@ -159,7 +164,7 @@ runs:
         ./build-experiment-results --url="$URL" \
           $tasktypereport $resourceusagereport $onlycacheableoutcome $taskpathreport $processreport \
           $kotlinreport $thresholdtaskduration $profile $openai_request $openai_api_key \
-          --max-builds="$MAX_BUILDS" $tagsParsed \
+          $gcreport --max-builds="$MAX_BUILDS" $tagsParsed \
           --repository="$REPOSITORY" \
           --experiment-id="$EXPERIMENT_ID" \
           --experiment-run-id="$RUN_ID" \
@@ -223,7 +228,7 @@ runs:
         if [ "${{ inputs.profile }}" == "true" ]; then
           tagsreport="gradle-profiler"
         else
-          tagsreport="${{ inputs.mode }}"
+          tagsreport="Variants running with ${{ inputs.mode }}"
         fi
         if [ "${{ inputs.experiment_title }}" != "" ]; then
           EXPERIMENT_TITLE="${{ inputs.experiment_title }}"
