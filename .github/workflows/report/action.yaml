@@ -69,6 +69,10 @@ inputs:
     description: 'OpenAI API key'
     required: false
     default: ""
+  deploy_results:
+    description: 'Deploy results'
+    required: true
+    default: false
 
 
 runs:
@@ -196,6 +200,7 @@ runs:
         path: temp-results
 
     - name: Update gh-pages content
+      if: ${{ inputs.deploy_results }} == 'true'
       shell: bash
       run: |
         TIMESTAMP=$(date +%Y-%m-%d)
