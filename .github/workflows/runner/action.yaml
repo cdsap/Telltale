@@ -73,7 +73,8 @@ runs:
       id: gradle-build
       run: |
         find /home/runner/.gradle/ -type d
-        
+        cd /home/runner/.gradle/
+        ls -la       
       shell: bash
       env:
         DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
