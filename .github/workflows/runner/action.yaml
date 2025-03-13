@@ -72,11 +72,8 @@ runs:
     - name: Execute Gradle Build
       id: gradle-build
       run: |
-        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} \
-          -Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }} \
-          -Dscan.tag."${{ inputs.mode }}" \
-          -Dscan.tag.experiment \
-          -Dscan.tag.${{ inputs.experiment-id }}
+        find /home/runner/.gradle/ -type d
+        
       shell: bash
       env:
         DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
