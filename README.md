@@ -81,7 +81,7 @@ This workflow executes Gradle tasks across two specified variants (branches) wit
 
 ### Experiment with Gradle Profiler
 
-Instead of using agents based on the iterations of the experiment, Gradle Profiler experiment uses gradle-profiler to orchestrae the execution of the experiment, enabling benchmarking of build scenarios with customizable iterations and ABI changes. Generates a report based on the results.
+Instead of using agents based on the iterations of the experiment, Gradle Profiler experiment uses gradle-profiler to orchestrate the execution of the experiment, enabling benchmarking of build scenarios with customizable iterations and ABI changes. Generates a report based on the results.
 
 - **Inputs**:
   - `repository`: The GitHub repository where the experiment will run.
@@ -90,6 +90,9 @@ Instead of using agents based on the iterations of the experiment, Gradle Profil
   - `iterations`: Number of iterations for each experiment run.
   - `class`: Classes to apply ABI changes.      
   - `os_args`, `java_args`, `extra_build_args`, `extra_report_args`: Additional configuration options for OS, Java versions, build arguments, and report settings.
+
+## Inputs individual actions
+[Action inputs](docs/actions-inputs.md)
 
 ### Report
 If `extra_report_args` defines `report_enabled: 'true'`, a list of reports will be generated at the end of the variant experiments. The report is generated using https://github.com/cdsap/BuildExperimentResults
