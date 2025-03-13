@@ -263,10 +263,11 @@ runs:
         fi
 
     - name: Push Experiment Results
+      if: ${{ inputs.deploy_results }} == 'true'
       shell: bash    
       run: |
-        git config user.email inaki.seri@gmail.com
-        git config user.name "inaki"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git config user.name "github-actions[bot]"
         git add _posts
         git add reports
         git commit -m "Add experiment results for ${{ inputs.experiment-id }}"
