@@ -1,0 +1,1210 @@
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gradle Build Performance Report</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+    }
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    .chart-container {
+        background-color: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 20px 0;
+        font-size: 14px;
+        background-color: white;
+    }
+    th, td {
+        border: 1px solid #e0e0e0;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f5f5f5;
+        color: #333;
+        font-weight: 500;
+        text-align: center;
+    }
+    .stats-header {
+        background-color: #f0f0f0;
+    }
+    tr:nth-child(even) {
+        background-color: #fafafa;
+    }
+    .metric-value {
+        text-align: right;
+        font-family: 'Roboto Mono', monospace;
+    }
+    .unit-column {
+        color: #666;
+        font-size: 12px;
+    }
+    h1, h2 {
+        color: #333;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 24px;
+    }
+    h2 {
+        margin-bottom: 15px;
+        font-size: 18px;
+    }
+</style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Gradle Build Performance Report</h1>
+                    <table><tr><td colspan=12>Experiment</td></tr><tr><td>Repository</td><td colspan=11>cdsap/Experiment_Gradle_8_13</td></tr><tr><td>Task experiment</td><td colspan=11>:core:model:compileKotlin</td></tr><tr><td>varianta_main_4g</td><td>10 builds processed</td><td colspan=10><a href="https://ge.solutions-team.gradle.com/scans?search.startTimeMax=1742253537594&search.startTimeMin=1741907937594&search.tags=cdsap-118_varianta_main_4g">Build Scans</a></td></tr><tr><td>variantb_main_6g</td><td>10 builds processed</td><td colspan=10><a href="https://ge.solutions-team.gradle.com/scans?search.startTimeMax=1742253537594&search.startTimeMin=1741907937594&search.tags=cdsap-118_variantb_main_6g">Build Scans</a></td></tr><tr><td>Experiment raw data</td><td colspan=11><a href="experiment_results_20250315232008.csv">Download csv</a></td></tr><tr><td>Experiment run execution</td><td colspan=11><a href="https://github.com/cdsap/Telltale/actions/runs/13877539604">Workflow</a></td></tr></table>            <div class="charts-grid">
+                <div class="chart-container">
+    <h2>Build Duration Time Series</h2>
+    <canvas id="buildDurationChart"></canvas>
+</div>
+<div class="chart-container">
+    <h2>Build Process Memory</h2>
+    <canvas id="buildProcessMemoryChart"></canvas>
+</div>
+<div class="chart-container">
+    <h2>Build Child Processes Memory</h2>
+    <canvas id="buildChildProcessMemoryChart"></canvas>
+</div>
+<div class="chart-container">
+    <h2>Most Expensive Task: :build-logic:convention:compileKotlin</h2>
+    <canvas id="expensiveTaskChart"></canvas>
+</div>
+                
+                
+                
+            </div>
+            <script>
+                        new Chart(document.getElementById('buildDurationChart'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [45993.0,43793.0,44836.0,45077.0,43494.0,43279.0,43705.0,42962.0,42061.0,40751.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [45518.0,43403.0,43200.0,44090.0,43089.0,42736.0,41995.0,43248.0,43178.0,42507.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Build Duration (seconds)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('buildProcessMemoryChart'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [2.01988096E9,2.184749056E9,1.973497856E9,1.94859008E9,1.93212416E9,1.864716288E9,2.105933824E9,1.613684736E9,1.787015168E9,1.790754816E9],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [1.66617088E9,1.654771712E9,1.765343232E9,1.63663872E9,1.570668544E9,1.494319104E9,1.578340352E9,1.696202752E9,1.693691904E9,1.730424832E9],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Memory Usage (MB)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('buildChildProcessMemoryChart'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [1.393553408E9,1.412104192E9,1.386135552E9,1.36894464E9,1.394561024E9,1.388376064E9,1.38862592E9,1.410146304E9,1.384419328E9,1.396871168E9],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [1.500721152E9,1.479749632E9,1.482993664E9,1.463345152E9,1.482862592E9,1.467449344E9,1.4097408E9,1.47521536E9,1.491513344E9,1.464889344E9],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Memory Usage (MB)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('expensiveTaskChart'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [14513.0,12152.0,14260.0,12264.0,12012.0,11664.0,11920.0,11812.0,11621.0,11292.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [12354.0,11811.0,11927.0,12119.0,11867.0,11371.0,11588.0,11947.0,11891.0,11707.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Task Duration (seconds)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('kotlinGCChart'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Kotlin GC (minutes)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('gradleGCChart'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01,0.01],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Gradle GC (minutes)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('runcompilation'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [4235.0,4401.0,4276.0,4460.0,4444.0,4336.0,4359.0,4281.0,4297.0,4187.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [4530.0,4324.0,4345.0,4374.0,4346.0,4304.0,4329.0,4415.0,4313.0,4377.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Run compilation (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('runcompilationingradleworker'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [4691.0,4810.0,4685.0,4915.0,4903.0,4770.0,4790.0,4688.0,4770.0,4590.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [5015.0,4779.0,4754.0,4801.0,4822.0,4718.0,4773.0,4865.0,4801.0,4788.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Run compilation in Gradle worker (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('compilercodeanalysis'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [1783.0,1882.0,1793.0,1905.0,1840.0,1834.0,1900.0,1807.0,1798.0,1777.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [1945.0,1847.0,1820.0,1878.0,1821.0,1800.0,1818.0,1915.0,1776.0,1836.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Compiler code analysis (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('compilercodegeneration'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [972.0,992.0,966.0,984.0,1036.0,969.0,945.0,941.0,967.0,922.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [1018.0,992.0,975.0,969.0,977.0,981.0,980.0,949.0,995.0,958.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Compiler code generation (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('compilerinitializationtime'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [571.0,577.0,544.0,583.0,576.0,584.0,589.0,554.0,545.0,534.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [600.0,577.0,571.0,589.0,579.0,574.0,584.0,583.0,554.0,562.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Compiler initialization time (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('compilerirgeneration'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [448.0,447.0,435.0,466.0,470.0,465.0,445.0,422.0,448.0,410.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [447.0,440.0,455.0,447.0,442.0,420.0,435.0,435.0,467.0,439.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Compiler IR generation (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('compilerirtranslation'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [439.0,467.0,438.0,495.0,471.0,473.0,446.0,458.0,496.0,425.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [466.0,433.0,458.0,441.0,475.0,428.0,465.0,461.0,485.0,464.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Compiler IR translation (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('compilerirlowering'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [523.0,544.0,531.0,518.0,566.0,504.0,499.0,519.0,518.0,512.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [570.0,551.0,520.0,521.0,535.0,561.0,544.0,513.0,528.0,518.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Compiler IR lowering (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('spenttimebeforetaskaction'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [131.0,133.0,129.0,130.0,131.0,132.0,132.0,127.0,127.0,121.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [130.0,127.0,128.0,138.0,132.0,141.0,127.0,131.0,129.0,132.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Spent time before task action (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('totalgradletasktime'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [4991.0,5096.0,4989.0,5211.0,5183.0,5095.0,5096.0,4982.0,5058.0,4865.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [5314.0,5069.0,5068.0,5110.0,5114.0,5034.0,5057.0,5161.0,5100.0,5083.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Total Gradle task time (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('taskactionbeforeworkerexecution'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [127.0,114.0,138.0,129.0,107.0,146.0,139.0,127.0,124.0,118.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [133.0,126.0,151.0,136.0,122.0,138.0,123.0,127.0,132.0,124.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Task action before worker execution (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('connecttokotlindaemon'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [443.0,396.0,396.0,442.0,446.0,421.0,416.0,392.0,459.0,385.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [472.0,441.0,395.0,414.0,462.0,399.0,430.0,435.0,473.0,397.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Connect to Kotlin daemon (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('incrementalcompilationindaemon'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [4090.0,4268.0,4089.0,4313.0,4289.0,4196.0,4222.0,4110.0,4147.0,4015.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [4382.0,4186.0,4200.0,4236.0,4201.0,4160.0,4192.0,4252.0,4164.0,4183.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Incremental compilation in daemon (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('sourcescompilationround'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [3859.0,4018.0,3837.0,4082.0,4023.0,3954.0,3980.0,3863.0,3906.0,3748.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [4139.0,3959.0,3957.0,3993.0,3963.0,3915.0,3949.0,4006.0,3927.0,3934.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Sources compilation round (ms)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('gc-gradle_gc.log'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [12.0,12.0,13.0,12.0,12.0,13.0,12.0,13.0,13.0,13.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [13.0,12.0,12.0,12.0,13.0,12.0,12.0,12.0,12.0,12.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'gc-gradle_gc.log-total-collections'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('gc-kotlin_gc.log'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_4g',
+    data: [3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_6g',
+    data: [3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0,3.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'gc-kotlin_gc.log-total-collections'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+            </script><table id='metricsTable' class='metric-table'><tr><th>Category</th><th>Metric</th><th colspan=7 class='stats-header'>Statistics</th></tr><tr><th colspan='2'></th><th colspan=2>Mean</th><th colspan=2>P50</th><th colspan=2>P90</th><th>Unit</th></tr><tr class='variant-headers'><th colspan='2'></th><th>varianta_main_4g</th><th>variantb_main_6g</th><th>varianta_main_4g</th><th>variantb_main_6g</th><th>varianta_main_4g</th><th>variantb_main_6g</th><th></th></tr><tr><td>Build</td><td>Build time</td><td class='metric-value'>43595</td><td class='metric-value'>43296</td><td class='metric-value'>43600</td><td class='metric-value'>43189</td><td class='metric-value'>45901</td><td class='metric-value'>45375</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.jetbrains.kotlin.gradle.plugin.diagnostics.CheckKotlinGradlePluginConfigurationErrors</td><td class='metric-value'>3</td><td class='metric-value'>3</td><td class='metric-value'>4</td><td class='metric-value'>4</td><td class='metric-value'>9</td><td class='metric-value'>7</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.plugin.devel.tasks.GeneratePluginDescriptors</td><td class='metric-value'>38</td><td class='metric-value'>38</td><td class='metric-value'>39</td><td class='metric-value'>39</td><td class='metric-value'>43</td><td class='metric-value'>44</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.language.jvm.tasks.ProcessResources</td><td class='metric-value'>45</td><td class='metric-value'>41</td><td class='metric-value'>44</td><td class='metric-value'>40</td><td class='metric-value'>61</td><td class='metric-value'>48</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.jetbrains.kotlin.gradle.tasks.KotlinCompile</td><td class='metric-value'>8703</td><td class='metric-value'>8484</td><td class='metric-value'>8252</td><td class='metric-value'>8343</td><td class='metric-value'>14060</td><td class='metric-value'>12102</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.api.tasks.compile.JavaCompile</td><td class='metric-value'>4</td><td class='metric-value'>3</td><td class='metric-value'>4</td><td class='metric-value'>4</td><td class='metric-value'>6</td><td class='metric-value'>5</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.api.DefaultTask</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>1</td><td class='metric-value'>1</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.api.tasks.bundling.Jar</td><td class='metric-value'>98</td><td class='metric-value'>104</td><td class='metric-value'>97</td><td class='metric-value'>103</td><td class='metric-value'>116</td><td class='metric-value'>120</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:build-logic:convention:compileKotlin</td><td class='metric-value'>12351</td><td class='metric-value'>11858</td><td class='metric-value'>11966</td><td class='metric-value'>11879</td><td class='metric-value'>14488</td><td class='metric-value'>12331</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:model:compileKotlin</td><td class='metric-value'>5056</td><td class='metric-value'>5111</td><td class='metric-value'>5077</td><td class='metric-value'>5092</td><td class='metric-value'>5208</td><td class='metric-value'>5299</td><td class='unit-column'>ms</td></tr><tr><td>All processes cpu</td><td>Max</td><td class='metric-value'>96.6</td><td class='metric-value'>96.6</td><td class='metric-value'>97.0</td><td class='metric-value'>97.0</td><td class='metric-value'>98</td><td class='metric-value'>97</td><td class='unit-column'>%</td></tr><tr><td>All processes memory</td><td>Max</td><td class='metric-value'>4.1</td><td class='metric-value'>3.94</td><td class='metric-value'>4.1</td><td class='metric-value'>3.95</td><td class='metric-value'>4.33</td><td class='metric-value'>4.01</td><td class='unit-column'>Gb</td></tr><tr><td>Build process cpu</td><td>Max</td><td class='metric-value'>82.6</td><td class='metric-value'>81.9</td><td class='metric-value'>82.5</td><td class='metric-value'>82.0</td><td class='metric-value'>86</td><td class='metric-value'>83</td><td class='unit-column'>%</td></tr><tr><td>Build processes memory</td><td>Max</td><td class='metric-value'>1.79</td><td class='metric-value'>1.54</td><td class='metric-value'>1.81</td><td class='metric-value'>1.55</td><td class='metric-value'>2.03</td><td class='metric-value'>1.64</td><td class='unit-column'>Gb</td></tr><tr><td>Build child processes cpu</td><td>Max</td><td class='metric-value'>87.3</td><td class='metric-value'>86.5</td><td class='metric-value'>87.5</td><td class='metric-value'>86.0</td><td class='metric-value'>90</td><td class='metric-value'>88</td><td class='unit-column'>%</td></tr><tr><td>Build child processes memory</td><td>Max</td><td class='metric-value'>1.3</td><td class='metric-value'>1.37</td><td class='metric-value'>1.3</td><td class='metric-value'>1.38</td><td class='metric-value'>1.31</td><td class='metric-value'>1.4</td><td class='unit-column'>Gb</td></tr></table>
+                </div>
+            </body>
+            </html>
