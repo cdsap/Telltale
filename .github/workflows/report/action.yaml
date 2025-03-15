@@ -233,7 +233,7 @@ runs:
         if [ "${{ inputs.profile }}" == "true" ]; then
           tagsreport="gradle-profiler"
         else
-          tagsreport="[${{ inputs.mode }}]"
+          tagsreport="${{ inputs.mode }}"
         fi
         if [ "${{ inputs.experiment_title }}" != "" ]; then
           EXPERIMENT_TITLE="${{ inputs.experiment_title }}"
@@ -256,7 +256,7 @@ runs:
           echo "date: $TIMESTAMP" >> "$EXPERIMENT_FILE"
           echo "report_link: /Telltale/reports/$html_filename" >> "$EXPERIMENT_FILE"
           echo "description: $DESCRIPTION" >> "$EXPERIMENT_FILE"
-          echo "tags: \"$tagsreport\"" >> "$EXPERIMENT_FILE"
+          echo "tags: [\"$tagsreport\"]" >> "$EXPERIMENT_FILE"
           echo "---" >> "$EXPERIMENT_FILE"
           echo "[Report 📊](../../reports/$html_filename)" >> "$EXPERIMENT_FILE"
           echo "$analysis_content" >> "$EXPERIMENT_FILE"
