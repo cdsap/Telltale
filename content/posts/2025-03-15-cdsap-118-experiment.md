@@ -5,7 +5,7 @@ date: 2025-03-15
 report_link: /Telltale/reports/experiment_results_20250315232008.html
 description: " 
 The Gradle build performance comparison data shows minor differences between the two variants. The overall build time is slightly faster in variantb_main_6g, with a mean build time of 43.296 seconds compared to 43.595 seconds in varianta_main_4g. The most time-consuming task, 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile', also runs faster in variantb_main_6g. CPU usage is similar across both variants, but memory usage is slightly lower in variantb_main_6g for all processes and the build process, while it's higher for build child processes."
-tags: "[dependencies cache]"
+tags: ["dependencies cache"]
 ---
 [Report 📊](../../reports/experiment_results_20250315232008.html)
 ## Summary
