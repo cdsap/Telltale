@@ -9,7 +9,7 @@ summary: "The analysis reveals that variantb_main_parallel was 6.27% faster (200
 
 
 ## Benchmarks
-[Report 🔍](../../reports/experiment_results_20250312033850.html)
+[Report 🔍](/reports/experiment_results_20250312033850.html)
 
 
 ## Detailed Report
