@@ -4,9 +4,9 @@ title: "cdsap/Experiment_Gradle_8_13-:core:model:compileKotlin"
 date: 2025-03-10
 report_link: /Telltale/reports/experiment_results_20250310160350.html
 description: "The experiment focuses on comparing the performance of two Gradle build variants: 'varianta_main_g1' and 'variantb_main_parallel'. The comparison includes build times, task type performances, statistical patterns, and CPU and memory usage. The most significant findings include differences in build times, variations in task execution times, and differences in CPU and memory usage between the two variants. "
-tags: "dependencies cache"
+tags: ["dependencies cache"]
 ---
-[📊 View Full Report]({{ page.report_link }}){: .report-link}
+{{ partial "report-link.html" . }}
 
 
 ## Build Time Comparison

@@ -4,9 +4,9 @@ title: "cdsap/Experiment_Gradle_8_13-assembleDebug"
 date: 2025-03-10
 report_link: /Telltale/reports/experiment_results_20250310162852.html
 description: "The comparison of Gradle build performance between variant A (main_g1) and variant B (main_parallel) reveals several key differences. Overall, variant B has a faster build time, with a mean time of 200.6 seconds compared to variant A's 215.5 seconds, a difference of 6.9%. The most time-consuming tasks across both variants are 'L8DexDesugarLibTask', 'DexMergingTask', and 'KspTaskJvm'. In terms of CPU and memory usage, both variants showed similar CPU usage, but variant A had a higher memory usage. "
-tags: "dependencies cache"
+tags: ["dependencies cache"]
 ---
-[📊 View Full Report]({{ page.report_link }}){: .report-link}
+{{ partial "report-link.html" . }}
 
 
 # Build Time Comparison

@@ -2,7 +2,7 @@
 layout: post
 title: "cdsap/Experiment_Gradle_8_13-:core:model:compileKotlin"
 date: 2025-03-07
-report_link: /Telltale/reports/experiment_results_20250307033906.html
+report_link: /Telltale/reports/experiment_results_20250307165049.html
 description: "Variants: varianta_main,variantb_gradle_8_13"
-tags: dependencies cache - transforms cache
+tags: ["no caching"]
 ---

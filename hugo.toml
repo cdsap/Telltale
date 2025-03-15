@@ -1,0 +1,34 @@
+baseURL = 'https://cdsap.github.io/Telltale/'
+languageCode = 'en-us'
+title = 'Telltale'
+theme = 'PaperMod'
+
+
+[params]
+  description = "Experimentation Framework for Gradle Builds"
+  defaultTheme = "auto"
+  ShowReadingTime = false
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowRssButtonInSectionTermList = false
+  ShowToc = false
+  mainSections = ["posts"]
+  assets = {customCSS = ["css/extended.css"]}
+
+[params.homeInfoParams]
+  Title = "Telltale 🔍"
+  Content = "A framework for running and analyzing Gradle build experiments"
+
+[menu]
+  [[menu.main]]
+    identifier = "expereiments"
+    name = "Experiments"
+    url = "/posts/"
+    weight = 10
+  [[menu.main]]
+    identifier = "info"
+    name = "Info"
+    url = "/info/"
+    weight = 20

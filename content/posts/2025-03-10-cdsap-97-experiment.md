@@ -4,9 +4,9 @@ title: "cdsap/Experiment_Gradle_8_13-:core:model:compileKotlin"
 date: 2025-03-10
 report_link: /Telltale/reports/experiment_results_20250310014500.html
 description: "The comparison between the two Gradle build variants, 'varianta_main' and 'variantb_gradle_8_13', reveals slight differences in build times, task execution times, and resource usage. The overall build times are almost identical, with 'varianta_main' taking slightly longer on average. The most time-consuming tasks in both variants are 'KotlinCompile', 'GeneratePluginDescriptors', and 'ProcessResources'. CPU and memory usage are also similar, with 'varianta_main' using slightly more resources in some cases."
-tags: "dependencies cache"
+tags: ["dependencies cache"]
 ---
-[📊 View Full Report]({{ page.report_link }}){: .report-link}
+{{ partial "report-link.html" . }}
 
 
 # Build Time Comparison

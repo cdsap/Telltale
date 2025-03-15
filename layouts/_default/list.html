@@ -1,0 +1,46 @@
+{{- define "main" }}
+
+{{- if (and .Title (ne .Title "Posts")) }}
+<header class="page-header">
+  
+  {{- if .Description }}
+  <div class="post-description">{{ .Description }}</div>
+  {{- end }}
+</header>
+{{- end }}
+
+{{- $pages := union .RegularPages .Sections }}
+{{- if .IsHome }}
+{{- $pages = where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{- end }}
+
+<div class="posts-list">
+  {{ range $pages }}
+  <article class="post-entry">
+    <header class="entry-header">
+      <h2>
+        <a href="{{ .Permalink }}">{{ .Title }}</a>
+      </h2>
+    </header>
+    <div class="entry-content">
+      {{- if .Params.summary }}
+      <p>{{ .Params.summary }}</p>
+      {{- else }}
+      <p>{{ .Summary }}</p>
+      {{- end }}
+    </div>
+    {{- if .Params.tags }}
+    <div class="entry-tags">
+      {{- range .Params.tags }}
+      <a href="{{ "tags/" | absURL }}{{ . | urlize }}" class="entry-tag">#{{ . }}</a>
+      {{- end }}
+    </div>
+    {{- end }}
+    <footer class="entry-footer">
+      <time>{{ .Date.Format "January 2, 2006" }}</time>
+    </footer>
+  </article>
+  {{ end }}
+</div>
+
+{{- end }}{{/* end main */}}

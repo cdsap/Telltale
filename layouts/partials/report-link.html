@@ -1,0 +1,8 @@
+{{ with .Params.report_link }}
+<div class="report-links">
+  <a href="{{ . }}" class="report-link">📊 View Full Report</a>
+  {{ with $.Params.log_link }}
+  <a href="{{ . }}" class="log-link">📝 View Log</a>
+  {{ end }}
+</div>
+{{ end }} 

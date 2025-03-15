@@ -4,7 +4,7 @@ title: "Gradle 8.13 nowinandroid"
 date: 2025-03-09
 report_link: /Telltale/reports/experiment_results_20250309233945.html
 description: "The comparison between the two Gradle build variants, 'varianta_main' and 'variantb_gradle_8_13', reveals some interesting insights. The overall build time for 'variantb_gradle_8_13' is slightly higher than 'varianta_main'. The most time-consuming tasks are 'KotlinCompile' and 'Jar', with 'KotlinCompile' taking significantly longer in both variants. CPU and memory usage are relatively similar between the two variants, with only minor differences observed."
-tags: "dependencies cache"
+tags: ["dependencies cache"]
 ---
 
 
