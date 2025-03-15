@@ -268,7 +268,7 @@ runs:
       run: |
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git config user.name "github-actions[bot]"
-        git add _posts
+        git add content
         git add reports
         git commit -m "Add experiment results for ${{ inputs.experiment-id }}"
         git push https://x-access-token:${{ inputs.gh_token }}@github.com/cdsap/Telltale.git gh-pages
