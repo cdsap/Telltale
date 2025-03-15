@@ -204,7 +204,7 @@ runs:
       shell: bash
       run: |
         TIMESTAMP=$(date +%Y-%m-%d)
-        EXPERIMENT_FILE="_posts/${TIMESTAMP}-${{ inputs.experiment-id }}-experiment.md"
+        EXPERIMENT_FILE="content/posts/${TIMESTAMP}-${{ inputs.experiment-id }}-experiment.md"
         html_file=$(ls temp-results/*.html | head -n 1)
         html_filename=$(basename "$html_file")   
 
@@ -233,7 +233,7 @@ runs:
         if [ "${{ inputs.profile }}" == "true" ]; then
           tagsreport="gradle-profiler"
         else
-          tagsreport="Variants running with ${{ inputs.mode }}"
+          tagsreport="[${{ inputs.mode }}]"
         fi
         if [ "${{ inputs.experiment_title }}" != "" ]; then
           EXPERIMENT_TITLE="${{ inputs.experiment_title }}"
@@ -258,7 +258,7 @@ runs:
           echo "description: $DESCRIPTION" >> "$EXPERIMENT_FILE"
           echo "tags: \"$tagsreport\"" >> "$EXPERIMENT_FILE"
           echo "---" >> "$EXPERIMENT_FILE"
-          echo "[📊 View Full Report]({{ page.report_link }}){: .report-link}" >> "$EXPERIMENT_FILE"
+          echo "[Report 📊](../../reports/$html_filename)" >> "$EXPERIMENT_FILE"
           echo "$analysis_content" >> "$EXPERIMENT_FILE"
         fi
 
