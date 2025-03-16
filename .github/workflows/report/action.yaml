@@ -259,7 +259,7 @@ runs:
           echo "title: \"$EXPERIMENT_TITLE\"" >> "$EXPERIMENT_FILE"
           echo "date: $TIMESTAMP" >> "$EXPERIMENT_FILE"
           echo "report_link: /Telltale/reports/$html_filename" >> "$EXPERIMENT_FILE"
-          echo "description: $DESCRIPTION" >> "$EXPERIMENT_FILE"
+          echo "summary: $DESCRIPTION" >> "$EXPERIMENT_FILE"
           echo "tags: [\"$tagsreport\"]" >> "$EXPERIMENT_FILE"
           echo "---" >> "$EXPERIMENT_FILE"
           echo "[Report 📊](../../reports/$html_filename)" >> "$EXPERIMENT_FILE"
