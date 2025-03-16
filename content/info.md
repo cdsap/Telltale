@@ -63,3 +63,4 @@ Have an open-source project? We welcome new experiments!
 
 **Interested?** Get in touch to start experimenting with your builds!
 
+![Telltale](../telltale.png)
