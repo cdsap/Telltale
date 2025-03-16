@@ -1,0 +1,40 @@
+---
+layout: post
+title: "Another test"
+date: 2025-03-16
+report_link: /Telltale/reports/experiment_results_20250316005223.html
+description: " 
+
+The analysis of the Gradle build performance comparison data reveals several key findings. The overall build time for variantb_main_6g is slightly faster than varianta_main_4g, with a mean time of 43.479 seconds compared to 44.617 seconds. The most time-consuming tasks across both variants are 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile', ':build-logic:convention:compileKotlin', and ':core:model:compileKotlin'. Notably, all these tasks take less time in variantb_main_6g. CPU usage is almost identical for both variants, but variantb_main_6g uses less memory across all processes, the build process, and build child processes."
+tags: ["dependencies cache"]
+---
+[Report 📊](../../reports/experiment_results_20250316005223.html)
+## Summary
+
+The analysis of the Gradle build performance comparison data reveals several key findings. The overall build time for variantb_main_6g is slightly faster than varianta_main_4g, with a mean time of 43.479 seconds compared to 44.617 seconds. The most time-consuming tasks across both variants are 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile', ':build-logic:convention:compileKotlin', and ':core:model:compileKotlin'. Notably, all these tasks take less time in variantb_main_6g. CPU usage is almost identical for both variants, but variantb_main_6g uses less memory across all processes, the build process, and build child processes.
+
+## Detailed Report
+
+1. **Build Time Comparison**
+   - The mean build time for varianta_main_4g is 44.617 seconds, while for variantb_main_6g it is 43.479 seconds, indicating that variantb_main_6g is faster by 1.138 seconds or 2.55%.
+
+2. **Task Type Differences**
+   - The top 3 most time-consuming tasks for both variants are 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile', ':build-logic:convention:compileKotlin', and ':core:model:compileKotlin'. All these tasks take less time in variantb_main_6g, with differences ranging from 1.55% to 3.28%.
+
+3. **Statistical Patterns**
+   - The tasks with notable timing variations are the same as the top 3 most time-consuming tasks. Variantb_main_6g performs better in all these tasks.
+
+4. **Process State Analysis**
+   - Not available.
+
+5. **CPU & Memory Usage Analysis**
+   - The maximum CPU usage is slightly higher for variantb_main_6g in all processes and build child processes, but identical in the build process. However, variantb_main_6g uses less memory across all processes (3.89 GB vs 4.16 GB), the build process (1.51 GB vs 1.83 GB), and build child processes (1.37 GB vs 1.29 GB).
+
+6. **Garbage Collection Analysis**
+   - Not available.
+
+7. **Kotlin Build Reports Analysis**
+   - Not available.
+
+8. **Summary and Formatting Requirements**
+   - The analysis reveals that variantb_main_6g performs better than varianta_main_4g in terms of build time, task execution time, and memory usage. However, it has slightly higher CPU usage. The most time-consuming tasks are 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile', ':build-logic:convention:compileKotlin', and ':core:model:compileKotlin', all of which are faster in variantb_main_6g.
