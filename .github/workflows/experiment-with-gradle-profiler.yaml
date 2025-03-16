@@ -118,5 +118,6 @@ jobs:
           deploy_results: ${{ fromJson(github.event.inputs.extra_report_args).deploy_results }}
           open-ai-request: ${{ fromJson(github.event.inputs.extra_report_args).open_ai_request }}
           open-ai-api-key: ${{ secrets.OPEN_API_KEY }}
+          deployment-key: ${{ secrets.GH_BUILD_DEPLOYMENT }}
 
       - uses: actions/checkout@v4
