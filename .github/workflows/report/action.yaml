@@ -284,5 +284,6 @@ runs:
         curl -X POST \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: token ${{ inputs.deployment-key }}" \
-          https://api.github.com/repos/${{ github.repository }}/dispatches \
-          -d '{"event_type": "deploy-hugo"}'
+          https://api.github.com/repos/cdsap/Telltale/dispatches \
+          -d '{"event_type": "deploy-hugo", "client_payload": {"ref": "gh-pages"}}'
+  
