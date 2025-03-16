@@ -1,79 +1,65 @@
 ---
-title: "Site Information"
+title: "About This Site"
 layout: "page"
 url: "/info/"
-summary: "Information about the components and tools used in this site"
+summary: "Learn about how we use Telltale to run and share Gradle build experiments"
 ---
 
-# About This Site
+This site showcases build optimization experiments conducted using [Telltale](https://github.com/cdsap/Telltale), an automated framework for running and analyzing Gradle builds. Here's what you need to know:
 
-This site serves as a platform for analyzing and comparing Gradle build performance experiments. Here's an overview of the key components and tools used:
+## How It Works
 
-## Core Components
+1. **Experiment Execution**: Telltale automates:
+   - Setting up experimental environments
+   - Running different build variants
+   - Collecting performance metrics
+   - Visualizing results
 
-### Experimentation Framework
-- **Gradle Build Tool**: Used for building and analyzing Android projects
-- **Gradle Profiler**: Tool for automated Gradle build performance experiments
-- **GitHub Actions**: CI/CD platform for running automated experiments
+2. **Data Collection**: 
+   - All builds are tracked in Develocity
+   - [Build Experiment Results](https://github.com/cdsap/BuildExperimentResults) tool aggregates data
+   - Generates comprehensive CSV and HTML reports
+   ![Experiment Results](../html_output.png)
 
-### Data Collection
-- **Build Performance Data**: Collected metrics include
-  - Build time measurements
-  - Task execution times
-  - Memory usage statistics
-  - Garbage collection data
-  - CPU utilization
+3. **AI-Powered Analysis**:
+   - OpenAI analyzes experiment results
+   - Provides detailed summaries and insights
+   - Helps identify performance patterns and improvements
 
-### Report Generation
-Each experiment generates:
-- **HTML Reports**: Detailed performance analysis with charts and metrics
-- **Log Files**: Raw build execution logs and profiler data
-- **Summary Data**: Quick overview of key findings in each post
+## Publishing Process
 
-## Site Architecture
+### When Do We Publish?
+Experiments are published when:
+- They are triggered by main workflows
+- The `extra_report_args.deploy_results` is set to `'true'`
+- Results are validated and ready for sharing
 
-### Static Site Generator
-- **Hugo**: Fast static site generator written in Go
-- **PaperMod Theme**: Clean, fast, and responsive theme
-- **Custom Components**: 
-  - Report link partial templates
-  - Styled navigation elements
-  - Performance metric displays
+### What's in Each Post?
+Each experiment post includes:
+- Detailed performance comparisons
+- CPU and memory usage analysis
+- Build time metrics
+- Task execution statistics
+- Gradle User Home environment tags (e.g., #dependencies cache)
 
-### Deployment
-- **GitHub Pages**: Hosting platform for the site
-- **GitHub Actions**: Automated deployment workflow
+![Example Post Layout](../examplepost.png)
 
-## Data Organization
+## Technology Stack
 
-### Content Structure
-- **Posts**: Individual experiment results and analysis
-- **Reports**: Detailed HTML reports for each experiment
-- **Logs**: Build and profiler logs for verification
+We leverage these powerful tools:
+- **[Develocity](https://gradle.com/develocity/)**: Build performance monitoring
+- **[Hugo](https://gohugo.io/)**: Static site generation
+- **[Hugo PaperMod](https://github.com/adityatelange/hugo-PaperMod/)**: Theme and styling
+- **[Build Experiment Results](https://github.com/cdsap/BuildExperimentResults)**: Data aggregation and analysis
 
-### Metadata
-Each experiment includes:
-- Build configuration details
-- Performance metrics
-- Comparative analysis
-- Links to full reports and logs
+## Contribute Your Experiments
 
-## Tools Used
+Have an open-source project? We welcome new experiments!
 
-### Build Analysis
-- **Gradle Enterprise**: For detailed build scanning
-- **Custom Analysis Scripts**: Processing raw performance data
-- **Statistical Analysis**: For comparing build variants
+**Requirements**:
+- Open source project
+- Compatible with GitHub Actions free runners
+- Interesting build configuration scenarios to test
 
-### Visualization
-- **Performance Charts**: Visual representation of metrics
-- **Comparison Tables**: Side-by-side variant analysis
-- **Timeline Views**: Build progression over time
+**Interested?** Get in touch to start experimenting with your builds!
 
-## Future Enhancements
-
-Planned improvements include:
-- Enhanced data visualization
-- More detailed statistical analysis
-- Improved search and filtering
-- Additional performance metrics 
