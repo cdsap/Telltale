@@ -188,6 +188,7 @@ jobs:
   report-no-caching:
     permissions:
       contents: write
+      actions: write
     name: Report for No Caching
     if: fromJson(github.event.inputs.extra_report_args).report_enabled == 'true'
     runs-on: ubuntu-latest
@@ -223,6 +224,7 @@ jobs:
   report:
     permissions:
       contents: write
+      actions: write
     name: Report with Caching
     if: fromJson(github.event.inputs.extra_report_args).report_enabled == 'true'
     runs-on: ubuntu-latest
