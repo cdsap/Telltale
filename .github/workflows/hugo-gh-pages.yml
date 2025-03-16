@@ -25,8 +25,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: true
           fetch-depth: 0
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
@@ -34,8 +38,18 @@ jobs:
           hugo-version: 'latest'
           extended: true
 
+      - name: Install theme
+        run: git submodule add -f https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
+
       - name: Build with Hugo
-        run: hugo --minify
+        env:
+          HUGO_ENVIRONMENT: production
+          HUGO_ENV: production
+        run: |
+          hugo \
+            --gc \
+            --minify \
+            --baseURL "https://cdsap.github.io/Telltale/"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
