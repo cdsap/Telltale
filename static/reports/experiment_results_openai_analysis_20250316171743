@@ -1,0 +1,28 @@
+## Summary
+The Gradle build performance comparison between `varianta_main_4g` and `variantb_main_7g` shows minor differences in build times and task execution times. The most time-consuming task for both variants was `:build-logic:convention:compileKotlin`. CPU usage was similar across all processes, but `variantb_main_7g` used less memory in the build process and more in the child processes.
+
+## Detailed Report
+
+1. **Build Time Comparison**
+   - The mean build times were quite similar, with `varianta_main_4g` taking 43.763 seconds and `variantb_main_7g` taking 43.532 seconds. This is a negligible difference of 0.53%.
+   - The P50 build times were also close, with `varianta_main_4g` at 43.325 seconds and `variantb_main_7g` at 43.105 seconds.
+   - The P90 build times showed a more significant difference, with `varianta_main_4g` taking 47.924 seconds and `variantb_main_7g` taking 45.090 seconds, a 6.3% decrease.
+
+2. **Task Type Differences**
+   - The most time-consuming task for both variants was `:build-logic:convention:compileKotlin`, with mean times of 12.115 seconds for `varianta_main_4g` and 12.309 seconds for `variantb_main_7g`.
+   - The second most time-consuming task was `org.jetbrains.kotlin.gradle.tasks.KotlinCompile`, with mean times of 8.640 seconds for `varianta_main_4g` and 8.734 seconds for `variantb_main_7g`.
+   - The third most time-consuming task was `:core:model:compileKotlin`, with mean times of 5.166 seconds for `varianta_main_4g` and 5.159 seconds for `variantb_main_7g`.
+
+3. **Statistical Patterns**
+   - The tasks with notable timing variations were `:build-logic:convention:compileKotlin` and `org.jetbrains.kotlin.gradle.tasks.KotlinCompile`, with differences of 1.6% and 1.1% respectively.
+   - The P50 and P90 values for these tasks were also similar across both variants.
+
+4. **Process State Analysis**
+   - CPU usage was similar across all processes, with maximum values of 96.5% for `varianta_main_4g` and 98% for `variantb_main_7g`.
+   - Memory usage was lower for `variantb_main_7g` in the build process (1.53GB vs 1.92GB for `varianta_main_4g`) but higher in the child processes (1.41GB vs 1.29GB for `varianta_main_4g`).
+
+5. **CPU & Memory Usage Analysis**
+   - CPU usage was similar for all processes, the build process, and build child processes across both variants.
+   - Memory usage was lower for `variantb_main_7g` in the build process and higher in the child processes compared to `varianta_main_4g`.
+
+Please note that data for Garbage Collection Analysis and Kotlin Build Reports Analysis were not provided in the dataset.
