@@ -3,7 +3,7 @@ layout: post
 title: "One more"
 date: 2025-03-16
 report_link: /Telltale/reports/experiment_results_20250316015446.html
-description: " 
+summary: " 
 The analysis of the Gradle build performance comparison data reveals that variant B (main_6g) generally performs better than variant A (main_4g). Variant B has a shorter overall build time, with a mean difference of around 838ms. The most time-consuming tasks, such as 'KotlinCompile' and 'compileKotlin' for both 'build-logic:convention' and 'core:model', also take less time in variant B. CPU usage is slightly higher in variant B, but it uses less memory across all processes, the build process, and build child processes."
 tags: ["dependencies cache"]
 ---

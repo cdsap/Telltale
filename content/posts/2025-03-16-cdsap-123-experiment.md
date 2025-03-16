@@ -3,7 +3,7 @@ layout: post
 title: "Ei it will work now?"
 date: 2025-03-16
 report_link: /Telltale/reports/experiment_results_20250316011557.html
-description: " 
+summary: " 
 The Gradle build performance comparison between `varianta_main_4g` and `variantb_main_6g` shows minor differences. The overall build time is marginally faster in `variantb_main_6g` by about 0.7%. The most time-consuming tasks are similar across both variants, with minor differences in execution times. CPU usage is slightly higher in `variantb_main_6g` for all processes, but memory usage is lower. For the build process, CPU usage is slightly lower in `variantb_main_6g`, and memory usage is significantly lower by about 13.3%. For build child processes, CPU usage is slightly lower in `variantb_main_6g`, but memory usage is higher."
 tags: ["dependencies cache"]
 ---

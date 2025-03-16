@@ -3,7 +3,7 @@ layout: post
 title: "kio"
 date: 2025-03-16
 report_link: /Telltale/reports/experiment_results_20250316014221.html
-description: " 
+summary: " 
 The Gradle build performance comparison between `varianta_main_4g` and `variantb_main_6g` shows minor differences overall. The build time for both variants is almost identical, with `variantb_main_6g` being slightly faster on average. The most time-consuming task, `org.jetbrains.kotlin.gradle.tasks.KotlinCompile`, also performs similarly in both variants. The CPU usage is nearly the same across all processes, but `variantb_main_6g` uses less memory, particularly for the build process."
 tags: ["dependencies cache"]
 ---

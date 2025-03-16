@@ -3,7 +3,7 @@ layout: post
 title: "test"
 date: 2025-03-16
 report_link: /Telltale/reports/experiment_results_20250316010452.html
-description: " 
+summary: " 
 The Gradle build performance comparison data shows very similar performance between the two variants, with the difference in build times being less than 1%. The most time-consuming tasks were 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile', ':build-logic:convention:compileKotlin', and ':core:model:compileKotlin', with minimal differences in execution times between the two variants. CPU usage was almost identical across all processes, while memory usage was slightly lower in variant B."
 tags: ["dependencies cache"]
 ---

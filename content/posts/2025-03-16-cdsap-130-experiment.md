@@ -3,7 +3,7 @@ layout: post
 title: "adding"
 date: 2025-03-16
 report_link: /Telltale/reports/experiment_results_20250316031524.html
-description: " 
+summary: " 
 The analysis of the Gradle build performance comparison data reveals that variantb_main_6g generally performs slightly better than varianta_main_4g. The overall build time for variantb_main_6g is marginally less than varianta_main_4g. The most time-consuming tasks such as 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile' and ':build-logic:convention:compileKotlin' also take less time in variantb_main_6g. However, the ':core:model:compileKotlin' task takes slightly more time in variantb_main_6g. In terms of resource usage, variantb_main_6g uses less memory but slightly more CPU in some cases."
 tags: ["dependencies cache"]
 ---

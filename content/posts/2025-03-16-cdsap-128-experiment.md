@@ -3,7 +3,7 @@ layout: post
 title: "Adding 4g"
 date: 2025-03-16
 report_link: /Telltale/reports/experiment_results_20250316023509.html
-description: " 
+summary: " 
 The Gradle build performance comparison data shows minor differences between the two variants: varianata_main_4g and variantb_main_6g. The overall build time was slightly faster for variantb_main_6g. Task execution times were almost identical, with the most time-consuming tasks being the same for both variants. CPU usage was slightly higher for varianata_main_4g, while memory usage was slightly lower. "
 tags: ["dependencies cache"]
 ---

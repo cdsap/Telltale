@@ -14,7 +14,9 @@
 {{- $pages = where site.RegularPages "Type" "in" site.Params.mainSections }}
 {{- end }}
 
-<div class="posts-list">
+<div class="posts">
+  {{ $pages := $pages.ByDate.Reverse }}
+  {{ $pages := sort $pages "File.BaseFileName" "desc" }}
   {{ range $pages }}
   <article class="post-entry">
     <header class="entry-header">
@@ -24,21 +26,21 @@
     </header>
     <div class="entry-content">
       {{- if .Params.summary }}
-      <p>{{ .Params.summary }}</p>
+      <p>{{ .Params.summary | markdownify | safeHTML }}</p>
       {{- else }}
-      <p>{{ .Summary }}</p>
+      <p>{{ .Summary | safeHTML }}</p>
       {{- end }}
     </div>
-    {{- if .Params.tags }}
-    <div class="entry-tags">
-      {{- range .Params.tags }}
-      <a href="{{ "tags/" | absURL }}{{ . | urlize }}" class="entry-tag">#{{ . }}</a>
+    <div class="entry-footer">
+      {{- if .Params.tags }}
+      <div class="entry-tags">
+        {{- range .Params.tags }}
+        <a href="{{ "tags/" | absURL }}{{ . | lower | urlize }}" class="entry-tag">#{{ . }}</a>
+        {{- end }}
+      </div>
       {{- end }}
+      <time class="entry-date">{{ .Date.Format "January 2, 2006" }}</time>
     </div>
-    {{- end }}
-    <footer class="entry-footer">
-      <time>{{ .Date.Format "January 2, 2006" }}</time>
-    </footer>
   </article>
   {{ end }}
 </div>

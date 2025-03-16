@@ -3,7 +3,7 @@ layout: post
 title: "new one"
 date: 2025-03-16
 report_link: /Telltale/reports/experiment_results_20250316025239.html
-description: " 
+summary: " 
 The performance comparison between the two variants, varianata_main_4g and variantb_main_6g, reveals a few significant differences. The overall build time is slightly lower for variantb_main_6g, but the difference is less than 1%. The most time-consuming task, 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile', shows a negligible difference in execution time between the two variants. However, there are notable differences in CPU and memory usage. The maximum CPU usage is slightly higher for variantb_main_6g across all processes, the build process, and build child processes. Memory usage is generally lower for variantb_main_6g, with the most significant difference seen in the build process memory usage, where variantb_main_6g uses about 15% less memory."
 tags: ["dependencies cache"]
 ---

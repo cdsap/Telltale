@@ -3,10 +3,11 @@ layout: post
 title: "test"
 date: 2025-03-16
 report_link: /Telltale/reports/experiment_results_20250316163257.html
-description: " 
+summary: " 
 The comparison between the two Gradle build variants, `varianta_main_4g` and `variantb_main_6g`, shows minor differences in build times and task execution times. However, there are noticeable differences in CPU and memory usage. The `variantb_main_6g` variant shows lower memory usage across all processes, the build process, and build child processes. However, `variantb_main_6g` has slightly higher CPU usage for build child processes."
 tags: ["dependencies cache"]
 ---
+
 [Report 📊](../../reports/experiment_results_20250316163257.html)
 ## Summary
 The comparison between the two Gradle build variants, `varianta_main_4g` and `variantb_main_6g`, shows minor differences in build times and task execution times. However, there are noticeable differences in CPU and memory usage. The `variantb_main_6g` variant shows lower memory usage across all processes, the build process, and build child processes. However, `variantb_main_6g` has slightly higher CPU usage for build child processes.
