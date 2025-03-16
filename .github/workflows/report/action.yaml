@@ -95,7 +95,7 @@ runs:
       id: compareBuilds
       run: |
         # Download and set permissions for the CompareGEBuilds binary
-        curl -L https://github.com/cdsap/CompareGEBuilds/releases/download/v0.5.8/build-experiment-results --output build-experiment-results
+        curl -L https://github.com/cdsap/CompareGEBuilds/releases/download/v0.5.9/build-experiment-results --output build-experiment-results
         chmod 0757 build-experiment-results
 
         # Parse and format tags input into the required format
