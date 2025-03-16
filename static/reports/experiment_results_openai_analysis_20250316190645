@@ -1,0 +1,34 @@
+## Summary
+The analysis of the Gradle build performance comparison data reveals that variantb_main_7g generally performs better than varianta_main_4g. The overall build time is slightly shorter for variantb_main_7g, with a mean time of 144.944 seconds compared to 151.666 seconds for varianta_main_4g. The most time-consuming tasks are similar across both variants, with minor differences in execution times. In terms of resource usage, variantb_main_7g utilizes more CPU and memory, which could be attributed to its better performance.
+
+## Detailed Report
+
+1. **Build Time Comparison**
+   - The mean build time for varianta_main_4g is 151.666 seconds, while for variantb_main_7g it is 144.944 seconds. This indicates that variantb_main_7g is approximately 4.43% faster.
+   - The P50 build time for varianta_main_4g is 143.961 seconds, while for variantb_main_7g it is 147.397 seconds. 
+   - The P90 build time for varianta_main_4g is 182.194 seconds, while for variantb_main_7g it is 153.731 seconds. This shows that variantb_main_7g is significantly faster at the 90th percentile.
+
+2. **Task Type Differences**
+   - The top three most time-consuming tasks for both variants are "org.jetbrains.kotlin.gradle.tasks.KotlinCompile", ":build-logic:convention:compileKotlin", and ":core:model:compileKotlin".
+   - The execution times for these tasks are relatively similar across both variants, with minor differences in the mean, P50, and P90 values. None of these differences exceed 10%.
+
+3. **Statistical Patterns**
+   - The tasks do not show notable timing variations greater than 10% between the two variants.
+
+4. **Process State Analysis**
+   - The maximum CPU usage is the same for both variants at 100%.
+   - The maximum memory usage is higher for variantb_main_7g at 8.3GB compared to 6.4GB for varianta_main_4g.
+
+5. **CPU & Memory Usage Analysis**
+   - The maximum CPU usage for the build process is slightly higher for variantb_main_7g at 94.8% compared to 94.7% for varianta_main_4g.
+   - The maximum memory usage for the build process is significantly higher for variantb_main_7g at 5.84GB compared to 4.02GB for varianta_main_4g.
+   - The maximum CPU usage for build child processes is slightly lower for variantb_main_7g at 89.9% compared to 90.7% for varianta_main_4g.
+   - The maximum memory usage for build child processes is slightly higher for variantb_main_7g at 1.4GB compared to 1.32GB for varianta_main_4g.
+
+6. **Garbage Collection Analysis**
+   - The data does not provide information on total GC collections.
+
+7. **Kotlin Build Reports Analysis**
+   - The data does not provide information on Kotlin build reports.
+
+In conclusion, while variantb_main_7g utilizes more resources, it provides a faster build time, especially at the 90th percentile. The tasks execution times are relatively similar across both variants, indicating that the difference in build times may be due to other factors such as resource allocation and usage.
