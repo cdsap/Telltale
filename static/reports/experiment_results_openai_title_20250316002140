@@ -1,0 +1,3 @@
+ 
+The build performance comparison between `varianta_main_4g` and `variantb_main_6g` shows that `variantb_main_6g` generally performs better. The overall build time for `variantb_main_6g` is shorter across all percentiles. The most time-consuming tasks, `org.jetbrains.kotlin.gradle.tasks.KotlinCompile`, `:build-logic:convention:compileKotlin`, and `:core:model:compileKotlin`, also execute faster in `variantb_main_6g`. CPU usage is slightly higher in `variantb_main_6g`, but it uses less memory across all processes.
+
