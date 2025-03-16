@@ -278,6 +278,8 @@ runs:
         git push https://x-access-token:${{ inputs.gh_token }}@github.com/cdsap/Telltale.git gh-pages
 
     - name: Trigger gh-pages workflow
+      if: ${{ inputs.deploy_results }} == 'true'
+      shell: bash    
       run: |
         curl -X POST \
           -H "Accept: application/vnd.github+json" \
