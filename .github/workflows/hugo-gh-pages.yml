@@ -3,6 +3,8 @@ name: Deploy Hugo site to Pages
 on:
   push:
     branches: ["gh-pages"]
+  repository_dispatch:
+    types: [deploy-hugo]     
   workflow_dispatch:
 
 permissions:
