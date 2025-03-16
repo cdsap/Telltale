@@ -229,7 +229,7 @@ runs:
             echo "Title file not found."
         fi
         
-        cp temp-results/experiment_results* "reports/"
+        cp temp-results/experiment_results* "static/reports/"
         if [ "${{ inputs.profile }}" == "true" ]; then
           tagsreport="gradle-profiler"
         else
@@ -269,6 +269,6 @@ runs:
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git config user.name "github-actions[bot]"
         git add content
-        git add reports
+        git add static/reports
         git commit -m "Add experiment results for ${{ inputs.experiment-id }}"
         git push https://x-access-token:${{ inputs.gh_token }}@github.com/cdsap/Telltale.git gh-pages
