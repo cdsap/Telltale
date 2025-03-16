@@ -1,0 +1,11 @@
+Category,Metric,varianta_main_4g Mean,variantb_main_6g Mean,varianta_main_4g P50,variantb_main_6g P50,varianta_main_4g P90,variantb_main_6g P90,Unit
+Build,Build time,43243,43022,43123,43110,44703,44303,ms
+Task Type,org.jetbrains.kotlin.gradle.tasks.KotlinCompile,8708,8513,8523,8403,12513,12353,ms
+Task Path,:build-logic:convention:compileKotlin,12277,11872,12049,11712,14144,12497,ms
+Task Path,:core:model:compileKotlin,5140,5155,5129,5159,5375,5304,ms
+All processes cpu,Max,97.0,96.5,97.0,96.5,98,98,%
+All processes memory,Max,4.05,3.93,4.05,3.94,4.42,4.1,Gb
+Build process cpu,Max,83.3,82.8,83.0,82.5,86,86,%
+Build processes memory,Max,1.71,1.52,1.72,1.51,2.06,1.72,Gb
+Build child processes cpu,Max,87.7,87.0,87.5,87.0,91,90,%
+Build child processes memory,Max,1.3,1.37,1.31,1.37,1.31,1.39,Gb
