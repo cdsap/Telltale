@@ -270,9 +270,9 @@ runs:
       if: ${{ inputs.deploy_results }} == 'true'
       shell: bash    
       run: |
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git config user.name "github-actions[bot]"
+        git config user.email "inaki.seri@gmail.com"
+        git config user.name "Inaki Villar"
         git add content
         git add static/reports
         git commit -m "Add experiment results for ${{ inputs.experiment-id }}"
-        git push https://x-access-token:${{ inputs.deployment-key }}@github.com/cdsap/Telltale.git gh-pages
+        git push https://x-access-token:${{ inputs.gh_token }}@github.com/cdsap/Telltale.git gh-pages
