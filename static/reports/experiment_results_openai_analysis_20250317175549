@@ -1,0 +1,30 @@
+## Summary
+The Gradle build performance comparison data reveals that variant B (`variantb_main_parallel`) generally performs better than variant A (`varianta_main_g1`). The mean build time for variant B is approximately 14.3 seconds, which is 6.6% faster than variant A's mean build time of around 21.5 seconds. The most time-consuming tasks across both variants are `:app:l8DexDesugarLibDemoDebug`, `:app:mergeExtDexDemoDebug`, and `:core:designsystem:compileDemoDebugKotlin`. Significant differences in task execution times are observed in `:app:transformDemoDebugClassesWithAsm` and `:core:designsystem:bundleLibCompileToJarDemoDebug`. The CPU and memory usage are also slightly lower for variant B.
+
+## Detailed Report
+
+**1. Build Time Comparison**
+- Variant B's mean build time is approximately 14.3 seconds, which is 6.6% faster than variant A's mean build time of around 21.5 seconds. 
+- The P50 build time for variant B is around 20.0 seconds, compared to approximately 21.6 seconds for variant A, indicating a 7.1% improvement.
+- At the P90 level, variant B's build time is approximately 21.0 seconds, which is 6.1% faster than variant A's P90 build time of around 22.4 seconds.
+
+**2. Task Type Differences**
+- The top 3 most time-consuming tasks for both variants are `:app:l8DexDesugarLibDemoDebug`, `:app:mergeExtDexDemoDebug`, and `:core:designsystem:compileDemoDebugKotlin`.
+- For `:app:l8DexDesugarLibDemoDebug`, variant B is 6.6% faster on average, with a mean execution time of around 36.2 seconds compared to variant A's 38.7 seconds.
+- For `:app:mergeExtDexDemoDebug`, variant B is 7.0% faster on average, with a mean execution time of approximately 39.6 seconds compared to variant A's 42.5 seconds.
+- For `:core:designsystem:compileDemoDebugKotlin`, variant B is 3.8% faster on average, with a mean execution time of approximately 17.4 seconds compared to variant A's 18.1 seconds.
+
+**3. Statistical Patterns**
+- The task `:app:transformDemoDebugClassesWithAsm` shows a significant timing variation of 30.7% between the two variants, with variant B being faster.
+- The task `:core:designsystem:bundleLibCompileToJarDemoDebug` also shows a significant timing variation of 34.9% between the two variants, with variant B being faster.
+
+**5. CPU & Memory Usage Analysis**
+- The maximum CPU usage for all processes is 100% for both variants.
+- The maximum memory usage for all processes is slightly lower for variant B at 9.75 GB, compared to variant A's 11.75 GB.
+- The maximum CPU usage for the build process is slightly lower for variant B at 95%, compared to variant A's 95%.
+- The maximum memory usage for the build process is slightly lower for variant B at 5.29 GB, compared to variant A's 5.45 GB.
+- The maximum CPU usage for the build child processes is slightly higher for variant B at 94%, compared to variant A's 94%.
+- The maximum memory usage for the build child processes is significantly lower for variant B at 3.44 GB, compared to variant A's 5.33 GB.
+
+**6. Garbage Collection Analysis**
+- Variant B has fewer total GC collections for both `gc-gradle_gc.log` and `gc-kotlin_gc.log`, indicating potentially better memory management.
