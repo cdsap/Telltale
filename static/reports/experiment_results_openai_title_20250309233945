@@ -1,2 +1,0 @@
-The comparison between the two Gradle build variants, 'varianta_main' and 'variantb_gradle_8_13', reveals some interesting insights. The overall build time for 'variantb_gradle_8_13' is slightly higher than 'varianta_main'. The most time-consuming tasks are 'KotlinCompile' and 'Jar', with 'KotlinCompile' taking significantly longer in both variants. CPU and memory usage are relatively similar between the two variants, with only minor differences observed.
-

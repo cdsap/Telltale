@@ -1,3 +1,0 @@
- 
-The build performance comparison between the two variants, `varianta_main_4g` and `variantb_main_3g`, shows minor differences. The overall build time is slightly higher in `variantb_main_3g` by 0.48%. The task `org.jetbrains.kotlin.gradle.tasks.KotlinCompile` has a negligible difference in execution time between the two variants. The most time-consuming task `:build-logic:convention:compileKotlin` also shows a marginal difference in execution times. In terms of CPU and memory usage, both variants have similar CPU usage, but `varianta_main_4g` uses more memory across all processes, the build process, and build child processes.
-

@@ -1,3 +1,0 @@
- 
-The Gradle build performance comparison between `varianta_main_4g` and `variantb_main_7g` shows minor differences in build times and task execution times. The most time-consuming task for both variants was `:build-logic:convention:compileKotlin`. CPU usage was similar across all processes, but `variantb_main_7g` used less memory in the build process and more in the child processes.
-

@@ -1,2 +1,0 @@
-The experiment focuses on comparing the performance of two Gradle build variants: 'varianta_main_g1' and 'variantb_main_parallel'. The comparison includes build times, task type performances, statistical patterns, and CPU and memory usage. The most significant findings include differences in build times, variations in task execution times, and differences in CPU and memory usage between the two variants. 
-

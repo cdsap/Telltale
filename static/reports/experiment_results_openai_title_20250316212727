@@ -1,3 +1,0 @@
- 
-The build time for `varianta_main_6g` is slightly longer than `variantb_main_4g` by 586ms (2.5%). The most time-consuming tasks are `:app:hiltJavaCompileDemoDebug`, `:feature:foryou:kspProdDebugKotlin`, and `:feature:foryou:compileProdDebugKotlin`. The CPU usage is similar for both variants, but `varianta_main_6g` uses significantly more memory (up to 2.8GB more) in all processes.
-

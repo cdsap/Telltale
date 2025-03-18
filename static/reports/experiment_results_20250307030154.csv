@@ -1,4 +1,0 @@
-Category,Metric,varianta_main Mean,variantb_gradle_8_13 Mean,varianta_main P50,variantb_gradle_8_13 P50,varianta_main P90,variantb_gradle_8_13 P90,Unit
-Build,Build time,208,185,215,187,295,223,ms
-Task Type,org.jetbrains.kotlin.gradle.plugin.diagnostics.CheckKotlinGradlePluginConfigurationErrors,0,0,0,0,0,2,ms
-Task Type,org.jetbrains.kotlin.gradle.tasks.KotlinCompile,40,42,35,37,55,63,ms
