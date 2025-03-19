@@ -46,8 +46,8 @@ Each experiment post includes:
 
 ## Technology Stack
 
-We leverage these powerful tools:
 - **[Develocity](https://gradle.com/develocity/)**: Build performance monitoring
+- **[setup-gradle action](https://github.com/gradle/actions/tree/main/setup-gradle/)**: Seeding Gradle User home for experiments
 - **[Hugo](https://gohugo.io/)**: Static site generation
 - **[Hugo PaperMod](https://github.com/adityatelange/hugo-PaperMod/)**: Theme and styling
 - **[Build Experiment Results](https://github.com/cdsap/BuildExperimentResults)**: Data aggregation and analysis
