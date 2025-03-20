@@ -87,7 +87,7 @@ runs:
             title = \"assemble\"
             tasks = [\"${{ inputs.task }}\"]
             cleanup-tasks = [\"clean\"]
-            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
+            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
           }" > scenario
         else
           echo "assemble {
@@ -95,7 +95,7 @@ runs:
             tasks = [\"${{ inputs.task }}\"]
             cleanup-tasks = [\"clean\"]
             apply-abi-change-to = [${{ inputs.class }}]
-            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
+            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
           }" > scenario
         fi 
 

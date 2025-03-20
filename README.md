@@ -3,6 +3,7 @@ Telltale is an experimentation framework for Gradle builds that automates the cr
 
 <img alt="Summary" src="resources/experiment-diagram.png"/>
 
+https://cdsap.github.io/Telltale/
 
 ## Table of Contents
 
@@ -20,6 +21,9 @@ These workflows are designed to automate the testing and reporting of Gradle bui
 There are different phases in the workflow experiment execution:
 <img alt="Summary" src="resources/experiment_execution.png"/>
 
+## Website
+
+When the deployment is configured (by setting `extra_report_args.deploy_results:'true'`), the results of your experiments will be automatically published to [https://cdsap.github.io/Telltale/](https://cdsap.github.io/Telltale/).
 
 ## Workflows
 
@@ -67,18 +71,21 @@ This workflow executes Gradle tasks across two specified variants (branches) wit
     - **Format**: A JSON string with boolean flags for each report type.
     - **Options**:
       - `report_enabled`: Enable or disable report generation (`true` or `false`).
+      - `deploy_results`: Enable or disable deployment of results in https://cdsap.github.io/Telltale/ (`true` or `false`).
+      - `experiment_title`: Title for the experiment.
+      - `open_ai_request`: Enable or disable OpenAI request (`true` or `false`).
       - `tasktype_report`: Include task type reports.
       - `taskpath_report`: Include task path reports.
       - `kotlin_build_report`: Include Kotlin build reports. Requires [Kotlin Build Reports](https://blog.jetbrains.com/kotlin/2022/06/introducing-kotlin-build-reports/).
       - `process_report`: Include process-related reports. Requires [InfoKotlinProcess](https://github.com/cdsap/InfoKotlinProcess) and [InfoGradleProcess](https://github.com/cdsap/InfoGradleProcess).
       - `resource_usage_report`: Include resource usage reports. Requires builds using Develocity 2024.2.
+      - `gc_report`: Include garbage collection reports.
       - `only_cacheable_outcome`: Include only cacheable outcomes in the report.
       - `threshold_task_duration`: Threshold of task duration(ms) for the task path report. Default 1000.
-    - **Example**: `{report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',only_cacheable_outcome:'false'}`
 
 ### Experiment with Gradle Profiler
 
-Instead of using agents based on the iterations of the experiment, Gradle Profiler experiment uses gradle-profiler to orchestrae the execution of the experiment, enabling benchmarking of build scenarios with customizable iterations and ABI changes. Generates a report based on the results.
+Instead of using agents based on the iterations of the experiment, Gradle Profiler experiment uses gradle-profiler to orchestrate the execution of the experiment, enabling benchmarking of build scenarios with customizable iterations and ABI changes. Generates a report based on the results.
 
 - **Inputs**:
   - `repository`: The GitHub repository where the experiment will run.
@@ -88,8 +95,11 @@ Instead of using agents based on the iterations of the experiment, Gradle Profil
   - `class`: Classes to apply ABI changes.      
   - `os_args`, `java_args`, `extra_build_args`, `extra_report_args`: Additional configuration options for OS, Java versions, build arguments, and report settings.
 
+## Inputs individual actions
+[Action inputs](docs/actions-inputs.md)
+
 ### Report
-If `extra_report_args` defines `report_enabled:'true`, a report will be generated at the end of the variant experiments. The report is generated with https://github.com/cdsap/BuildExperimentResults:
+If `extra_report_args` defines `report_enabled: 'true'`, a list of reports will be generated at the end of the variant experiments. The report is generated using https://github.com/cdsap/BuildExperimentResults
 
 <img alt="Summary" src="resources/summary.png"/>
 
