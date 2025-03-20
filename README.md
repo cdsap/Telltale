@@ -3,8 +3,6 @@ Telltale is an experimentation framework for Gradle builds that automates the cr
 
 <img alt="Summary" src="resources/experiment-diagram.png"/>
 
-https://cdsap.github.io/Telltale/
-
 ## Table of Contents
 
 - [Overview](#overview)
