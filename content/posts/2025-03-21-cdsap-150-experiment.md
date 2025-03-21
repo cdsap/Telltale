@@ -1,0 +1,36 @@
+---
+layout: post
+title: "Kotlin 2.1.20 vs 2.1.0 in nowinandroid"
+date: 2025-03-21
+report_link: /Telltale/reports/experiment_results_20250321183537.html
+summary: " 
+The Gradle build performance comparison shows a slight improvement in overall build times for variantb_kotlin_2_1_20 compared to varianta_main_2_1_0, with a mean time of 213.747 seconds versus 214.317 seconds, respectively. The most time-consuming tasks across both variants were 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile', 'com.android.build.gradle.internal.tasks.DexMergingTask', and 'com.android.build.gradle.tasks.PackageApplication'. Notably, the 'com.google.devtools.ksp.gradle.KspTaskJvm' task showed a significant timing variation of more than 10% between the two variants. In terms of resource consumption, both variants showed similar CPU and memory usage, with a slight increase in memory usage for variantb_kotlin_2_1_20."
+tags: ["dependencies cache"]
+---
+[Report 📊](../../reports/experiment_results_20250321183537.html)
+## Summary
+The Gradle build performance comparison shows a slight improvement in overall build times for variantb_kotlin_2_1_20 compared to varianta_main_2_1_0, with a mean time of 213.747 seconds versus 214.317 seconds, respectively. The most time-consuming tasks across both variants were 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile', 'com.android.build.gradle.internal.tasks.DexMergingTask', and 'com.android.build.gradle.tasks.PackageApplication'. Notably, the 'com.google.devtools.ksp.gradle.KspTaskJvm' task showed a significant timing variation of more than 10% between the two variants. In terms of resource consumption, both variants showed similar CPU and memory usage, with a slight increase in memory usage for variantb_kotlin_2_1_20.
+
+## Detailed Report
+
+- **1. Build Time Comparison**
+  - The mean build time for varianta_main_2_1_0 was 214.317 seconds, while for variantb_kotlin_2_1_20 it was 213.747 seconds, indicating a slight improvement in the latter. The P50 values were 213.437 seconds and 212.479 seconds respectively, and the P90 values were 222.291 seconds and 225.001 seconds respectively.
+
+- **2. Task Type Differences**
+  - The top 3 most time-consuming tasks for both variants were 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile', 'com.android.build.gradle.internal.tasks.DexMergingTask', and 'com.android.build.gradle.tasks.PackageApplication'. The 'com.google.devtools.ksp.gradle.KspTaskJvm' task showed a significant timing variation of more than 10% between the two variants.
+
+- **3. Statistical Patterns**
+  - The task 'com.google.devtools.ksp.gradle.KspTaskJvm' showed a notable timing variation of more than 10% between the two variants, with P50 values of 2999 ms for varianta_main_2_1_0 and 2973 ms for variantb_kotlin_2_1_20, and P90 values of 6583 ms and 6054 ms respectively.
+
+- **4. Process State Analysis**
+  - **Kotlin Process State:** The mean garbage collection time for varianta_main_2_1_0 was 0.08, while for variantb_kotlin_2_1_20 it was 0.09. The P50 values were the same for both variants, and the P90 values were 0.1 and 0.11 respectively.
+  - **Gradle Process State:** The mean garbage collection time for varianta_main_2_1_0 was 0.12, while for variantb_kotlin_2_1_20 it was 0.13. The P50 values were the same for both variants, and the P90 values were 0.14 and 0.14 respectively.
+
+- **5. CPU & Memory Usage Analysis**
+  - The maximum CPU usage for all processes was 100% for both variants. The maximum memory usage was 11.12 GB for varianta_main_2_1_0 and 11.06 GB for variantb_kotlin_2_1_20. The build process had a maximum CPU usage of 93.36% for varianta_main_2_1_0 and 93.18% for variantb_kotlin_2_1_20, and a maximum memory usage of 5.37 GB for both variants. The build child processes had a maximum CPU usage of 91.96% for varianta_main_2_1_0 and 91.98% for variantb_kotlin_2_1_20, and a maximum memory usage of 4.73 GB and 4.68 GB respectively.
+
+- **6. Garbage Collection Analysis**
+  - The total number of garbage collections for the Gradle process was 68 for both variants. The total number of garbage collections for the Kotlin process was 43 for varianta_main_2_1_0 and 45 for variantb_kotlin_2_1_20.
+
+- **7. Kotlin Build Reports Analysis**
+  - The time spent before task action was 52.13 ms for varianta_main_2_1_0 and 39.57 ms for variantb_kotlin_2_1_20. The time spent on compiler code analysis was 1427.99 ms for varianta_main_2_1_0 and 1448.62 ms for variantb_kotlin_2_1_20. The time spent on compiler code generation was 884.67 ms for varianta_main_2_1_0 and 885.94 ms for variantb_kotlin_2_1_20. The time spent on compiler IR translation showed a significant variation, with 636.47 ms for varianta_main_2_1_0 and 1304.22 ms for variantb_kotlin_2_1_20. The total Gradle task time was 3765.32 ms for varianta_main_2_1_0 and 3799.16 ms for variantb_kotlin_2_1_20. The total compiler iteration was 1 for both variants. The number of cache hits when loading classpath entry snapshots was 59 for both variants, and the number of cache misses was 10 for both variants. The total size of the cache directory was 561.2 KB for varianta_main_2_1_0 and 561.44 KB for variantb_kotlin_2_1_20. The size of the classpath snapshot was 22.27 MB for varianta_main_2_1_0 and 22.49 MB for variantb_kotlin_2_1_20. The number of lines for code generation was 758 for both variants. The number of lines analyzed was also 758 for both variants. The code generation lines per second were 1345 for varianta_main_2_1_0 and 1355 for variantb_kotlin_2_1_20. The analysis lines per second were 629 for varianta_main_2_1_0 and 617 for variantb_kotlin_2_1_20.
