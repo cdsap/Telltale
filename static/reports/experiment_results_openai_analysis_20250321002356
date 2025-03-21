@@ -1,0 +1,46 @@
+## Summary
+The analysis of the Gradle build performance comparison data reveals that the variant `variantb_no_xms` generally takes longer to build than `varianta_using_xms`. The mean build time for `variantb_no_xms` is approximately 3.5% longer than `varianta_using_xms`. The most time-consuming tasks across both variants are `:app:l8DexDesugarLibDemoDebug`, `:app:mergeExtDexDemoDebug`, and `:core:designsystem:compileDemoDebugKotlin`. In terms of CPU and memory usage, both variants reach 100% CPU usage, but `varianta_using_xms` uses more memory. Garbage collection data shows more collections for `variantb_no_xms`.
+
+## Detailed Report
+
+- **1. Build Time Comparison**
+  - The mean build time for `varianta_using_xms` is 212.565 seconds, while for `variantb_no_xms` it is 219.916 seconds, approximately 3.5% longer.
+  - The P50 build time for `varianta_using_xms` is 211.546 seconds, while for `variantb_no_xms` it is 217.186 seconds.
+  - The P90 build time for `varianta_using_xms` is 221.784 seconds, while for `variantb_no_xms` it is 229.056 seconds.
+
+- **2. Task Type Differences**
+  - The top 3 most time-consuming tasks for both variants are `:app:l8DexDesugarLibDemoDebug`, `:app:mergeExtDexDemoDebug`, and `:core:designsystem:compileDemoDebugKotlin`.
+  - The mean execution time for `:app:l8DexDesugarLibDemoDebug` is 38.415 seconds for `varianta_using_xms` and 40.047 seconds for `variantb_no_xms`.
+  - The mean execution time for `:app:mergeExtDexDemoDebug` is 42.239 seconds for `varianta_using_xms` and 43.693 seconds for `variantb_no_xms`.
+  - The mean execution time for `:core:designsystem:compileDemoDebugKotlin` is 181.06 seconds for `varianta_using_xms` and 187.75 seconds for `variantb_no_xms`.
+
+- **3. Statistical Patterns**
+  - Tasks with notable timing variations include `:app:l8DexDesugarLibDemoDebug`, `:app:mergeExtDexDemoDebug`, and `:core:designsystem:compileDemoDebugKotlin`.
+  - For `:app:l8DexDesugarLibDemoDebug`, the P50 value is 38.251 seconds for `varianta_using_xms` and 39.758 seconds for `variantb_no_xms`. The P90 value is 40.523 seconds for `varianta_using_xms` and 42.309 seconds for `variantb_no_xms`.
+  - For `:app:mergeExtDexDemoDebug`, the P50 value is 42.572 seconds for `varianta_using_xms` and 43.415 seconds for `variantb_no_xms`. The P90 value is 44.24 seconds for `varianta_using_xms` and 46.34 seconds for `variantb_no_xms`.
+  - For `:core:designsystem:compileDemoDebugKotlin`, the P50 value is 180.86 seconds for `varianta_using_xms` and 188.08 seconds for `variantb_no_xms`. The P90 value is 196.43 seconds for `varianta_using_xms` and 205.92 seconds for `variantb_no_xms`.
+
+- **4. Process State Analysis**
+  - **Kotlin Process State:** The mean GC time for `varianta_using_xms` is 0.09, while for `variantb_no_xms` it is 0.1.
+  - **Gradle Process State:** The mean GC time for `varianta_using_xms` is 0.13, while for `variantb_no_xms` it is 0.14.
+
+- **5. CPU & Memory Usage Analysis**
+  - The maximum CPU usage for all processes is 100% for both variants.
+  - The maximum memory usage for all processes is 11.16 GB for `varianta_using_xms` and 9.85 GB for `variantb_no_xms`.
+  - The maximum CPU usage for the build process is 93.1% for `varianta_using_xms` and 93.34% for `variantb_no_xms`.
+  - The maximum memory usage for the build process is 5.39 GB for `varianta_using_xms` and 5.04 GB for `variantb_no_xms`.
+  - The maximum CPU usage for build child processes is 92.12% for `varianta_using_xms` and 92.76% for `variantb_no_xms`.
+  - The maximum memory usage for build child processes is 4.75 GB for `varianta_using_xms` and 3.83 GB for `variantb_no_xms`.
+
+- **6. Garbage Collection Analysis**
+  - The total GC collections for `varianta_using_xms` are 68 for the Gradle process and 44 for the Kotlin process.
+  - The total GC collections for `variantb_no_xms` are 104 for the Gradle process and 72 for the Kotlin process.
+
+- **7. Kotlin Build Reports Analysis**
+  - The total Gradle task time is 3751.84 ms for `varianta_using_xms` and 3947.01 ms for `variantb_no_xms`.
+  - The time spent before task action is 39.21 ms for `varianta_using_xms` and 54.48 ms for `variantb_no_xms`.
+  - The compiler code analysis time is 1432.8 ms for `varianta_using_xms` and 1483.63 ms for `variantb_no_xms`.
+  - The compiler code generation time is 879.98 ms for `varianta_using_xms` and 921.64 ms for `variantb_no_xms`.
+  - The compiler IR generation time is 493.42 ms for `varianta_using_xms` and 516.7 ms for `variantb_no_xms`.
+  - The compiler IR translation time is 632.85 ms for `varianta_using_xms` and 662.25 ms for `variantb_no_xms`.
+  - The compiler IR lowering time is 386.05 ms for `varianta_using
