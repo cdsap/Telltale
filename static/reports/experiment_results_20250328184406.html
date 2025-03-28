@@ -1,0 +1,410 @@
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gradle Build Performance Report</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+    }
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    .chart-container {
+        background-color: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 20px 0;
+        font-size: 14px;
+        background-color: white;
+    }
+    th, td {
+        border: 1px solid #e0e0e0;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f5f5f5;
+        color: #333;
+        font-weight: 500;
+        text-align: center;
+    }
+    .stats-header {
+        background-color: #f0f0f0;
+    }
+    tr:nth-child(even) {
+        background-color: #fafafa;
+    }
+    .metric-value {
+        text-align: right;
+        font-family: 'Roboto Mono', monospace;
+    }
+    .unit-column {
+        color: #666;
+        font-size: 12px;
+    }
+    h1, h2 {
+        color: #333;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 24px;
+    }
+    h2 {
+        margin-bottom: 15px;
+        font-size: 18px;
+    }
+</style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Gradle Build Performance Report</h1>
+                    <table><tr><td colspan=12>Results</td></tr><tr><td>Repository</td><td colspan=11>cdsap/Experiment_Gradle_8_13</td></tr><tr><td>Task</td><td colspan=11>:app:lintProdRelease,:app-nia-catalog:lintRelease,:lint:lint,:app:lintProdRelease,:app-nia-catalog:lintRelease,:lint:lint,:app:lintProdRelease,:app-nia-catalog:lintRelease,:lint:lint,:app:lintProdRelease,:app-nia-catalog:lintRelease,:lint:lint</td></tr><tr><td>varianta_main_lint_with_memory</td><td>10 builds processed</td><td colspan=10><a href="https://ge.solutions-team.gradle.com/scans?search.startTimeMax=1743359987192&search.startTimeMin=1743014387192&search.tags=cdsap-157_varianta_main_lint_with_memory">Build Scans</a></td></tr><tr><td>variantb_main_lint</td><td>10 builds processed</td><td colspan=10><a href="https://ge.solutions-team.gradle.com/scans?search.startTimeMax=1743359987192&search.startTimeMin=1743014387192&search.tags=cdsap-157_variantb_main_lint">Build Scans</a></td></tr><tr><td>Execution raw data</td><td colspan=11><a href="experiment_results_20250328184406.csv">Download csv</a></td></tr><tr><td>Experiment run execution</td><td colspan=11><a href="https://github.com/cdsap/Telltale/actions/runs/14135544889">Workflow</a></td></tr></table>            <div class="charts-grid">
+                            <div class="chart-container">
+                <h2>Build Duration Time Series</h2>
+                <canvas id="buildDurationChart"></canvas>
+            </div>
+            <div class="chart-container">
+    <h2>Build Process Memory</h2>
+    <canvas id="buildProcessMemoryChart"></canvas>
+</div>
+<div class="chart-container">
+    <h2>Build Child Processes Memory</h2>
+    <canvas id="buildChildProcessMemoryChart"></canvas>
+</div>
+            <div class="chart-container">
+                <h2>Most Expensive Task: :core:designsystem:lintAnalyzeProdRelease</h2>
+                <canvas id="expensiveTaskChart"></canvas>
+            </div>
+                
+                
+                
+            </div>
+            <script>
+                        new Chart(document.getElementById('buildDurationChart'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_lint_with_memory',
+    data: [225279.0,219716.0,218804.0,218839.0,222211.0,217504.0,216948.0,219197.0,220135.0,212835.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_lint',
+    data: [236836.0,243831.0,240313.0,222734.0,221382.0,218429.0,219436.0,217345.0,216197.0,215276.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Build Duration (seconds)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('buildProcessMemoryChart'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_lint_with_memory',
+    data: [5.559410688E9,5.53906176E9,5.562118144E9,5.479026688E9,5.568241664E9,5.56220416E9,5.569953792E9,5.60013312E9,5.586485248E9,5.558829056E9],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_lint',
+    data: [5.543530496E9,5.543890944E9,5.542629376E9,5.624987648E9,5.527228416E9,5.619474432E9,5.629431808E9,5.576433664E9,5.640032256E9,5.546119168E9],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Memory Usage (MB)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('buildChildProcessMemoryChart'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_lint_with_memory',
+    data: [4.242460672E9,4.3817984E9,3.855200256E9,5.214154752E9,4.132409344E9,3.81063168E9,4.711591936E9,3.994587136E9,5.390512128E9,5.381976064E9],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_lint',
+    data: [3.703291904E9,3.711500288E9,3.93760768E9,4.60693504E9,5.540958208E9,5.407117312E9,4.042067968E9,3.96560384E9,3.775152128E9,3.755835392E9],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Memory Usage (MB)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('expensiveTaskChart'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_lint_with_memory',
+    data: [45398.0,45732.0,44911.0,45410.0,43249.0,43064.0,41907.0,44735.0,45173.0,41682.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_lint',
+    data: [43956.0,46424.0,46996.0,42401.0,41889.0,42209.0,41829.0,41813.0,40053.0,41715.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Task Duration (seconds)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('gc-gradle_gc.log'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_lint_with_memory',
+    data: [92.0,88.0,84.0,94.0,83.0,101.0,100.0,102.0,91.0,89.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_lint',
+    data: [92.0,88.0,88.0,96.0,88.0,96.0,90.0,88.0,98.0,86.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'gc-gradle_gc.log-total-collections'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+        new Chart(document.getElementById('gc-kotlin_gc.log'), {
+            type: 'line',
+            data: {
+                labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                datasets: [{
+    label: 'varianta_main_lint_with_memory',
+    data: [35.0,36.0,37.0,33.0,35.0,38.0,31.0,38.0,35.0,32.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_main_lint',
+    data: [40.0,39.0,34.0,34.0,32.0,32.0,33.0,39.0,37.0,37.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+            },
+            options: {
+    responsive: true,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'gc-kotlin_gc.log-total-collections'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+        });
+            </script><table id='metricsTable' class='metric-table'><tr><th>Category</th><th>Metric</th><th colspan=7 class='stats-header'>Statistics</th></tr><tr><th colspan='2'></th><th colspan=2>Mean</th><th colspan=2>P50</th><th colspan=2>P90</th><th>Unit</th></tr><tr class='variant-headers'><th colspan='2'></th><th>varianta_main_lint_with_memory</th><th>variantb_main_lint</th><th>varianta_main_lint_with_memory</th><th>variantb_main_lint</th><th>varianta_main_lint_with_memory</th><th>variantb_main_lint</th><th></th></tr><tr><td>Build</td><td>Build time</td><td class='metric-value'>219146</td><td class='metric-value'>225177</td><td class='metric-value'>219018</td><td class='metric-value'>220409</td><td class='metric-value'>224972</td><td class='metric-value'>243479</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.jetbrains.kotlin.gradle.plugin.diagnostics.CheckKotlinGradlePluginConfigurationErrors</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>1</td><td class='metric-value'>1</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.plugin.devel.tasks.GeneratePluginDescriptors</td><td class='metric-value'>39</td><td class='metric-value'>38</td><td class='metric-value'>40</td><td class='metric-value'>40</td><td class='metric-value'>44</td><td class='metric-value'>42</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.language.jvm.tasks.ProcessResources</td><td class='metric-value'>16</td><td class='metric-value'>17</td><td class='metric-value'>11</td><td class='metric-value'>12</td><td class='metric-value'>42</td><td class='metric-value'>46</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.jetbrains.kotlin.gradle.tasks.KotlinCompile</td><td class='metric-value'>4896</td><td class='metric-value'>5063</td><td class='metric-value'>3747</td><td class='metric-value'>3813</td><td class='metric-value'>12191</td><td class='metric-value'>12416</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.api.tasks.compile.JavaCompile</td><td class='metric-value'>715</td><td class='metric-value'>742</td><td class='metric-value'>420</td><td class='metric-value'>437</td><td class='metric-value'>1598</td><td class='metric-value'>1636</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.api.DefaultTask</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>1</td><td class='metric-value'>1</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.api.tasks.bundling.Jar</td><td class='metric-value'>47</td><td class='metric-value'>47</td><td class='metric-value'>34</td><td class='metric-value'>33</td><td class='metric-value'>98</td><td class='metric-value'>100</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.AndroidVariantTask</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>1</td><td class='metric-value'>1</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.AarMetadataTask</td><td class='metric-value'>14</td><td class='metric-value'>15</td><td class='metric-value'>9</td><td class='metric-value'>9</td><td class='metric-value'>25</td><td class='metric-value'>26</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.jetbrains.kotlin.gradle.tooling.BuildKotlinToolingMetadataTask$FromKotlinExtension</td><td class='metric-value'>47</td><td class='metric-value'>53</td><td class='metric-value'>44</td><td class='metric-value'>46</td><td class='metric-value'>100</td><td class='metric-value'>116</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.google.firebase.crashlytics.buildtools.gradle.tasks.InjectMappingFileIdTask</td><td class='metric-value'>46</td><td class='metric-value'>43</td><td class='metric-value'>43</td><td class='metric-value'>42</td><td class='metric-value'>65</td><td class='metric-value'>63</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.google.gms.googleservices.GoogleServicesTask</td><td class='metric-value'>30</td><td class='metric-value'>25</td><td class='metric-value'>22</td><td class='metric-value'>26</td><td class='metric-value'>91</td><td class='metric-value'>34</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.PerModuleReportDependenciesTask</td><td class='metric-value'>722</td><td class='metric-value'>704</td><td class='metric-value'>743</td><td class='metric-value'>658</td><td class='metric-value'>828</td><td class='metric-value'>980</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.google.android.gms.oss.licenses.plugin.DependencyTask</td><td class='metric-value'>371</td><td class='metric-value'>357</td><td class='metric-value'>386</td><td class='metric-value'>332</td><td class='metric-value'>475</td><td class='metric-value'>511</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.CheckAarMetadataTask</td><td class='metric-value'>660</td><td class='metric-value'>580</td><td class='metric-value'>520</td><td class='metric-value'>453</td><td class='metric-value'>1426</td><td class='metric-value'>1323</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.ValidateResourcesTask</td><td class='metric-value'>16</td><td class='metric-value'>17</td><td class='metric-value'>15</td><td class='metric-value'>14</td><td class='metric-value'>28</td><td class='metric-value'>29</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.MergeResources</td><td class='metric-value'>345</td><td class='metric-value'>364</td><td class='metric-value'>40</td><td class='metric-value'>40</td><td class='metric-value'>961</td><td class='metric-value'>1042</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.google.android.gms.oss.licenses.plugin.LicensesTask</td><td class='metric-value'>1510</td><td class='metric-value'>1617</td><td class='metric-value'>1404</td><td class='metric-value'>1534</td><td class='metric-value'>2428</td><td class='metric-value'>2293</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.MapSourceSetPathsTask</td><td class='metric-value'>130</td><td class='metric-value'>134</td><td class='metric-value'>116</td><td class='metric-value'>152</td><td class='metric-value'>259</td><td class='metric-value'>264</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.res.ParseLibraryResourcesTask</td><td class='metric-value'>82</td><td class='metric-value'>120</td><td class='metric-value'>18</td><td class='metric-value'>20</td><td class='metric-value'>121</td><td class='metric-value'>116</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.CompatibleScreensManifest</td><td class='metric-value'>15</td><td class='metric-value'>13</td><td class='metric-value'>12</td><td class='metric-value'>11</td><td class='metric-value'>29</td><td class='metric-value'>26</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ExtractDeepLinksTask</td><td class='metric-value'>9</td><td class='metric-value'>9</td><td class='metric-value'>8</td><td class='metric-value'>8</td><td class='metric-value'>15</td><td class='metric-value'>16</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ProcessLibraryManifest</td><td class='metric-value'>40</td><td class='metric-value'>68</td><td class='metric-value'>29</td><td class='metric-value'>30</td><td class='metric-value'>59</td><td class='metric-value'>62</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ProcessApplicationManifest</td><td class='metric-value'>642</td><td class='metric-value'>529</td><td class='metric-value'>480</td><td class='metric-value'>485</td><td class='metric-value'>1190</td><td class='metric-value'>910</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ProcessMultiApkApplicationManifest</td><td class='metric-value'>118</td><td class='metric-value'>117</td><td class='metric-value'>91</td><td class='metric-value'>68</td><td class='metric-value'>270</td><td class='metric-value'>275</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ProcessPackagedManifestTask</td><td class='metric-value'>484</td><td class='metric-value'>197</td><td class='metric-value'>34</td><td class='metric-value'>110</td><td class='metric-value'>1559</td><td class='metric-value'>300</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.CompileLibraryResourcesTask</td><td class='metric-value'>56</td><td class='metric-value'>79</td><td class='metric-value'>16</td><td class='metric-value'>16</td><td class='metric-value'>145</td><td class='metric-value'>170</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.res.GenerateLibraryRFileTask</td><td class='metric-value'>53</td><td class='metric-value'>47</td><td class='metric-value'>37</td><td class='metric-value'>38</td><td class='metric-value'>106</td><td class='metric-value'>87</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.google.devtools.ksp.gradle.KspTaskJvm</td><td class='metric-value'>4046</td><td class='metric-value'>4211</td><td class='metric-value'>3539</td><td class='metric-value'>3527</td><td class='metric-value'>6409</td><td class='metric-value'>6756</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask</td><td class='metric-value'>1332</td><td class='metric-value'>1550</td><td class='metric-value'>1413</td><td class='metric-value'>1531</td><td class='metric-value'>2241</td><td class='metric-value'>2452</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.JavaPreCompileTask</td><td class='metric-value'>15</td><td class='metric-value'>17</td><td class='metric-value'>8</td><td class='metric-value'>10</td><td class='metric-value'>30</td><td class='metric-value'>34</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.google.protobuf.gradle.ProtobufExtract</td><td class='metric-value'>80</td><td class='metric-value'>80</td><td class='metric-value'>7</td><td class='metric-value'>8</td><td class='metric-value'>380</td><td class='metric-value'>360</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.google.protobuf.gradle.GenerateProtoTask</td><td class='metric-value'>131</td><td class='metric-value'>132</td><td class='metric-value'>137</td><td class='metric-value'>134</td><td class='metric-value'>164</td><td class='metric-value'>166</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.GenerateBuildConfig</td><td class='metric-value'>39</td><td class='metric-value'>39</td><td class='metric-value'>37</td><td class='metric-value'>40</td><td class='metric-value'>60</td><td class='metric-value'>51</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.TransformClassesWithAsmTask</td><td class='metric-value'>167</td><td class='metric-value'>177</td><td class='metric-value'>133</td><td class='metric-value'>143</td><td class='metric-value'>346</td><td class='metric-value'>353</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.BundleLibraryClassesJar</td><td class='metric-value'>28</td><td class='metric-value'>28</td><td class='metric-value'>22</td><td class='metric-value'>23</td><td class='metric-value'>44</td><td class='metric-value'>43</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.ExtractProguardFiles</td><td class='metric-value'>13</td><td class='metric-value'>13</td><td class='metric-value'>12</td><td class='metric-value'>12</td><td class='metric-value'>20</td><td class='metric-value'>19</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.ProcessJavaResTask</td><td class='metric-value'>23</td><td class='metric-value'>24</td><td class='metric-value'>21</td><td class='metric-value'>22</td><td class='metric-value'>35</td><td class='metric-value'>34</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ZipMergingTask</td><td class='metric-value'>15</td><td class='metric-value'>14</td><td class='metric-value'>14</td><td class='metric-value'>13</td><td class='metric-value'>23</td><td class='metric-value'>23</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.lint.LintModelWriterTask</td><td class='metric-value'>96</td><td class='metric-value'>101</td><td class='metric-value'>45</td><td class='metric-value'>54</td><td class='metric-value'>246</td><td class='metric-value'>249</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.PrepareLintJarForPublish</td><td class='metric-value'>12</td><td class='metric-value'>12</td><td class='metric-value'>9</td><td class='metric-value'>9</td><td class='metric-value'>20</td><td class='metric-value'>20</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.MergeSourceSetFolders</td><td class='metric-value'>16</td><td class='metric-value'>15</td><td class='metric-value'>14</td><td class='metric-value'>13</td><td class='metric-value'>26</td><td class='metric-value'>23</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.MergeNativeLibsTask</td><td class='metric-value'>5</td><td class='metric-value'>4</td><td class='metric-value'>4</td><td class='metric-value'>3</td><td class='metric-value'>10</td><td class='metric-value'>9</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.StripDebugSymbolsTask</td><td class='metric-value'>2</td><td class='metric-value'>2</td><td class='metric-value'>2</td><td class='metric-value'>2</td><td class='metric-value'>7</td><td class='metric-value'>7</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.LibraryJniLibsTask</td><td class='metric-value'>9</td><td class='metric-value'>9</td><td class='metric-value'>8</td><td class='metric-value'>8</td><td class='metric-value'>15</td><td class='metric-value'>16</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ProcessLibraryArtProfileTask</td><td class='metric-value'>6</td><td class='metric-value'>6</td><td class='metric-value'>5</td><td class='metric-value'>6</td><td class='metric-value'>12</td><td class='metric-value'>12</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ExtractAnnotations</td><td class='metric-value'>35</td><td class='metric-value'>36</td><td class='metric-value'>27</td><td class='metric-value'>26</td><td class='metric-value'>63</td><td class='metric-value'>60</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.MergeFileTask</td><td class='metric-value'>6</td><td class='metric-value'>6</td><td class='metric-value'>6</td><td class='metric-value'>6</td><td class='metric-value'>12</td><td class='metric-value'>13</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.MergeConsumerProguardFilesTask</td><td class='metric-value'>5</td><td class='metric-value'>6</td><td class='metric-value'>5</td><td class='metric-value'>5</td><td class='metric-value'>10</td><td class='metric-value'>12</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.MergeJavaResourceTask</td><td class='metric-value'>29</td><td class='metric-value'>33</td><td class='metric-value'>20</td><td class='metric-value'>20</td><td class='metric-value'>37</td><td class='metric-value'>42</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.LibraryAarJarsTask</td><td class='metric-value'>54</td><td class='metric-value'>52</td><td class='metric-value'>44</td><td class='metric-value'>45</td><td class='metric-value'>99</td><td class='metric-value'>96</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.BundleAar</td><td class='metric-value'>15</td><td class='metric-value'>15</td><td class='metric-value'>14</td><td class='metric-value'>14</td><td class='metric-value'>25</td><td class='metric-value'>24</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.LintModelMetadataTask</td><td class='metric-value'>8</td><td class='metric-value'>9</td><td class='metric-value'>8</td><td class='metric-value'>9</td><td class='metric-value'>14</td><td class='metric-value'>16</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>androidx.room.gradle.RoomGradlePlugin$RoomSchemaCopyTask</td><td class='metric-value'>2</td><td class='metric-value'>5</td><td class='metric-value'>3</td><td class='metric-value'>5</td><td class='metric-value'>5</td><td class='metric-value'>15</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.lint.AndroidLintAnalysisTask</td><td class='metric-value'>6502</td><td class='metric-value'>7040</td><td class='metric-value'>4080</td><td class='metric-value'>4658</td><td class='metric-value'>14656</td><td class='metric-value'>14712</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>dagger.hilt.android.plugin.task.AggregateDepsTask</td><td class='metric-value'>1159</td><td class='metric-value'>1152</td><td class='metric-value'>1228</td><td class='metric-value'>1148</td><td class='metric-value'>1336</td><td class='metric-value'>1385</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.feature.BundleAllClasses</td><td class='metric-value'>69</td><td class='metric-value'>65</td><td class='metric-value'>62</td><td class='metric-value'>56</td><td class='metric-value'>119</td><td class='metric-value'>116</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.lint.AndroidLintTask</td><td class='metric-value'>188</td><td class='metric-value'>220</td><td class='metric-value'>94</td><td class='metric-value'>122</td><td class='metric-value'>460</td><td class='metric-value'>548</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.lint.AndroidLintTextOutputTask</td><td class='metric-value'>2</td><td class='metric-value'>1</td><td class='metric-value'>1</td><td class='metric-value'>1</td><td class='metric-value'>2</td><td class='metric-value'>3</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.lint.AndroidLintGlobalTask</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>1</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:build-logic:convention:compileKotlin</td><td class='metric-value'>12117</td><td class='metric-value'>12486</td><td class='metric-value'>12027</td><td class='metric-value'>12082</td><td class='metric-value'>12800</td><td class='metric-value'>13958</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:checkProdReleaseAarMetadata</td><td class='metric-value'>1294</td><td class='metric-value'>1123</td><td class='metric-value'>1306</td><td class='metric-value'>1064</td><td class='metric-value'>1678</td><td class='metric-value'>1594</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:prodReleaseOssLicensesTask</td><td class='metric-value'>1510</td><td class='metric-value'>1617</td><td class='metric-value'>1404</td><td class='metric-value'>1534</td><td class='metric-value'>2428</td><td class='metric-value'>2293</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:designsystem:packageProdReleaseResources</td><td class='metric-value'>1317</td><td class='metric-value'>1245</td><td class='metric-value'>1264</td><td class='metric-value'>1193</td><td class='metric-value'>1909</td><td class='metric-value'>1447</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:parseProdReleaseLocalResources</td><td class='metric-value'>1268</td><td class='metric-value'>2426</td><td class='metric-value'>1004</td><td class='metric-value'>2062</td><td class='metric-value'>4282</td><td class='metric-value'>4845</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:mergeProdReleaseResources</td><td class='metric-value'>5705</td><td class='metric-value'>5660</td><td class='metric-value'>5697</td><td class='metric-value'>5583</td><td class='metric-value'>6207</td><td class='metric-value'>6378</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:common:kspKotlin</td><td class='metric-value'>11453</td><td class='metric-value'>11949</td><td class='metric-value'>11439</td><td class='metric-value'>11805</td><td class='metric-value'>11950</td><td class='metric-value'>13736</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:processProdReleaseResources</td><td class='metric-value'>2134</td><td class='metric-value'>2278</td><td class='metric-value'>2110</td><td class='metric-value'>2265</td><td class='metric-value'>2288</td><td class='metric-value'>2552</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:model:compileKotlin</td><td class='metric-value'>13484</td><td class='metric-value'>14205</td><td class='metric-value'>13484</td><td class='metric-value'>13972</td><td class='metric-value'>13805</td><td class='metric-value'>15875</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:common:compileKotlin</td><td class='metric-value'>2740</td><td class='metric-value'>2891</td><td class='metric-value'>2739</td><td class='metric-value'>2893</td><td class='metric-value'>3039</td><td class='metric-value'>3283</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:analytics:kspProdReleaseKotlin</td><td class='metric-value'>5587</td><td class='metric-value'>5893</td><td class='metric-value'>5594</td><td class='metric-value'>5788</td><td class='metric-value'>5884</td><td class='metric-value'>6352</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:common:compileJava</td><td class='metric-value'>1557</td><td class='metric-value'>1603</td><td class='metric-value'>1543</td><td class='metric-value'>1597</td><td class='metric-value'>1748</td><td class='metric-value'>1893</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:analytics:compileProdReleaseKotlin</td><td class='metric-value'>2613</td><td class='metric-value'>2774</td><td class='metric-value'>2592</td><td class='metric-value'>2803</td><td class='metric-value'>3017</td><td class='metric-value'>3190</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:datastore-proto:compileProdReleaseKotlin</td><td class='metric-value'>5266</td><td class='metric-value'>5596</td><td class='metric-value'>5255</td><td class='metric-value'>5535</td><td class='metric-value'>5476</td><td class='metric-value'>6307</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:analytics:compileProdReleaseJavaWithJavac</td><td class='metric-value'>2620</td><td class='metric-value'>2786</td><td class='metric-value'>2670</td><td class='metric-value'>2792</td><td class='metric-value'>2902</td><td class='metric-value'>2985</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:network:kspProdReleaseKotlin</td><td class='metric-value'>4262</td><td class='metric-value'>4367</td><td class='metric-value'>4280</td><td class='metric-value'>4397</td><td class='metric-value'>4553</td><td class='metric-value'>4956</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:datastore-proto:compileProdReleaseJavaWithJavac</td><td class='metric-value'>3501</td><td class='metric-value'>3728</td><td class='metric-value'>3572</td><td class='metric-value'>3681</td><td class='metric-value'>3810</td><td class='metric-value'>4468</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:database:kspProdReleaseKotlin</td><td class='metric-value'>10906</td><td class='metric-value'>11448</td><td class='metric-value'>10903</td><td class='metric-value'>11515</td><td class='metric-value'>11901</td><td class='metric-value'>12188</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:notifications:kspProdReleaseKotlin</td><td class='metric-value'>3803</td><td class='metric-value'>3815</td><td class='metric-value'>3780</td><td class='metric-value'>3753</td><td class='metric-value'>4177</td><td class='metric-value'>4590</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:datastore:kspProdReleaseKotlin</td><td class='metric-value'>3214</td><td class='metric-value'>3291</td><td class='metric-value'>3138</td><td class='metric-value'>3216</td><td class='metric-value'>3863</td><td class='metric-value'>3760</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:notifications:compileProdReleaseKotlin</td><td class='metric-value'>2087</td><td class='metric-value'>2045</td><td class='metric-value'>2056</td><td class='metric-value'>2041</td><td class='metric-value'>2519</td><td class='metric-value'>2240</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:network:compileProdReleaseKotlin</td><td class='metric-value'>6178</td><td class='metric-value'>6449</td><td class='metric-value'>6147</td><td class='metric-value'>6244</td><td class='metric-value'>6488</td><td class='metric-value'>7409</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:datastore:compileProdReleaseKotlin</td><td class='metric-value'>4401</td><td class='metric-value'>4399</td><td class='metric-value'>4453</td><td class='metric-value'>4328</td><td class='metric-value'>4968</td><td class='metric-value'>5061</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:lint:compileKotlin</td><td class='metric-value'>3865</td><td class='metric-value'>4084</td><td class='metric-value'>3779</td><td class='metric-value'>4089</td><td class='metric-value'>4635</td><td class='metric-value'>4715</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:datastore-test:kspProdReleaseKotlin</td><td class='metric-value'>2801</td><td class='metric-value'>2936</td><td class='metric-value'>2787</td><td class='metric-value'>2902</td><td class='metric-value'>3051</td><td class='metric-value'>3448</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:datastore-test:compileProdReleaseKotlin</td><td class='metric-value'>1232</td><td class='metric-value'>1308</td><td class='metric-value'>1219</td><td class='metric-value'>1274</td><td class='metric-value'>1555</td><td class='metric-value'>1528</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:database:compileProdReleaseKotlin</td><td class='metric-value'>12663</td><td class='metric-value'>13064</td><td class='metric-value'>12643</td><td class='metric-value'>12820</td><td class='metric-value'>13260</td><td class='metric-value'>14817</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:data:kspProdReleaseKotlin</td><td class='metric-value'>4284</td><td class='metric-value'>4542</td><td class='metric-value'>4232</td><td class='metric-value'>4334</td><td class='metric-value'>4894</td><td class='metric-value'>5298</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:designsystem:compileProdReleaseKotlin</td><td class='metric-value'>18741</td><td class='metric-value'>19914</td><td class='metric-value'>18906</td><td class='metric-value'>19629</td><td class='metric-value'>20284</td><td class='metric-value'>22661</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:data:compileProdReleaseKotlin</td><td class='metric-value'>5064</td><td class='metric-value'>5385</td><td class='metric-value'>5031</td><td class='metric-value'>5344</td><td class='metric-value'>5858</td><td class='metric-value'>6182</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:domain:compileProdReleaseKotlin</td><td class='metric-value'>1259</td><td class='metric-value'>1267</td><td class='metric-value'>1229</td><td class='metric-value'>1289</td><td class='metric-value'>1522</td><td class='metric-value'>1507</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:ui:compileProdReleaseKotlin</td><td class='metric-value'>6246</td><td class='metric-value'>6716</td><td class='metric-value'>6366</td><td class='metric-value'>6735</td><td class='metric-value'>6789</td><td class='metric-value'>7795</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:common:lintAnalyzeJvmMain</td><td class='metric-value'>19885</td><td class='metric-value'>21503</td><td class='metric-value'>19907</td><td class='metric-value'>21253</td><td class='metric-value'>20977</td><td class='metric-value'>23814</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:sync:work:kspProdReleaseKotlin</td><td class='metric-value'>6115</td><td class='metric-value'>6503</td><td class='metric-value'>6153</td><td class='metric-value'>6611</td><td class='metric-value'>6561</td><td class='metric-value'>7141</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:analytics:lintAnalyzeProdRelease</td><td class='metric-value'>21161</td><td class='metric-value'>22987</td><td class='metric-value'>21243</td><td class='metric-value'>22982</td><td class='metric-value'>22964</td><td class='metric-value'>25235</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:bookmarks:kspProdReleaseKotlin</td><td class='metric-value'>4054</td><td class='metric-value'>4426</td><td class='metric-value'>3960</td><td class='metric-value'>4513</td><td class='metric-value'>4537</td><td class='metric-value'>5304</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:interests:kspProdReleaseKotlin</td><td class='metric-value'>3449</td><td class='metric-value'>3464</td><td class='metric-value'>3428</td><td class='metric-value'>3467</td><td class='metric-value'>4008</td><td class='metric-value'>3727</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:foryou:kspProdReleaseKotlin</td><td class='metric-value'>3887</td><td class='metric-value'>4109</td><td class='metric-value'>3819</td><td class='metric-value'>4198</td><td class='metric-value'>4564</td><td class='metric-value'>4452</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:search:kspProdReleaseKotlin</td><td class='metric-value'>3519</td><td class='metric-value'>3427</td><td class='metric-value'>3359</td><td class='metric-value'>3353</td><td class='metric-value'>4126</td><td class='metric-value'>3979</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:bookmarks:compileProdReleaseKotlin</td><td class='metric-value'>3774</td><td class='metric-value'>3791</td><td class='metric-value'>3725</td><td class='metric-value'>3820</td><td class='metric-value'>4441</td><td class='metric-value'>4039</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:interests:compileProdReleaseKotlin</td><td class='metric-value'>3394</td><td class='metric-value'>3478</td><td class='metric-value'>3367</td><td class='metric-value'>3370</td><td class='metric-value'>3761</td><td class='metric-value'>4067</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:foryou:compileProdReleaseKotlin</td><td class='metric-value'>5269</td><td class='metric-value'>5295</td><td class='metric-value'>5260</td><td class='metric-value'>5152</td><td class='metric-value'>5851</td><td class='metric-value'>6163</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:settings:kspProdReleaseKotlin</td><td class='metric-value'>3354</td><td class='metric-value'>3282</td><td class='metric-value'>3385</td><td class='metric-value'>3265</td><td class='metric-value'>3506</td><td class='metric-value'>3877</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:search:compileProdReleaseKotlin</td><td class='metric-value'>5204</td><td class='metric-value'>5254</td><td class='metric-value'>5176</td><td class='metric-value'>5107</td><td class='metric-value'>5723</td><td class='metric-value'>5847</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:topic:kspProdReleaseKotlin</td><td class='metric-value'>3405</td><td class='metric-value'>3469</td><td class='metric-value'>3428</td><td class='metric-value'>3475</td><td class='metric-value'>3654</td><td class='metric-value'>3916</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:sync:work:compileProdReleaseKotlin</td><td class='metric-value'>2372</td><td class='metric-value'>2440</td><td class='metric-value'>2474</td><td class='metric-value'>2458</td><td class='metric-value'>2960</td><td class='metric-value'>3085</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:settings:compileProdReleaseKotlin</td><td class='metric-value'>3424</td><td class='metric-value'>3364</td><td class='metric-value'>3413</td><td class='metric-value'>3304</td><td class='metric-value'>3875</td><td class='metric-value'>4266</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:sync:sync-test:kspProdReleaseKotlin</td><td class='metric-value'>2831</td><td class='metric-value'>2788</td><td class='metric-value'>2817</td><td class='metric-value'>2757</td><td class='metric-value'>3365</td><td class='metric-value'>3420</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:data-test:kspProdReleaseKotlin</td><td class='metric-value'>3525</td><td class='metric-value'>3420</td><td class='metric-value'>3492</td><td class='metric-value'>3379</td><td class='metric-value'>4065</td><td class='metric-value'>3942</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:topic:compileProdReleaseKotlin</td><td class='metric-value'>4494</td><td class='metric-value'>4703</td><td class='metric-value'>4212</td><td class='metric-value'>4719</td><td class='metric-value'>5684</td><td class='metric-value'>5400</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:data-test:compileProdReleaseKotlin</td><td class='metric-value'>1256</td><td class='metric-value'>1433</td><td class='metric-value'>1247</td><td class='metric-value'>1377</td><td class='metric-value'>1744</td><td class='metric-value'>1965</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:kspProdReleaseKotlin</td><td class='metric-value'>5224</td><td class='metric-value'>5474</td><td class='metric-value'>5237</td><td class='metric-value'>5399</td><td class='metric-value'>5754</td><td class='metric-value'>6167</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:model:lintAnalyzeJvmMain</td><td class='metric-value'>6995</td><td class='metric-value'>7111</td><td class='metric-value'>6983</td><td class='metric-value'>7174</td><td class='metric-value'>7634</td><td class='metric-value'>7702</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:compileProdReleaseKotlin</td><td class='metric-value'>6835</td><td class='metric-value'>7016</td><td class='metric-value'>6901</td><td class='metric-value'>7109</td><td class='metric-value'>7471</td><td class='metric-value'>8067</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:datastore-proto:lintAnalyzeProdRelease</td><td class='metric-value'>12438</td><td class='metric-value'>12815</td><td class='metric-value'>12610</td><td class='metric-value'>12499</td><td class='metric-value'>13600</td><td class='metric-value'>14348</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:database:lintAnalyzeProdRelease</td><td class='metric-value'>7412</td><td class='metric-value'>7773</td><td class='metric-value'>7384</td><td class='metric-value'>7867</td><td class='metric-value'>8528</td><td class='metric-value'>8807</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:hiltAggregateDepsProdRelease</td><td class='metric-value'>1159</td><td class='metric-value'>1152</td><td class='metric-value'>1228</td><td class='metric-value'>1148</td><td class='metric-value'>1336</td><td class='metric-value'>1385</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:datastore:lintAnalyzeProdRelease</td><td class='metric-value'>5244</td><td class='metric-value'>5394</td><td class='metric-value'>5136</td><td class='metric-value'>5579</td><td class='metric-value'>6030</td><td class='metric-value'>5935</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:network:lintAnalyzeProdRelease</td><td class='metric-value'>5404</td><td class='metric-value'>5395</td><td class='metric-value'>5379</td><td class='metric-value'>5396</td><td class='metric-value'>6393</td><td class='metric-value'>5768</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:hiltJavaCompileProdRelease</td><td class='metric-value'>6097</td><td class='metric-value'>6200</td><td class='metric-value'>6094</td><td class='metric-value'>6121</td><td class='metric-value'>6745</td><td class='metric-value'>6672</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:notifications:lintAnalyzeProdRelease</td><td class='metric-value'>3981</td><td class='metric-value'>3779</td><td class='metric-value'>3944</td><td class='metric-value'>3701</td><td class='metric-value'>4919</td><td class='metric-value'>4803</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:testing:kspProdReleaseKotlin</td><td class='metric-value'>2498</td><td class='metric-value'>2479</td><td class='metric-value'>2383</td><td class='metric-value'>2480</td><td class='metric-value'>3385</td><td class='metric-value'>2982</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:testing:compileProdReleaseKotlin</td><td class='metric-value'>2003</td><td class='metric-value'>1945</td><td class='metric-value'>2038</td><td class='metric-value'>1862</td><td class='metric-value'>2465</td><td class='metric-value'>2701</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:screenshot-testing:kspProdReleaseKotlin</td><td class='metric-value'>1407</td><td class='metric-value'>1599</td><td class='metric-value'>1430</td><td class='metric-value'>1556</td><td class='metric-value'>1643</td><td class='metric-value'>2206</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:screenshot-testing:compileProdReleaseKotlin</td><td class='metric-value'>1849</td><td class='metric-value'>1834</td><td class='metric-value'>1750</td><td class='metric-value'>1779</td><td class='metric-value'>2298</td><td class='metric-value'>2129</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:data:lintAnalyzeProdRelease</td><td class='metric-value'>11157</td><td class='metric-value'>11124</td><td class='metric-value'>11018</td><td class='metric-value'>11000</td><td class='metric-value'>12033</td><td class='metric-value'>12367</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app-nia-catalog:mergeReleaseResources</td><td class='metric-value'>1697</td><td class='metric-value'>2236</td><td class='metric-value'>1586</td><td class='metric-value'>2370</td><td class='metric-value'>2329</td><td class='metric-value'>2904</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:lintAnalyzeProdReleaseUnitTest</td><td class='metric-value'>13952</td><td class='metric-value'>11071</td><td class='metric-value'>14492</td><td class='metric-value'>10629</td><td class='metric-value'>16260</td><td class='metric-value'>16301</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:analytics:kspDemoReleaseKotlin</td><td class='metric-value'>1618</td><td class='metric-value'>2259</td><td class='metric-value'>1519</td><td class='metric-value'>2311</td><td class='metric-value'>1956</td><td class='metric-value'>2646</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:domain:lintAnalyzeProdRelease</td><td class='metric-value'>3301</td><td class='metric-value'>2897</td><td class='metric-value'>3239</td><td class='metric-value'>2984</td><td class='metric-value'>4082</td><td class='metric-value'>3611</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:common:lintAnalyzeJvmTest</td><td class='metric-value'>3364</td><td class='metric-value'>3022</td><td class='metric-value'>3276</td><td class='metric-value'>2936</td><td class='metric-value'>4097</td><td class='metric-value'>3764</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:sync:work:lintAnalyzeProdRelease</td><td class='metric-value'>6436</td><td class='metric-value'>4934</td><td class='metric-value'>6270</td><td class='metric-value'>4853</td><td class='metric-value'>7979</td><td class='metric-value'>5849</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:designsystem:lintAnalyzeProdRelease</td><td class='metric-value'>44126</td><td class='metric-value'>42928</td><td class='metric-value'>44823</td><td class='metric-value'>42049</td><td class='metric-value'>45700</td><td class='metric-value'>46939</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:datastore:lintAnalyzeProdReleaseUnitTest</td><td class='metric-value'>2662</td><td class='metric-value'>2289</td><td class='metric-value'>2756</td><td class='metric-value'>2297</td><td class='metric-value'>2955</td><td class='metric-value'>2727</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:designsystem:compileDemoReleaseKotlin</td><td class='metric-value'>8250</td><td class='metric-value'>8223</td><td class='metric-value'>8319</td><td class='metric-value'>8078</td><td class='metric-value'>8970</td><td class='metric-value'>9035</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:ui:compileDemoReleaseKotlin</td><td class='metric-value'>3537</td><td class='metric-value'>3514</td><td class='metric-value'>3528</td><td class='metric-value'>3547</td><td class='metric-value'>3979</td><td class='metric-value'>3829</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app-nia-catalog:compileReleaseKotlin</td><td class='metric-value'>3747</td><td class='metric-value'>3614</td><td class='metric-value'>3813</td><td class='metric-value'>3575</td><td class='metric-value'>4444</td><td class='metric-value'>4289</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:data:lintAnalyzeProdReleaseUnitTest</td><td class='metric-value'>12156</td><td class='metric-value'>9984</td><td class='metric-value'>11932</td><td class='metric-value'>9712</td><td class='metric-value'>13759</td><td class='metric-value'>11587</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:domain:lintAnalyzeProdReleaseUnitTest</td><td class='metric-value'>1515</td><td class='metric-value'>1751</td><td class='metric-value'>1371</td><td class='metric-value'>1499</td><td class='metric-value'>2126</td><td class='metric-value'>3699</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:screenshot-testing:kspDemoReleaseKotlin</td><td class='metric-value'>1144</td><td class='metric-value'>1210</td><td class='metric-value'>1071</td><td class='metric-value'>1157</td><td class='metric-value'>1604</td><td class='metric-value'>1599</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:designsystem:lintAnalyzeProdReleaseUnitTest</td><td class='metric-value'>9685</td><td class='metric-value'>8334</td><td class='metric-value'>9695</td><td class='metric-value'>8333</td><td class='metric-value'>10724</td><td class='metric-value'>9185</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:screenshot-testing:compileDemoReleaseKotlin</td><td class='metric-value'>1644</td><td class='metric-value'>1712</td><td class='metric-value'>1635</td><td class='metric-value'>1683</td><td class='metric-value'>1943</td><td class='metric-value'>1994</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:model:lintAnalyzeJvmTest</td><td class='metric-value'>2579</td><td class='metric-value'>2400</td><td class='metric-value'>2511</td><td class='metric-value'>2343</td><td class='metric-value'>3083</td><td class='metric-value'>3138</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:ui:lintAnalyzeProdRelease</td><td class='metric-value'>13225</td><td class='metric-value'>11950</td><td class='metric-value'>13236</td><td class='metric-value'>11854</td><td class='metric-value'>14433</td><td class='metric-value'>13338</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:network:lintAnalyzeProdReleaseUnitTest</td><td class='metric-value'>1438</td><td class='metric-value'>2527</td><td class='metric-value'>1367</td><td class='metric-value'>2496</td><td class='metric-value'>2140</td><td class='metric-value'>3373</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:bookmarks:lintAnalyzeProdRelease</td><td class='metric-value'>6867</td><td class='metric-value'>10109</td><td class='metric-value'>6614</td><td class='metric-value'>10035</td><td class='metric-value'>7812</td><td class='metric-value'>10946</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:interests:lintAnalyzeProdRelease</td><td class='metric-value'>6484</td><td class='metric-value'>8705</td><td class='metric-value'>6379</td><td class='metric-value'>8622</td><td class='metric-value'>7500</td><td class='metric-value'>9786</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:foryou:lintAnalyzeProdRelease</td><td class='metric-value'>8941</td><td class='metric-value'>12827</td><td class='metric-value'>8879</td><td class='metric-value'>12798</td><td class='metric-value'>9840</td><td class='metric-value'>14628</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:settings:lintAnalyzeProdRelease</td><td class='metric-value'>6388</td><td class='metric-value'>8926</td><td class='metric-value'>6248</td><td class='metric-value'>9025</td><td class='metric-value'>7181</td><td class='metric-value'>9610</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:bookmarks:lintAnalyzeProdReleaseUnitTest</td><td class='metric-value'>2744</td><td class='metric-value'>2804</td><td class='metric-value'>2644</td><td class='metric-value'>2855</td><td class='metric-value'>3612</td><td class='metric-value'>3385</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:search:lintAnalyzeProdRelease</td><td class='metric-value'>9004</td><td class='metric-value'>12703</td><td class='metric-value'>8974</td><td class='metric-value'>12923</td><td class='metric-value'>9540</td><td class='metric-value'>13823</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:topic:lintAnalyzeProdRelease</td><td class='metric-value'>7130</td><td class='metric-value'>10933</td><td class='metric-value'>6865</td><td class='metric-value'>10986</td><td class='metric-value'>8212</td><td class='metric-value'>11995</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:interests:lintAnalyzeProdReleaseUnitTest</td><td class='metric-value'>1995</td><td class='metric-value'>2534</td><td class='metric-value'>1787</td><td class='metric-value'>2426</td><td class='metric-value'>2914</td><td class='metric-value'>3239</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:search:lintAnalyzeProdReleaseUnitTest</td><td class='metric-value'>1661</td><td class='metric-value'>2364</td><td class='metric-value'>1665</td><td class='metric-value'>2380</td><td class='metric-value'>2014</td><td class='metric-value'>2519</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:foryou:lintAnalyzeProdReleaseUnitTest</td><td class='metric-value'>4725</td><td class='metric-value'>5448</td><td class='metric-value'>4632</td><td class='metric-value'>5516</td><td class='metric-value'>6727</td><td class='metric-value'>6100</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:settings:lintAnalyzeProdReleaseUnitTest</td><td class='metric-value'>1009</td><td class='metric-value'>1444</td><td class='metric-value'>967</td><td class='metric-value'>1444</td><td class='metric-value'>1242</td><td class='metric-value'>1909</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:topic:lintAnalyzeProdReleaseUnitTest</td><td class='metric-value'>1874</td><td class='metric-value'>3067</td><td class='metric-value'>1809</td><td class='metric-value'>3063</td><td class='metric-value'>2270</td><td class='metric-value'>3771</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:analytics:lintAnalyzeDemoRelease</td><td class='metric-value'>1364</td><td class='metric-value'>2789</td><td class='metric-value'>1318</td><td class='metric-value'>2885</td><td class='metric-value'>1883</td><td class='metric-value'>4562</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:designsystem:lintAnalyzeDemoReleaseUnitTest</td><td class='metric-value'>5029</td><td class='metric-value'>6465</td><td class='metric-value'>5076</td><td class='metric-value'>6652</td><td class='metric-value'>5554</td><td class='metric-value'>7730</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:lint:lintAnalyzeJvmMain</td><td class='metric-value'>3138</td><td class='metric-value'>5999</td><td class='metric-value'>3178</td><td class='metric-value'>5917</td><td class='metric-value'>3497</td><td class='metric-value'>7421</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:lint:lintAnalyzeJvmTest</td><td class='metric-value'>2175</td><td class='metric-value'>4176</td><td class='metric-value'>2200</td><td class='metric-value'>4077</td><td class='metric-value'>2392</td><td class='metric-value'>5761</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:designsystem:lintAnalyzeDemoRelease</td><td class='metric-value'>14569</td><td class='metric-value'>18087</td><td class='metric-value'>14654</td><td class='metric-value'>18181</td><td class='metric-value'>15800</td><td class='metric-value'>20197</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:ui:lintAnalyzeDemoRelease</td><td class='metric-value'>4135</td><td class='metric-value'>4072</td><td class='metric-value'>4169</td><td class='metric-value'>3994</td><td class='metric-value'>4483</td><td class='metric-value'>4678</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:lintAnalyzeProdRelease</td><td class='metric-value'>18661</td><td class='metric-value'>16673</td><td class='metric-value'>19249</td><td class='metric-value'>15709</td><td class='metric-value'>21405</td><td class='metric-value'>23996</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app-nia-catalog:lintAnalyzeRelease</td><td class='metric-value'>3449</td><td class='metric-value'>3575</td><td class='metric-value'>3647</td><td class='metric-value'>3603</td><td class='metric-value'>3973</td><td class='metric-value'>4034</td><td class='unit-column'>ms</td></tr><tr><td>All processes cpu</td><td>Max</td><td class='metric-value'>100.0</td><td class='metric-value'>100.0</td><td class='metric-value'>100.0</td><td class='metric-value'>100.0</td><td class='metric-value'>100</td><td class='metric-value'>100</td><td class='unit-column'>%</td></tr><tr><td>All processes memory</td><td>Max</td><td class='metric-value'>10.35</td><td class='metric-value'>10.14</td><td class='metric-value'>10.18</td><td class='metric-value'>9.82</td><td class='metric-value'>11.25</td><td class='metric-value'>11.33</td><td class='unit-column'>Gb</td></tr><tr><td>Build process cpu</td><td>Max</td><td class='metric-value'>95.6</td><td class='metric-value'>95.4</td><td class='metric-value'>96.0</td><td class='metric-value'>95.5</td><td class='metric-value'>96</td><td class='metric-value'>96</td><td class='unit-column'>%</td></tr><tr><td>Build processes memory</td><td>Max</td><td class='metric-value'>5.18</td><td class='metric-value'>5.2</td><td class='metric-value'>5.18</td><td class='metric-value'>5.18</td><td class='metric-value'>5.21</td><td class='metric-value'>5.25</td><td class='unit-column'>Gb</td></tr><tr><td>Build child processes cpu</td><td>Max</td><td class='metric-value'>91.0</td><td class='metric-value'>90.5</td><td class='metric-value'>91.0</td><td class='metric-value'>91.0</td><td class='metric-value'>94</td><td class='metric-value'>93</td><td class='unit-column'>%</td></tr><tr><td>Build child processes memory</td><td>Max</td><td class='metric-value'>4.2</td><td class='metric-value'>3.95</td><td class='metric-value'>4.02</td><td class='metric-value'>3.68</td><td class='metric-value'>5.02</td><td class='metric-value'>5.15</td><td class='unit-column'>Gb</td></tr></table>
+                </div>
+            </body>
+            </html>
