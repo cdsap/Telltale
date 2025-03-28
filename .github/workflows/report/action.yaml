@@ -201,7 +201,7 @@ runs:
         path: .
 
     - name: Download experiment results
-     if: ${{ inputs.deploy_results }} == 'true'
+      if: ${{ inputs.deploy_results }} == 'true'
       uses: actions/download-artifact@v4
       with:
         name: build-comparison-reports
