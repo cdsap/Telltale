@@ -1,0 +1,63 @@
+---
+layout: post
+title: "Testing reservedMemoryPerTask 1G in Lint builds"
+date: 2025-03-28
+report_link: /Telltale/reports/experiment_results_20250328210419.html
+summary: " 
+The analysis of the Gradle build performance data reveals minor differences between the two variants, with variant B showing a slight increase in overall build time by approximately 0.3 seconds (0.3%). Notably, the most time-consuming tasks across both variants include `com.android.build.gradle.internal.lint.AndroidLintAnalysisTask`, `:core:designsystem:compileProdReleaseKotlin`, and `:core:common:lintAnalyzeJvmMain`, with variant B generally performing slightly better in these tasks. Memory and CPU usage are nearly identical for both variants, with no significant differences observed. The total garbage collection counts for Gradle and Kotlin processes are slightly lower in variant B, suggesting marginally better memory management."
+tags: ["dependencies cache"]
+---
+[Report 📊](../../reports/experiment_results_20250328210419.html)
+## Summary
+The analysis of the Gradle build performance data reveals minor differences between the two variants, with variant B showing a slight increase in overall build time by approximately 0.3 seconds (0.3%). Notably, the most time-consuming tasks across both variants include `com.android.build.gradle.internal.lint.AndroidLintAnalysisTask`, `:core:designsystem:compileProdReleaseKotlin`, and `:core:common:lintAnalyzeJvmMain`, with variant B generally performing slightly better in these tasks. Memory and CPU usage are nearly identical for both variants, with no significant differences observed. The total garbage collection counts for Gradle and Kotlin processes are slightly lower in variant B, suggesting marginally better memory management.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Mean Build Time:**
+  - Variant A: 220.491 seconds
+  - Variant B: 221.151 seconds
+  - Difference: 0.660 seconds (0.3% increase for Variant B)
+- **P50 Build Time:**
+  - Variant A: 220.357 seconds
+  - Variant B: 220.265 seconds
+  - Difference: -0.092 seconds (0.04% decrease for Variant B)
+- **P90 Build Time:**
+  - Variant A: 227.485 seconds
+  - Variant B: 228.486 seconds
+  - Difference: 1.001 seconds (0.44% increase for Variant B)
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  1. `com.android.build.gradle.internal.lint.AndroidLintAnalysisTask`
+     - Variant A Mean: 6984 ms
+     - Variant B Mean: 6492 ms
+     - Difference: 492 ms (7% decrease for Variant B)
+  2. `:core:designsystem:compileProdReleaseKotlin`
+     - Variant A Mean: 18955 ms
+     - Variant B Mean: 19174 ms
+     - Difference: 219 ms (1.2% increase for Variant B)
+  3. `:core:common:lintAnalyzeJvmMain`
+     - Variant A Mean: 20050 ms
+     - Variant B Mean: 20433 ms
+     - Difference: 383 ms (1.9% increase for Variant B)
+
+### 3. Statistical Patterns
+- **Significant Timing Variations:**
+  - `:app:parseProdReleaseLocalResources` shows a notable increase in build time in Variant B, with a P90 time increase from 2540 ms to 4440 ms.
+  - `com.android.build.gradle.internal.lint.AndroidLintAnalysisTask` and `:core:common:lintAnalyzeJvmMain` show better performance in Variant B in terms of mean times.
+
+### 5. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - Both variants reached a maximum of 100% CPU usage for all processes.
+  - The main build process peaked at 95.46% CPU usage for Variant B, slightly higher than Variant A's 95%.
+- **Memory Usage:**
+  - Maximum memory usage for all processes was nearly identical, with Variant A at 10.33 GB and Variant B at 10.32 GB.
+  - Build child processes memory usage was slightly higher in Variant B, peaking at 4.16 GB compared to 4.15 GB in Variant A.
+
+### 6. Garbage Collection Analysis
+- **Total GC Collections:**
+  - Gradle Process: Variant A had 93 collections, and Variant B had 90, indicating a slight improvement in Variant B.
+  - Kotlin Process: Both variants had similar collections, with Variant A at 35 and Variant B at 34.
+
+This detailed analysis highlights the minor performance improvements in Variant B, particularly in garbage collection efficiency and specific task execution times. However, the overall differences between the two variants are quite marginal.
