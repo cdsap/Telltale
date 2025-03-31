@@ -1,0 +1,45 @@
+## Summary
+The analysis of the Gradle build performance comparison between `varianta_main` and `variantb_lint_2g` reveals several key findings. The overall build time for `variantb_lint_2g` is longer by approximately 73 seconds (7.3% increase) compared to `varianta_main`. In task execution, the most significant difference is observed in the `:layer_0:module_0_1:lintAnalyzeDebug` task, where `variantb_lint_2g` takes about 13.64 seconds longer than `varianta_main`. Memory and CPU usage across all processes are relatively similar between the two variants, with slight variations in peak values. The total garbage collection (GC) count was lower in `variantb_lint_2g` by 73 collections, indicating potentially more efficient memory management.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Mean Build Time:**
+  - `varianta_main`: 1013.33 seconds
+  - `variantb_lint_2g`: 1087.55 seconds
+- **Percentage Increase:** 7.3% (74.22 seconds longer in `variantb_lint_2g`)
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  - `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"`:
+    - `varianta_main`: Mean = 2.484 seconds
+    - `variantb_lint_2g`: Mean = 2.538 seconds
+  - `"com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask"`:
+    - `varianta_main`: Mean = 1.920 seconds
+    - `variantb_lint_2g`: Mean = 2.406 seconds
+  - `":layer_0:module_0_1:lintAnalyzeDebug"`:
+    - `varianta_main`: Mean = 33.255 seconds
+    - `variantb_lint_2g`: Mean = 46.895 seconds
+    - **Significant Variation:** 13.64 seconds longer in `variantb_lint_2g`
+
+### 3. Statistical Patterns
+- Tasks with notable timing variations:
+  - `":layer_0:module_0_1:lintAnalyzeDebug"` shows a significant increase in execution time in `variantb_lint_2g`.
+  - `":layer_0:module_0_1:compileDebugKotlin"` and `":layer_0:module_0_100:compileDebugKotlin"` show minor variations but maintain similar execution times across variants.
+
+### 4. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - All processes maxed out at 100% CPU usage for both variants.
+  - Build process CPU usage was slightly lower in `variantb_lint_2g` (94.1% vs. 95.75% in `varianta_main`).
+- **Memory Usage:**
+  - All processes peaked at 12.24 GB for `varianta_main` and 12.23 GB for `variantb_lint_2g`.
+  - Build process memory was slightly higher in `variantb_lint_2g` (7.47 GB vs. 7.38 GB in `varianta_main`).
+
+### 6. Garbage Collection Analysis
+- **Total GC Collections:**
+  - `varianta_main`: 765 collections
+  - `variantb_lint_2g`: 692 collections
+  - This indicates a more efficient garbage collection process in `variantb_lint_2g`.
+
+### 8. Summary and Formatting Requirements
+- The report highlights significant findings in markdown format, with tasks and task types quoted for clarity. Observations are factual, focusing on numerical differences and trends.
