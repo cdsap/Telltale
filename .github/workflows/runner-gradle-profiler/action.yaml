@@ -120,6 +120,7 @@ runs:
         VARIANT="${{ inputs.variant }}"
         SAFE_VARIANT="${VARIANT//\//-}"
         echo "safe_variant=$SAFE_VARIANT" >> $GITHUB_OUTPUT
+      shell: bash  
   
     - name: Archive Profiler Artifacts
       uses: actions/upload-artifact@v4
