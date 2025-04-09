@@ -204,7 +204,7 @@ runs:
         path: temp-results
 
     - name: Update gh-pages content
-      if: ${{ inputs.deploy_results }} == 'true'
+      if: ${{ inputs.deploy_results == 'true' }}
       shell: bash
       run: |
         TIMESTAMP=$(date +%Y-%m-%d)
@@ -267,7 +267,7 @@ runs:
         fi
 
     - name: Push Experiment Results
-      if: ${{ inputs.deploy_results }} == 'true'
+      if: ${{ inputs.deploy_results == 'true' }}
       shell: bash    
       run: |
         git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -278,7 +278,7 @@ runs:
         git push https://x-access-token:${{ inputs.gh_token }}@github.com/cdsap/Telltale.git gh-pages
 
     - name: Trigger gh-pages workflow
-      if: ${{ inputs.deploy_results }} == 'true'
+      if: ${{ inputs.deploy_results == 'true' }}
       shell: bash    
       run: |
         curl -X POST \
