@@ -114,9 +114,16 @@ runs:
         DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
 
+    - name: Sanitize variant name
+      id: sanitize
+      run: |
+        VARIANT="${{ inputs.variant }}"
+        SAFE_VARIANT="${VARIANT//\//-}"
+        echo "safe_variant=$SAFE_VARIANT" >> $GITHUB_OUTPUT
+  
     - name: Archive Profiler Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: profiler-${{ inputs.variant-prefix }}${{ inputs.variant.replace('/', '-') }}
+        name: profiler-${{ inputs.variant-prefix }}${{ steps.sanitize.outputs.safe_variant }}
         path: |
           profile-out/*
