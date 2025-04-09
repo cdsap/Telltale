@@ -117,6 +117,6 @@ runs:
     - name: Archive Profiler Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: profiler-${{ inputs.variant-prefix }}${{ inputs.variant }}
+        name: profiler-${{ inputs.variant-prefix }}${{ inputs.variant.replace('/', '-') }}
         path: |
           profile-out/*
