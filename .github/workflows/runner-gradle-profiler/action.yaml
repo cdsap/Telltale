@@ -66,7 +66,7 @@ runs:
       id: sdkman
       with:
         candidate: gradleprofiler
-        version: 0.20.0
+        version: 0.22.0
 
     - name: Execute Gradle Build with Profiler
       id: geapix
@@ -100,7 +100,7 @@ runs:
         fi 
 
         # Execute the Gradle Profiler
-        gradle-profiler-0.20.0/bin/gradle-profiler --benchmark --scenario-file scenario assemble --warmups ${{ inputs.warmups }} --iterations ${{ inputs.iterations }}
+        gradle-profiler-0.22.0/bin/gradle-profiler --benchmark --scenario-file scenario assemble --warmups ${{ inputs.warmups }} --iterations ${{ inputs.iterations }}
 
         # Generate table output from benchmark results
         TABLE_OUTPUT="<table><tr><td>Build</td><td>Time</td></tr>"
