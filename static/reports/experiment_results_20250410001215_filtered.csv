@@ -1,0 +1,120 @@
+Category,Metric,varianta_main Mean,variantb_z/metro Mean,varianta_main P50,variantb_z/metro P50,varianta_main P90,variantb_z/metro P90,Unit
+Build,Build time,152507,132088,151774,131314,160185,139556,ms
+Gradle process state,Gradle-Process-gcTime,0.08,0.06,0.08,0.06,0.09,0.07,
+Kotlin process state,Kotlin-Process-gcTime,0.05,0.04,0.05,0.04,0.06,0.05,
+Task Type,com.android.build.gradle.tasks.MapSourceSetPathsTask,1728,2303,1692,2077,2774,3461,ms
+Task Type,com.android.build.gradle.internal.tasks.CheckAarMetadataTask,2321,2906,2326,2662,3339,4122,ms
+Task Type,com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask,3375,3400,3362,3383,3715,3757,ms
+Task Type,com.google.devtools.ksp.gradle.KspAATask,3297,4483,2611,3087,8504,9982,ms
+Task Type,org.jetbrains.kotlin.gradle.tasks.KotlinCompile,4253,4914,3015,3587,8400,9278,ms
+Task Type,app.cash.sqldelight.gradle.SqlDelightTask,2679,3305,3832,4624,4932,5462,ms
+Task Type,com.apollographql.apollo3.gradle.internal.ApolloGenerateSourcesTask,1684,1656,1689,1642,2355,2298,ms
+Task Type,com.android.build.gradle.internal.tasks.L8DexDesugarLibTask,1986,3170,2000,3164,2273,3811,ms
+Task Type,com.android.build.gradle.internal.tasks.ValidateSigningTask,3048,2498,3067,2498,4008,3237,ms
+Task Type,org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask,24169,,24148,,25312,,ms
+Task Type,org.jetbrains.kotlin.gradle.internal.KaptWithoutKotlincTask,4975,,4922,,5474,,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeJavaResourceTask,1571,1673,1325,1352,3180,3415,ms
+Task Type,com.android.build.gradle.internal.tasks.DexArchiveBuilderTask,1061,1159,1023,1129,1352,1474,ms
+Task Path,:app:mapDebugSourceSetPaths,1728,2303,1692,2077,2774,3461,ms
+Task Path,:app:parseDebugLocalResources,1870,2400,1854,2097,3199,3589,ms
+Task Path,:app:checkDebugAarMetadata,2321,2906,2326,2662,3339,4122,ms
+Task Path,:app-scaffold:processDebugManifest,1133,1178,1158,767,2590,3190,ms
+Task Path,:app:mergeDebugResources,7365,7801,7374,7600,9188,9714,ms
+Task Path,:app:processDebugResources,3375,3400,3362,3383,3715,3757,ms
+Task Path,:libraries:auth:kspKotlinJvm,8848,7918,8909,7890,9416,8458,ms
+Task Path,:libraries:retrofitconverters:compileKotlinJvm,10088,10135,10126,10087,10656,10745,ms
+Task Path,:libraries:appconfig:compileKotlinJvm,10040,10087,10073,10031,10620,10646,ms
+Task Path,:libraries:di:compileKotlinJvm,1705,1514,1344,1389,3885,2065,ms
+Task Path,:libraries:kotlinutil:compileKotlinJvm,4684,4606,4675,4619,5070,5106,ms
+Task Path,:libraries:auth:compileKotlinJvm,5667,5782,5662,5746,6120,6125,ms
+Task Path,:libraries:gemoji:db:generateCommonMainGemojiDatabaseInterface,4428,4703,4440,4684,4656,5091,ms
+Task Path,:libraries:unfurler:generateCommonMainUnfurlerDatabaseInterface,4888,5006,4872,5013,5267,5359,ms
+Task Path,:service-db:generateCommonMainCatchUpDatabaseInterface,1214,4351,1116,5518,1264,6040,ms
+Task Path,:app-scaffold:generateGithubApolloSources,2202,2154,2246,2162,2574,2637,ms
+Task Path,:libraries:gemoji:db:compileKotlinJvm,2861,2646,2840,2661,3177,2917,ms
+Task Path,:libraries:unfurler:compileKotlinJvm,2818,4036,2805,3990,3204,4380,ms
+Task Path,:service-db:compileReleaseKotlinAndroid,5956,5583,5943,5568,6403,6286,ms
+Task Path,:libraries:deeplinking:compileReleaseKotlin,1561,1932,1557,1919,1848,2090,ms
+Task Path,:libraries:util:compileReleaseKotlin,5305,5986,5319,5937,5638,6681,ms
+Task Path,:libraries:flowbinding:compileReleaseKotlin,1301,1352,1282,1331,1537,1611,ms
+Task Path,:bookmarks:db:compileReleaseKotlinAndroid,2585,2169,2576,2167,2959,2541,ms
+Task Path,:libraries:gemoji:compileReleaseKotlin,3071,3068,3053,3058,3396,3446,ms
+Task Path,:service-api:compileReleaseKotlinAndroid,4095,3957,4038,4005,4669,4366,ms
+Task Path,:libraries:summarizer:generateReleaseSummarizationsDatabaseInterface,4552,4850,4538,4800,4969,5256,ms
+Task Path,:services:github:generateGithubApolloSources,1719,1642,1705,1642,2042,1906,ms
+Task Path,:libraries:base-ui:compileReleaseKotlin,7956,7727,7955,7738,8446,8369,ms
+Task Path,:bookmarks:compileReleaseKotlinAndroid,2439,2340,2447,2305,2645,2596,ms
+Task Path,:services:dribbble:compileReleaseKotlin,2523,2600,2494,2556,2836,2993,ms
+Task Path,:libraries:summarizer:kspReleaseKotlin,3311,3980,3346,4013,3937,4339,ms
+Task Path,:services:hackernews:compileReleaseKotlin,2790,3291,2803,3321,3090,3633,ms
+Task Path,:libraries:compose-extensions:compileReleaseKotlin,6639,6980,6664,6864,7139,7810,ms
+Task Path,:services:github:compileReleaseKotlin,7601,8229,7681,8197,8057,8873,ms
+Task Path,:services:producthunt:generateProducthuntApolloSources,1130,1172,1106,1153,1393,1340,ms
+Task Path,:libraries:summarizer:compileReleaseKotlin,5149,5680,5150,5702,5794,6097,ms
+Task Path,:services:reddit:kspReleaseKotlin,2308,2052,2295,1980,2829,2611,ms
+Task Path,:services:github:compileReleaseJavaWithJavac,4751,4355,4746,4460,5323,5041,ms
+Task Path,:libraries:summarizer:compileReleaseJavaWithJavac,3733,1955,3787,1798,4572,3817,ms
+Task Path,:services:unsplash:kspReleaseKotlin,2012,1393,1999,1400,2333,1654,ms
+Task Path,:services:reddit:compileReleaseKotlin,4913,4641,4933,4660,5381,4960,ms
+Task Path,:services:slashdot:compileReleaseKotlin,2592,3019,2550,2994,2916,3484,ms
+Task Path,:services:unsplash:compileReleaseKotlin,2332,2693,2376,2721,2568,2985,ms
+Task Path,:services:producthunt:compileReleaseKotlin,6936,7676,7029,7606,7523,8918,ms
+Task Path,:services:uplabs:kspReleaseKotlin,1837,1425,1748,1437,2282,1719,ms
+Task Path,:services:uplabs:compileReleaseKotlin,2629,2985,2585,3005,3000,3269,ms
+Task Path,:app:l8DexDesugarLibDebug,1986,3170,2000,3164,2273,3811,ms
+Task Path,:app-scaffold:kspDebugKotlin,9773,10132,9694,10149,10700,10981,ms
+Task Path,:app:validateSigningDebug,3048,2498,3067,2498,4008,3237,ms
+Task Path,:app:mergeExtDexDebug,22915,21527,23079,21116,23762,23951,ms
+Task Path,:app-scaffold:compileDebugKotlin,13095,25189,12882,24610,14454,28154,ms
+Task Path,:app:dexBuilderDebug,1061,1159,1023,1129,1352,1474,ms
+Task Path,:app:mergeDebugJavaResource,2988,3174,2956,3232,3413,3634,ms
+Kotlin Build Reports,Shrink current classpath snapshot non-incrementally,64.15,65.67,52,55,132,123,ms
+Kotlin Build Reports,Connect to Kotlin daemon,101.36,105.9,20,21,64,53,ms
+Kotlin Build Reports,Save shrunk current classpath snapshot,3.38,4.28,2,3,7,7,ms
+Kotlin Build Reports,Compiler IR translation,519.45,1505.35,332,1122,1322,2940,ms
+Kotlin Build Reports,Sources compilation round,3675.87,4308.74,2589,3274,7019,7106,ms
+Kotlin Build Reports,Update caches,20.92,22.09,14,15,47,51,ms
+Kotlin Build Reports,Calculate output size,3.01,3.14,2,2,7,7,ms
+Kotlin Build Reports,Spent time before task action,97.1,110.91,53,61,226,293,ms
+Kotlin Build Reports,Compiler initialization time,246.44,227.31,125,124,351,338,ms
+Kotlin Build Reports,Compiler IR generation,656.09,677.41,449,482,1413,1449,ms
+Kotlin Build Reports,Total Gradle task time,5033.35,5083.22,3246,3832,10075,9474,ms
+Kotlin Build Reports,Run compilation,4013.89,4667.1,2865,3568,7698,7953,ms
+Kotlin Build Reports,Task action before worker execution,48.61,50.51,23,21,74,66,ms
+Kotlin Build Reports,Compiler code analysis,1758.55,2135.6,1349,1391,3594,3681,ms
+Kotlin Build Reports,Compiler IR lowering,473.06,502.09,376,408,882,890,ms
+Kotlin Build Reports,Load current classpath snapshot,26.26,25.5,13,12,79,79,ms
+Kotlin Build Reports,Incremental compilation in daemon,3949.34,4599.33,2797,3518,7560,7668,ms
+Kotlin Build Reports,Run compilation in Gradle worker,4741.99,4782.19,3054,3597,9333,8820,ms
+Kotlin Build Reports,Start gradle worker,11.22,7.6,3,3,12,11,ms
+Kotlin Build Reports,Shrink and save current classpath snapshot after compilation,67.66,70.08,55,59,138,129,ms
+Kotlin Build Reports,Compiler code generation,1129.66,1180.04,856,949,2261,2258,ms
+Kotlin Build Reports,Size of classpath snapshot,123.13,127.1,3,3,449,458,MB
+Kotlin Build Reports,Code generation lines per second,695,550,562,423,1223,1026,
+Kotlin Build Reports,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+Kotlin Build Reports,Number of lines analyzed,1153,984,561,336,2477,2370,
+Kotlin Build Reports,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+Kotlin Build Reports,Analysis lines per second,457,310,374,301,740,573,
+Kotlin Build Reports,ABI snapshot size,49.0,49.0,49,49,49,49,B
+Kotlin Build Reports,Number of cache misses when loading classpath entry snapshots,11,12,5,5,19,19,
+Kotlin Build Reports,Number of classpath entries,36,33,22,18,78,75,
+Kotlin Build Reports,Number of cache hits when loading classpath entry snapshots,26,24,20,16,61,58,
+Kotlin Build Reports,Compiler IR translation line number,1153,1969,561,672,2477,4740,
+Kotlin Build Reports,Compiler IR lowering line number,1153,984,561,336,2477,2370,
+Kotlin Build Reports,Compiler IR generation line number,1153,984,561,336,2477,2370,
+Kotlin Build Reports,Total compiler iteration,1,1,1,1,1,1,
+Kotlin Build Reports,Total size of the cache directory,537.62,535.15,526,526,675,657,MB
+Kotlin Build Reports,Number of lines for code generation,1153,984,561,336,2477,2370,
+Kotlin Build Reports,Size of shrunk classpath snapshot,95.25,101.45,49,52,388,380,KB
+Kotlin Build Reports,Non incremental compilation in daemon,23165.28,,23123,,24203,,ms
+Kotlin Build Reports,Clear jar cache,2.92,3.18,2,2,6,6,ms
+Kotlin Build Reports,Write history file,3.72,3.82,3,3,7,7,ms
+Kotlin Build Reports,Clear output,2.84,3.01,3,3,5,5,ms
+Kotlin Build Reports,Store build info,3.56,3.74,3,3,7,6,ms
+Kotlin Build Reports,Clear outputs on rebuild,2.57,3.3,3,2,5,7,ms
+All processes cpu,Max,100.0,100.0,100.0,100.0,100,100,%
+All processes memory,Max,7.04,6.9,6.99,6.86,7.31,7.3,Gb
+Build process cpu,Max,94.94,95.04,95.0,95.0,96,96,%
+Build processes memory,Max,3.35,3.14,3.31,3.08,3.65,3.41,Gb
+Build child processes cpu,Max,89.48,90.14,90.0,90.0,92,93,%
+Build child processes memory,Max,2.71,2.77,2.69,2.76,2.83,2.86,Gb

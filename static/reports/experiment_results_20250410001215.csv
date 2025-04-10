@@ -1,0 +1,1470 @@
+Category,Metric,varianta_main Mean,variantb_z/metro Mean,varianta_main P50,variantb_z/metro P50,varianta_main P90,variantb_z/metro P90,Unit
+Build,Build time,152507,132088,151774,131314,160185,139556,ms
+Gradle process state,Gradle-Process-capacity,2.23,2.06,2.19,2.01,2.53,2.29,
+Gradle process state,Gradle-Process-gcTime,0.08,0.06,0.08,0.06,0.09,0.07,
+Gradle process state,Gradle-Process-max,4.0,4.0,4.0,4.0,4.0,4.0,
+Gradle process state,Gradle-Process-uptime,2.52,2.18,2.51,2.17,2.65,2.31,
+Gradle process state,Gradle-Process-usage,1.48,1.31,1.41,1.19,2.01,1.86,
+Kotlin process state,Kotlin-Process-capacity,1.56,1.59,1.55,1.58,1.66,1.69,
+Kotlin process state,Kotlin-Process-gcTime,0.05,0.04,0.05,0.04,0.06,0.05,
+Kotlin process state,Kotlin-Process-max,4.0,4.0,4.0,4.0,4.0,4.0,
+Kotlin process state,Kotlin-Process-uptime,1.91,1.57,1.92,1.56,1.97,1.62,
+Kotlin process state,Kotlin-Process-usage,0.58,0.65,0.42,0.65,1.26,0.76,
+Task Type,org.gradle.api.DefaultTask,1,1,0,0,4,6,ms
+Task Type,org.jetbrains.kotlin.gradle.plugin.diagnostics.CheckKotlinGradlePluginConfigurationErrors,0,0,0,0,1,1,ms
+Task Type,com.android.build.gradle.internal.tasks.AndroidVariantTask,0,0,0,0,1,1,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeNativeDebugMetadataTask,35,37,34,37,53,51,ms
+Task Type,com.android.build.gradle.internal.tasks.AarMetadataTask,28,32,12,13,114,128,ms
+Task Type,com.android.build.gradle.tasks.GenerateBuildConfig,46,47,18,19,178,182,ms
+Task Type,com.android.build.gradle.tasks.GenerateResValues,27,28,18,18,58,60,ms
+Task Type,com.android.build.gradle.internal.res.GenerateEmptyResourceFilesTask,11,11,10,10,17,17,ms
+Task Type,com.android.build.gradle.internal.tasks.ValidateResourcesTask,19,19,16,16,34,35,ms
+Task Type,com.android.build.gradle.tasks.MergeResources,649,686,46,50,470,480,ms
+Task Type,com.android.build.gradle.tasks.CompatibleScreensManifest,15,18,17,18,19,24,ms
+Task Type,com.android.build.gradle.tasks.ExtractDeepLinksTask,11,12,10,10,20,22,ms
+Task Type,com.android.build.gradle.tasks.MapSourceSetPathsTask,1728,2303,1692,2077,2774,3461,ms
+Task Type,com.android.build.gradle.internal.res.ParseLibraryResourcesTask,201,246,32,33,292,318,ms
+Task Type,com.android.build.gradle.internal.tasks.CheckAarMetadataTask,2321,2906,2326,2662,3339,4122,ms
+Task Type,com.android.build.gradle.tasks.ProcessLibraryManifest,102,95,33,33,102,96,ms
+Task Type,com.android.build.gradle.tasks.CompileLibraryResourcesTask,70,70,17,17,152,207,ms
+Task Type,com.android.build.gradle.internal.res.GenerateLibraryRFileTask,57,57,34,35,117,106,ms
+Task Type,com.android.build.gradle.tasks.ProcessApplicationManifest,897,917,868,893,1006,1110,ms
+Task Type,org.gradle.language.jvm.tasks.ProcessResources,10,5,5,1,25,9,ms
+Task Type,com.android.build.gradle.tasks.ProcessMultiApkApplicationManifest,183,177,177,180,222,219,ms
+Task Type,com.android.build.gradle.tasks.ProcessPackagedManifestTask,68,42,38,40,136,56,ms
+Task Type,com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask,3375,3400,3362,3383,3715,3757,ms
+Task Type,com.google.devtools.ksp.gradle.KspAATask,3297,4483,2611,3087,8504,9982,ms
+Task Type,org.jetbrains.kotlin.gradle.tasks.KotlinCompile,4253,4914,3015,3587,8400,9278,ms
+Task Type,org.gradle.api.tasks.bundling.Jar,45,47,35,38,92,92,ms
+Task Type,app.cash.sqldelight.gradle.SqlDelightTask,2679,3305,3832,4624,4932,5462,ms
+Task Type,com.android.build.gradle.internal.tasks.databinding.DataBindingMergeDependencyArtifactsTask,398,440,379,435,542,560,ms
+Task Type,com.apollographql.apollo3.gradle.internal.ApolloGenerateOptionsTask,71,72,22,25,186,204,ms
+Task Type,com.android.build.gradle.internal.tasks.databinding.DataBindingGenBaseClassesTask,620,642,608,640,737,794,ms
+Task Type,com.apollographql.apollo3.gradle.internal.ApolloGenerateSourcesTask,1684,1656,1689,1642,2355,2298,ms
+Task Type,com.android.build.gradle.tasks.JavaPreCompileTask,20,16,14,13,43,26,ms
+Task Type,org.gradle.api.tasks.compile.JavaCompile,524,319,8,7,1543,839,ms
+Task Type,com.android.build.gradle.internal.tasks.BundleLibraryClassesJar,30,34,20,21,68,75,ms
+Task Type,com.android.build.gradle.tasks.MergeSourceSetFolders,28,24,13,13,27,24,ms
+Task Type,org.jetbrains.kotlin.gradle.plugin.mpp.resources.publication.KotlinAndroidTargetResourcesPublication$AssetsCopyForAGPTask,3,3,3,3,6,8,ms
+Task Type,com.android.build.gradle.internal.tasks.CompressAssetsTask,94,66,64,61,253,91,ms
+Task Type,com.android.build.gradle.internal.tasks.L8DexDesugarLibTask,1986,3170,2000,3164,2273,3811,ms
+Task Type,com.android.build.gradle.internal.tasks.DexFileDependenciesTask,12,124,13,13,18,22,ms
+Task Type,com.android.build.gradle.internal.tasks.ProcessJavaResTask,19,19,17,17,30,30,ms
+Task Type,com.android.build.gradle.internal.tasks.BundleLibraryClassesDir,147,154,49,51,470,510,ms
+Task Type,com.android.build.gradle.internal.tasks.CheckDuplicateClassesTask,850,838,832,816,1051,1018,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeNativeLibsTask,47,47,3,3,11,10,ms
+Task Type,com.android.build.gradle.internal.tasks.LibraryJniLibsTask,10,10,8,9,16,17,ms
+Task Type,com.android.build.gradle.internal.tasks.StripDebugSymbolsTask,200,194,141,117,455,423,ms
+Task Type,com.android.build.gradle.internal.tasks.AppMetadataTask,13,11,13,11,22,17,ms
+Task Type,com.android.build.gradle.internal.tasks.SigningConfigVersionsWriterTask,25,20,20,20,39,26,ms
+Task Type,com.android.build.gradle.tasks.ProcessLibraryArtProfileTask,7,7,7,8,12,13,ms
+Task Type,com.android.build.gradle.internal.tasks.PrepareLintJarForPublish,24,25,21,24,38,35,ms
+Task Type,com.android.build.gradle.internal.tasks.ValidateSigningTask,3048,2498,3067,2498,4008,3237,ms
+Task Type,com.android.build.gradle.internal.tasks.DexMergingTask,7927,7487,484,544,23448,22056,ms
+Task Type,org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask,24169,,24148,,25312,,ms
+Task Type,org.jetbrains.kotlin.gradle.internal.KaptWithoutKotlincTask,4975,,4922,,5474,,ms
+Task Type,com.android.build.gradle.tasks.ExtractAnnotations,455,617,448,615,511,705,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeFileTask,10,12,11,13,15,18,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeConsumerProguardFilesTask,9,7,9,7,14,12,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeJavaResourceTask,1571,1673,1325,1352,3180,3415,ms
+Task Type,com.android.build.gradle.internal.tasks.LibraryAarJarsTask,520,597,499,572,660,755,ms
+Task Type,com.android.build.gradle.internal.tasks.DexArchiveBuilderTask,1061,1159,1023,1129,1352,1474,ms
+Task Type,com.android.build.gradle.tasks.BundleAar,176,198,171,196,226,244,ms
+Task Type,com.android.build.gradle.internal.tasks.GlobalSyntheticsMergeTask,189,211,156,201,269,290,ms
+Task Type,com.android.build.gradle.tasks.PackageApplication,525,566,510,566,608,659,ms
+Task Type,com.android.build.gradle.internal.tasks.ListingFileRedirectTask,3,3,3,3,5,6,ms
+Task Path,:app:mapDebugSourceSetPaths,1728,2303,1692,2077,2774,3461,ms
+Task Path,:app:parseDebugLocalResources,1870,2400,1854,2097,3199,3589,ms
+Task Path,:app:checkDebugAarMetadata,2321,2906,2326,2662,3339,4122,ms
+Task Path,:app-scaffold:processDebugManifest,1133,1178,1158,767,2590,3190,ms
+Task Path,:app:mergeDebugResources,7365,7801,7374,7600,9188,9714,ms
+Task Path,:app:processDebugResources,3375,3400,3362,3383,3715,3757,ms
+Task Path,:libraries:auth:kspKotlinJvm,8848,7918,8909,7890,9416,8458,ms
+Task Path,:libraries:retrofitconverters:compileKotlinJvm,10088,10135,10126,10087,10656,10745,ms
+Task Path,:libraries:appconfig:compileKotlinJvm,10040,10087,10073,10031,10620,10646,ms
+Task Path,:libraries:di:compileKotlinJvm,1705,1514,1344,1389,3885,2065,ms
+Task Path,:libraries:kotlinutil:compileKotlinJvm,4684,4606,4675,4619,5070,5106,ms
+Task Path,:libraries:auth:compileKotlinJvm,5667,5782,5662,5746,6120,6125,ms
+Task Path,:libraries:gemoji:db:generateCommonMainGemojiDatabaseInterface,4428,4703,4440,4684,4656,5091,ms
+Task Path,:libraries:unfurler:generateCommonMainUnfurlerDatabaseInterface,4888,5006,4872,5013,5267,5359,ms
+Task Path,:service-db:generateCommonMainCatchUpDatabaseInterface,1214,4351,1116,5518,1264,6040,ms
+Task Path,:app-scaffold:generateGithubApolloSources,2202,2154,2246,2162,2574,2637,ms
+Task Path,:libraries:gemoji:db:compileKotlinJvm,2861,2646,2840,2661,3177,2917,ms
+Task Path,:libraries:unfurler:compileKotlinJvm,2818,4036,2805,3990,3204,4380,ms
+Task Path,:service-db:compileReleaseKotlinAndroid,5956,5583,5943,5568,6403,6286,ms
+Task Path,:libraries:deeplinking:compileReleaseKotlin,1561,1932,1557,1919,1848,2090,ms
+Task Path,:libraries:util:compileReleaseKotlin,5305,5986,5319,5937,5638,6681,ms
+Task Path,:libraries:flowbinding:compileReleaseKotlin,1301,1352,1282,1331,1537,1611,ms
+Task Path,:bookmarks:db:compileReleaseKotlinAndroid,2585,2169,2576,2167,2959,2541,ms
+Task Path,:libraries:gemoji:compileReleaseKotlin,3071,3068,3053,3058,3396,3446,ms
+Task Path,:service-api:compileReleaseKotlinAndroid,4095,3957,4038,4005,4669,4366,ms
+Task Path,:libraries:summarizer:generateReleaseSummarizationsDatabaseInterface,4552,4850,4538,4800,4969,5256,ms
+Task Path,:services:github:generateGithubApolloSources,1719,1642,1705,1642,2042,1906,ms
+Task Path,:libraries:base-ui:compileReleaseKotlin,7956,7727,7955,7738,8446,8369,ms
+Task Path,:bookmarks:compileReleaseKotlinAndroid,2439,2340,2447,2305,2645,2596,ms
+Task Path,:services:dribbble:compileReleaseKotlin,2523,2600,2494,2556,2836,2993,ms
+Task Path,:libraries:summarizer:kspReleaseKotlin,3311,3980,3346,4013,3937,4339,ms
+Task Path,:services:hackernews:compileReleaseKotlin,2790,3291,2803,3321,3090,3633,ms
+Task Path,:libraries:compose-extensions:compileReleaseKotlin,6639,6980,6664,6864,7139,7810,ms
+Task Path,:services:github:compileReleaseKotlin,7601,8229,7681,8197,8057,8873,ms
+Task Path,:services:producthunt:generateProducthuntApolloSources,1130,1172,1106,1153,1393,1340,ms
+Task Path,:libraries:summarizer:compileReleaseKotlin,5149,5680,5150,5702,5794,6097,ms
+Task Path,:services:reddit:kspReleaseKotlin,2308,2052,2295,1980,2829,2611,ms
+Task Path,:services:github:compileReleaseJavaWithJavac,4751,4355,4746,4460,5323,5041,ms
+Task Path,:libraries:summarizer:compileReleaseJavaWithJavac,3733,1955,3787,1798,4572,3817,ms
+Task Path,:services:unsplash:kspReleaseKotlin,2012,1393,1999,1400,2333,1654,ms
+Task Path,:services:reddit:compileReleaseKotlin,4913,4641,4933,4660,5381,4960,ms
+Task Path,:services:slashdot:compileReleaseKotlin,2592,3019,2550,2994,2916,3484,ms
+Task Path,:services:unsplash:compileReleaseKotlin,2332,2693,2376,2721,2568,2985,ms
+Task Path,:services:producthunt:compileReleaseKotlin,6936,7676,7029,7606,7523,8918,ms
+Task Path,:services:uplabs:kspReleaseKotlin,1837,1425,1748,1437,2282,1719,ms
+Task Path,:services:uplabs:compileReleaseKotlin,2629,2985,2585,3005,3000,3269,ms
+Task Path,:app:l8DexDesugarLibDebug,1986,3170,2000,3164,2273,3811,ms
+Task Path,:app-scaffold:kspDebugKotlin,9773,10132,9694,10149,10700,10981,ms
+Task Path,:app:validateSigningDebug,3048,2498,3067,2498,4008,3237,ms
+Task Path,:app:mergeExtDexDebug,22915,21527,23079,21116,23762,23951,ms
+Task Path,:app-scaffold:compileDebugKotlin,13095,25189,12882,24610,14454,28154,ms
+Task Path,:app:dexBuilderDebug,1061,1159,1023,1129,1352,1474,ms
+Task Path,:app:mergeDebugJavaResource,2988,3174,2956,3232,3413,3634,ms
+:app-scaffold:compileDebugKotlin,Shrink current classpath snapshot non-incrementally,100.86,86.74,78,91,169,103,ms
+:app-scaffold:compileDebugKotlin,Connect to Kotlin daemon,5.1,22.14,5,19,8,31,ms
+:app-scaffold:compileDebugKotlin,Save shrunk current classpath snapshot,4.08,4.42,4,4,5,5,ms
+:app-scaffold:compileDebugKotlin,Compiler IR translation,2275.06,8291.6,2268,7448,2730,11566,ms
+:app-scaffold:compileDebugKotlin,Sources compilation round,12130.2,23523.78,11950,22894,13287,26497,ms
+:app-scaffold:compileDebugKotlin,Update caches,79.42,99.82,73,100,133,114,ms
+:app-scaffold:compileDebugKotlin,Calculate output size,1.0,1.06,1,1,1,1,ms
+:app-scaffold:compileDebugKotlin,Spent time before task action,48.52,437.66,48,412,59,594,ms
+:app-scaffold:compileDebugKotlin,Compiler initialization time,64.08,212.18,65,210,75,281,ms
+:app-scaffold:compileDebugKotlin,Compiler IR generation,2581.9,2961.92,2557,2961,2845,3168,ms
+:app-scaffold:compileDebugKotlin,Total Gradle task time,13095.64,25189.3,12882,24610,14454,28154,ms
+:app-scaffold:compileDebugKotlin,Run compilation,12668.72,24205.7,12470,23614,14012,27186,ms
+:app-scaffold:compileDebugKotlin,Task action before worker execution,31.5,85.6,30,75,39,125,ms
+:app-scaffold:compileDebugKotlin,Compiler code analysis,5392.32,14237.04,5336,14201,5933,16004,ms
+:app-scaffold:compileDebugKotlin,Compiler IR lowering,1801.58,1940.52,1852,1949,2051,2054,ms
+:app-scaffold:compileDebugKotlin,Load current classpath snapshot,32.96,40.14,28,43,42,47,ms
+:app-scaffold:compileDebugKotlin,Incremental compilation in daemon,12652.68,24165.06,12456,23560,13984,27146,ms
+:app-scaffold:compileDebugKotlin,Run compilation in Gradle worker,12676.4,24232.6,12478,23644,14024,27207,ms
+:app-scaffold:compileDebugKotlin,Start gradle worker,2.26,5.06,2,5,3,10,ms
+:app-scaffold:compileDebugKotlin,Shrink and save current classpath snapshot after compilation,106.42,93.02,83,97,175,109,ms
+:app-scaffold:compileDebugKotlin,Compiler code generation,4383.78,4903.06,4383,4882,4767,5181,ms
+:app-scaffold:compileDebugKotlin,Size of classpath snapshot,9.8,9.8,10,10,10,10,MB
+:app-scaffold:compileDebugKotlin,Code generation lines per second,3660,2717,3644,2725,3999,2855,
+:app-scaffold:compileDebugKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:app-scaffold:compileDebugKotlin,Number of lines analyzed,15975,13305,15975,13305,15975,13305,
+:app-scaffold:compileDebugKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:app-scaffold:compileDebugKotlin,Analysis lines per second,2972,940,2994,937,3211,1049,
+:app-scaffold:compileDebugKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:app-scaffold:compileDebugKotlin,Number of cache misses when loading classpath entry snapshots,124,129,124,129,124,129,
+:app-scaffold:compileDebugKotlin,Number of classpath entries,255,251,255,251,255,251,
+:app-scaffold:compileDebugKotlin,Number of cache hits when loading classpath entry snapshots,131,122,131,122,131,122,
+:app-scaffold:compileDebugKotlin,Compiler IR translation line number,15975,26610,15975,26610,15975,26610,
+:app-scaffold:compileDebugKotlin,Compiler IR lowering line number,15975,13305,15975,13305,15975,13305,
+:app-scaffold:compileDebugKotlin,Compiler IR generation line number,15975,13305,15975,13305,15975,13305,
+:app-scaffold:compileDebugKotlin,Total compiler iteration,1,1,1,1,1,1,
+:app-scaffold:compileDebugKotlin,Total size of the cache directory,2.3,2.4,2,2,2,2,MB
+:app-scaffold:compileDebugKotlin,Number of lines for code generation,15975,13305,15975,13305,15975,13305,
+:app-scaffold:compileDebugKotlin,Size of shrunk classpath snapshot,421.9,380.0,422,380,422,380,KB
+:app-scaffold:compileDebugKotlin,Clear jar cache,1.0,1.67,1,2,1,2,ms
+:app-scaffold:kaptGenerateStubsDebugKotlin,Total Gradle task time,24169.36,,24148,,25312,,ms
+:app-scaffold:kaptGenerateStubsDebugKotlin,Task action before worker execution,92.88,,93,,159,,ms
+:app-scaffold:kaptGenerateStubsDebugKotlin,Non incremental compilation in daemon,23165.28,,23123,,24203,,ms
+:app-scaffold:kaptGenerateStubsDebugKotlin,Run compilation in Gradle worker,23189.18,,23144,,24229,,ms
+:app-scaffold:kaptGenerateStubsDebugKotlin,Start gradle worker,65.28,,4,,324,,ms
+:app-scaffold:kaptGenerateStubsDebugKotlin,Clear jar cache,1.09,,1,,2,,ms
+:app-scaffold:kaptGenerateStubsDebugKotlin,Spent time before task action,578.34,,445,,1018,,ms
+:app-scaffold:kaptGenerateStubsDebugKotlin,Connect to Kotlin daemon,15.42,,15,,27,,ms
+:app-scaffold:kaptGenerateStubsDebugKotlin,Clear output,10.0,,10,,10,,ms
+:bookmarks:compileReleaseKotlinAndroid,Shrink current classpath snapshot non-incrementally,62.06,48.04,52,45,81,65,ms
+:bookmarks:compileReleaseKotlinAndroid,Connect to Kotlin daemon,20.94,19.94,20,19,30,30,ms
+:bookmarks:compileReleaseKotlinAndroid,Save shrunk current classpath snapshot,3.13,3.31,3,3,6,7,ms
+:bookmarks:compileReleaseKotlinAndroid,Compiler IR translation,148.98,602.86,148,599,185,760,ms
+:bookmarks:compileReleaseKotlinAndroid,Sources compilation round,1986.9,1954.42,1985,1961,2195,2142,ms
+:bookmarks:compileReleaseKotlinAndroid,Update caches,8.46,6.86,8,7,12,10,ms
+:bookmarks:compileReleaseKotlinAndroid,Calculate output size,3.04,2.88,2,3,7,5,ms
+:bookmarks:compileReleaseKotlinAndroid,Spent time before task action,42.2,34.74,42,35,55,46,ms
+:bookmarks:compileReleaseKotlinAndroid,Compiler initialization time,307.08,257.9,311,265,364,324,ms
+:bookmarks:compileReleaseKotlinAndroid,Compiler IR generation,340.92,302.08,339,291,428,376,ms
+:bookmarks:compileReleaseKotlinAndroid,Total Gradle task time,2439.58,2340.74,2447,2305,2645,2596,ms
+:bookmarks:compileReleaseKotlinAndroid,Run compilation,2227.8,2168.68,2241,2149,2403,2419,ms
+:bookmarks:compileReleaseKotlinAndroid,Task action before worker execution,22.4,13.5,22,13,31,18,ms
+:bookmarks:compileReleaseKotlinAndroid,Compiler code analysis,957.8,895.36,939,899,1110,1086,ms
+:bookmarks:compileReleaseKotlinAndroid,Compiler IR lowering,221.62,191.84,213,182,282,248,ms
+:bookmarks:compileReleaseKotlinAndroid,Load current classpath snapshot,13.34,9.18,11,9,19,15,ms
+:bookmarks:compileReleaseKotlinAndroid,Incremental compilation in daemon,2188.98,2128.82,2200,2098,2371,2357,ms
+:bookmarks:compileReleaseKotlinAndroid,Run compilation in Gradle worker,2255.76,2195.18,2270,2182,2434,2440,ms
+:bookmarks:compileReleaseKotlinAndroid,Start gradle worker,3.92,2.88,3,2,9,6,ms
+:bookmarks:compileReleaseKotlinAndroid,Shrink and save current classpath snapshot after compilation,65.06,51.38,57,49,83,73,ms
+:bookmarks:compileReleaseKotlinAndroid,Compiler code generation,563.08,494.46,555,473,680,601,ms
+:bookmarks:compileReleaseKotlinAndroid,Size of classpath snapshot,2.5,2.5,3,3,3,3,MB
+:bookmarks:compileReleaseKotlinAndroid,Code generation lines per second,407,271,407,275,486,341,
+:bookmarks:compileReleaseKotlinAndroid,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:bookmarks:compileReleaseKotlinAndroid,Number of lines analyzed,226,130,226,130,226,130,
+:bookmarks:compileReleaseKotlinAndroid,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:bookmarks:compileReleaseKotlinAndroid,Analysis lines per second,239,147,240,144,287,181,
+:bookmarks:compileReleaseKotlinAndroid,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:bookmarks:compileReleaseKotlinAndroid,Number of cache misses when loading classpath entry snapshots,2,1,2,2,2,2,
+:bookmarks:compileReleaseKotlinAndroid,Number of classpath entries,23,18,23,18,23,18,
+:bookmarks:compileReleaseKotlinAndroid,Number of cache hits when loading classpath entry snapshots,21,16,21,16,21,16,
+:bookmarks:compileReleaseKotlinAndroid,Compiler IR translation line number,226,260,226,260,226,260,
+:bookmarks:compileReleaseKotlinAndroid,Compiler IR lowering line number,226,130,226,130,226,130,
+:bookmarks:compileReleaseKotlinAndroid,Compiler IR generation line number,226,130,226,130,226,130,
+:bookmarks:compileReleaseKotlinAndroid,Total compiler iteration,1,1,1,1,1,1,
+:bookmarks:compileReleaseKotlinAndroid,Total size of the cache directory,510.5,474.6,511,475,511,475,KB
+:bookmarks:compileReleaseKotlinAndroid,Number of lines for code generation,226,130,226,130,226,130,
+:bookmarks:compileReleaseKotlinAndroid,Size of shrunk classpath snapshot,55.3,52.5,55,53,55,53,KB
+:bookmarks:compileReleaseKotlinAndroid,Clear jar cache,3.05,2.49,2,2,6,5,ms
+:bookmarks:compileReleaseKotlinAndroid,Clear output,3.0,3.0,3,3,5,3,ms
+:bookmarks:compileReleaseKotlinAndroid,Store build info,4.5,6.0,5,6,7,10,ms
+:bookmarks:compileReleaseKotlinAndroid,Write history file,3.0,3.5,3,4,3,4,ms
+:bookmarks:compileReleaseKotlinAndroid,Clear outputs on rebuild,1.0,18.0,1,18,1,18,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Shrink current classpath snapshot non-incrementally,57.68,49.18,55,47,91,70,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Connect to Kotlin daemon,22.34,23.1,21,23,30,33,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Save shrunk current classpath snapshot,3.21,2.36,2,1,8,6,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Compiler IR translation,235.5,394.66,237,388,305,537,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Sources compilation round,2154.02,1772.16,2139,1749,2458,2120,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Update caches,8.86,7.28,9,6,14,11,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Calculate output size,2.86,2.94,2,2,6,7,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Spent time before task action,39.82,35.54,34,32,49,55,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Compiler initialization time,232.06,188.52,226,178,287,275,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Compiler IR generation,325.48,273.36,327,261,418,378,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Total Gradle task time,2585.46,2169.48,2576,2167,2959,2541,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Run compilation,2400.82,1985.0,2403,1977,2763,2348,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Task action before worker execution,14.92,19.36,15,17,22,26,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Compiler code analysis,1072.78,879.56,1062,863,1253,1131,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Compiler IR lowering,278.12,226.7,284,219,342,320,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Clear jar cache,2.65,2.67,2,2,5,5,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Load current classpath snapshot,10.28,7.3,10,7,16,11,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Incremental compilation in daemon,2350.74,1946.32,2359,1947,2640,2312,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Run compilation in Gradle worker,2429.02,2014.24,2434,2009,2803,2372,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Start gradle worker,7.3,3.68,3,3,10,7,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Shrink and save current classpath snapshot after compilation,60.94,51.96,57,49,92,75,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Compiler code generation,604.22,500.72,608,508,710,643,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Size of classpath snapshot,1.9,1.9,2,2,2,2,MB
+:bookmarks:db:compileReleaseKotlinAndroid,Code generation lines per second,743,912,719,861,853,1208,
+:bookmarks:db:compileReleaseKotlinAndroid,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:bookmarks:db:compileReleaseKotlinAndroid,Number of lines analyzed,437,437,437,437,437,437,
+:bookmarks:db:compileReleaseKotlinAndroid,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:bookmarks:db:compileReleaseKotlinAndroid,Analysis lines per second,415,514,411,506,483,639,
+:bookmarks:db:compileReleaseKotlinAndroid,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:bookmarks:db:compileReleaseKotlinAndroid,Number of cache misses when loading classpath entry snapshots,1,1,1,1,1,1,
+:bookmarks:db:compileReleaseKotlinAndroid,Number of classpath entries,7,7,7,7,7,7,
+:bookmarks:db:compileReleaseKotlinAndroid,Number of cache hits when loading classpath entry snapshots,6,6,6,6,6,7,
+:bookmarks:db:compileReleaseKotlinAndroid,Compiler IR translation line number,437,874,437,874,437,874,
+:bookmarks:db:compileReleaseKotlinAndroid,Compiler IR lowering line number,437,437,437,437,437,437,
+:bookmarks:db:compileReleaseKotlinAndroid,Compiler IR generation line number,437,437,437,437,437,437,
+:bookmarks:db:compileReleaseKotlinAndroid,Total compiler iteration,1,1,1,1,1,1,
+:bookmarks:db:compileReleaseKotlinAndroid,Total size of the cache directory,506.5,506.5,507,507,507,507,KB
+:bookmarks:db:compileReleaseKotlinAndroid,Number of lines for code generation,437,437,437,437,437,437,
+:bookmarks:db:compileReleaseKotlinAndroid,Size of shrunk classpath snapshot,46.1,46.1,46,46,46,46,KB
+:bookmarks:db:compileReleaseKotlinAndroid,Clear output,2.5,9.0,3,4,4,21,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Store build info,3.0,2.67,3,3,5,4,ms
+:bookmarks:db:compileReleaseKotlinAndroid,Clear outputs on rebuild,3.0,,3,,3,,ms
+:libraries:appconfig:compileKotlinJvm,Shrink current classpath snapshot non-incrementally,126.12,99.2,126,99,168,135,ms
+:libraries:appconfig:compileKotlinJvm,Connect to Kotlin daemon,1219.32,1198.62,1225,1210,1346,1331,ms
+:libraries:appconfig:compileKotlinJvm,Compiler IR translation,837.68,1790.5,852,1789,922,2054,ms
+:libraries:appconfig:compileKotlinJvm,Sources compilation round,6990.54,7072.28,7092,7086,7493,7529,ms
+:libraries:appconfig:compileKotlinJvm,Update caches,28.2,19.1,28,20,40,33,ms
+:libraries:appconfig:compileKotlinJvm,Calculate output size,3.5,5.12,3,4,7,10,ms
+:libraries:appconfig:compileKotlinJvm,Spent time before task action,199.4,226.66,190,185,263,313,ms
+:libraries:appconfig:compileKotlinJvm,Compiler initialization time,1606.02,1369.88,1579,1373,1740,1492,ms
+:libraries:appconfig:compileKotlinJvm,Compiler IR generation,441.58,435.42,442,432,516,523,ms
+:libraries:appconfig:compileKotlinJvm,Total Gradle task time,10040.88,10087.66,10073,10031,10620,10646,ms
+:libraries:appconfig:compileKotlinJvm,Run compilation,8012.0,8055.16,8101,8052,8539,8549,ms
+:libraries:appconfig:compileKotlinJvm,Task action before worker execution,388.5,408.9,383,404,433,480,ms
+:libraries:appconfig:compileKotlinJvm,Compiler code analysis,3392.32,3545.62,3467,3574,3690,3766,ms
+:libraries:appconfig:compileKotlinJvm,Compiler IR lowering,541.22,747.56,550,767,631,870,ms
+:libraries:appconfig:compileKotlinJvm,Clear jar cache,4.23,4.74,3,4,9,9,ms
+:libraries:appconfig:compileKotlinJvm,Load current classpath snapshot,104.56,82.56,100,84,146,114,ms
+:libraries:appconfig:compileKotlinJvm,Incremental compilation in daemon,7663.64,7686.16,7773,7673,8225,8169,ms
+:libraries:appconfig:compileKotlinJvm,Write history file,3.92,3.76,3,4,9,7,ms
+:libraries:appconfig:compileKotlinJvm,Run compilation in Gradle worker,9272.68,9288.62,9351,9278,9864,9902,ms
+:libraries:appconfig:compileKotlinJvm,Start gradle worker,83.62,63.38,25,27,38,37,ms
+:libraries:appconfig:compileKotlinJvm,Shrink and save current classpath snapshot after compilation,130.28,102.72,129,103,172,140,ms
+:libraries:appconfig:compileKotlinJvm,Compiler code generation,983.42,1183.64,1002,1192,1111,1357,ms
+:libraries:appconfig:compileKotlinJvm,Size of classpath snapshot,277.3,282.8,277,283,277,283,KB
+:libraries:appconfig:compileKotlinJvm,Code generation lines per second,104,87,102,85,123,108,
+:libraries:appconfig:compileKotlinJvm,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:appconfig:compileKotlinJvm,Number of lines analyzed,102,102,102,102,102,102,
+:libraries:appconfig:compileKotlinJvm,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:appconfig:compileKotlinJvm,Analysis lines per second,29,28,29,28,36,30,
+:libraries:appconfig:compileKotlinJvm,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:appconfig:compileKotlinJvm,Number of cache misses when loading classpath entry snapshots,2,2,3,2,3,3,
+:libraries:appconfig:compileKotlinJvm,Number of classpath entries,3,3,3,3,3,3,
+:libraries:appconfig:compileKotlinJvm,Compiler IR translation line number,102,204,102,204,102,204,
+:libraries:appconfig:compileKotlinJvm,Compiler IR lowering line number,102,102,102,102,102,102,
+:libraries:appconfig:compileKotlinJvm,Compiler IR generation line number,102,102,102,102,102,102,
+:libraries:appconfig:compileKotlinJvm,Total compiler iteration,1,1,1,1,1,1,
+:libraries:appconfig:compileKotlinJvm,Total size of the cache directory,525.7,525.7,526,526,526,526,KB
+:libraries:appconfig:compileKotlinJvm,Number of lines for code generation,102,102,102,102,102,102,
+:libraries:appconfig:compileKotlinJvm,Size of shrunk classpath snapshot,680.0,680.0,680,680,680,680,B
+:libraries:appconfig:compileKotlinJvm,Number of cache hits when loading classpath entry snapshots,1,1,1,2,2,2,
+:libraries:appconfig:compileKotlinJvm,Save shrunk current classpath snapshot,3.7,3.5,3,3,10,6,ms
+:libraries:appconfig:compileKotlinJvm,Clear output,1.5,2.6,1,2,3,5,ms
+:libraries:appconfig:compileKotlinJvm,Clear outputs on rebuild,2.27,2.0,1,2,5,3,ms
+:libraries:appconfig:compileKotlinJvm,Store build info,4.0,3.6,4,4,8,6,ms
+:libraries:auth:compileKotlinJvm,Shrink current classpath snapshot non-incrementally,40.94,45.94,38,45,60,60,ms
+:libraries:auth:compileKotlinJvm,Connect to Kotlin daemon,22.94,31.78,22,27,32,42,ms
+:libraries:auth:compileKotlinJvm,Save shrunk current classpath snapshot,3.0,3.7,3,4,6,8,ms
+:libraries:auth:compileKotlinJvm,Compiler IR translation,923.8,1894.8,917,1892,1084,2265,ms
+:libraries:auth:compileKotlinJvm,Sources compilation round,5083.72,5184.56,5072,5161,5471,5527,ms
+:libraries:auth:compileKotlinJvm,Update caches,19.72,19.56,17,18,26,29,ms
+:libraries:auth:compileKotlinJvm,Calculate output size,3.38,4.04,2,4,8,9,ms
+:libraries:auth:compileKotlinJvm,Spent time before task action,92.72,97.7,88,99,127,125,ms
+:libraries:auth:compileKotlinJvm,Compiler initialization time,186.7,183.76,179,180,272,228,ms
+:libraries:auth:compileKotlinJvm,Compiler IR generation,1342.8,1525.5,1319,1511,1587,1753,ms
+:libraries:auth:compileKotlinJvm,Total Gradle task time,5667.46,5782.68,5662,5746,6120,6125,ms
+:libraries:auth:compileKotlinJvm,Run compilation,5400.68,5517.06,5402,5491,5827,5877,ms
+:libraries:auth:compileKotlinJvm,Task action before worker execution,17.36,17.78,16,17,23,25,ms
+:libraries:auth:compileKotlinJvm,Compiler code analysis,1784.38,1637.46,1786,1617,2045,1967,ms
+:libraries:auth:compileKotlinJvm,Compiler IR lowering,834.34,883.08,825,883,964,963,ms
+:libraries:auth:compileKotlinJvm,Clear jar cache,1.93,2.73,1,2,4,5,ms
+:libraries:auth:compileKotlinJvm,Load current classpath snapshot,21.06,24.94,20,25,33,34,ms
+:libraries:auth:compileKotlinJvm,Incremental compilation in daemon,5356.18,5470.42,5352,5444,5793,5830,ms
+:libraries:auth:compileKotlinJvm,Run compilation in Gradle worker,5429.12,5556.54,5429,5536,5858,5914,ms
+:libraries:auth:compileKotlinJvm,Start gradle worker,4.74,4.36,3,4,8,10,ms
+:libraries:auth:compileKotlinJvm,Shrink and save current classpath snapshot after compilation,43.8,50.02,42,50,61,69,ms
+:libraries:auth:compileKotlinJvm,Compiler code generation,2177.6,2409.12,2185,2395,2459,2623,ms
+:libraries:auth:compileKotlinJvm,Size of classpath snapshot,815.9,803.0,816,803,816,803,KB
+:libraries:auth:compileKotlinJvm,Code generation lines per second,118,106,117,107,137,114,
+:libraries:auth:compileKotlinJvm,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:auth:compileKotlinJvm,Number of lines analyzed,257,257,257,257,257,257,
+:libraries:auth:compileKotlinJvm,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:auth:compileKotlinJvm,Analysis lines per second,145,159,144,159,174,191,
+:libraries:auth:compileKotlinJvm,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:auth:compileKotlinJvm,Number of cache misses when loading classpath entry snapshots,11,11,12,12,12,12,
+:libraries:auth:compileKotlinJvm,Number of classpath entries,21,17,21,17,21,17,
+:libraries:auth:compileKotlinJvm,Number of cache hits when loading classpath entry snapshots,9,5,9,5,11,5,
+:libraries:auth:compileKotlinJvm,Compiler IR translation line number,257,514,257,514,257,514,
+:libraries:auth:compileKotlinJvm,Compiler IR lowering line number,257,257,257,257,257,257,
+:libraries:auth:compileKotlinJvm,Compiler IR generation line number,257,257,257,257,257,257,
+:libraries:auth:compileKotlinJvm,Total compiler iteration,1,1,1,1,1,1,
+:libraries:auth:compileKotlinJvm,Total size of the cache directory,509.9,510.1,510,510,510,510,KB
+:libraries:auth:compileKotlinJvm,Number of lines for code generation,257,257,257,257,257,257,
+:libraries:auth:compileKotlinJvm,Size of shrunk classpath snapshot,8.3,8.3,8,8,8,8,KB
+:libraries:auth:compileKotlinJvm,Write history file,4.0,4.0,4,4,6,4,ms
+:libraries:auth:compileKotlinJvm,Store build info,1.67,3.75,2,4,2,6,ms
+:libraries:auth:compileKotlinJvm,Clear outputs on rebuild,2.5,3.33,3,3,4,9,ms
+:libraries:auth:compileKotlinJvm,Clear output,1.0,2.33,1,2,1,4,ms
+:libraries:base-ui:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,169.98,136.24,162,132,255,202,ms
+:libraries:base-ui:compileReleaseKotlin,Connect to Kotlin daemon,47.72,30.14,29,24,98,43,ms
+:libraries:base-ui:compileReleaseKotlin,Save shrunk current classpath snapshot,3.38,3.1,3,1,8,7,ms
+:libraries:base-ui:compileReleaseKotlin,Compiler IR translation,1366.56,2910.32,1395,2842,1517,3499,ms
+:libraries:base-ui:compileReleaseKotlin,Sources compilation round,7061.54,6703.2,7125,6763,7522,7236,ms
+:libraries:base-ui:compileReleaseKotlin,Update caches,23.98,20.42,23,19,32,30,ms
+:libraries:base-ui:compileReleaseKotlin,Calculate output size,3.2,3.14,2,3,7,7,ms
+:libraries:base-ui:compileReleaseKotlin,Spent time before task action,214.16,451.52,196,458,327,594,ms
+:libraries:base-ui:compileReleaseKotlin,Compiler initialization time,209.48,137.7,151,133,422,173,ms
+:libraries:base-ui:compileReleaseKotlin,Compiler IR generation,1411.58,1175.16,1396,1170,1664,1380,ms
+:libraries:base-ui:compileReleaseKotlin,Total Gradle task time,7956.02,7727.24,7955,7738,8446,8369,ms
+:libraries:base-ui:compileReleaseKotlin,Run compilation,7494.24,7062.34,7501,7084,7983,7631,ms
+:libraries:base-ui:compileReleaseKotlin,Task action before worker execution,31.04,30.56,28,30,38,49,ms
+:libraries:base-ui:compileReleaseKotlin,Compiler code analysis,3118.76,3127.42,3066,3129,3576,3549,ms
+:libraries:base-ui:compileReleaseKotlin,Compiler IR lowering,943.78,799.94,933,807,1098,927,ms
+:libraries:base-ui:compileReleaseKotlin,Clear jar cache,3.46,2.66,3,2,7,5,ms
+:libraries:base-ui:compileReleaseKotlin,Load current classpath snapshot,89.76,67.98,78,69,128,94,ms
+:libraries:base-ui:compileReleaseKotlin,Incremental compilation in daemon,7443.22,7020.54,7456,7049,7937,7592,ms
+:libraries:base-ui:compileReleaseKotlin,Run compilation in Gradle worker,7549.28,7099.04,7573,7112,8032,7662,ms
+:libraries:base-ui:compileReleaseKotlin,Start gradle worker,4.62,4.44,4,4,10,9,ms
+:libraries:base-ui:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,175.22,140.24,168,138,260,206,ms
+:libraries:base-ui:compileReleaseKotlin,Compiler code generation,2355.84,1975.68,2310,1958,2678,2267,ms
+:libraries:base-ui:compileReleaseKotlin,Size of classpath snapshot,4.9,4.9,5,5,5,5,MB
+:libraries:base-ui:compileReleaseKotlin,Code generation lines per second,572,596,579,596,636,665,
+:libraries:base-ui:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:base-ui:compileReleaseKotlin,Number of lines analyzed,1337,1168,1337,1168,1337,1168,
+:libraries:base-ui:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:base-ui:compileReleaseKotlin,Analysis lines per second,433,376,436,373,495,429,
+:libraries:base-ui:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:base-ui:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,48,47,48,48,48,48,
+:libraries:base-ui:compileReleaseKotlin,Number of classpath entries,80,76,80,76,80,76,
+:libraries:base-ui:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,32,28,32,28,32,28,
+:libraries:base-ui:compileReleaseKotlin,Compiler IR translation line number,1337,2336,1337,2336,1337,2336,
+:libraries:base-ui:compileReleaseKotlin,Compiler IR lowering line number,1337,1168,1337,1168,1337,1168,
+:libraries:base-ui:compileReleaseKotlin,Compiler IR generation line number,1337,1168,1337,1168,1337,1168,
+:libraries:base-ui:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:libraries:base-ui:compileReleaseKotlin,Total size of the cache directory,649.5,646.1,650,646,650,646,KB
+:libraries:base-ui:compileReleaseKotlin,Number of lines for code generation,1337,1168,1337,1168,1337,1168,
+:libraries:base-ui:compileReleaseKotlin,Size of shrunk classpath snapshot,58.2,52.4,58,52,58,52,KB
+:libraries:base-ui:compileReleaseKotlin,Store build info,4.0,5.33,5,5,6,9,ms
+:libraries:base-ui:compileReleaseKotlin,Clear output,2.75,3.4,3,2,4,9,ms
+:libraries:base-ui:compileReleaseKotlin,Clear outputs on rebuild,3.33,2.67,3,3,5,3,ms
+:libraries:base-ui:compileReleaseKotlin,Write history file,3.0,,3,,3,,ms
+:libraries:compose-extensions:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,83.74,77.0,82,67,108,108,ms
+:libraries:compose-extensions:compileReleaseKotlin,Connect to Kotlin daemon,27.94,19.52,21,18,39,24,ms
+:libraries:compose-extensions:compileReleaseKotlin,Save shrunk current classpath snapshot,2.68,2.24,1,1,7,5,ms
+:libraries:compose-extensions:compileReleaseKotlin,Compiler IR translation,1382.04,3095.8,1382,3088,1585,3571,ms
+:libraries:compose-extensions:compileReleaseKotlin,Sources compilation round,5988.42,6388.18,6014,6300,6454,7176,ms
+:libraries:compose-extensions:compileReleaseKotlin,Update caches,21.94,19.4,22,18,31,27,ms
+:libraries:compose-extensions:compileReleaseKotlin,Calculate output size,2.92,2.56,3,2,6,7,ms
+:libraries:compose-extensions:compileReleaseKotlin,Spent time before task action,101.36,99.14,97,95,142,134,ms
+:libraries:compose-extensions:compileReleaseKotlin,Compiler initialization time,92.56,83.08,88,80,117,118,ms
+:libraries:compose-extensions:compileReleaseKotlin,Compiler IR generation,903.08,981.4,919,897,1120,1557,ms
+:libraries:compose-extensions:compileReleaseKotlin,Total Gradle task time,6639.72,6980.22,6664,6864,7139,7810,ms
+:libraries:compose-extensions:compileReleaseKotlin,Run compilation,6301.86,6675.24,6340,6574,6772,7489,ms
+:libraries:compose-extensions:compileReleaseKotlin,Task action before worker execution,27.86,23.66,22,24,41,32,ms
+:libraries:compose-extensions:compileReleaseKotlin,Compiler code analysis,2979.68,3099.44,2949,3127,3334,3464,ms
+:libraries:compose-extensions:compileReleaseKotlin,Compiler IR lowering,620.76,668.0,613,648,786,798,ms
+:libraries:compose-extensions:compileReleaseKotlin,Load current classpath snapshot,17.8,17.86,17,18,28,27,ms
+:libraries:compose-extensions:compileReleaseKotlin,Incremental compilation in daemon,6263.38,6637.0,6298,6537,6727,7452,ms
+:libraries:compose-extensions:compileReleaseKotlin,Run compilation in Gradle worker,6339.1,6701.88,6384,6600,6805,7530,ms
+:libraries:compose-extensions:compileReleaseKotlin,Start gradle worker,3.78,3.88,3,3,11,8,ms
+:libraries:compose-extensions:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,87.46,87.08,86,70,114,115,ms
+:libraries:compose-extensions:compileReleaseKotlin,Compiler code generation,1524.42,1649.92,1480,1524,1856,2235,ms
+:libraries:compose-extensions:compileReleaseKotlin,Size of classpath snapshot,4.7,4.7,5,5,5,5,MB
+:libraries:compose-extensions:compileReleaseKotlin,Code generation lines per second,885,832,894,869,1042,1010,
+:libraries:compose-extensions:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:compose-extensions:compileReleaseKotlin,Number of lines analyzed,1324,1324,1324,1324,1324,1324,
+:libraries:compose-extensions:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:compose-extensions:compileReleaseKotlin,Analysis lines per second,446,431,449,423,494,502,
+:libraries:compose-extensions:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:compose-extensions:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,5,5,5,5,5,5,
+:libraries:compose-extensions:compileReleaseKotlin,Number of classpath entries,66,63,66,63,66,63,
+:libraries:compose-extensions:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,61,58,61,58,61,58,
+:libraries:compose-extensions:compileReleaseKotlin,Compiler IR translation line number,1324,2648,1324,2648,1324,2648,
+:libraries:compose-extensions:compileReleaseKotlin,Compiler IR lowering line number,1324,1324,1324,1324,1324,1324,
+:libraries:compose-extensions:compileReleaseKotlin,Compiler IR generation line number,1324,1324,1324,1324,1324,1324,
+:libraries:compose-extensions:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:libraries:compose-extensions:compileReleaseKotlin,Total size of the cache directory,657.3,657.3,657,657,657,657,KB
+:libraries:compose-extensions:compileReleaseKotlin,Number of lines for code generation,1324,1324,1324,1324,1324,1324,
+:libraries:compose-extensions:compileReleaseKotlin,Size of shrunk classpath snapshot,63.4,63.4,63,63,63,63,KB
+:libraries:compose-extensions:compileReleaseKotlin,Clear jar cache,2.96,3.71,3,3,6,5,ms
+:libraries:compose-extensions:compileReleaseKotlin,Store build info,2.0,2.33,2,2,2,4,ms
+:libraries:compose-extensions:compileReleaseKotlin,Clear output,1.0,1.0,1,1,1,1,ms
+:libraries:compose-extensions:compileReleaseKotlin,Clear outputs on rebuild,3.0,2.5,3,3,3,3,ms
+:libraries:deeplinking:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,74.8,169.1,70,159,106,250,ms
+:libraries:deeplinking:compileReleaseKotlin,Connect to Kotlin daemon,37.1,21.62,23,21,117,32,ms
+:libraries:deeplinking:compileReleaseKotlin,Save shrunk current classpath snapshot,2.31,5.61,1,3,5,7,ms
+:libraries:deeplinking:compileReleaseKotlin,Compiler IR translation,120.14,625.22,121,601,157,884,ms
+:libraries:deeplinking:compileReleaseKotlin,Sources compilation round,1102.7,1346.64,1090,1336,1308,1531,ms
+:libraries:deeplinking:compileReleaseKotlin,Update caches,5.62,5.0,5,5,9,8,ms
+:libraries:deeplinking:compileReleaseKotlin,Calculate output size,2.96,3.26,2,3,7,7,ms
+:libraries:deeplinking:compileReleaseKotlin,Spent time before task action,48.92,74.68,46,71,67,122,ms
+:libraries:deeplinking:compileReleaseKotlin,Compiler initialization time,115.36,69.24,97,63,216,101,ms
+:libraries:deeplinking:compileReleaseKotlin,Compiler IR generation,145.0,146.42,147,139,184,190,ms
+:libraries:deeplinking:compileReleaseKotlin,Total Gradle task time,1561.36,1932.72,1557,1919,1848,2090,ms
+:libraries:deeplinking:compileReleaseKotlin,Run compilation,1335.64,1705.36,1329,1694,1540,1847,ms
+:libraries:deeplinking:compileReleaseKotlin,Task action before worker execution,24.42,20.74,23,20,33,32,ms
+:libraries:deeplinking:compileReleaseKotlin,Compiler code analysis,594.92,690.08,592,695,766,838,ms
+:libraries:deeplinking:compileReleaseKotlin,Compiler IR lowering,119.24,122.12,119,114,152,159,ms
+:libraries:deeplinking:compileReleaseKotlin,Load current classpath snapshot,17.74,91.22,16,84,27,158,ms
+:libraries:deeplinking:compileReleaseKotlin,Incremental compilation in daemon,1296.24,1655.0,1286,1659,1500,1793,ms
+:libraries:deeplinking:compileReleaseKotlin,Run compilation in Gradle worker,1377.88,1733.6,1385,1723,1651,1870,ms
+:libraries:deeplinking:compileReleaseKotlin,Start gradle worker,3.46,3.6,3,3,7,7,ms
+:libraries:deeplinking:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,77.2,174.2,72,163,107,252,ms
+:libraries:deeplinking:compileReleaseKotlin,Compiler code generation,264.68,269.04,266,254,326,382,ms
+:libraries:deeplinking:compileReleaseKotlin,Size of classpath snapshot,2.3,2.3,2,2,2,2,MB
+:libraries:deeplinking:compileReleaseKotlin,Code generation lines per second,989,635,947,629,1271,834,
+:libraries:deeplinking:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:deeplinking:compileReleaseKotlin,Number of lines analyzed,252,160,252,160,252,160,
+:libraries:deeplinking:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:deeplinking:compileReleaseKotlin,Analysis lines per second,440,236,425,230,555,292,
+:libraries:deeplinking:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:deeplinking:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,2,7,2,8,6,8,
+:libraries:deeplinking:compileReleaseKotlin,Number of classpath entries,20,15,20,15,20,15,
+:libraries:deeplinking:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,17,7,18,7,18,9,
+:libraries:deeplinking:compileReleaseKotlin,Compiler IR translation line number,252,320,252,320,252,320,
+:libraries:deeplinking:compileReleaseKotlin,Compiler IR lowering line number,252,160,252,160,252,160,
+:libraries:deeplinking:compileReleaseKotlin,Compiler IR generation line number,252,160,252,160,252,160,
+:libraries:deeplinking:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:libraries:deeplinking:compileReleaseKotlin,Total size of the cache directory,496.4,493.7,496,494,496,494,KB
+:libraries:deeplinking:compileReleaseKotlin,Number of lines for code generation,252,160,252,160,252,160,
+:libraries:deeplinking:compileReleaseKotlin,Size of shrunk classpath snapshot,25.7,22.6,26,23,26,23,KB
+:libraries:deeplinking:compileReleaseKotlin,Clear jar cache,2.17,2.57,1,2,4,5,ms
+:libraries:deeplinking:compileReleaseKotlin,Store build info,4.0,2.33,4,3,6,3,ms
+:libraries:deeplinking:compileReleaseKotlin,Write history file,6.0,6.5,6,7,6,7,ms
+:libraries:di:android:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,22.28,40.58,21,41,31,60,ms
+:libraries:di:android:compileReleaseKotlin,Connect to Kotlin daemon,16.5,22.2,14,21,22,29,ms
+:libraries:di:android:compileReleaseKotlin,Compiler IR translation,100.78,237.28,106,235,136,351,ms
+:libraries:di:android:compileReleaseKotlin,Sources compilation round,236.1,290.96,227,291,310,401,ms
+:libraries:di:android:compileReleaseKotlin,Update caches,3.18,2.43,3,2,5,6,ms
+:libraries:di:android:compileReleaseKotlin,Calculate output size,4.96,2.94,2,2,7,6,ms
+:libraries:di:android:compileReleaseKotlin,Spent time before task action,24.92,27.4,23,25,33,44,ms
+:libraries:di:android:compileReleaseKotlin,Compiler initialization time,16.3,27.26,16,25,29,50,ms
+:libraries:di:android:compileReleaseKotlin,Compiler IR generation,7.46,8.98,8,9,12,15,ms
+:libraries:di:android:compileReleaseKotlin,Total Gradle task time,521.38,606.74,515,606,636,745,ms
+:libraries:di:android:compileReleaseKotlin,Run compilation,381.1,451.26,368,453,496,570,ms
+:libraries:di:android:compileReleaseKotlin,Task action before worker execution,14.48,15.74,14,15,20,22,ms
+:libraries:di:android:compileReleaseKotlin,Compiler code analysis,67.44,90.14,64,82,93,132,ms
+:libraries:di:android:compileReleaseKotlin,Compiler IR lowering,36.16,40.06,36,40,53,61,ms
+:libraries:di:android:compileReleaseKotlin,Load current classpath snapshot,3.42,6.2,2,6,7,9,ms
+:libraries:di:android:compileReleaseKotlin,Incremental compilation in daemon,342.24,413.46,327,419,436,528,ms
+:libraries:di:android:compileReleaseKotlin,Run compilation in Gradle worker,401.88,483.1,385,482,512,598,ms
+:libraries:di:android:compileReleaseKotlin,Start gradle worker,2.58,3.34,2,3,6,7,ms
+:libraries:di:android:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,23.62,42.14,23,44,34,60,ms
+:libraries:di:android:compileReleaseKotlin,Compiler code generation,44.28,49.6,45,50,62,76,ms
+:libraries:di:android:compileReleaseKotlin,Size of classpath snapshot,1.7,1.7,2,2,2,2,MB
+:libraries:di:android:compileReleaseKotlin,Code generation lines per second,274,255,245,220,407,437,
+:libraries:di:android:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:di:android:compileReleaseKotlin,Number of lines analyzed,11,11,11,11,11,11,
+:libraries:di:android:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:di:android:compileReleaseKotlin,Analysis lines per second,173,140,173,134,224,235,
+:libraries:di:android:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:di:android:compileReleaseKotlin,Number of classpath entries,9,5,9,5,9,5,
+:libraries:di:android:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,9,5,9,5,9,5,
+:libraries:di:android:compileReleaseKotlin,Compiler IR translation line number,11,22,11,22,11,22,
+:libraries:di:android:compileReleaseKotlin,Compiler IR lowering line number,11,11,11,11,11,11,
+:libraries:di:android:compileReleaseKotlin,Compiler IR generation line number,11,11,11,11,11,11,
+:libraries:di:android:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:libraries:di:android:compileReleaseKotlin,Total size of the cache directory,409.9,409.9,410,410,410,410,KB
+:libraries:di:android:compileReleaseKotlin,Number of lines for code generation,11,11,11,11,11,11,
+:libraries:di:android:compileReleaseKotlin,Size of shrunk classpath snapshot,2.8,2.9,3,3,3,3,KB
+:libraries:di:android:compileReleaseKotlin,Clear jar cache,1.6,2.48,1,2,3,5,ms
+:libraries:di:android:compileReleaseKotlin,Write history file,3.5,6.0,4,6,5,6,ms
+:libraries:di:android:compileReleaseKotlin,Save shrunk current classpath snapshot,3.5,4.09,3,4,6,7,ms
+:libraries:di:android:compileReleaseKotlin,Store build info,3.5,1.67,4,1,6,3,ms
+:libraries:di:android:compileReleaseKotlin,Clear outputs on rebuild,1.0,2.0,1,2,1,2,ms
+:libraries:di:android:compileReleaseKotlin,Clear output,1.0,1.0,1,1,1,1,ms
+:libraries:di:compileKotlinJvm,Shrink current classpath snapshot non-incrementally,25.42,55.56,7,50,114,113,ms
+:libraries:di:compileKotlinJvm,Connect to Kotlin daemon,28.46,30.84,27,25,39,45,ms
+:libraries:di:compileKotlinJvm,Compiler IR translation,314.42,489.78,261,434,690,713,ms
+:libraries:di:compileKotlinJvm,Sources compilation round,1221.24,928.44,918,776,3014,1227,ms
+:libraries:di:compileKotlinJvm,Update caches,6.14,12.48,3,5,26,33,ms
+:libraries:di:compileKotlinJvm,Calculate output size,3.12,3.06,2,3,8,6,ms
+:libraries:di:compileKotlinJvm,Spent time before task action,30.08,27.52,29,27,45,40,ms
+:libraries:di:compileKotlinJvm,Compiler initialization time,135.84,132.54,119,128,162,175,ms
+:libraries:di:compileKotlinJvm,Compiler IR generation,89.14,103.02,70,68,182,223,ms
+:libraries:di:compileKotlinJvm,Total Gradle task time,1705.0,1514.6,1344,1389,3885,2065,ms
+:libraries:di:compileKotlinJvm,Run compilation,1531.3,1341.4,1162,1198,3744,1806,ms
+:libraries:di:compileKotlinJvm,Task action before worker execution,10.96,11.34,11,11,17,18,ms
+:libraries:di:compileKotlinJvm,Compiler code analysis,482.84,260.48,315,215,1307,286,ms
+:libraries:di:compileKotlinJvm,Compiler IR lowering,170.44,171.4,136,121,428,335,ms
+:libraries:di:compileKotlinJvm,Clear jar cache,4.43,6.43,4,6,10,12,ms
+:libraries:di:compileKotlinJvm,Incremental compilation in daemon,1483.48,1288.18,1121,1149,3673,1740,ms
+:libraries:di:compileKotlinJvm,Run compilation in Gradle worker,1571.46,1385.6,1216,1233,3782,1933,ms
+:libraries:di:compileKotlinJvm,Start gradle worker,3.54,3.6,3,3,8,7,ms
+:libraries:di:compileKotlinJvm,Shrink and save current classpath snapshot after compilation,26.98,57.96,8,51,120,118,ms
+:libraries:di:compileKotlinJvm,Compiler code generation,259.96,274.82,206,188,635,588,ms
+:libraries:di:compileKotlinJvm,Size of classpath snapshot,276.8,280.8,277,281,277,281,KB
+:libraries:di:compileKotlinJvm,Code generation lines per second,135,90,141,101,202,125,
+:libraries:di:compileKotlinJvm,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:di:compileKotlinJvm,Number of lines analyzed,29,19,29,19,29,19,
+:libraries:di:compileKotlinJvm,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:di:compileKotlinJvm,Analysis lines per second,86,87,92,88,115,120,
+:libraries:di:compileKotlinJvm,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:di:compileKotlinJvm,Number of cache misses when loading classpath entry snapshots,1,1,1,1,5,3,
+:libraries:di:compileKotlinJvm,Number of classpath entries,7,3,7,3,7,3,
+:libraries:di:compileKotlinJvm,Number of cache hits when loading classpath entry snapshots,5,1,6,2,6,2,
+:libraries:di:compileKotlinJvm,Compiler IR translation line number,29,38,29,38,29,38,
+:libraries:di:compileKotlinJvm,Compiler IR lowering line number,29,19,29,19,29,19,
+:libraries:di:compileKotlinJvm,Compiler IR generation line number,29,19,29,19,29,19,
+:libraries:di:compileKotlinJvm,Total compiler iteration,1,1,1,1,1,1,
+:libraries:di:compileKotlinJvm,Total size of the cache directory,444.3,443.0,444,443,444,443,KB
+:libraries:di:compileKotlinJvm,Number of lines for code generation,29,19,29,19,29,19,
+:libraries:di:compileKotlinJvm,Size of shrunk classpath snapshot,1.3,188.0,1,188,1,188,KB
+:libraries:di:compileKotlinJvm,Load current classpath snapshot,30.41,44.06,3,33,101,97,ms
+:libraries:di:compileKotlinJvm,Save shrunk current classpath snapshot,2.17,1.0,2,1,3,1,ms
+:libraries:di:compileKotlinJvm,Store build info,2.0,3.8,2,3,3,8,ms
+:libraries:di:compileKotlinJvm,Write history file,3.0,4.35,3,4,7,9,ms
+:libraries:di:compileKotlinJvm,Clear outputs on rebuild,4.0,2.5,4,3,6,3,ms
+:libraries:flowbinding:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,72.12,109.04,68,94,97,190,ms
+:libraries:flowbinding:compileReleaseKotlin,Connect to Kotlin daemon,24.1,20.94,21,21,34,30,ms
+:libraries:flowbinding:compileReleaseKotlin,Save shrunk current classpath snapshot,19.9,4.0,2,3,160,6,ms
+:libraries:flowbinding:compileReleaseKotlin,Compiler IR translation,101.72,224.64,88,192,149,307,ms
+:libraries:flowbinding:compileReleaseKotlin,Sources compilation round,901.84,893.3,910,901,1112,1066,ms
+:libraries:flowbinding:compileReleaseKotlin,Update caches,2.72,2.72,2,1,6,6,ms
+:libraries:flowbinding:compileReleaseKotlin,Calculate output size,2.98,2.58,2,2,7,5,ms
+:libraries:flowbinding:compileReleaseKotlin,Spent time before task action,36.52,29.62,32,30,42,38,ms
+:libraries:flowbinding:compileReleaseKotlin,Compiler initialization time,48.58,35.34,41,34,63,50,ms
+:libraries:flowbinding:compileReleaseKotlin,Compiler IR generation,71.3,83.7,63,72,96,125,ms
+:libraries:flowbinding:compileReleaseKotlin,Total Gradle task time,1301.72,1352.06,1282,1331,1537,1611,ms
+:libraries:flowbinding:compileReleaseKotlin,Run compilation,1125.68,1176.54,1113,1156,1386,1434,ms
+:libraries:flowbinding:compileReleaseKotlin,Task action before worker execution,17.68,18.18,17,17,25,26,ms
+:libraries:flowbinding:compileReleaseKotlin,Compiler code analysis,540.72,486.84,552,492,644,621,ms
+:libraries:flowbinding:compileReleaseKotlin,Compiler IR lowering,131.84,169.56,127,150,174,299,ms
+:libraries:flowbinding:compileReleaseKotlin,Load current classpath snapshot,13.28,33.24,10,13,19,82,ms
+:libraries:flowbinding:compileReleaseKotlin,Incremental compilation in daemon,1084.84,1133.74,1074,1115,1352,1370,ms
+:libraries:flowbinding:compileReleaseKotlin,Run compilation in Gradle worker,1156.36,1202.96,1147,1172,1408,1462,ms
+:libraries:flowbinding:compileReleaseKotlin,Start gradle worker,5.6,4.0,3,3,10,8,ms
+:libraries:flowbinding:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,76.72,110.52,70,94,102,191,ms
+:libraries:flowbinding:compileReleaseKotlin,Compiler code generation,203.54,253.72,192,240,275,400,ms
+:libraries:flowbinding:compileReleaseKotlin,Size of classpath snapshot,1.9,1.9,2,2,2,2,MB
+:libraries:flowbinding:compileReleaseKotlin,Code generation lines per second,550,473,538,429,763,835,
+:libraries:flowbinding:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:flowbinding:compileReleaseKotlin,Number of lines analyzed,103,103,103,103,103,103,
+:libraries:flowbinding:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:flowbinding:compileReleaseKotlin,Analysis lines per second,196,220,186,209,266,302,
+:libraries:flowbinding:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:flowbinding:compileReleaseKotlin,Number of classpath entries,6,6,6,6,6,6,
+:libraries:flowbinding:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,5,5,6,6,6,6,
+:libraries:flowbinding:compileReleaseKotlin,Compiler IR translation line number,103,206,103,206,103,206,
+:libraries:flowbinding:compileReleaseKotlin,Compiler IR lowering line number,103,103,103,103,103,103,
+:libraries:flowbinding:compileReleaseKotlin,Compiler IR generation line number,103,103,103,103,103,103,
+:libraries:flowbinding:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:libraries:flowbinding:compileReleaseKotlin,Total size of the cache directory,485.6,485.6,486,486,486,486,KB
+:libraries:flowbinding:compileReleaseKotlin,Number of lines for code generation,103,103,103,103,103,103,
+:libraries:flowbinding:compileReleaseKotlin,Size of shrunk classpath snapshot,8.5,8.5,9,9,9,9,KB
+:libraries:flowbinding:compileReleaseKotlin,Clear jar cache,2.13,2.09,2,1,4,5,ms
+:libraries:flowbinding:compileReleaseKotlin,Write history file,8.0,2.8,8,2,9,6,ms
+:libraries:flowbinding:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,2,1,2,2,2,2,
+:libraries:flowbinding:compileReleaseKotlin,Clear output,2.67,2.33,3,3,3,3,ms
+:libraries:flowbinding:compileReleaseKotlin,Clear outputs on rebuild,3.0,3.0,3,3,3,3,ms
+:libraries:gemoji:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,56.56,59.98,57,61,82,84,ms
+:libraries:gemoji:compileReleaseKotlin,Connect to Kotlin daemon,29.4,26.22,24,22,35,39,ms
+:libraries:gemoji:compileReleaseKotlin,Save shrunk current classpath snapshot,2.55,2.41,1,1,6,5,ms
+:libraries:gemoji:compileReleaseKotlin,Compiler IR translation,168.62,926.4,159,904,223,1135,ms
+:libraries:gemoji:compileReleaseKotlin,Sources compilation round,2588.34,2532.5,2579,2509,2875,2859,ms
+:libraries:gemoji:compileReleaseKotlin,Update caches,10.42,10.98,10,8,16,16,ms
+:libraries:gemoji:compileReleaseKotlin,Calculate output size,2.16,1.7,1,1,6,4,ms
+:libraries:gemoji:compileReleaseKotlin,Spent time before task action,60.64,153.48,56,89,89,313,ms
+:libraries:gemoji:compileReleaseKotlin,Compiler initialization time,130.38,82.7,105,80,278,124,ms
+:libraries:gemoji:compileReleaseKotlin,Compiler IR generation,371.32,335.16,372,330,473,438,ms
+:libraries:gemoji:compileReleaseKotlin,Total Gradle task time,3071.56,3068.42,3053,3058,3396,3446,ms
+:libraries:gemoji:compileReleaseKotlin,Run compilation,2832.26,2759.58,2827,2725,3091,3110,ms
+:libraries:gemoji:compileReleaseKotlin,Task action before worker execution,24.12,22.92,24,21,34,31,ms
+:libraries:gemoji:compileReleaseKotlin,Compiler code analysis,1616.08,1391.58,1668,1391,1906,1711,ms
+:libraries:gemoji:compileReleaseKotlin,Compiler IR lowering,292.9,253.62,281,245,408,326,ms
+:libraries:gemoji:compileReleaseKotlin,Clear jar cache,3.34,2.91,3,2,6,6,ms
+:libraries:gemoji:compileReleaseKotlin,Load current classpath snapshot,12.42,12.5,12,12,17,20,ms
+:libraries:gemoji:compileReleaseKotlin,Incremental compilation in daemon,2772.32,2715.74,2769,2687,3052,3038,ms
+:libraries:gemoji:compileReleaseKotlin,Run compilation in Gradle worker,2872.02,2793.7,2866,2751,3122,3143,ms
+:libraries:gemoji:compileReleaseKotlin,Start gradle worker,4.06,5.06,3,3,8,8,ms
+:libraries:gemoji:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,59.82,62.98,60,64,83,88,ms
+:libraries:gemoji:compileReleaseKotlin,Compiler code generation,664.68,589.36,644,574,862,735,ms
+:libraries:gemoji:compileReleaseKotlin,Size of classpath snapshot,2.7,2.7,3,3,3,3,MB
+:libraries:gemoji:compileReleaseKotlin,Code generation lines per second,959,820,962,819,1143,1030,
+:libraries:gemoji:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:gemoji:compileReleaseKotlin,Number of lines analyzed,620,470,620,470,620,470,
+:libraries:gemoji:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:gemoji:compileReleaseKotlin,Analysis lines per second,392,344,371,338,486,424,
+:libraries:gemoji:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:gemoji:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,7,6,7,6,7,6,
+:libraries:gemoji:compileReleaseKotlin,Number of classpath entries,42,37,42,37,42,37,
+:libraries:gemoji:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,35,31,35,31,35,31,
+:libraries:gemoji:compileReleaseKotlin,Compiler IR translation line number,620,940,620,940,620,940,
+:libraries:gemoji:compileReleaseKotlin,Compiler IR lowering line number,620,470,620,470,620,470,
+:libraries:gemoji:compileReleaseKotlin,Compiler IR generation line number,620,470,620,470,620,470,
+:libraries:gemoji:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:libraries:gemoji:compileReleaseKotlin,Total size of the cache directory,521.0,518.0,521,518,521,518,KB
+:libraries:gemoji:compileReleaseKotlin,Number of lines for code generation,620,470,620,470,620,470,
+:libraries:gemoji:compileReleaseKotlin,Size of shrunk classpath snapshot,42.3,39.6,42,40,42,40,KB
+:libraries:gemoji:compileReleaseKotlin,Write history file,4.33,2.25,3,2,7,4,ms
+:libraries:gemoji:compileReleaseKotlin,Store build info,4.0,2.5,2,3,8,3,ms
+:libraries:gemoji:compileReleaseKotlin,Clear output,2.5,2.0,3,2,3,3,ms
+:libraries:gemoji:db:compileKotlinJvm,Shrink current classpath snapshot non-incrementally,9.62,9.0,9,9,16,15,ms
+:libraries:gemoji:db:compileKotlinJvm,Connect to Kotlin daemon,25.66,28.76,25,30,34,37,ms
+:libraries:gemoji:db:compileKotlinJvm,Save shrunk current classpath snapshot,3.42,3.06,3,1,8,7,ms
+:libraries:gemoji:db:compileKotlinJvm,Compiler IR translation,266.6,586.82,267,578,360,748,ms
+:libraries:gemoji:db:compileKotlinJvm,Sources compilation round,2405.46,2214.2,2396,2208,2726,2479,ms
+:libraries:gemoji:db:compileKotlinJvm,Update caches,9.8,7.52,9,8,14,11,ms
+:libraries:gemoji:db:compileKotlinJvm,Calculate output size,3.5,3.64,3,3,8,7,ms
+:libraries:gemoji:db:compileKotlinJvm,Spent time before task action,46.44,37.0,29,34,117,57,ms
+:libraries:gemoji:db:compileKotlinJvm,Compiler initialization time,232.88,175.38,234,149,290,274,ms
+:libraries:gemoji:db:compileKotlinJvm,Compiler IR generation,349.86,329.72,351,312,446,469,ms
+:libraries:gemoji:db:compileKotlinJvm,Total Gradle task time,2861.76,2646.08,2840,2661,3177,2917,ms
+:libraries:gemoji:db:compileKotlinJvm,Run compilation,2645.7,2436.9,2615,2467,2981,2680,ms
+:libraries:gemoji:db:compileKotlinJvm,Task action before worker execution,13.84,20.46,12,20,19,32,ms
+:libraries:gemoji:db:compileKotlinJvm,Compiler code analysis,1209.84,1067.22,1204,1051,1424,1255,ms
+:libraries:gemoji:db:compileKotlinJvm,Compiler IR lowering,333.92,341.3,335,343,400,422,ms
+:libraries:gemoji:db:compileKotlinJvm,Clear jar cache,3.0,2.4,2,1,6,6,ms
+:libraries:gemoji:db:compileKotlinJvm,Incremental compilation in daemon,2600.38,2383.68,2572,2368,2928,2641,ms
+:libraries:gemoji:db:compileKotlinJvm,Run compilation in Gradle worker,2678.86,2473.3,2657,2500,3010,2721,ms
+:libraries:gemoji:db:compileKotlinJvm,Start gradle worker,14.7,4.98,4,4,53,11,ms
+:libraries:gemoji:db:compileKotlinJvm,Shrink and save current classpath snapshot after compilation,12.92,11.88,12,10,19,19,ms
+:libraries:gemoji:db:compileKotlinJvm,Clear output,4.33,,5,,5,,ms
+:libraries:gemoji:db:compileKotlinJvm,Compiler code generation,684.52,671.5,673,630,807,848,ms
+:libraries:gemoji:db:compileKotlinJvm,Size of classpath snapshot,269.5,274.9,270,275,270,275,KB
+:libraries:gemoji:db:compileKotlinJvm,Code generation lines per second,236,245,236,252,288,315,
+:libraries:gemoji:db:compileKotlinJvm,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:gemoji:db:compileKotlinJvm,Number of lines analyzed,159,159,159,159,159,159,
+:libraries:gemoji:db:compileKotlinJvm,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:gemoji:db:compileKotlinJvm,Analysis lines per second,133,151,132,151,155,181,
+:libraries:gemoji:db:compileKotlinJvm,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:gemoji:db:compileKotlinJvm,Number of classpath entries,3,3,3,3,3,3,
+:libraries:gemoji:db:compileKotlinJvm,Number of cache hits when loading classpath entry snapshots,3,3,3,3,3,3,
+:libraries:gemoji:db:compileKotlinJvm,Compiler IR translation line number,159,318,159,318,159,318,
+:libraries:gemoji:db:compileKotlinJvm,Compiler IR lowering line number,159,159,159,159,159,159,
+:libraries:gemoji:db:compileKotlinJvm,Compiler IR generation line number,159,159,159,159,159,159,
+:libraries:gemoji:db:compileKotlinJvm,Total compiler iteration,1,1,1,1,1,1,
+:libraries:gemoji:db:compileKotlinJvm,Total size of the cache directory,498.6,498.6,499,499,499,499,KB
+:libraries:gemoji:db:compileKotlinJvm,Number of lines for code generation,159,159,159,159,159,159,
+:libraries:gemoji:db:compileKotlinJvm,Size of shrunk classpath snapshot,23.9,23.9,24,24,24,24,KB
+:libraries:gemoji:db:compileKotlinJvm,Store build info,6.25,4.0,7,4,9,4,ms
+:libraries:gemoji:db:compileKotlinJvm,Load current classpath snapshot,4.0,3.36,4,3,6,8,ms
+:libraries:gemoji:db:compileKotlinJvm,Write history file,8.33,6.0,8,6,11,6,ms
+:libraries:gemoji:db:compileKotlinJvm,Clear outputs on rebuild,4.0,1.0,4,1,4,1,ms
+:libraries:kotlinutil:compileKotlinJvm,Shrink current classpath snapshot non-incrementally,18.0,15.62,17,16,30,21,ms
+:libraries:kotlinutil:compileKotlinJvm,Connect to Kotlin daemon,31.66,24.7,25,20,64,52,ms
+:libraries:kotlinutil:compileKotlinJvm,Save shrunk current classpath snapshot,4.52,4.86,4,4,8,9,ms
+:libraries:kotlinutil:compileKotlinJvm,Compiler IR translation,512.0,1055.76,513,1025,622,1265,ms
+:libraries:kotlinutil:compileKotlinJvm,Sources compilation round,4184.72,4124.34,4156,4141,4572,4623,ms
+:libraries:kotlinutil:compileKotlinJvm,Update caches,13.48,15.36,14,15,19,24,ms
+:libraries:kotlinutil:compileKotlinJvm,Calculate output size,4.68,4.92,4,4,11,10,ms
+:libraries:kotlinutil:compileKotlinJvm,Spent time before task action,27.4,27.7,28,25,36,40,ms
+:libraries:kotlinutil:compileKotlinJvm,Compiler initialization time,235.94,242.44,234,237,310,309,ms
+:libraries:kotlinutil:compileKotlinJvm,Compiler IR generation,654.82,679.98,650,694,768,777,ms
+:libraries:kotlinutil:compileKotlinJvm,Total Gradle task time,4684.7,4606.82,4675,4619,5070,5106,ms
+:libraries:kotlinutil:compileKotlinJvm,Run compilation,4463.84,4424.16,4411,4430,4837,4928,ms
+:libraries:kotlinutil:compileKotlinJvm,Task action before worker execution,13.16,11.86,13,11,19,18,ms
+:libraries:kotlinutil:compileKotlinJvm,Compiler code analysis,2184.88,2176.7,2197,2176,2436,2497,ms
+:libraries:kotlinutil:compileKotlinJvm,Compiler IR lowering,586.1,488.0,582,495,705,568,ms
+:libraries:kotlinutil:compileKotlinJvm,Clear jar cache,2.32,3.07,2,2,4,6,ms
+:libraries:kotlinutil:compileKotlinJvm,Load current classpath snapshot,8.61,4.14,8,4,18,8,ms
+:libraries:kotlinutil:compileKotlinJvm,Incremental compilation in daemon,4424.14,4380.08,4376,4390,4792,4879,ms
+:libraries:kotlinutil:compileKotlinJvm,Run compilation in Gradle worker,4502.52,4455.28,4450,4476,4883,4958,ms
+:libraries:kotlinutil:compileKotlinJvm,Start gradle worker,3.54,4.34,3,4,8,9,ms
+:libraries:kotlinutil:compileKotlinJvm,Shrink and save current classpath snapshot after compilation,23.12,21.4,22,22,37,29,ms
+:libraries:kotlinutil:compileKotlinJvm,Compiler code generation,1241.42,1168.5,1243,1176,1457,1356,ms
+:libraries:kotlinutil:compileKotlinJvm,Size of classpath snapshot,452.9,458.3,453,458,453,458,KB
+:libraries:kotlinutil:compileKotlinJvm,Code generation lines per second,171,181,169,178,197,205,
+:libraries:kotlinutil:compileKotlinJvm,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:kotlinutil:compileKotlinJvm,Number of lines analyzed,210,210,210,210,210,210,
+:libraries:kotlinutil:compileKotlinJvm,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:kotlinutil:compileKotlinJvm,Analysis lines per second,96,96,95,96,110,110,
+:libraries:kotlinutil:compileKotlinJvm,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:kotlinutil:compileKotlinJvm,Number of cache misses when loading classpath entry snapshots,2,1,2,2,2,2,
+:libraries:kotlinutil:compileKotlinJvm,Number of classpath entries,3,3,3,3,3,3,
+:libraries:kotlinutil:compileKotlinJvm,Number of cache hits when loading classpath entry snapshots,2,2,3,3,3,3,
+:libraries:kotlinutil:compileKotlinJvm,Compiler IR translation line number,210,420,210,420,210,420,
+:libraries:kotlinutil:compileKotlinJvm,Compiler IR lowering line number,210,210,210,210,210,210,
+:libraries:kotlinutil:compileKotlinJvm,Compiler IR generation line number,210,210,210,210,210,210,
+:libraries:kotlinutil:compileKotlinJvm,Total compiler iteration,1,1,1,1,1,1,
+:libraries:kotlinutil:compileKotlinJvm,Total size of the cache directory,543.7,543.7,544,544,544,544,KB
+:libraries:kotlinutil:compileKotlinJvm,Number of lines for code generation,210,210,210,210,210,210,
+:libraries:kotlinutil:compileKotlinJvm,Size of shrunk classpath snapshot,25.0,25.0,25,25,25,25,KB
+:libraries:kotlinutil:compileKotlinJvm,Clear output,3.0,1.0,3,1,3,1,ms
+:libraries:kotlinutil:compileKotlinJvm,Clear outputs on rebuild,1.0,,1,,1,,ms
+:libraries:kotlinutil:compileKotlinJvm,Store build info,4.0,2.0,4,2,6,3,ms
+:libraries:kotlinutil:compileKotlinJvm,Write history file,3.0,3.5,3,4,3,6,ms
+:libraries:retrofitconverters:compileKotlinJvm,Shrink current classpath snapshot non-incrementally,130.96,108.78,127,107,172,139,ms
+:libraries:retrofitconverters:compileKotlinJvm,Connect to Kotlin daemon,1237.5,1211.88,1239,1220,1358,1331,ms
+:libraries:retrofitconverters:compileKotlinJvm,Compiler IR translation,816.52,1771.76,837,1772,918,2024,ms
+:libraries:retrofitconverters:compileKotlinJvm,Sources compilation round,6982.76,7057.46,7089,7083,7493,7518,ms
+:libraries:retrofitconverters:compileKotlinJvm,Update caches,28.02,25.0,26,25,44,41,ms
+:libraries:retrofitconverters:compileKotlinJvm,Calculate output size,4.24,3.6,4,4,8,7,ms
+:libraries:retrofitconverters:compileKotlinJvm,Spent time before task action,286.48,276.4,273,237,379,377,ms
+:libraries:retrofitconverters:compileKotlinJvm,Compiler initialization time,1605.78,1369.44,1580,1373,1744,1491,ms
+:libraries:retrofitconverters:compileKotlinJvm,Compiler IR generation,400.0,403.62,397,406,489,501,ms
+:libraries:retrofitconverters:compileKotlinJvm,Total Gradle task time,10088.2,10135.04,10126,10087,10656,10745,ms
+:libraries:retrofitconverters:compileKotlinJvm,Run compilation,8009.94,8054.86,8103,8052,8536,8571,ms
+:libraries:retrofitconverters:compileKotlinJvm,Task action before worker execution,350.56,409.78,354,402,418,483,ms
+:libraries:retrofitconverters:compileKotlinJvm,Compiler code analysis,3430.76,3563.3,3490,3586,3704,3754,ms
+:libraries:retrofitconverters:compileKotlinJvm,Compiler IR lowering,556.14,765.42,550,780,637,882,ms
+:libraries:retrofitconverters:compileKotlinJvm,Clear jar cache,5.66,4.8,5,5,9,10,ms
+:libraries:retrofitconverters:compileKotlinJvm,Load current classpath snapshot,109.26,89.86,104,88,151,114,ms
+:libraries:retrofitconverters:compileKotlinJvm,Incremental compilation in daemon,7663.34,7684.46,7756,7670,8202,8188,ms
+:libraries:retrofitconverters:compileKotlinJvm,Write history file,3.13,4.14,2,4,8,7,ms
+:libraries:retrofitconverters:compileKotlinJvm,Run compilation in Gradle worker,9286.6,9305.24,9351,9271,9866,9898,ms
+:libraries:retrofitconverters:compileKotlinJvm,Start gradle worker,69.9,46.88,26,26,37,35,ms
+:libraries:retrofitconverters:compileKotlinJvm,Shrink and save current classpath snapshot after compilation,135.98,112.5,132,110,177,145,ms
+:libraries:retrofitconverters:compileKotlinJvm,Compiler code generation,956.6,1169.6,983,1186,1078,1348,ms
+:libraries:retrofitconverters:compileKotlinJvm,Size of classpath snapshot,418.6,405.7,419,406,419,406,KB
+:libraries:retrofitconverters:compileKotlinJvm,Code generation lines per second,76,63,74,61,91,80,
+:libraries:retrofitconverters:compileKotlinJvm,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:retrofitconverters:compileKotlinJvm,Number of lines analyzed,73,73,73,73,73,73,
+:libraries:retrofitconverters:compileKotlinJvm,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:retrofitconverters:compileKotlinJvm,Analysis lines per second,20,20,20,20,23,21,
+:libraries:retrofitconverters:compileKotlinJvm,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:retrofitconverters:compileKotlinJvm,Number of cache misses when loading classpath entry snapshots,6,3,7,3,8,4,
+:libraries:retrofitconverters:compileKotlinJvm,Number of classpath entries,9,5,9,5,9,5,
+:libraries:retrofitconverters:compileKotlinJvm,Number of cache hits when loading classpath entry snapshots,2,1,2,2,6,2,
+:libraries:retrofitconverters:compileKotlinJvm,Compiler IR translation line number,73,146,73,146,73,146,
+:libraries:retrofitconverters:compileKotlinJvm,Compiler IR lowering line number,73,73,73,73,73,73,
+:libraries:retrofitconverters:compileKotlinJvm,Compiler IR generation line number,73,73,73,73,73,73,
+:libraries:retrofitconverters:compileKotlinJvm,Total compiler iteration,1,1,1,1,1,1,
+:libraries:retrofitconverters:compileKotlinJvm,Total size of the cache directory,485.5,485.5,486,486,486,486,KB
+:libraries:retrofitconverters:compileKotlinJvm,Number of lines for code generation,73,73,73,73,73,73,
+:libraries:retrofitconverters:compileKotlinJvm,Size of shrunk classpath snapshot,3.8,3.7,4,4,4,4,KB
+:libraries:retrofitconverters:compileKotlinJvm,Save shrunk current classpath snapshot,2.58,2.62,3,2,4,7,ms
+:libraries:retrofitconverters:compileKotlinJvm,Store build info,2.63,4.0,2,3,6,6,ms
+:libraries:retrofitconverters:compileKotlinJvm,Clear outputs on rebuild,3.09,1.6,3,2,6,2,ms
+:libraries:retrofitconverters:compileKotlinJvm,Clear output,2.2,3.0,3,3,3,6,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Shrink current classpath snapshot non-incrementally,9.36,8.68,9,9,15,14,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Connect to Kotlin daemon,24.48,24.1,21,21,41,34,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Compiler IR translation,212.1,498.32,213,506,278,663,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Sources compilation round,640.34,614.96,639,607,769,734,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Update caches,7.19,3.71,3,3,27,6,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Calculate output size,2.32,2.86,1,1,6,7,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Spent time before task action,42.12,27.74,27,26,149,38,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Compiler initialization time,215.46,168.18,219,158,299,262,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Compiler IR generation,11.8,9.14,9,8,18,15,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Total Gradle task time,957.02,891.02,962,869,1086,1018,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Run compilation,797.04,757.38,788,749,941,863,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Task action before worker execution,18.36,12.74,16,12,36,19,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Compiler code analysis,112.3,111.86,111,112,156,148,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Compiler IR lowering,79.8,69.84,77,70,105,99,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Clear jar cache,2.63,2.18,2,1,5,4,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Incremental compilation in daemon,752.86,717.6,755,713,895,831,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Run compilation in Gradle worker,829.9,788.66,826,777,975,904,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Start gradle worker,2.3,3.22,1,3,5,9,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Shrink and save current classpath snapshot after compilation,10.2,9.8,9,9,16,16,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Compiler code generation,92.3,79.56,89,82,136,107,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Size of classpath snapshot,269.5,274.9,270,275,270,275,KB
+:libraries:sqldelight-extensions:compileKotlinJvm,Code generation lines per second,129,154,123,135,171,267,
+:libraries:sqldelight-extensions:compileKotlinJvm,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:sqldelight-extensions:compileKotlinJvm,Number of lines analyzed,11,11,11,11,11,11,
+:libraries:sqldelight-extensions:compileKotlinJvm,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:sqldelight-extensions:compileKotlinJvm,Analysis lines per second,104,104,99,98,134,137,
+:libraries:sqldelight-extensions:compileKotlinJvm,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:sqldelight-extensions:compileKotlinJvm,Number of cache misses when loading classpath entry snapshots,1,1,1,1,1,1,
+:libraries:sqldelight-extensions:compileKotlinJvm,Number of classpath entries,3,3,3,3,3,3,
+:libraries:sqldelight-extensions:compileKotlinJvm,Number of cache hits when loading classpath entry snapshots,2,2,2,2,2,2,
+:libraries:sqldelight-extensions:compileKotlinJvm,Compiler IR translation line number,11,22,11,22,11,22,
+:libraries:sqldelight-extensions:compileKotlinJvm,Compiler IR lowering line number,11,11,11,11,11,11,
+:libraries:sqldelight-extensions:compileKotlinJvm,Compiler IR generation line number,11,11,11,11,11,11,
+:libraries:sqldelight-extensions:compileKotlinJvm,Total compiler iteration,1,1,1,1,1,1,
+:libraries:sqldelight-extensions:compileKotlinJvm,Total size of the cache directory,329.9,329.9,330,330,330,330,KB
+:libraries:sqldelight-extensions:compileKotlinJvm,Number of lines for code generation,11,11,11,11,11,11,
+:libraries:sqldelight-extensions:compileKotlinJvm,Size of shrunk classpath snapshot,652.0,652.0,652,652,652,652,B
+:libraries:sqldelight-extensions:compileKotlinJvm,Load current classpath snapshot,4.24,3.3,4,3,7,7,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Clear output,3.67,7.0,3,7,5,7,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Save shrunk current classpath snapshot,3.8,4.4,4,4,6,6,ms
+:libraries:sqldelight-extensions:compileKotlinJvm,Write history file,1.5,2.5,2,3,2,3,ms
+:libraries:summarizer:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,70.04,73.68,70,71,94,110,ms
+:libraries:summarizer:compileReleaseKotlin,Connect to Kotlin daemon,18.66,33.74,18,18,27,28,ms
+:libraries:summarizer:compileReleaseKotlin,Save shrunk current classpath snapshot,3.81,2.59,3,1,9,6,ms
+:libraries:summarizer:compileReleaseKotlin,Compiler IR translation,1426.54,3625.3,1410,3616,1670,4588,ms
+:libraries:summarizer:compileReleaseKotlin,Sources compilation round,4516.12,5058.44,4535,5041,5102,5491,ms
+:libraries:summarizer:compileReleaseKotlin,Update caches,35.18,30.6,36,30,43,40,ms
+:libraries:summarizer:compileReleaseKotlin,Calculate output size,3.06,3.22,4,4,6,7,ms
+:libraries:summarizer:compileReleaseKotlin,Spent time before task action,71.76,60.5,66,62,93,79,ms
+:libraries:summarizer:compileReleaseKotlin,Compiler initialization time,112.58,157.5,110,155,149,206,ms
+:libraries:summarizer:compileReleaseKotlin,Compiler IR generation,819.4,773.1,793,745,990,1026,ms
+:libraries:summarizer:compileReleaseKotlin,Total Gradle task time,5149.44,5680.34,5150,5702,5794,6097,ms
+:libraries:summarizer:compileReleaseKotlin,Run compilation,4848.4,5378.74,4901,5402,5457,5782,ms
+:libraries:summarizer:compileReleaseKotlin,Task action before worker execution,28.3,26.04,27,27,40,33,ms
+:libraries:summarizer:compileReleaseKotlin,Compiler code analysis,1521.08,1693.7,1526,1503,1781,2339,ms
+:libraries:summarizer:compileReleaseKotlin,Compiler IR lowering,623.14,613.06,623,562,759,1017,ms
+:libraries:summarizer:compileReleaseKotlin,Clear jar cache,3.0,3.83,1,3,7,7,ms
+:libraries:summarizer:compileReleaseKotlin,Load current classpath snapshot,13.2,16.78,13,17,18,29,ms
+:libraries:summarizer:compileReleaseKotlin,Incremental compilation in daemon,4809.68,5335.42,4850,5322,5398,5741,ms
+:libraries:summarizer:compileReleaseKotlin,Run compilation in Gradle worker,4872.1,5420.06,4924,5465,5475,5810,ms
+:libraries:summarizer:compileReleaseKotlin,Start gradle worker,4.34,3.52,4,3,8,6,ms
+:libraries:summarizer:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,75.26,77.32,74,75,100,112,ms
+:libraries:summarizer:compileReleaseKotlin,Compiler code generation,1442.96,1386.62,1417,1319,1623,1847,ms
+:libraries:summarizer:compileReleaseKotlin,Size of classpath snapshot,4.8,4.8,5,5,5,5,MB
+:libraries:summarizer:compileReleaseKotlin,Code generation lines per second,677,380,683,384,770,464,
+:libraries:summarizer:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:summarizer:compileReleaseKotlin,Number of lines analyzed,968,507,968,507,968,507,
+:libraries:summarizer:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:summarizer:compileReleaseKotlin,Analysis lines per second,646,316,634,337,759,400,
+:libraries:summarizer:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:summarizer:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,5,5,5,5,5,5,
+:libraries:summarizer:compileReleaseKotlin,Number of classpath entries,79,75,79,75,79,75,
+:libraries:summarizer:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,74,70,74,70,74,70,
+:libraries:summarizer:compileReleaseKotlin,Compiler IR translation line number,968,1014,968,1014,968,1014,
+:libraries:summarizer:compileReleaseKotlin,Compiler IR lowering line number,968,507,968,507,968,507,
+:libraries:summarizer:compileReleaseKotlin,Compiler IR generation line number,968,507,968,507,968,507,
+:libraries:summarizer:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:libraries:summarizer:compileReleaseKotlin,Total size of the cache directory,677.0,656.1,677,656,677,656,KB
+:libraries:summarizer:compileReleaseKotlin,Number of lines for code generation,968,507,968,507,968,507,
+:libraries:summarizer:compileReleaseKotlin,Size of shrunk classpath snapshot,56.9,53.6,57,54,57,54,KB
+:libraries:summarizer:compileReleaseKotlin,Store build info,6.67,5.0,6,3,11,10,ms
+:libraries:summarizer:compileReleaseKotlin,Write history file,4.0,2.67,4,3,5,3,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Shrink current classpath snapshot non-incrementally,48.3,,44,,73,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Connect to Kotlin daemon,14.26,,14,,20,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Compiler IR translation,48.42,,44,,76,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Sources compilation round,686.26,,689,,793,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Calculate output size,2.96,,2,,7,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Spent time before task action,72.7,,62,,124,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Compiler initialization time,195.2,,193,,240,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Compiler IR generation,36.06,,34,,45,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Total Gradle task time,1042.92,,1030,,1202,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Run compilation,847.64,,848,,989,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Task action before worker execution,10.02,,9,,14,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Compiler code analysis,338.7,,330,,435,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Compiler IR lowering,59.4,,57,,82,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Clear jar cache,1.89,,1,,4,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Load current classpath snapshot,31.74,,28,,44,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Incremental compilation in daemon,812.3,,820,,930,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Run compilation in Gradle worker,865.98,,867,,1006,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Start gradle worker,6.27,,2,,7,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Shrink and save current classpath snapshot after compilation,50.14,,46,,74,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Compiler code generation,95.96,,92,,132,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Size of classpath snapshot,1.8,,2,,2,,MB
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Code generation lines per second,433,,404,,594,,
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Number of times classpath snapshot is loaded,1,,1,,1,,
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Number of lines analyzed,37,,37,,37,,
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,,1,,1,,
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Analysis lines per second,113,,112,,138,,
+:libraries:tooling:spi-multibinds-validator:compileKotlin,ABI snapshot size,49.0,,49,,49,,B
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Number of cache misses when loading classpath entry snapshots,13,,13,,13,,
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Number of classpath entries,19,,19,,19,,
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Number of cache hits when loading classpath entry snapshots,6,,6,,6,,
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Compiler IR translation line number,37,,37,,37,,
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Compiler IR lowering line number,37,,37,,37,,
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Compiler IR generation line number,37,,37,,37,,
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Total compiler iteration,1,,1,,1,,
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Total size of the cache directory,451.9,,452,,452,,KB
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Number of lines for code generation,37,,37,,37,,
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Size of shrunk classpath snapshot,24.5,,25,,25,,KB
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Store build info,1.5,,1,,3,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Update caches,4.19,,4,,6,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Save shrunk current classpath snapshot,3.31,,2,,10,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Clear outputs on rebuild,3.0,,3,,3,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Clear output,2.5,,2,,6,,ms
+:libraries:tooling:spi-multibinds-validator:compileKotlin,Write history file,3.5,,4,,5,,ms
+:libraries:unfurler:compileKotlinJvm,Shrink current classpath snapshot non-incrementally,38.06,30.1,36,28,49,44,ms
+:libraries:unfurler:compileKotlinJvm,Connect to Kotlin daemon,21.46,25.22,22,25,29,36,ms
+:libraries:unfurler:compileKotlinJvm,Save shrunk current classpath snapshot,5.88,4.08,7,4,10,9,ms
+:libraries:unfurler:compileKotlinJvm,Compiler IR translation,261.72,1326.38,265,1315,320,1629,ms
+:libraries:unfurler:compileKotlinJvm,Sources compilation round,2346.34,3571.52,2301,3554,2649,3907,ms
+:libraries:unfurler:compileKotlinJvm,Update caches,10.8,9.54,10,8,16,16,ms
+:libraries:unfurler:compileKotlinJvm,Calculate output size,2.9,2.44,1,2,7,5,ms
+:libraries:unfurler:compileKotlinJvm,Spent time before task action,58.34,83.18,51,73,87,114,ms
+:libraries:unfurler:compileKotlinJvm,Compiler initialization time,313.58,307.92,302,316,392,384,ms
+:libraries:unfurler:compileKotlinJvm,Compiler IR generation,408.66,420.38,397,406,507,543,ms
+:libraries:unfurler:compileKotlinJvm,Total Gradle task time,2818.08,4036.9,2805,3990,3204,4380,ms
+:libraries:unfurler:compileKotlinJvm,Run compilation,2596.12,3805.08,2546,3780,2884,4151,ms
+:libraries:unfurler:compileKotlinJvm,Task action before worker execution,19.2,15.46,19,14,25,25,ms
+:libraries:unfurler:compileKotlinJvm,Compiler code analysis,1003.6,1742.08,992,1717,1209,1952,ms
+:libraries:unfurler:compileKotlinJvm,Compiler IR lowering,348.5,429.5,351,438,411,545,ms
+:libraries:unfurler:compileKotlinJvm,Clear jar cache,3.18,2.65,3,2,7,6,ms
+:libraries:unfurler:compileKotlinJvm,Load current classpath snapshot,17.08,14.7,17,14,24,23,ms
+:libraries:unfurler:compileKotlinJvm,Incremental compilation in daemon,2550.14,3757.38,2512,3731,2832,4104,ms
+:libraries:unfurler:compileKotlinJvm,Run compilation in Gradle worker,2625.26,3837.64,2564,3813,2918,4192,ms
+:libraries:unfurler:compileKotlinJvm,Start gradle worker,5.48,4.2,3,3,9,10,ms
+:libraries:unfurler:compileKotlinJvm,Shrink and save current classpath snapshot after compilation,45.62,35.16,46,32,57,52,ms
+:libraries:unfurler:compileKotlinJvm,Compiler code generation,757.7,850.36,746,842,896,1036,ms
+:libraries:unfurler:compileKotlinJvm,Size of classpath snapshot,842.7,836.7,843,837,843,837,KB
+:libraries:unfurler:compileKotlinJvm,Code generation lines per second,390,303,389,299,444,379,
+:libraries:unfurler:compileKotlinJvm,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:unfurler:compileKotlinJvm,Number of lines analyzed,290,252,290,252,290,252,
+:libraries:unfurler:compileKotlinJvm,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:unfurler:compileKotlinJvm,Analysis lines per second,293,146,292,146,361,164,
+:libraries:unfurler:compileKotlinJvm,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:unfurler:compileKotlinJvm,Number of cache misses when loading classpath entry snapshots,6,5,6,5,6,5,
+:libraries:unfurler:compileKotlinJvm,Number of classpath entries,17,12,17,12,17,12,
+:libraries:unfurler:compileKotlinJvm,Number of cache hits when loading classpath entry snapshots,11,7,11,7,11,7,
+:libraries:unfurler:compileKotlinJvm,Compiler IR translation line number,290,504,290,504,290,504,
+:libraries:unfurler:compileKotlinJvm,Compiler IR lowering line number,290,252,290,252,290,252,
+:libraries:unfurler:compileKotlinJvm,Compiler IR generation line number,290,252,290,252,290,252,
+:libraries:unfurler:compileKotlinJvm,Total compiler iteration,1,1,1,1,1,1,
+:libraries:unfurler:compileKotlinJvm,Total size of the cache directory,510.0,509.2,510,509,510,509,KB
+:libraries:unfurler:compileKotlinJvm,Number of lines for code generation,290,252,290,252,290,252,
+:libraries:unfurler:compileKotlinJvm,Size of shrunk classpath snapshot,28.9,27.0,29,27,29,27,KB
+:libraries:unfurler:compileKotlinJvm,Write history file,3.8,2.33,3,3,6,3,ms
+:libraries:unfurler:compileKotlinJvm,Store build info,2.5,2.5,3,3,3,3,ms
+:libraries:unfurler:compileKotlinJvm,Clear outputs on rebuild,3.0,16.0,3,16,4,16,ms
+:libraries:util:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,121.2,114.46,119,112,152,153,ms
+:libraries:util:compileReleaseKotlin,Connect to Kotlin daemon,25.8,30.66,22,23,38,42,ms
+:libraries:util:compileReleaseKotlin,Save shrunk current classpath snapshot,3.76,4.62,3,4,8,9,ms
+:libraries:util:compileReleaseKotlin,Compiler IR translation,338.08,781.74,332,749,417,1007,ms
+:libraries:util:compileReleaseKotlin,Sources compilation round,4343.62,4994.72,4370,4975,4645,5684,ms
+:libraries:util:compileReleaseKotlin,Update caches,26.54,26.52,28,26,37,37,ms
+:libraries:util:compileReleaseKotlin,Calculate output size,3.42,3.32,3,3,7,7,ms
+:libraries:util:compileReleaseKotlin,Spent time before task action,241.44,272.96,235,277,298,334,ms
+:libraries:util:compileReleaseKotlin,Compiler initialization time,78.08,72.46,73,72,113,116,ms
+:libraries:util:compileReleaseKotlin,Compiler IR generation,847.38,854.38,820,857,1034,993,ms
+:libraries:util:compileReleaseKotlin,Total Gradle task time,5305.5,5986.72,5319,5937,5638,6681,ms
+:libraries:util:compileReleaseKotlin,Run compilation,4848.16,5489.64,4842,5438,5189,6147,ms
+:libraries:util:compileReleaseKotlin,Task action before worker execution,45.86,47.14,46,45,64,62,ms
+:libraries:util:compileReleaseKotlin,Compiler code analysis,2446.54,3008.1,2409,3019,2792,3543,ms
+:libraries:util:compileReleaseKotlin,Compiler IR lowering,621.92,658.84,621,671,751,775,ms
+:libraries:util:compileReleaseKotlin,Load current classpath snapshot,36.22,32.56,29,32,47,49,ms
+:libraries:util:compileReleaseKotlin,Incremental compilation in daemon,4748.48,5396.74,4759,5340,5054,6044,ms
+:libraries:util:compileReleaseKotlin,Run compilation in Gradle worker,4880.76,5527.9,4878,5537,5244,6178,ms
+:libraries:util:compileReleaseKotlin,Start gradle worker,6.12,7.54,5,5,12,10,ms
+:libraries:util:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,126.24,120.02,126,119,158,160,ms
+:libraries:util:compileReleaseKotlin,Clear output,3.67,7.0,3,7,5,7,ms
+:libraries:util:compileReleaseKotlin,Compiler code generation,1469.82,1513.74,1445,1499,1691,1713,ms
+:libraries:util:compileReleaseKotlin,Size of classpath snapshot,2.7,2.7,3,3,3,3,MB
+:libraries:util:compileReleaseKotlin,Code generation lines per second,693,673,698,673,786,768,
+:libraries:util:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:libraries:util:compileReleaseKotlin,Number of lines analyzed,1009,1009,1009,1009,1009,1009,
+:libraries:util:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:libraries:util:compileReleaseKotlin,Analysis lines per second,414,340,419,334,455,396,
+:libraries:util:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:libraries:util:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,18,16,19,16,19,16,
+:libraries:util:compileReleaseKotlin,Number of classpath entries,35,33,35,33,35,33,
+:libraries:util:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,16,17,16,17,20,17,
+:libraries:util:compileReleaseKotlin,Compiler IR translation line number,1009,2018,1009,2018,1009,2018,
+:libraries:util:compileReleaseKotlin,Compiler IR lowering line number,1009,1009,1009,1009,1009,1009,
+:libraries:util:compileReleaseKotlin,Compiler IR generation line number,1009,1009,1009,1009,1009,1009,
+:libraries:util:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:libraries:util:compileReleaseKotlin,Total size of the cache directory,611.5,627.6,612,628,612,628,KB
+:libraries:util:compileReleaseKotlin,Number of lines for code generation,1009,1009,1009,1009,1009,1009,
+:libraries:util:compileReleaseKotlin,Size of shrunk classpath snapshot,47.3,47.8,47,48,47,48,KB
+:libraries:util:compileReleaseKotlin,Clear jar cache,2.04,2.86,1,3,5,6,ms
+:libraries:util:compileReleaseKotlin,Write history file,2.33,3.0,2,3,3,3,ms
+:libraries:util:compileReleaseKotlin,Store build info,3.29,4.5,3,5,9,6,ms
+:libraries:util:compileReleaseKotlin,Clear outputs on rebuild,5.0,4.0,5,4,6,5,ms
+:service-api:compileReleaseKotlinAndroid,Shrink current classpath snapshot non-incrementally,48.1,52.42,44,55,68,66,ms
+:service-api:compileReleaseKotlinAndroid,Connect to Kotlin daemon,21.76,29.42,20,23,31,52,ms
+:service-api:compileReleaseKotlinAndroid,Compiler IR translation,343.26,963.08,304,918,510,1252,ms
+:service-api:compileReleaseKotlinAndroid,Sources compilation round,3630.08,3445.02,3602,3468,4257,3856,ms
+:service-api:compileReleaseKotlinAndroid,Update caches,15.8,13.88,15,13,23,19,ms
+:service-api:compileReleaseKotlinAndroid,Calculate output size,2.22,3.1,1,3,5,7,ms
+:service-api:compileReleaseKotlinAndroid,Spent time before task action,39.82,60.64,36,57,59,77,ms
+:service-api:compileReleaseKotlinAndroid,Compiler initialization time,319.46,265.72,319,271,418,345,ms
+:service-api:compileReleaseKotlinAndroid,Compiler IR generation,704.32,715.2,692,711,887,856,ms
+:service-api:compileReleaseKotlinAndroid,Total Gradle task time,4095.04,3957.52,4038,4005,4669,4366,ms
+:service-api:compileReleaseKotlinAndroid,Run compilation,3881.0,3711.42,3832,3753,4454,4152,ms
+:service-api:compileReleaseKotlinAndroid,Task action before worker execution,20.88,19.64,20,18,29,30,ms
+:service-api:compileReleaseKotlinAndroid,Compiler code analysis,1669.84,1362.2,1692,1339,1956,1809,ms
+:service-api:compileReleaseKotlinAndroid,Compiler IR lowering,581.54,612.22,551,599,893,762,ms
+:service-api:compileReleaseKotlinAndroid,Load current classpath snapshot,8.64,8.26,8,8,13,12,ms
+:service-api:compileReleaseKotlinAndroid,Incremental compilation in daemon,3832.42,3662.08,3786,3713,4422,4088,ms
+:service-api:compileReleaseKotlinAndroid,Run compilation in Gradle worker,3910.18,3748.58,3864,3781,4493,4176,ms
+:service-api:compileReleaseKotlinAndroid,Start gradle worker,7.26,5.12,3,4,9,11,ms
+:service-api:compileReleaseKotlinAndroid,Shrink and save current classpath snapshot after compilation,50.02,55.4,47,56,70,70,ms
+:service-api:compileReleaseKotlinAndroid,Compiler code generation,1286.3,1327.92,1223,1337,1726,1550,ms
+:service-api:compileReleaseKotlinAndroid,Size of classpath snapshot,2.4,2.4,2,2,2,2,MB
+:service-api:compileReleaseKotlinAndroid,Code generation lines per second,503,459,513,449,597,538,
+:service-api:compileReleaseKotlinAndroid,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:service-api:compileReleaseKotlinAndroid,Number of lines analyzed,627,601,627,601,627,601,
+:service-api:compileReleaseKotlinAndroid,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:service-api:compileReleaseKotlinAndroid,Analysis lines per second,383,457,370,449,466,580,
+:service-api:compileReleaseKotlinAndroid,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:service-api:compileReleaseKotlinAndroid,Number of classpath entries,20,15,20,15,20,15,
+:service-api:compileReleaseKotlinAndroid,Number of cache hits when loading classpath entry snapshots,20,14,20,15,20,15,
+:service-api:compileReleaseKotlinAndroid,Compiler IR translation line number,627,1202,627,1202,627,1202,
+:service-api:compileReleaseKotlinAndroid,Compiler IR lowering line number,627,601,627,601,627,601,
+:service-api:compileReleaseKotlinAndroid,Compiler IR generation line number,627,601,627,601,627,601,
+:service-api:compileReleaseKotlinAndroid,Total compiler iteration,1,1,1,1,1,1,
+:service-api:compileReleaseKotlinAndroid,Total size of the cache directory,525.9,526.2,526,526,526,526,KB
+:service-api:compileReleaseKotlinAndroid,Number of lines for code generation,627,601,627,601,627,601,
+:service-api:compileReleaseKotlinAndroid,Size of shrunk classpath snapshot,37.4,35.8,37,36,37,36,KB
+:service-api:compileReleaseKotlinAndroid,Clear jar cache,3.17,2.72,3,1,6,6,ms
+:service-api:compileReleaseKotlinAndroid,Clear outputs on rebuild,1.0,1.0,1,1,1,1,ms
+:service-api:compileReleaseKotlinAndroid,Save shrunk current classpath snapshot,2.94,3.41,3,3,6,6,ms
+:service-api:compileReleaseKotlinAndroid,Clear output,2.33,2.5,2,3,3,3,ms
+:service-api:compileReleaseKotlinAndroid,Write history file,5.33,3.0,6,3,8,3,ms
+:service-api:compileReleaseKotlinAndroid,Store build info,5.0,4.5,5,5,7,7,ms
+:service-db:compileReleaseKotlinAndroid,Shrink current classpath snapshot non-incrementally,150.32,63.58,141,56,248,107,ms
+:service-db:compileReleaseKotlinAndroid,Connect to Kotlin daemon,32.26,31.24,24,25,45,40,ms
+:service-db:compileReleaseKotlinAndroid,Save shrunk current classpath snapshot,2.11,3.62,1,3,5,9,ms
+:service-db:compileReleaseKotlinAndroid,Compiler IR translation,492.18,1035.94,500,1018,576,1272,ms
+:service-db:compileReleaseKotlinAndroid,Sources compilation round,5305.52,5053.08,5273,5042,5685,5635,ms
+:service-db:compileReleaseKotlinAndroid,Update caches,17.18,14.8,14,14,19,24,ms
+:service-db:compileReleaseKotlinAndroid,Calculate output size,2.52,5.94,1,1,6,8,ms
+:service-db:compileReleaseKotlinAndroid,Spent time before task action,95.98,62.78,97,54,122,108,ms
+:service-db:compileReleaseKotlinAndroid,Compiler initialization time,191.36,324.12,185,232,260,636,ms
+:service-db:compileReleaseKotlinAndroid,Compiler IR generation,1040.62,955.9,1038,949,1256,1222,ms
+:service-db:compileReleaseKotlinAndroid,Total Gradle task time,5956.98,5583.5,5943,5568,6403,6286,ms
+:service-db:compileReleaseKotlinAndroid,Run compilation,5679.96,5335.04,5661,5324,6114,5977,ms
+:service-db:compileReleaseKotlinAndroid,Task action before worker execution,21.44,18.18,20,18,30,28,ms
+:service-db:compileReleaseKotlinAndroid,Compiler code analysis,2796.76,2542.68,2798,2532,3091,2898,ms
+:service-db:compileReleaseKotlinAndroid,Compiler IR lowering,776.26,704.82,763,700,933,884,ms
+:service-db:compileReleaseKotlinAndroid,Clear jar cache,3.29,3.13,2,3,7,6,ms
+:service-db:compileReleaseKotlinAndroid,Load current classpath snapshot,81.08,8.6,73,9,173,15,ms
+:service-db:compileReleaseKotlinAndroid,Incremental compilation in daemon,5628.4,5284.76,5577,5280,6069,5919,ms
+:service-db:compileReleaseKotlinAndroid,Run compilation in Gradle worker,5720.1,5374.24,5696,5356,6150,6024,ms
+:service-db:compileReleaseKotlinAndroid,Start gradle worker,3.88,3.34,3,3,9,7,ms
+:service-db:compileReleaseKotlinAndroid,Shrink and save current classpath snapshot after compilation,152.74,67.04,144,59,259,111,ms
+:service-db:compileReleaseKotlinAndroid,Compiler code generation,1817.32,1661.26,1802,1612,2109,2004,ms
+:service-db:compileReleaseKotlinAndroid,Size of classpath snapshot,1.8,1.9,2,2,2,2,MB
+:service-db:compileReleaseKotlinAndroid,Code generation lines per second,478,527,478,534,538,626,
+:service-db:compileReleaseKotlinAndroid,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:service-db:compileReleaseKotlinAndroid,Number of lines analyzed,861,861,861,861,861,861,
+:service-db:compileReleaseKotlinAndroid,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:service-db:compileReleaseKotlinAndroid,Analysis lines per second,309,341,307,340,339,388,
+:service-db:compileReleaseKotlinAndroid,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:service-db:compileReleaseKotlinAndroid,Number of cache misses when loading classpath entry snapshots,2,,2,,2,,
+:service-db:compileReleaseKotlinAndroid,Number of classpath entries,6,6,6,6,6,6,
+:service-db:compileReleaseKotlinAndroid,Number of cache hits when loading classpath entry snapshots,4,6,4,6,6,6,
+:service-db:compileReleaseKotlinAndroid,Compiler IR translation line number,861,1722,861,1722,861,1722,
+:service-db:compileReleaseKotlinAndroid,Compiler IR lowering line number,861,861,861,861,861,861,
+:service-db:compileReleaseKotlinAndroid,Compiler IR generation line number,861,861,861,861,861,861,
+:service-db:compileReleaseKotlinAndroid,Total compiler iteration,1,1,1,1,1,1,
+:service-db:compileReleaseKotlinAndroid,Total size of the cache directory,533.0,533.0,533,533,533,533,KB
+:service-db:compileReleaseKotlinAndroid,Number of lines for code generation,861,861,861,861,861,861,
+:service-db:compileReleaseKotlinAndroid,Size of shrunk classpath snapshot,25.1,25.1,25,25,25,25,KB
+:service-db:compileReleaseKotlinAndroid,Store build info,4.0,6.0,4,4,6,10,ms
+:service-db:compileReleaseKotlinAndroid,Write history file,3.0,,3,,4,,ms
+:service-db:compileReleaseKotlinAndroid,Clear output,8.0,3.5,8,4,8,4,ms
+:services:dribbble:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,49.78,63.9,47,54,67,103,ms
+:services:dribbble:compileReleaseKotlin,Connect to Kotlin daemon,19.82,28.08,20,18,28,31,ms
+:services:dribbble:compileReleaseKotlin,Save shrunk current classpath snapshot,2.41,4.37,1,1,6,9,ms
+:services:dribbble:compileReleaseKotlin,Compiler IR translation,165.4,900.24,160,867,209,1142,ms
+:services:dribbble:compileReleaseKotlin,Sources compilation round,2055.52,2105.46,2048,2074,2368,2447,ms
+:services:dribbble:compileReleaseKotlin,Update caches,11.62,12.82,11,11,18,20,ms
+:services:dribbble:compileReleaseKotlin,Calculate output size,2.52,2.6,1,1,6,6,ms
+:services:dribbble:compileReleaseKotlin,Spent time before task action,54.3,60.7,48,53,72,109,ms
+:services:dribbble:compileReleaseKotlin,Compiler initialization time,73.08,69.28,76,65,94,98,ms
+:services:dribbble:compileReleaseKotlin,Compiler IR generation,329.08,294.86,324,285,409,375,ms
+:services:dribbble:compileReleaseKotlin,Total Gradle task time,2523.26,2600.52,2494,2556,2836,2993,ms
+:services:dribbble:compileReleaseKotlin,Run compilation,2291.66,2361.84,2289,2328,2616,2741,ms
+:services:dribbble:compileReleaseKotlin,Task action before worker execution,29.2,24.04,26,24,34,33,ms
+:services:dribbble:compileReleaseKotlin,Compiler code analysis,1233.26,1067.72,1230,1034,1447,1331,ms
+:services:dribbble:compileReleaseKotlin,Compiler IR lowering,245.16,217.96,243,215,327,285,ms
+:services:dribbble:compileReleaseKotlin,Clear jar cache,3.0,2.89,3,2,5,5,ms
+:services:dribbble:compileReleaseKotlin,Load current classpath snapshot,9.1,12.96,9,11,15,23,ms
+:services:dribbble:compileReleaseKotlin,Incremental compilation in daemon,2244.2,2323.3,2251,2296,2566,2707,ms
+:services:dribbble:compileReleaseKotlin,Run compilation in Gradle worker,2318.02,2396.44,2308,2355,2643,2762,ms
+:services:dribbble:compileReleaseKotlin,Start gradle worker,4.24,2.94,3,2,8,8,ms
+:services:dribbble:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,52.08,68.2,50,59,70,114,ms
+:services:dribbble:compileReleaseKotlin,Compiler code generation,574.86,513.3,589,512,706,617,ms
+:services:dribbble:compileReleaseKotlin,Size of classpath snapshot,2.6,2.6,3,3,3,3,MB
+:services:dribbble:compileReleaseKotlin,Code generation lines per second,1023,700,960,684,1321,880,
+:services:dribbble:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:services:dribbble:compileReleaseKotlin,Number of lines analyzed,565,350,565,350,565,350,
+:services:dribbble:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:services:dribbble:compileReleaseKotlin,Analysis lines per second,467,335,459,339,577,405,
+:services:dribbble:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:services:dribbble:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,3,3,3,3,3,3,
+:services:dribbble:compileReleaseKotlin,Number of classpath entries,26,21,26,21,26,21,
+:services:dribbble:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,23,17,23,18,23,18,
+:services:dribbble:compileReleaseKotlin,Compiler IR translation line number,565,700,565,700,565,700,
+:services:dribbble:compileReleaseKotlin,Compiler IR lowering line number,565,350,565,350,565,350,
+:services:dribbble:compileReleaseKotlin,Compiler IR generation line number,565,350,565,350,565,350,
+:services:dribbble:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:services:dribbble:compileReleaseKotlin,Total size of the cache directory,568.1,557.5,568,558,568,558,KB
+:services:dribbble:compileReleaseKotlin,Number of lines for code generation,565,350,565,350,565,350,
+:services:dribbble:compileReleaseKotlin,Size of shrunk classpath snapshot,58.6,56.7,59,57,59,57,KB
+:services:dribbble:compileReleaseKotlin,Clear outputs on rebuild,1.0,2.0,1,2,1,2,ms
+:services:dribbble:compileReleaseKotlin,Clear output,2.67,,3,,4,,ms
+:services:dribbble:compileReleaseKotlin,Write history file,4.0,3.0,4,3,4,5,ms
+:services:dribbble:compileReleaseKotlin,Store build info,4.0,6.0,4,6,5,6,ms
+:services:github:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,60.78,74.62,63,64,77,102,ms
+:services:github:compileReleaseKotlin,Connect to Kotlin daemon,22.76,21.18,19,20,30,30,ms
+:services:github:compileReleaseKotlin,Save shrunk current classpath snapshot,2.9,13.18,2,2,7,7,ms
+:services:github:compileReleaseKotlin,Compiler IR translation,401.46,1503.98,383,1498,519,1817,ms
+:services:github:compileReleaseKotlin,Sources compilation round,6612.94,7133.96,6689,7078,7085,7824,ms
+:services:github:compileReleaseKotlin,Update caches,73.14,84.12,74,71,88,100,ms
+:services:github:compileReleaseKotlin,Calculate output size,3.7,3.08,4,3,7,6,ms
+:services:github:compileReleaseKotlin,Spent time before task action,96.38,109.32,91,104,138,150,ms
+:services:github:compileReleaseKotlin,Compiler initialization time,92.8,84.98,91,78,124,137,ms
+:services:github:compileReleaseKotlin,Compiler IR generation,1287.62,1317.18,1280,1328,1528,1766,ms
+:services:github:compileReleaseKotlin,Total Gradle task time,7601.82,8229.52,7681,8197,8057,8873,ms
+:services:github:compileReleaseKotlin,Run compilation,7178.7,7816.22,7282,7770,7659,8464,ms
+:services:github:compileReleaseKotlin,Task action before worker execution,40.82,35.54,40,34,56,44,ms
+:services:github:compileReleaseKotlin,Compiler code analysis,3989.34,4044.1,3995,4172,4277,4359,ms
+:services:github:compileReleaseKotlin,Compiler IR lowering,818.56,920.0,819,882,988,1269,ms
+:services:github:compileReleaseKotlin,Clear jar cache,2.8,3.28,1,2,8,7,ms
+:services:github:compileReleaseKotlin,Load current classpath snapshot,11.44,15.86,11,15,18,26,ms
+:services:github:compileReleaseKotlin,Incremental compilation in daemon,7131.32,7774.88,7241,7736,7621,8397,ms
+:services:github:compileReleaseKotlin,Run compilation in Gradle worker,7210.54,7845.3,7311,7801,7691,8494,ms
+:services:github:compileReleaseKotlin,Start gradle worker,3.4,3.38,3,3,7,7,ms
+:services:github:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,64.76,88.94,65,71,81,127,ms
+:services:github:compileReleaseKotlin,Compiler code generation,2106.66,2237.68,2115,2341,2458,2878,ms
+:services:github:compileReleaseKotlin,Size of classpath snapshot,3.2,3.1,3,3,3,3,MB
+:services:github:compileReleaseKotlin,Code generation lines per second,1254,1109,1231,1013,1523,1484,
+:services:github:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:services:github:compileReleaseKotlin,Number of lines analyzed,2604,2370,2604,2370,2604,2370,
+:services:github:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:services:github:compileReleaseKotlin,Analysis lines per second,654,589,651,568,706,666,
+:services:github:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:services:github:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,6,5,6,5,6,5,
+:services:github:compileReleaseKotlin,Number of classpath entries,49,44,49,44,49,44,
+:services:github:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,43,39,43,39,43,39,
+:services:github:compileReleaseKotlin,Compiler IR translation line number,2604,4740,2604,4740,2604,4740,
+:services:github:compileReleaseKotlin,Compiler IR lowering line number,2604,2370,2604,2370,2604,2370,
+:services:github:compileReleaseKotlin,Compiler IR generation line number,2604,2370,2604,2370,2604,2370,
+:services:github:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:services:github:compileReleaseKotlin,Total size of the cache directory,865.4,837.6,865,838,865,838,KB
+:services:github:compileReleaseKotlin,Number of lines for code generation,2604,2370,2604,2370,2604,2370,
+:services:github:compileReleaseKotlin,Size of shrunk classpath snapshot,78.1,76.3,78,76,78,76,KB
+:services:github:compileReleaseKotlin,Write history file,3.0,2.0,3,2,3,2,ms
+:services:github:compileReleaseKotlin,Store build info,2.5,5.33,3,6,3,8,ms
+:services:github:compileReleaseKotlin,Clear output,5.5,,6,,8,,ms
+:services:github:compileReleaseKotlin,Clear outputs on rebuild,1.0,2.5,1,3,1,4,ms
+:services:hackernews:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,63.64,77.3,65,74,89,117,ms
+:services:hackernews:compileReleaseKotlin,Connect to Kotlin daemon,23.16,19.58,19,18,33,28,ms
+:services:hackernews:compileReleaseKotlin,Save shrunk current classpath snapshot,1.74,2.8,1,1,4,6,ms
+:services:hackernews:compileReleaseKotlin,Compiler IR translation,205.02,1016.92,204,1034,277,1215,ms
+:services:hackernews:compileReleaseKotlin,Sources compilation round,2292.38,2697.98,2274,2719,2575,3074,ms
+:services:hackernews:compileReleaseKotlin,Update caches,14.28,13.62,12,12,19,21,ms
+:services:hackernews:compileReleaseKotlin,Calculate output size,1.7,2.38,1,1,4,6,ms
+:services:hackernews:compileReleaseKotlin,Spent time before task action,95.96,159.0,88,160,119,208,ms
+:services:hackernews:compileReleaseKotlin,Compiler initialization time,100.24,96.58,96,93,145,130,ms
+:services:hackernews:compileReleaseKotlin,Compiler IR generation,453.02,506.02,447,513,594,628,ms
+:services:hackernews:compileReleaseKotlin,Total Gradle task time,2790.44,3291.48,2803,3321,3090,3633,ms
+:services:hackernews:compileReleaseKotlin,Run compilation,2515.54,2958.58,2495,2995,2794,3310,ms
+:services:hackernews:compileReleaseKotlin,Task action before worker execution,25.8,19.46,23,20,32,27,ms
+:services:hackernews:compileReleaseKotlin,Compiler code analysis,1265.06,1292.18,1273,1296,1433,1585,ms
+:services:hackernews:compileReleaseKotlin,Compiler IR lowering,260.84,287.58,252,288,362,359,ms
+:services:hackernews:compileReleaseKotlin,Clear jar cache,3.24,5.47,2,4,5,8,ms
+:services:hackernews:compileReleaseKotlin,Load current classpath snapshot,19.12,23.4,18,23,25,36,ms
+:services:hackernews:compileReleaseKotlin,Incremental compilation in daemon,2481.34,2917.66,2458,2960,2753,3270,ms
+:services:hackernews:compileReleaseKotlin,Run compilation in Gradle worker,2547.08,2988.08,2543,3016,2838,3351,ms
+:services:hackernews:compileReleaseKotlin,Start gradle worker,3.82,3.72,3,3,10,9,ms
+:services:hackernews:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,66.2,80.82,68,79,93,118,ms
+:services:hackernews:compileReleaseKotlin,Compiler code generation,714.42,794.22,703,793,893,973,ms
+:services:hackernews:compileReleaseKotlin,Size of classpath snapshot,3.6,3.6,4,4,4,4,MB
+:services:hackernews:compileReleaseKotlin,Code generation lines per second,839,471,827,461,1018,576,
+:services:hackernews:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:services:hackernews:compileReleaseKotlin,Number of lines analyzed,581,366,581,366,581,366,
+:services:hackernews:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:services:hackernews:compileReleaseKotlin,Analysis lines per second,463,289,456,282,532,355,
+:services:hackernews:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:services:hackernews:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,18,19,18,19,18,19,
+:services:hackernews:compileReleaseKotlin,Number of classpath entries,64,61,64,61,64,61,
+:services:hackernews:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,46,41,46,42,46,42,
+:services:hackernews:compileReleaseKotlin,Compiler IR translation line number,581,732,581,732,581,732,
+:services:hackernews:compileReleaseKotlin,Compiler IR lowering line number,581,366,581,366,581,366,
+:services:hackernews:compileReleaseKotlin,Compiler IR generation line number,581,366,581,366,581,366,
+:services:hackernews:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:services:hackernews:compileReleaseKotlin,Total size of the cache directory,562.7,556.3,563,556,563,556,KB
+:services:hackernews:compileReleaseKotlin,Number of lines for code generation,581,366,581,366,581,366,
+:services:hackernews:compileReleaseKotlin,Size of shrunk classpath snapshot,61.2,59.4,61,59,61,59,KB
+:services:hackernews:compileReleaseKotlin,Store build info,2.83,3.0,3,3,5,5,ms
+:services:hackernews:compileReleaseKotlin,Clear outputs on rebuild,2.5,1.5,3,2,3,2,ms
+:services:hackernews:compileReleaseKotlin,Clear output,1.0,3.75,1,3,1,8,ms
+:services:hackernews:compileReleaseKotlin,Write history file,5.0,,5,,5,,ms
+:services:producthunt:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,42.0,58.34,41,54,58,87,ms
+:services:producthunt:compileReleaseKotlin,Connect to Kotlin daemon,19.82,20.2,16,20,29,31,ms
+:services:producthunt:compileReleaseKotlin,Save shrunk current classpath snapshot,2.74,8.8,1,4,7,9,ms
+:services:producthunt:compileReleaseKotlin,Compiler IR translation,577.4,1828.48,463,1728,1011,2555,ms
+:services:producthunt:compileReleaseKotlin,Sources compilation round,6232.9,6816.42,6277,6707,6781,7763,ms
+:services:producthunt:compileReleaseKotlin,Update caches,55.28,60.92,55,63,77,78,ms
+:services:producthunt:compileReleaseKotlin,Calculate output size,2.82,3.08,2,2,6,7,ms
+:services:producthunt:compileReleaseKotlin,Spent time before task action,75.08,79.7,71,76,98,100,ms
+:services:producthunt:compileReleaseKotlin,Compiler initialization time,84.6,70.84,81,73,116,94,ms
+:services:producthunt:compileReleaseKotlin,Compiler IR generation,1111.48,1222.02,1100,1167,1426,1656,ms
+:services:producthunt:compileReleaseKotlin,Total Gradle task time,6936.34,7676.66,7029,7606,7523,8918,ms
+:services:producthunt:compileReleaseKotlin,Run compilation,6597.08,7300.54,6638,7184,7196,8569,ms
+:services:producthunt:compileReleaseKotlin,Task action before worker execution,33.58,25.42,32,25,41,34,ms
+:services:producthunt:compileReleaseKotlin,Compiler code analysis,3571.44,3673.66,3513,3765,4075,4209,ms
+:services:producthunt:compileReleaseKotlin,Compiler IR lowering,871.8,915.28,837,881,1107,1187,ms
+:services:producthunt:compileReleaseKotlin,Clear jar cache,2.19,2.58,1,3,5,5,ms
+:services:producthunt:compileReleaseKotlin,Load current classpath snapshot,7.92,14.68,8,12,12,20,ms
+:services:producthunt:compileReleaseKotlin,Incremental compilation in daemon,6548.22,7259.6,6601,7113,7146,8531,ms
+:services:producthunt:compileReleaseKotlin,Run compilation in Gradle worker,6623.06,7326.98,6677,7205,7209,8584,ms
+:services:producthunt:compileReleaseKotlin,Start gradle worker,3.14,3.94,3,4,7,8,ms
+:services:producthunt:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,46.3,68.12,47,62,65,96,ms
+:services:producthunt:compileReleaseKotlin,Compiler code generation,1983.74,2137.86,1947,2006,2477,2704,ms
+:services:producthunt:compileReleaseKotlin,Size of classpath snapshot,3.1,3.1,3,3,3,3,MB
+:services:producthunt:compileReleaseKotlin,Code generation lines per second,1698,1341,1693,1397,1995,1513,
+:services:producthunt:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:services:producthunt:compileReleaseKotlin,Number of lines analyzed,3297,2804,3297,2804,3297,2804,
+:services:producthunt:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:services:producthunt:compileReleaseKotlin,Analysis lines per second,931,776,938,744,1056,964,
+:services:producthunt:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:services:producthunt:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,5,5,5,5,5,5,
+:services:producthunt:compileReleaseKotlin,Number of classpath entries,46,42,46,42,46,42,
+:services:producthunt:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,41,37,41,37,41,37,
+:services:producthunt:compileReleaseKotlin,Compiler IR translation line number,3297,5608,3297,5608,3297,5608,
+:services:producthunt:compileReleaseKotlin,Compiler IR lowering line number,3297,2804,3297,2804,3297,2804,
+:services:producthunt:compileReleaseKotlin,Compiler IR generation line number,3297,2804,3297,2804,3297,2804,
+:services:producthunt:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:services:producthunt:compileReleaseKotlin,Total size of the cache directory,884.7,878.6,885,879,885,879,KB
+:services:producthunt:compileReleaseKotlin,Number of lines for code generation,3297,2804,3297,2804,3297,2804,
+:services:producthunt:compileReleaseKotlin,Size of shrunk classpath snapshot,86.0,84.0,86,84,86,84,KB
+:services:producthunt:compileReleaseKotlin,Clear output,1.0,,1,,1,,ms
+:services:producthunt:compileReleaseKotlin,Clear outputs on rebuild,2.0,,2,,2,,ms
+:services:producthunt:compileReleaseKotlin,Store build info,7.0,5.5,7,6,7,6,ms
+:services:reddit:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,45.0,44.9,38,40,58,65,ms
+:services:reddit:compileReleaseKotlin,Connect to Kotlin daemon,15.44,21.88,15,17,25,31,ms
+:services:reddit:compileReleaseKotlin,Save shrunk current classpath snapshot,2.35,2.66,1,1,7,7,ms
+:services:reddit:compileReleaseKotlin,Compiler IR translation,490.86,1476.7,479,1485,593,1702,ms
+:services:reddit:compileReleaseKotlin,Sources compilation round,4417.2,4156.14,4393,4160,4857,4531,ms
+:services:reddit:compileReleaseKotlin,Update caches,18.74,19.14,17,19,28,26,ms
+:services:reddit:compileReleaseKotlin,Calculate output size,2.82,2.82,1,2,7,6,ms
+:services:reddit:compileReleaseKotlin,Spent time before task action,44.78,52.46,41,34,63,61,ms
+:services:reddit:compileReleaseKotlin,Compiler initialization time,110.64,110.26,107,108,149,139,ms
+:services:reddit:compileReleaseKotlin,Compiler IR generation,1823.34,1420.9,1787,1415,2214,1611,ms
+:services:reddit:compileReleaseKotlin,Total Gradle task time,4913.62,4641.68,4933,4660,5381,4960,ms
+:services:reddit:compileReleaseKotlin,Run compilation,4674.66,4399.2,4686,4408,5102,4768,ms
+:services:reddit:compileReleaseKotlin,Task action before worker execution,24.42,22.7,25,23,32,30,ms
+:services:reddit:compileReleaseKotlin,Compiler code analysis,1412.52,1443.12,1419,1432,1590,1633,ms
+:services:reddit:compileReleaseKotlin,Compiler IR lowering,568.78,436.64,509,428,959,556,ms
+:services:reddit:compileReleaseKotlin,Clear jar cache,3.28,3.45,3,3,7,6,ms
+:services:reddit:compileReleaseKotlin,Load current classpath snapshot,11.58,7.4,6,6,11,14,ms
+:services:reddit:compileReleaseKotlin,Incremental compilation in daemon,4633.22,4353.22,4628,4357,5065,4738,ms
+:services:reddit:compileReleaseKotlin,Run compilation in Gradle worker,4697.36,4427.52,4711,4427,5130,4785,ms
+:services:reddit:compileReleaseKotlin,Start gradle worker,3.96,3.2,3,3,8,6,ms
+:services:reddit:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,48.64,48.34,43,43,61,70,ms
+:services:reddit:compileReleaseKotlin,Compiler code generation,2392.58,1858.06,2353,1850,2796,2142,ms
+:services:reddit:compileReleaseKotlin,Size of classpath snapshot,3.0,3.0,3,3,3,3,MB
+:services:reddit:compileReleaseKotlin,Code generation lines per second,373,323,375,320,427,380,
+:services:reddit:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:services:reddit:compileReleaseKotlin,Number of lines analyzed,883,592,883,592,883,592,
+:services:reddit:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:services:reddit:compileReleaseKotlin,Analysis lines per second,632,414,622,413,738,470,
+:services:reddit:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:services:reddit:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,1,1,1,1,1,1,
+:services:reddit:compileReleaseKotlin,Number of classpath entries,41,37,41,37,41,37,
+:services:reddit:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,40,36,40,36,40,36,
+:services:reddit:compileReleaseKotlin,Compiler IR translation line number,883,1184,883,1184,883,1184,
+:services:reddit:compileReleaseKotlin,Compiler IR lowering line number,883,592,883,592,883,592,
+:services:reddit:compileReleaseKotlin,Compiler IR generation line number,883,592,883,592,883,592,
+:services:reddit:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:services:reddit:compileReleaseKotlin,Total size of the cache directory,614.0,591.0,614,591,614,591,KB
+:services:reddit:compileReleaseKotlin,Number of lines for code generation,883,592,883,592,883,592,
+:services:reddit:compileReleaseKotlin,Size of shrunk classpath snapshot,69.9,68.1,70,68,70,68,KB
+:services:reddit:compileReleaseKotlin,Clear output,2.25,3.0,3,3,3,3,ms
+:services:reddit:compileReleaseKotlin,Write history file,3.0,3.0,3,3,3,5,ms
+:services:slashdot:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,45.9,56.16,48,50,66,70,ms
+:services:slashdot:compileReleaseKotlin,Connect to Kotlin daemon,30.52,16.78,17,15,80,25,ms
+:services:slashdot:compileReleaseKotlin,Compiler IR translation,393.94,1343.76,398,1326,473,1617,ms
+:services:slashdot:compileReleaseKotlin,Sources compilation round,2112.02,2491.38,2063,2480,2435,2793,ms
+:services:slashdot:compileReleaseKotlin,Update caches,14.56,20.88,14,19,19,25,ms
+:services:slashdot:compileReleaseKotlin,Calculate output size,2.86,2.88,1,1,7,7,ms
+:services:slashdot:compileReleaseKotlin,Spent time before task action,58.24,75.06,52,67,71,132,ms
+:services:slashdot:compileReleaseKotlin,Compiler initialization time,110.36,103.94,108,103,147,137,ms
+:services:slashdot:compileReleaseKotlin,Compiler IR generation,331.18,348.98,332,354,436,447,ms
+:services:slashdot:compileReleaseKotlin,Total Gradle task time,2592.0,3019.34,2550,2994,2916,3484,ms
+:services:slashdot:compileReleaseKotlin,Run compilation,2326.82,2753.24,2279,2725,2638,3088,ms
+:services:slashdot:compileReleaseKotlin,Task action before worker execution,26.68,20.5,23,19,31,27,ms
+:services:slashdot:compileReleaseKotlin,Compiler code analysis,931.16,1009.12,925,980,1119,1184,ms
+:services:slashdot:compileReleaseKotlin,Compiler IR lowering,334.84,346.48,346,338,405,417,ms
+:services:slashdot:compileReleaseKotlin,Clear jar cache,2.2,2.44,2,1,4,6,ms
+:services:slashdot:compileReleaseKotlin,Load current classpath snapshot,10.52,11.82,10,11,17,17,ms
+:services:slashdot:compileReleaseKotlin,Incremental compilation in daemon,2291.38,2714.58,2239,2692,2586,3054,ms
+:services:slashdot:compileReleaseKotlin,Run compilation in Gradle worker,2361.88,2775.88,2310,2748,2686,3127,ms
+:services:slashdot:compileReleaseKotlin,Start gradle worker,2.82,4.5,2,4,7,9,ms
+:services:slashdot:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,48.68,60.14,51,54,68,79,ms
+:services:slashdot:compileReleaseKotlin,Compiler code generation,666.48,696.08,675,698,794,825,ms
+:services:slashdot:compileReleaseKotlin,Size of classpath snapshot,3.2,3.2,3,3,3,3,MB
+:services:slashdot:compileReleaseKotlin,Code generation lines per second,961,492,921,482,1190,597,
+:services:slashdot:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:services:slashdot:compileReleaseKotlin,Number of lines analyzed,622,336,622,336,622,336,
+:services:slashdot:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:services:slashdot:compileReleaseKotlin,Analysis lines per second,681,338,672,342,810,395,
+:services:slashdot:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:services:slashdot:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,5,5,5,5,5,5,
+:services:slashdot:compileReleaseKotlin,Number of classpath entries,45,41,45,41,45,41,
+:services:slashdot:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,40,36,40,36,40,36,
+:services:slashdot:compileReleaseKotlin,Compiler IR translation line number,622,672,622,672,622,672,
+:services:slashdot:compileReleaseKotlin,Compiler IR lowering line number,622,336,622,336,622,336,
+:services:slashdot:compileReleaseKotlin,Compiler IR generation line number,622,336,622,336,622,336,
+:services:slashdot:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:services:slashdot:compileReleaseKotlin,Total size of the cache directory,593.4,583.0,593,583,593,583,KB
+:services:slashdot:compileReleaseKotlin,Number of lines for code generation,622,336,622,336,622,336,
+:services:slashdot:compileReleaseKotlin,Size of shrunk classpath snapshot,50.8,48.8,51,49,51,49,KB
+:services:slashdot:compileReleaseKotlin,Save shrunk current classpath snapshot,3.9,4.41,3,4,7,7,ms
+:services:slashdot:compileReleaseKotlin,Store build info,5.67,2.33,6,3,9,3,ms
+:services:slashdot:compileReleaseKotlin,Write history file,3.0,4.8,3,3,3,9,ms
+:services:slashdot:compileReleaseKotlin,Clear output,6.0,3.5,6,4,6,4,ms
+:services:unsplash:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,40.9,40.44,41,37,53,60,ms
+:services:unsplash:compileReleaseKotlin,Connect to Kotlin daemon,20.02,15.94,17,15,24,26,ms
+:services:unsplash:compileReleaseKotlin,Save shrunk current classpath snapshot,3.75,3.58,3,4,8,7,ms
+:services:unsplash:compileReleaseKotlin,Compiler IR translation,319.06,1218.48,318,1199,386,1496,ms
+:services:unsplash:compileReleaseKotlin,Sources compilation round,1888.18,2243.66,1885,2262,2093,2503,ms
+:services:unsplash:compileReleaseKotlin,Update caches,13.3,12.04,12,11,20,16,ms
+:services:unsplash:compileReleaseKotlin,Calculate output size,2.98,3.44,2,3,7,7,ms
+:services:unsplash:compileReleaseKotlin,Spent time before task action,43.26,42.54,41,37,56,55,ms
+:services:unsplash:compileReleaseKotlin,Compiler initialization time,88.58,98.86,86,99,117,131,ms
+:services:unsplash:compileReleaseKotlin,Compiler IR generation,401.32,430.3,411,423,507,562,ms
+:services:unsplash:compileReleaseKotlin,Total Gradle task time,2332.62,2693.38,2376,2721,2568,2985,ms
+:services:unsplash:compileReleaseKotlin,Run compilation,2097.02,2469.38,2099,2505,2344,2735,ms
+:services:unsplash:compileReleaseKotlin,Task action before worker execution,38.96,24.6,28,24,99,32,ms
+:services:unsplash:compileReleaseKotlin,Compiler code analysis,830.96,854.34,829,861,986,1014,ms
+:services:unsplash:compileReleaseKotlin,Compiler IR lowering,238.92,245.2,241,247,289,300,ms
+:services:unsplash:compileReleaseKotlin,Clear jar cache,1.83,2.04,1,1,5,5,ms
+:services:unsplash:compileReleaseKotlin,Load current classpath snapshot,6.34,5.78,6,5,11,10,ms
+:services:unsplash:compileReleaseKotlin,Incremental compilation in daemon,2060.38,2424.84,2064,2455,2284,2709,ms
+:services:unsplash:compileReleaseKotlin,Run compilation in Gradle worker,2122.0,2490.48,2121,2528,2365,2757,ms
+:services:unsplash:compileReleaseKotlin,Start gradle worker,3.38,4.78,3,3,8,7,ms
+:services:unsplash:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,44.66,44.04,46,41,58,61,ms
+:services:unsplash:compileReleaseKotlin,Compiler code generation,640.74,676.04,649,673,760,843,ms
+:services:unsplash:compileReleaseKotlin,Size of classpath snapshot,3.0,3.0,3,3,3,3,MB
+:services:unsplash:compileReleaseKotlin,Code generation lines per second,906,408,866,399,1228,491,
+:services:unsplash:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:services:unsplash:compileReleaseKotlin,Number of lines analyzed,562,269,562,269,562,269,
+:services:unsplash:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:services:unsplash:compileReleaseKotlin,Analysis lines per second,687,321,678,313,816,404,
+:services:unsplash:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:services:unsplash:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,1,1,1,1,1,1,
+:services:unsplash:compileReleaseKotlin,Number of classpath entries,41,37,41,37,41,37,
+:services:unsplash:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,40,36,40,36,40,36,
+:services:unsplash:compileReleaseKotlin,Compiler IR translation line number,562,538,562,538,562,538,
+:services:unsplash:compileReleaseKotlin,Compiler IR lowering line number,562,269,562,269,562,269,
+:services:unsplash:compileReleaseKotlin,Compiler IR generation line number,562,269,562,269,562,269,
+:services:unsplash:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:services:unsplash:compileReleaseKotlin,Total size of the cache directory,577.2,565.6,577,566,577,566,KB
+:services:unsplash:compileReleaseKotlin,Number of lines for code generation,562,269,562,269,562,269,
+:services:unsplash:compileReleaseKotlin,Size of shrunk classpath snapshot,53.6,51.8,54,52,54,52,KB
+:services:unsplash:compileReleaseKotlin,Store build info,4.0,4.5,4,5,4,6,ms
+:services:uplabs:compileReleaseKotlin,Shrink current classpath snapshot non-incrementally,39.88,35.94,36,34,53,53,ms
+:services:uplabs:compileReleaseKotlin,Connect to Kotlin daemon,19.92,20.6,17,18,29,26,ms
+:services:uplabs:compileReleaseKotlin,Save shrunk current classpath snapshot,2.78,3.62,2,4,6,6,ms
+:services:uplabs:compileReleaseKotlin,Compiler IR translation,337.66,1237.52,338,1219,414,1521,ms
+:services:uplabs:compileReleaseKotlin,Sources compilation round,2178.1,2584.34,2193,2604,2472,2827,ms
+:services:uplabs:compileReleaseKotlin,Update caches,14.4,13.48,12,13,20,19,ms
+:services:uplabs:compileReleaseKotlin,Calculate output size,3.1,2.42,1,2,5,6,ms
+:services:uplabs:compileReleaseKotlin,Spent time before task action,42.0,33.1,39,31,51,45,ms
+:services:uplabs:compileReleaseKotlin,Compiler initialization time,88.24,93.9,87,89,116,135,ms
+:services:uplabs:compileReleaseKotlin,Compiler IR generation,641.26,631.02,649,627,771,747,ms
+:services:uplabs:compileReleaseKotlin,Total Gradle task time,2629.1,2985.02,2585,3005,3000,3269,ms
+:services:uplabs:compileReleaseKotlin,Run compilation,2405.4,2790.34,2393,2810,2697,3016,ms
+:services:uplabs:compileReleaseKotlin,Task action before worker execution,27.56,23.06,25,23,37,30,ms
+:services:uplabs:compileReleaseKotlin,Compiler code analysis,808.4,939.22,824,940,958,1151,ms
+:services:uplabs:compileReleaseKotlin,Compiler IR lowering,294.18,294.08,292,289,400,374,ms
+:services:uplabs:compileReleaseKotlin,Load current classpath snapshot,5.94,6.02,5,6,10,9,ms
+:services:uplabs:compileReleaseKotlin,Incremental compilation in daemon,2369.98,2749.86,2359,2765,2672,2984,ms
+:services:uplabs:compileReleaseKotlin,Run compilation in Gradle worker,2429.36,2814.92,2408,2831,2735,3040,ms
+:services:uplabs:compileReleaseKotlin,Start gradle worker,3.42,3.48,2,2,8,8,ms
+:services:uplabs:compileReleaseKotlin,Shrink and save current classpath snapshot after compilation,42.6,39.02,38,37,57,59,ms
+:services:uplabs:compileReleaseKotlin,Compiler code generation,935.86,925.74,946,919,1124,1094,ms
+:services:uplabs:compileReleaseKotlin,Size of classpath snapshot,3.0,3.0,3,3,3,3,MB
+:services:uplabs:compileReleaseKotlin,Code generation lines per second,610,331,591,330,738,386,
+:services:uplabs:compileReleaseKotlin,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+:services:uplabs:compileReleaseKotlin,Number of lines analyzed,559,303,559,303,559,303,
+:services:uplabs:compileReleaseKotlin,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+:services:uplabs:compileReleaseKotlin,Analysis lines per second,714,328,678,322,951,387,
+:services:uplabs:compileReleaseKotlin,ABI snapshot size,49.0,49.0,49,49,49,49,B
+:services:uplabs:compileReleaseKotlin,Number of cache misses when loading classpath entry snapshots,1,1,1,1,1,1,
+:services:uplabs:compileReleaseKotlin,Number of classpath entries,41,37,41,37,41,37,
+:services:uplabs:compileReleaseKotlin,Number of cache hits when loading classpath entry snapshots,40,36,40,36,40,36,
+:services:uplabs:compileReleaseKotlin,Compiler IR translation line number,559,606,559,606,559,606,
+:services:uplabs:compileReleaseKotlin,Compiler IR lowering line number,559,303,559,303,559,303,
+:services:uplabs:compileReleaseKotlin,Compiler IR generation line number,559,303,559,303,559,303,
+:services:uplabs:compileReleaseKotlin,Total compiler iteration,1,1,1,1,1,1,
+:services:uplabs:compileReleaseKotlin,Total size of the cache directory,577.3,567.0,577,567,577,567,KB
+:services:uplabs:compileReleaseKotlin,Number of lines for code generation,559,303,559,303,559,303,
+:services:uplabs:compileReleaseKotlin,Size of shrunk classpath snapshot,60.7,58.7,61,59,61,59,KB
+:services:uplabs:compileReleaseKotlin,Store build info,2.0,5.6,2,5,3,11,ms
+:services:uplabs:compileReleaseKotlin,Clear outputs on rebuild,2.0,,2,,2,,ms
+:services:uplabs:compileReleaseKotlin,Clear jar cache,1.8,2.5,1,3,3,4,ms
+:services:uplabs:compileReleaseKotlin,Write history file,5.0,5.5,5,6,9,6,ms
+:services:uplabs:compileReleaseKotlin,Clear output,5.0,2.0,5,2,5,2,ms
+Kotlin Build Reports,Shrink current classpath snapshot non-incrementally,64.15,65.67,52,55,132,123,ms
+Kotlin Build Reports,Connect to Kotlin daemon,101.36,105.9,20,21,64,53,ms
+Kotlin Build Reports,Save shrunk current classpath snapshot,3.38,4.28,2,3,7,7,ms
+Kotlin Build Reports,Compiler IR translation,519.45,1505.35,332,1122,1322,2940,ms
+Kotlin Build Reports,Sources compilation round,3675.87,4308.74,2589,3274,7019,7106,ms
+Kotlin Build Reports,Update caches,20.92,22.09,14,15,47,51,ms
+Kotlin Build Reports,Calculate output size,3.01,3.14,2,2,7,7,ms
+Kotlin Build Reports,Spent time before task action,97.1,110.91,53,61,226,293,ms
+Kotlin Build Reports,Compiler initialization time,246.44,227.31,125,124,351,338,ms
+Kotlin Build Reports,Compiler IR generation,656.09,677.41,449,482,1413,1449,ms
+Kotlin Build Reports,Total Gradle task time,5033.35,5083.22,3246,3832,10075,9474,ms
+Kotlin Build Reports,Run compilation,4013.89,4667.1,2865,3568,7698,7953,ms
+Kotlin Build Reports,Task action before worker execution,48.61,50.51,23,21,74,66,ms
+Kotlin Build Reports,Compiler code analysis,1758.55,2135.6,1349,1391,3594,3681,ms
+Kotlin Build Reports,Compiler IR lowering,473.06,502.09,376,408,882,890,ms
+Kotlin Build Reports,Load current classpath snapshot,26.26,25.5,13,12,79,79,ms
+Kotlin Build Reports,Incremental compilation in daemon,3949.34,4599.33,2797,3518,7560,7668,ms
+Kotlin Build Reports,Run compilation in Gradle worker,4741.99,4782.19,3054,3597,9333,8820,ms
+Kotlin Build Reports,Start gradle worker,11.22,7.6,3,3,12,11,ms
+Kotlin Build Reports,Shrink and save current classpath snapshot after compilation,67.66,70.08,55,59,138,129,ms
+Kotlin Build Reports,Compiler code generation,1129.66,1180.04,856,949,2261,2258,ms
+Kotlin Build Reports,Size of classpath snapshot,123.13,127.1,3,3,449,458,MB
+Kotlin Build Reports,Code generation lines per second,695,550,562,423,1223,1026,
+Kotlin Build Reports,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+Kotlin Build Reports,Number of lines analyzed,1153,984,561,336,2477,2370,
+Kotlin Build Reports,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+Kotlin Build Reports,Analysis lines per second,457,310,374,301,740,573,
+Kotlin Build Reports,ABI snapshot size,49.0,49.0,49,49,49,49,B
+Kotlin Build Reports,Number of cache misses when loading classpath entry snapshots,11,12,5,5,19,19,
+Kotlin Build Reports,Number of classpath entries,36,33,22,18,78,75,
+Kotlin Build Reports,Number of cache hits when loading classpath entry snapshots,26,24,20,16,61,58,
+Kotlin Build Reports,Compiler IR translation line number,1153,1969,561,672,2477,4740,
+Kotlin Build Reports,Compiler IR lowering line number,1153,984,561,336,2477,2370,
+Kotlin Build Reports,Compiler IR generation line number,1153,984,561,336,2477,2370,
+Kotlin Build Reports,Total compiler iteration,1,1,1,1,1,1,
+Kotlin Build Reports,Total size of the cache directory,537.62,535.15,526,526,675,657,MB
+Kotlin Build Reports,Number of lines for code generation,1153,984,561,336,2477,2370,
+Kotlin Build Reports,Size of shrunk classpath snapshot,95.25,101.45,49,52,388,380,KB
+Kotlin Build Reports,Non incremental compilation in daemon,23165.28,,23123,,24203,,ms
+Kotlin Build Reports,Clear jar cache,2.92,3.18,2,2,6,6,ms
+Kotlin Build Reports,Write history file,3.72,3.82,3,3,7,7,ms
+Kotlin Build Reports,Clear output,2.84,3.01,3,3,5,5,ms
+Kotlin Build Reports,Store build info,3.56,3.74,3,3,7,6,ms
+Kotlin Build Reports,Clear outputs on rebuild,2.57,3.3,3,2,5,7,ms
+All processes cpu,Max,100.0,100.0,100.0,100.0,100,100,%
+All processes memory,Max,7.04,6.9,6.99,6.86,7.31,7.3,Gb
+Build process cpu,Max,94.94,95.04,95.0,95.0,96,96,%
+Build processes memory,Max,3.35,3.14,3.31,3.08,3.65,3.41,Gb
+Build child processes cpu,Max,89.48,90.14,90.0,90.0,92,93,%
+Build child processes memory,Max,2.71,2.77,2.69,2.76,2.83,2.86,Gb
+:app-scaffold:compileDebugKotlin,Clear output,,2.5,,3,,4,
+:app-scaffold:compileDebugKotlin,Clear outputs on rebuild,,4.75,,4,,14,
+:bookmarks:db:compileReleaseKotlinAndroid,Write history file,,3.33,,3,,5,
+:libraries:compose-extensions:compileReleaseKotlin,Write history file,,1.0,,1,,1,
+:libraries:deeplinking:compileReleaseKotlin,Clear output,,1.0,,1,,1,
+:libraries:di:compileKotlinJvm,Clear output,,1.0,,1,,1,
+:libraries:flowbinding:compileReleaseKotlin,Store build info,,3.67,,3,,5,
+:libraries:gemoji:compileReleaseKotlin,Clear outputs on rebuild,,3.0,,3,,5,
+:libraries:sqldelight-extensions:compileKotlinJvm,Clear outputs on rebuild,,4.67,,5,,8,
+:libraries:sqldelight-extensions:compileKotlinJvm,Store build info,,3.0,,3,,5,
+:libraries:summarizer:compileReleaseKotlin,Clear output,,5.0,,5,,7,
+:libraries:unfurler:compileKotlinJvm,Clear output,,2.5,,3,,3,
+:service-api:compileReleaseKotlinAndroid,Number of cache misses when loading classpath entry snapshots,,1,,1,,1,
+:services:producthunt:compileReleaseKotlin,Write history file,,3.0,,3,,3,
+:services:reddit:compileReleaseKotlin,Clear outputs on rebuild,,2.0,,2,,2,
+:services:reddit:compileReleaseKotlin,Store build info,,2.5,,2,,6,
+:services:slashdot:compileReleaseKotlin,Clear outputs on rebuild,,2.0,,2,,2,
+:services:unsplash:compileReleaseKotlin,Clear output,,2.0,,2,,2,
+:services:unsplash:compileReleaseKotlin,Write history file,,4.0,,3,,7,
+:services:unsplash:compileReleaseKotlin,Clear outputs on rebuild,,1.5,,2,,2,

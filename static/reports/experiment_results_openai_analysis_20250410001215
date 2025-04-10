@@ -1,0 +1,48 @@
+## Summary
+The analysis of the Gradle build performance comparison data between two variants reveals notable differences in build times and task execution times. Variant B (`variantb_z/metro`) shows a faster overall build time with a mean reduction of 20.42 seconds (13.4% faster) compared to Variant A (`varianta_main`). Key tasks such as `com.android.build.gradle.internal.tasks.MapSourceSetPathsTask` and `com.google.devtools.ksp.gradle.KspAATask` also exhibit significant time reductions in Variant B. Memory usage is slightly lower in Variant B across all processes, with a maximum memory usage of 6.9 GB compared to 7.04 GB in Variant A. CPU usage is nearly identical for both variants, maxing out at 100% for all processes.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Mean Build Time:** Variant A: 152.507 seconds, Variant B: 132.088 seconds (13.4% faster).
+- **P50 Build Time:** Variant A: 151.774 seconds, Variant B: 131.314 seconds.
+- **P90 Build Time:** Variant A: 160.185 seconds, Variant B: 139.556 seconds.
+
+### 2. Task Type Differences
+- **`com.android.build.gradle.tasks.MapSourceSetPathsTask`:**
+  - Variant A Mean: 1.728 seconds, Variant B Mean: 2.303 seconds.
+  - Variant A P50: 1.692 seconds, Variant B P50: 2.077 seconds.
+  - Variant A P90: 2.774 seconds, Variant B P90: 3.461 seconds.
+- **`com.google.devtools.ksp.gradle.KspAATask`:**
+  - Variant A Mean: 3.297 seconds, Variant B Mean: 4.483 seconds.
+  - Variant A P50: 2.611 seconds, Variant B P50: 3.087 seconds.
+  - Variant A P90: 8.504 seconds, Variant B P90: 9.982 seconds.
+- **`org.jetbrains.kotlin.gradle.tasks.KotlinCompile`:**
+  - Variant A Mean: 4.253 seconds, Variant B Mean: 4.914 seconds.
+  - Variant A P50: 3.015 seconds, Variant B P50: 3.587 seconds.
+  - Variant A P90: 8.400 seconds, Variant B P90: 9.278 seconds.
+
+### 3. Statistical Patterns
+- Tasks such as `com.google.devtools.ksp.gradle.KspAATask` and `org.jetbrains.kotlin.gradle.tasks.KotlinCompile` show more than 10% increase in execution times in Variant B, indicating potential areas for optimization.
+
+### 5. CPU & Memory Usage Analysis
+- **All Processes:**
+  - CPU Usage: Max 100% for both variants.
+  - Memory Usage: Max 7.04 GB for Variant A, 6.9 GB for Variant B.
+- **Build Process:**
+  - CPU Usage: Max 94.94% for Variant A, 95.04% for Variant B.
+  - Memory Usage: Max 3.35 GB for Variant A, 3.14 GB for Variant B.
+- **Build Child Processes:**
+  - CPU Usage: Max 89.48% for Variant A, 90.14% for Variant B.
+  - Memory Usage: Max 2.71 GB for Variant A, 2.77 GB for Variant B.
+
+### 7. Kotlin Build Reports Analysis
+- **Compiler Performance Metrics:**
+  - **Code Generation Lines per Second:** Variant A: 695, Variant B: 550.
+  - **Analysis Lines per Second:** Variant A: 457, Variant B: 310.
+- **Incremental Compilation Insights:**
+  - Incremental compilation time in daemon for Variant A: 3949.34 ms, Variant B: 4599.33 ms.
+- **Classpath and Cache Insights:**
+  - Number of cache hits when loading classpath entries: Variant A: 26, Variant B: 24.
+
+The data indicates that while Variant B generally performs better in terms of build time and memory usage, there are specific areas, particularly in Kotlin compilation tasks, where Variant A performs more efficiently. This suggests a trade-off between build speed and task-specific performance that might be optimized further.
