@@ -1,0 +1,63 @@
+Category,Metric,varianta_main Mean,variantb_z/metro Mean,varianta_main P50,variantb_z/metro P50,varianta_main P90,variantb_z/metro P90,Unit
+Build,Build time,26486,19864,24948,18476,34027,24451,ms
+Task Type,org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask,2636,,2351,,4032,,ms
+Task Type,org.jetbrains.kotlin.gradle.internal.KaptWithoutKotlincTask,2543,,2508,,2760,,ms
+Task Path,:libraries:base-ui:compileReleaseKotlin,1489,1664,1383,1449,2240,2386,ms
+Task Path,:libraries:compose-extensions:compileReleaseKotlin,1609,1745,1439,1669,2551,2810,ms
+Task Path,:libraries:summarizer:compileReleaseKotlin,1801,1902,1664,1775,2837,2738,ms
+Task Path,:services:github:compileReleaseKotlin,1561,1756,1301,1647,2852,2990,ms
+Task Path,:services:producthunt:compileReleaseKotlin,1498,1865,1324,1734,2120,2612,ms
+Task Path,:services:reddit:compileReleaseKotlin,1456,1778,1276,1768,2268,2328,ms
+Task Path,:app-scaffold:kspDebugKotlin,1547,1160,1439,1121,2078,1631,ms
+Task Path,:app-scaffold:compileDebugKotlin,5399,6146,5113,5862,6333,7458,ms
+Task Path,:app:mergeDebugJavaResource,1076,1146,1082,1129,1272,1500,ms
+Kotlin Build Reports,Compiler initialization time,66.52,67.97,50,50,123,130,ms
+Kotlin Build Reports,Shrink and save current classpath snapshot after compilation,18.35,18.98,16,14,32,29,ms
+Kotlin Build Reports,Start gradle worker,2.15,2.25,1,1,4,5,ms
+Kotlin Build Reports,Incremental compilation in daemon,1099.36,1311.33,752,1004,2006,2063,ms
+Kotlin Build Reports,Compiler code generation,317.93,318.52,186,174,612,680,ms
+Kotlin Build Reports,Compiler IR lowering,126.26,128.67,73,66,234,219,ms
+Kotlin Build Reports,Compiler IR generation,191.16,189.38,103,96,496,507,ms
+Kotlin Build Reports,Run compilation in Gradle worker,1207.02,1345.47,848,1046,2260,2144,ms
+Kotlin Build Reports,Compiler IR translation,205.24,699.78,68,458,599,1418,ms
+Kotlin Build Reports,Load current classpath snapshot,2.28,2.24,2,1,5,4,ms
+Kotlin Build Reports,Compiler code analysis,413.54,488.94,296,375,849,825,ms
+Kotlin Build Reports,Calculate output size,2.01,1.51,1,1,4,4,ms
+Kotlin Build Reports,Save shrunk current classpath snapshot,1.94,2.39,2,2,3,4,ms
+Kotlin Build Reports,Total Gradle task time,1319.81,1472.7,980,1179,2418,2288,ms
+Kotlin Build Reports,Sources compilation round,1008.39,1228.87,673,931,1932,1936,ms
+Kotlin Build Reports,Connect to Kotlin daemon,10.54,11.13,6,7,14,17,ms
+Kotlin Build Reports,Shrink current classpath snapshot non-incrementally,17.65,18.07,15,13,30,27,ms
+Kotlin Build Reports,Run compilation,1122.71,1331.17,777,1026,2022,2085,ms
+Kotlin Build Reports,Update caches,6.29,5.76,3,2,15,15,ms
+Kotlin Build Reports,Task action before worker execution,13.94,11.08,11,9,23,20,ms
+Kotlin Build Reports,Spent time before task action,12.23,22.09,11,11,19,20,ms
+Kotlin Build Reports,ABI snapshot size,49.0,49.0,49,49,49,49,B
+Kotlin Build Reports,Number of classpath entries,53,49,42,37,80,76,
+Kotlin Build Reports,Number of lines analyzed,1740,1407,621,418,3297,2804,
+Kotlin Build Reports,Number of times classpath snapshot is shrunk and saved after compilation,1,1,1,1,1,1,
+Kotlin Build Reports,Analysis lines per second,3012,1850,2528,1234,5506,4014,
+Kotlin Build Reports,Size of classpath snapshot,65.49,65.38,3,3,277,281,MB
+Kotlin Build Reports,Total size of the cache directory,570.97,561.32,573,562,865,838,MB
+Kotlin Build Reports,Total compiler iteration,1,1,1,1,1,1,
+Kotlin Build Reports,Compiler IR generation line number,1740,1407,621,418,3297,2804,
+Kotlin Build Reports,Number of lines for code generation,1740,1407,621,418,3297,2804,
+Kotlin Build Reports,Compiler IR lowering line number,1740,1407,621,418,3297,2804,
+Kotlin Build Reports,Compiler IR translation line number,1740,2814,621,836,3297,5608,
+Kotlin Build Reports,Number of times classpath snapshot is loaded,1,1,1,1,1,1,
+Kotlin Build Reports,Number of cache hits when loading classpath entry snapshots,53,49,42,37,80,76,
+Kotlin Build Reports,Code generation lines per second,4914,3811,4427,3304,9046,7184,
+Kotlin Build Reports,Size of shrunk classpath snapshot,72.79,78.82,58,55,86,188,KB
+Kotlin Build Reports,Non incremental compilation in daemon,2465.48,,2195,,3853,,ms
+Kotlin Build Reports,Clear jar cache,2.25,2.38,1,1,4,3,ms
+Kotlin Build Reports,Number of cache misses when loading classpath entry snapshots,1,1,1,1,1,1,
+Kotlin Build Reports,Write history file,3.57,3.4,3,3,6,8,ms
+Kotlin Build Reports,Clear output,2.22,2.8,2,2,5,6,ms
+Kotlin Build Reports,Store build info,2.0,3.0,2,3,3,3,ms
+Kotlin Build Reports,Clear outputs on rebuild,2.0,1.0,2,1,2,1,ms
+All processes cpu,Max,99.80952380952381,99.66666666666667,100.0,100.0,100,100,%
+All processes memory,Max,9.27,8.79,9.36,8.86,9.7,9.28,Gb
+Build process cpu,Max,85.66666666666667,85.57142857142857,85.0,87.0,94,94,%
+Build processes memory,Max,4.97,4.27,4.98,4.27,5.18,4.57,Gb
+Build child processes cpu,Max,67.52380952380952,77.85714285714286,68.0,77.0,80,87,%
+Build child processes memory,Max,3.16,3.37,3.16,3.46,3.38,3.57,Gb
