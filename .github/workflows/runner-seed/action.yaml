@@ -112,7 +112,7 @@ runs:
 
     - name: Setup Gradle
       if: github.event.inputs.mode != 'no caching'
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v4
       with:
         cache-write-only: true
         cache-overwrite-existing: true

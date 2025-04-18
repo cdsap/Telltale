@@ -60,7 +60,7 @@ runs:
 
     - name: Setup Gradle (Cache Mode)
       if: github.event.inputs.mode != 'no caching'
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v4
       with:
         cache-read-only: true
         add-job-summary: 'never'
