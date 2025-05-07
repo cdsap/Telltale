@@ -1,0 +1,238 @@
+Category,Metric,varianta_gradle_8_13 Mean,variantb_gradle_814 Mean,varianta_gradle_8_13 P50,variantb_gradle_814 P50,varianta_gradle_8_13 P90,variantb_gradle_814 P90,Unit
+Build,Build time,221317,218791,219952,219323,232196,226016,ms
+Build,Configuration time,41817,41294,41606,40986,43210,42972,ms
+Gradle process state,Gradle-Process-capacity,4.0,4.0,4.0,4.0,4.0,4.0,
+Gradle process state,Gradle-Process-gcTime,0.13,0.13,0.13,0.13,0.15,0.15,
+Gradle process state,Gradle-Process-max,4.0,4.0,4.0,4.0,4.0,4.0,
+Gradle process state,Gradle-Process-uptime,3.67,3.63,3.65,3.64,3.85,3.74,
+Gradle process state,Gradle-Process-usage,2.13,2.13,2.26,2.38,2.96,3.1,
+Kotlin process state,Kotlin-Process-capacity,4.0,4.0,4.0,4.0,4.0,4.0,
+Kotlin process state,Kotlin-Process-gcTime,0.1,0.1,0.1,0.1,0.12,0.13,
+Kotlin process state,Kotlin-Process-max,4.0,4.0,4.0,4.0,4.0,4.0,
+Kotlin process state,Kotlin-Process-uptime,2.88,2.86,2.86,2.86,3.03,2.98,
+Kotlin process state,Kotlin-Process-usage,1.26,1.31,1.21,1.19,1.93,2.11,
+Task Type,org.jetbrains.kotlin.gradle.plugin.diagnostics.CheckKotlinGradlePluginConfigurationErrors,0,0,0,0,1,1,ms
+Task Type,org.gradle.plugin.devel.tasks.GeneratePluginDescriptors,39,42,38,41,46,53,ms
+Task Type,org.gradle.language.jvm.tasks.ProcessResources,17,17,10,9,47,47,ms
+Task Type,org.jetbrains.kotlin.gradle.tasks.KotlinCompile,4026,3963,2864,2799,10348,10584,ms
+Task Type,org.gradle.api.tasks.compile.JavaCompile,696,694,413,411,1446,1446,ms
+Task Type,org.gradle.api.DefaultTask,0,0,0,0,1,1,ms
+Task Type,org.gradle.api.tasks.bundling.Jar,46,45,34,33,97,96,ms
+Task Type,com.android.build.gradle.internal.tasks.AndroidVariantTask,0,0,0,0,1,1,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeNativeDebugMetadataTask,3,2,3,2,7,6,ms
+Task Type,com.android.build.gradle.internal.tasks.AarMetadataTask,13,13,9,9,17,19,ms
+Task Type,com.google.android.gms.oss.licenses.plugin.DependencyTask,78,80,99,101,149,151,ms
+Task Type,com.google.android.gms.oss.licenses.plugin.LicensesTask,86,63,82,66,179,117,ms
+Task Type,com.google.firebase.crashlytics.buildtools.gradle.tasks.InjectMappingFileIdTask,25,30,24,23,47,62,ms
+Task Type,com.google.gms.googleservices.GoogleServicesTask,33,22,19,20,85,39,ms
+Task Type,com.android.build.gradle.internal.tasks.ValidateResourcesTask,13,14,12,12,23,23,ms
+Task Type,com.android.build.gradle.tasks.MergeResources,277,289,32,32,225,194,ms
+Task Type,com.android.build.gradle.internal.tasks.CheckAarMetadataTask,539,639,234,231,1353,1694,ms
+Task Type,com.android.build.gradle.tasks.MapSourceSetPathsTask,94,99,46,46,210,238,ms
+Task Type,com.android.build.gradle.internal.res.ParseLibraryResourcesTask,62,54,10,10,41,41,ms
+Task Type,com.android.build.gradle.tasks.CompatibleScreensManifest,18,16,13,14,32,29,ms
+Task Type,com.android.build.gradle.tasks.ExtractDeepLinksTask,7,8,6,6,14,14,ms
+Task Type,com.android.build.gradle.tasks.ProcessLibraryManifest,47,48,23,23,46,45,ms
+Task Type,com.android.build.gradle.tasks.CompileLibraryResourcesTask,20,19,12,11,30,31,ms
+Task Type,com.android.build.gradle.tasks.ProcessApplicationManifest,560,603,366,357,1046,1106,ms
+Task Type,com.android.build.gradle.internal.res.GenerateLibraryRFileTask,29,30,20,20,54,51,ms
+Task Type,com.android.build.gradle.tasks.ProcessMultiApkApplicationManifest,79,79,17,17,225,228,ms
+Task Type,com.android.build.gradle.tasks.ProcessPackagedManifestTask,106,123,39,30,134,172,ms
+Task Type,com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask,1601,1585,1473,1520,2345,2339,ms
+Task Type,com.android.build.gradle.tasks.JavaPreCompileTask,12,11,9,9,20,19,ms
+Task Type,com.google.devtools.ksp.gradle.KspTaskJvm,3823,3771,3142,3046,6627,6484,ms
+Task Type,com.android.build.gradle.tasks.TransformClassesWithAsmTask,375,377,113,110,964,865,ms
+Task Type,com.android.build.gradle.internal.tasks.BundleLibraryClassesJar,142,140,22,21,69,67,ms
+Task Type,com.google.protobuf.gradle.ProtobufExtract,76,75,10,10,364,369,ms
+Task Type,com.android.build.gradle.tasks.GenerateBuildConfig,36,30,34,26,66,53,ms
+Task Type,com.google.protobuf.gradle.GenerateProtoTask,87,84,84,81,148,151,ms
+Task Type,com.android.build.gradle.tasks.MergeSourceSetFolders,20,20,12,12,26,26,ms
+Task Type,com.android.build.gradle.internal.tasks.CompressAssetsTask,28,29,12,14,70,73,ms
+Task Type,androidx.room.gradle.RoomGradlePlugin$RoomSchemaCopyTask,7,5,4,4,17,8,ms
+Task Type,com.android.build.gradle.internal.coverage.JacocoPropertiesTask,16,17,15,16,31,34,ms
+Task Type,com.android.build.gradle.internal.tasks.ProcessJavaResTask,21,21,19,19,31,31,ms
+Task Type,com.android.build.gradle.internal.tasks.CheckDuplicateClassesTask,377,361,175,168,919,835,ms
+Task Type,com.android.build.gradle.internal.tasks.DexFileDependenciesTask,130,128,45,46,356,315,ms
+Task Type,com.android.build.gradle.internal.tasks.L8DexDesugarLibTask,13163,13002,77,77,40298,39508,ms
+Task Type,com.android.build.gradle.internal.tasks.DexMergingTask,9985,9958,1261,1206,40591,39852,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeNativeLibsTask,16,16,3,3,9,9,ms
+Task Type,com.android.build.gradle.internal.tasks.LibraryJniLibsTask,11,14,7,7,13,13,ms
+Task Type,com.android.build.gradle.internal.tasks.StripDebugSymbolsTask,7,7,2,2,7,7,ms
+Task Type,com.android.build.gradle.internal.tasks.AppMetadataTask,7,8,7,7,12,14,ms
+Task Type,com.android.build.gradle.internal.tasks.SigningConfigVersionsWriterTask,24,25,8,9,66,64,ms
+Task Type,com.android.build.gradle.internal.tasks.ValidateSigningTask,919,938,9,9,3223,2999,ms
+Task Type,dagger.hilt.android.plugin.task.AggregateDepsTask,816,780,808,876,1574,1448,ms
+Task Type,com.android.build.gradle.internal.tasks.JacocoTask,1417,1395,1118,1134,2628,2714,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeJavaResourceTask,237,233,14,14,90,77,ms
+Task Type,com.android.build.gradle.internal.tasks.DexArchiveBuilderTask,2115,2020,2045,1949,3477,3303,ms
+Task Type,com.android.build.gradle.tasks.PackageApplication,3090,3000,2905,2925,4637,4302,ms
+Task Type,com.android.build.gradle.internal.tasks.ListingFileRedirectTask,8,7,7,6,15,16,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeFileTask,9,7,6,6,12,11,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeConsumerProguardFilesTask,6,5,5,5,10,9,ms
+Task Type,com.android.build.gradle.tasks.ProcessLibraryArtProfileTask,6,6,5,5,10,9,ms
+Task Type,com.android.build.gradle.internal.tasks.PrepareLintJarForPublish,14,12,5,5,13,13,ms
+Task Type,com.android.build.gradle.tasks.ExtractAnnotations,43,27,23,23,51,43,ms
+Task Type,com.android.build.gradle.internal.tasks.LibraryAarJarsTask,46,45,35,35,91,86,ms
+Task Type,com.android.build.gradle.tasks.BundleAar,22,22,18,18,38,37,ms
+Task Path,:build-logic:convention:compileKotlin,12465,12505,12284,12318,13350,14089,ms
+Task Path,:app:checkDemoDebugAarMetadata,1285,1586,1260,1648,1598,1791,ms
+Task Path,:app:parseDemoDebugLocalResources,2195,1866,1978,1656,4146,4090,ms
+Task Path,:app:mergeDemoDebugResources,5033,5371,5010,5389,5502,5867,ms
+Task Path,:app:processDemoDebugMainManifest,1119,1232,923,978,2208,2539,ms
+Task Path,:app:processDemoDebugResources,2191,2201,2205,2202,2474,2402,ms
+Task Path,:core:common:kspKotlin,12594,11574,12600,11535,13698,12452,ms
+Task Path,:core:analytics:kspDemoDebugKotlin,3511,3536,3439,3552,3861,3844,ms
+Task Path,:ui-test-hilt-manifest:kspDemoDebugKotlin,6641,6511,6606,6459,7213,6850,ms
+Task Path,:core:model:compileKotlin,14501,13598,14459,13651,15382,14128,ms
+Task Path,:core:common:compileKotlin,2612,2636,2612,2611,2941,2937,ms
+Task Path,:core:common:compileJava,1674,1553,1670,1546,1878,1725,ms
+Task Path,:core:analytics:compileDemoDebugKotlin,3009,2791,2968,2799,3319,3170,ms
+Task Path,:ui-test-hilt-manifest:compileDemoDebugKotlin,4187,3944,4197,3914,4576,4279,ms
+Task Path,:core:analytics:compileDemoDebugJavaWithJavac,2523,2399,2480,2396,2904,2637,ms
+Task Path,:ui-test-hilt-manifest:compileDemoDebugJavaWithJavac,1238,1363,914,1004,2378,2441,ms
+Task Path,:core:network:kspDemoDebugKotlin,3779,3742,3777,3737,4112,3992,ms
+Task Path,:core:datastore-proto:compileDemoDebugKotlin,4716,4651,4684,4634,5135,5117,ms
+Task Path,:core:database:kspProdDebugKotlin,8899,8885,8875,8914,9592,9358,ms
+Task Path,:core:database:kspDemoDebugKotlin,10895,10765,10810,10734,11505,11330,ms
+Task Path,:core:datastore-proto:compileDemoDebugJavaWithJavac,1563,1580,1552,1580,1739,1711,ms
+Task Path,:core:datastore:kspDemoDebugKotlin,3197,3159,3188,3146,3500,3427,ms
+Task Path,:core:network:compileDemoDebugKotlin,6028,5904,5947,5871,6407,6283,ms
+Task Path,:core:datastore:compileDemoDebugKotlin,3670,3432,3624,3434,4013,3776,ms
+Task Path,:core:notifications:kspDemoDebugKotlin,3402,3300,3399,3317,3738,3564,ms
+Task Path,:core:notifications:compileDemoDebugKotlin,1818,1857,1771,1823,2155,2223,ms
+Task Path,:core:database:compileDemoDebugKotlin,11620,11500,11522,11471,12528,12147,ms
+Task Path,:core:database:compileProdDebugKotlin,11193,11161,11146,11112,11810,11965,ms
+Task Path,:core:data:kspDemoDebugKotlin,4990,4934,4902,4827,5724,5723,ms
+Task Path,:core:designsystem:compileDemoDebugKotlin,18574,18088,18612,17994,19990,19630,ms
+Task Path,:core:designsystem:bundleLibCompileToJarDemoDebug,1317,1562,950,893,3949,3807,ms
+Task Path,:core:data:compileDemoDebugKotlin,8427,9329,7037,7053,13267,14499,ms
+Task Path,:core:ui:compileDemoDebugKotlin,5498,5291,5437,5410,6441,6133,ms
+Task Path,:core:data:transformDemoDebugClassesWithAsm,3456,3653,3692,3691,4528,4728,ms
+Task Path,:core:domain:compileDemoDebugKotlin,1235,1301,1104,1072,1344,1447,ms
+Task Path,:core:domain:bundleLibCompileToJarDemoDebug,2662,2005,2882,2541,5235,4696,ms
+Task Path,:feature:bookmarks:kspDemoDebugKotlin,5497,4822,5749,4407,6874,6554,ms
+Task Path,:feature:bookmarks:compileDemoDebugKotlin,5522,5049,6145,5545,6977,7001,ms
+Task Path,:feature:bookmarks:compileDemoDebugJavaWithJavac,1124,1156,1055,1149,1553,1441,ms
+Task Path,:feature:foryou:kspDemoDebugKotlin,5965,6171,5963,6136,6942,7354,ms
+Task Path,:feature:bookmarks:transformDemoDebugClassesWithAsm,1612,1851,1756,2090,3344,3512,ms
+Task Path,:app:l8DexDesugarLibDemoDebug,39349,38865,39185,38737,41613,41839,ms
+Task Path,:feature:interests:kspDemoDebugKotlin,3104,3223,3045,2979,3631,3863,ms
+Task Path,:feature:foryou:compileDemoDebugKotlin,7154,6716,7673,6926,8933,8805,ms
+Task Path,:feature:interests:compileDemoDebugKotlin,2991,3000,2949,2959,3580,3504,ms
+Task Path,:feature:search:kspDemoDebugKotlin,3008,3032,3007,2999,3418,3555,ms
+Task Path,:app:mergeExtDexDemoDebug,42602,42595,43038,42651,44521,44869,ms
+Task Path,:feature:settings:kspDemoDebugKotlin,3006,3014,2999,2998,3614,3415,ms
+Task Path,:feature:topic:kspDemoDebugKotlin,3169,3104,3209,3044,3555,3595,ms
+Task Path,:feature:search:compileDemoDebugKotlin,4673,4723,4720,4676,5242,5402,ms
+Task Path,:feature:settings:compileDemoDebugKotlin,3018,3066,3031,3084,3436,3521,ms
+Task Path,:sync:work:kspDemoDebugKotlin,4054,4307,3969,3800,4529,7608,ms
+Task Path,:sync:work:compileDemoDebugKotlin,1546,1540,1488,1503,1796,1881,ms
+Task Path,:feature:topic:compileDemoDebugKotlin,3472,3705,3479,3613,3946,4622,ms
+Task Path,:app:kspDemoDebugKotlin,5277,5034,5246,5032,6109,5567,ms
+Task Path,:app:validateSigningDemoDebug,2733,2791,2396,2564,4080,4028,ms
+Task Path,:app:compileDemoDebugKotlin,6123,6071,6100,6095,7059,7147,ms
+Task Path,:app:mergeLibDexDemoDebug,1507,1518,1496,1452,1846,1943,ms
+Task Path,:app:compileDemoDebugJavaWithJavac,1046,1044,1000,999,1351,1390,ms
+Task Path,:app:mergeProdDebugResources,3744,3679,3601,3578,4381,4616,ms
+Task Path,:app:hiltAggregateDepsDemoDebug,1346,1229,1247,1173,1730,1536,ms
+Task Path,:ui-test-hilt-manifest:kspProdDebugKotlin,2720,2641,2638,2618,3328,2928,ms
+Task Path,:core:analytics:kspProdDebugKotlin,2575,2478,2532,2490,3187,2833,ms
+Task Path,:app:processProdDebugResources,1466,1446,1394,1404,2325,2080,ms
+Task Path,:core:analytics:compileProdDebugKotlin,1298,1240,1225,1177,1837,1610,ms
+Task Path,:ui-test-hilt-manifest:compileProdDebugKotlin,1280,1253,1225,1212,1589,1688,ms
+Task Path,:core:datastore-proto:compileProdDebugKotlin,1645,1562,1618,1533,2064,1978,ms
+Task Path,:core:notifications:kspProdDebugKotlin,2657,2573,2596,2497,3213,3100,ms
+Task Path,:core:network:kspProdDebugKotlin,2793,2694,2709,2600,3503,3204,ms
+Task Path,:app:hiltJavaCompileDemoDebug,6483,6473,6230,6308,8082,7459,ms
+Task Path,:core:datastore:kspProdDebugKotlin,2412,2352,2350,2302,2885,2798,ms
+Task Path,:app:transformDemoDebugClassesWithAsm,2159,2403,1332,1447,4872,4791,ms
+Task Path,:core:network:compileProdDebugKotlin,2306,2276,2290,2273,2734,2755,ms
+Task Path,:core:datastore:compileProdDebugKotlin,1657,1581,1654,1507,2092,2055,ms
+Task Path,:app:jacocoDemoDebug,1664,1674,1203,1234,4168,3226,ms
+Task Path,:app:mergeDemoDebugJavaResource,5403,5419,5097,5044,7230,6997,ms
+Task Path,:core:data:kspProdDebugKotlin,3527,3698,3448,3507,4305,4824,ms
+Task Path,:app:dexBuilderDemoDebug,3241,3127,3068,3004,4162,3824,ms
+Task Path,:core:data:compileProdDebugKotlin,3294,3336,3076,2986,4561,5407,ms
+Task Path,:app:packageDemoDebug,4246,3933,3931,3678,5681,5595,ms
+Task Path,:core:designsystem:compileProdDebugKotlin,8766,8456,8595,8339,10046,9577,ms
+Task Path,:sync:work:kspProdDebugKotlin,4371,4156,4190,4049,5245,5020,ms
+Task Path,:core:ui:compileProdDebugKotlin,3925,3827,3719,3762,5232,4749,ms
+Task Path,:sync:work:compileProdDebugKotlin,1589,1589,1531,1527,1956,2099,ms
+Task Path,:feature:foryou:kspProdDebugKotlin,3805,3877,3535,3685,5114,5467,ms
+Task Path,:feature:bookmarks:kspProdDebugKotlin,3294,3142,2958,2982,4488,4774,ms
+Task Path,:feature:interests:kspProdDebugKotlin,3713,3616,3445,3611,4969,4978,ms
+Task Path,:feature:foryou:compileProdDebugKotlin,4432,4124,4325,3995,5973,5366,ms
+Task Path,:feature:bookmarks:compileProdDebugKotlin,3509,3060,3256,2936,5397,4302,ms
+Task Path,:feature:interests:compileProdDebugKotlin,3122,2834,2715,2561,4831,4273,ms
+Task Path,:feature:search:kspProdDebugKotlin,3132,3051,2925,2820,4367,4183,ms
+Task Path,:feature:settings:kspProdDebugKotlin,2774,2634,2755,2581,3330,3178,ms
+Task Path,:feature:topic:kspProdDebugKotlin,2908,2902,2705,2711,4133,4171,ms
+Task Path,:app:mergeExtDexProdDebug,25518,25112,25031,24754,29728,28302,ms
+Task Path,:feature:settings:compileProdDebugKotlin,2502,2458,2385,2390,3057,3050,ms
+Task Path,:feature:search:compileProdDebugKotlin,3730,3702,3666,3588,4415,4603,ms
+Task Path,:feature:topic:compileProdDebugKotlin,3046,3046,3010,2982,3616,3520,ms
+Task Path,:app:kspProdDebugKotlin,4458,4501,4422,4429,4915,5239,ms
+Task Path,:app:mergeLibDexProdDebug,1251,1253,1216,1281,1651,1647,ms
+Task Path,:app-nia-catalog:mergeDebugResources,2496,2581,2494,2602,2976,3060,ms
+Task Path,:app-nia-catalog:processDebugResources,1146,1107,1116,1006,1580,1636,ms
+Task Path,:app:compileProdDebugKotlin,4976,5080,4940,4818,5820,6186,ms
+Task Path,:app:compileProdDebugJavaWithJavac,1037,1107,961,976,1479,1705,ms
+Task Path,:app-nia-catalog:compileDebugKotlin,3374,3387,3332,3344,4081,4111,ms
+Task Path,:app-nia-catalog:mergeDebugJavaResource,1734,1770,1733,1661,2171,2190,ms
+Task Path,:app:hiltJavaCompileProdDebug,5629,5768,5566,5694,6502,6588,ms
+Task Path,:core:data-test:kspDemoDebugKotlin,2733,2672,2707,2685,3187,3094,ms
+Task Path,:core:data-test:kspProdDebugKotlin,2718,2652,2527,2536,3930,3229,ms
+Task Path,:core:data-test:compileDemoDebugKotlin,1159,1134,1092,1126,1699,1461,ms
+Task Path,:app:jacocoProdDebug,1171,1117,1013,1033,1920,1646,ms
+Task Path,:core:data-test:compileProdDebugKotlin,1060,1049,1025,1007,1334,1371,ms
+Task Path,:app:dexBuilderProdDebug,2025,1933,2045,1933,2636,2491,ms
+Task Path,:app:mergeProdDebugJavaResource,2956,3123,2867,2945,4136,4403,ms
+Task Path,:app-nia-catalog:mergeExtDexDebug,17549,17802,17335,17584,19374,20286,ms
+Task Path,:app-nia-catalog:packageDebug,2075,2035,2005,1945,2520,2596,ms
+Task Path,:core:datastore-test:kspProdDebugKotlin,2021,2135,1989,2132,2453,2588,ms
+Task Path,:app:packageProdDebug,2948,3032,2905,2936,3514,3642,ms
+Task Path,:core:datastore-test:kspDemoDebugKotlin,2110,2205,2054,2150,2593,2687,ms
+Task Path,:lint:compileKotlin,2073,2105,2025,2093,2625,2621,ms
+Task Path,:core:screenshot-testing:kspDemoDebugKotlin,1707,1720,1710,1688,1926,2117,ms
+Task Path,:core:screenshot-testing:kspProdDebugKotlin,1609,1568,1609,1526,1926,2018,ms
+Task Path,:core:testing:kspDemoDebugKotlin,2733,2748,2652,2710,3186,3273,ms
+Task Path,:core:screenshot-testing:compileProdDebugKotlin,1805,1884,1753,1837,2269,2310,ms
+Task Path,:core:testing:kspProdDebugKotlin,2477,2551,2433,2512,2944,3023,ms
+Task Path,:core:screenshot-testing:compileDemoDebugKotlin,1821,1849,1793,1790,2227,2265,ms
+Task Path,:core:testing:compileDemoDebugKotlin,1477,1775,1423,1713,1831,2346,ms
+Task Path,:core:testing:compileProdDebugKotlin,1363,1580,1306,1498,1806,2118,ms
+Task Path,:sync:sync-test:kspProdDebugKotlin,1224,1418,1163,1342,1655,1907,ms
+Task Path,:sync:sync-test:kspDemoDebugKotlin,1277,1504,1215,1440,1731,2008,ms
+All processes cpu,Max,100.0,100.0,100.0,100.0,100,100,%
+All processes memory,Max,10.7,10.54,10.69,10.57,11.36,11.19,Gb
+Build process cpu,Max,93.48,93.64,93.0,94.0,95,95,%
+Build processes memory,Max,5.32,5.3,5.33,5.31,5.45,5.45,Gb
+Build child processes cpu,Max,92.46,91.88,93.0,92.0,94,94,%
+Build child processes memory,Max,4.46,4.31,4.4,4.26,5.13,4.9,Gb
+gc-gradle_gc.log,Concurrent Mark Cycle,9.0,9.0,9.0,9.0,10.0,10.0,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (G1 Evacuation Pause),1.0,1.0,2.0,2.0,2.0,2.0,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (G1 Humongous Allocation),2.0,2.0,2.0,2.0,5.3,4.0,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (GCLocker Initiated GC),1.0,1.0,1.0,1.0,2.0,2.0,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (Metadata GC Threshold),4.0,4.0,5.0,5.0,5.0,5.0,
+gc-gradle_gc.log,Pause Young (Mixed) (G1 Evacuation Pause),7.0,7.0,7.0,6.0,11.0,11.9,
+gc-gradle_gc.log,Pause Young (Normal) (G1 Evacuation Pause),42.0,43.0,42.0,43.0,48.9,47.9,
+gc-gradle_gc.log,Pause Young (Normal) (GCLocker Initiated GC),3.0,3.0,3.0,3.0,6.0,5.9,
+gc-gradle_gc.log,Pause Young (Prepare Mixed) (G1 Evacuation Pause),4.0,5.0,5.0,5.0,6.0,6.9,
+gc-gradle_gc.log,Pause Young (Prepare Mixed) (GCLocker Initiated GC),1.0,1.0,1.0,1.0,2.0,2.0,
+gc-gradle_gc.log,total-collections,69.0,70.0,69.0,70.0,75.0,77.0,
+gc-gradle_gc.log,Pause Young (Mixed) (GCLocker Initiated GC),2.0,1.0,2.0,1.0,4.6,3.5,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (G1 Preventive Collection),1.0,1.0,1.0,1.0,1.0,1.0,
+gc-gradle_gc.log,Pause Young (Prepare Mixed) (G1 Preventive Collection),1.0,,1.0,,1.0,,
+gc-kotlin_gc.log,Concurrent Mark Cycle,9.0,9.0,9.0,9.0,10.0,10.0,
+gc-kotlin_gc.log,Pause Young (Concurrent Start) (G1 Evacuation Pause),2.0,3.0,3.0,3.0,4.0,4.0,
+gc-kotlin_gc.log,Pause Young (Concurrent Start) (Metadata GC Threshold),5.0,5.0,6.0,5.5,6.0,6.9,
+gc-kotlin_gc.log,Pause Young (Mixed) (G1 Evacuation Pause),4.0,4.0,5.0,4.0,6.0,6.0,
+gc-kotlin_gc.log,Pause Young (Normal) (G1 Evacuation Pause),28.0,28.0,29.5,29.0,35.0,35.9,
+gc-kotlin_gc.log,Pause Young (Prepare Mixed) (G1 Evacuation Pause),4.0,4.0,5.0,4.5,5.0,6.0,
+gc-kotlin_gc.log,total-collections,48.0,48.0,49.0,48.5,56.0,56.8,
+gc-kotlin_gc.log,Pause Young (Normal) (GCLocker Initiated GC),1.0,1.0,1.0,1.0,3.0,2.7,
+gc-kotlin_gc.log,Pause Young (Prepare Mixed) (GCLocker Initiated GC),1.0,1.0,1.0,1.0,1.7,1.0,
+gc-kotlin_gc.log,Pause Young (Mixed) (GCLocker Initiated GC),1.0,1.0,1.0,1.0,2.0,1.0,
+gc-kotlin_gc.log,Pause Young (Concurrent Start) (G1 Humongous Allocation),1.0,1.0,1.0,1.0,2.0,4.0,
+gc-kotlin_gc.log,Pause Young (Concurrent Start) (GCLocker Initiated GC),1.0,1.0,1.0,1.0,1.0,2.0,
+gc-gradle_gc.log,Pause Young (Normal) (G1 Preventive Collection),,1.0,,1.0,,1.0,
