@@ -45,6 +45,7 @@ jobs:
       - name: Install theme
         run: | 
           git submodule add -f https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
+          git submodule update --init --recursive
 
 
 
