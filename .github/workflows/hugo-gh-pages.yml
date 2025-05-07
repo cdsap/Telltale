@@ -45,9 +45,6 @@ jobs:
       - name: Install theme
         run: | 
           git submodule add -f https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
-          cd themes/PaperMod
-          git checkout e2e1011bdecaf84d59c70fa42ff3d2c29c537b65
-          cd ..
 
 
 
