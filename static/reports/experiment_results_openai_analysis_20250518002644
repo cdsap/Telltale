@@ -1,0 +1,51 @@
+## Summary
+The performance analysis of the two Gradle build variants, `varianta_anvil` and `variantb_metro_0_3_2`, reveals significant differences in build times and task execution. `variantb_metro_0_3_2` shows a faster overall build time by approximately 22.2 seconds (14.1%) compared to `varianta_anvil`. Notably, the `com.google.devtools.ksp.gradle.KspAATask` and `org.jetbrains.kotlin.gradle.tasks.KotlinCompile` tasks in `variantb_metro_0_3_2` are considerably slower, indicating potential areas for optimization. Memory usage is slightly lower in `variantb_metro_0_3_2` across all processes, with a maximum difference of about 0.19 GB. The Kotlin Build Reports highlight `variantb_metro_0_3_2` as having a higher compiler IR translation time and more intensive code analysis, suggesting more complex operations despite the overall faster build time.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - `varianta_anvil`: Mean = 157.464s, P50 = 156.148s, P90 = 164.148s
+  - `variantb_metro_0_3_2`: Mean = 135.163s, P50 = 133.020s, P90 = 142.947s
+  - Percentage difference: `variantb_metro_0_3_2` is 14.1% faster on average.
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  - `"com.google.devtools.ksp.gradle.KspAATask"`: 
+    - `varianta_anvil`: Mean = 3025ms, P50 = 2297ms, P90 = 7538ms
+    - `variantb_metro_0_3_2`: Mean = 4361ms, P50 = 3257ms, P90 = 9624ms
+    - `variantb_metro_0_3_2` is 44.1% slower on average.
+  - `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"`:
+    - `varianta_anvil`: Mean = 4247ms, P50 = 3041ms, P90 = 8649ms
+    - `variantb_metro_0_3_2`: Mean = 4813ms, P50 = 3486ms, P90 = 8838ms
+    - `variantb_metro_0_3_2` is 13.3% slower on average.
+  - `"com.android.build.gradle.internal.tasks.LinkApplicationAndroidResourcesTask"`:
+    - `varianta_anvil`: Mean = 3507ms, P50 = 3491ms, P90 = 3924ms
+    - `variantb_metro_0_3_2`: Mean = 3443ms, P50 = 3447ms, P90 = 3885ms
+    - Similar performance between variants.
+
+### 3. Statistical Patterns
+- Notable timing variations are seen in `"com.google.devtools.ksp.gradle.KspAATask"` and `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"`, where `variantb_metro_0_3_2` performs slower, particularly at the P90 percentile.
+
+### 4. CPU & Memory Usage Analysis
+- **All Processes:**
+  - CPU: Both variants reach a maximum of 100%.
+  - Memory: `varianta_anvil` = Max 6.93 GB, `variantb_metro_0_3_2` = Max 6.74 GB.
+- **Build Process:**
+  - CPU: `varianta_anvil` = Max 96.26%, `variantb_metro_0_3_2` = Max 96.12%.
+  - Memory: `varianta_anvil` = Max 3.32 GB, `variantb_metro_0_3_2` = Max 3.15 GB.
+- **Build Child Processes:**
+  - CPU: `varianta_anvil` = Max 89.14%, `variantb_metro_0_3_2` = Max 90.96%.
+  - Memory: `varianta_anvil` = Max 2.79 GB, `variantb_metro_0_3_2` = Max 2.77 GB.
+
+### 5. Garbage Collection Analysis
+- **Total GC Collections:**
+  - `varianta_anvil`: Gradle = 99, Kotlin = 21
+  - `variantb_metro_0_3_2`: Gradle = 94, Kotlin = 21
+  - Slightly fewer collections in `variantb_metro_0_3_2` for Gradle processes.
+
+### 6. Kotlin Build Reports Analysis
+- **Compiler Performance Metrics:**
+  - `variantb_metro_0_3_2` shows higher times in compiler IR translation and code analysis, which correlates with its slower task times for Kotlin compilation despite the overall quicker build time.
+
+This analysis underscores the complexity of build performance, where faster overall times may still include slower performances in critical tasks, suggesting areas for targeted optimizations.
