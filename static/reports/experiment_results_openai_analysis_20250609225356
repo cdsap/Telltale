@@ -1,0 +1,49 @@
+## Summary
+The performance comparison between two Gradle build variants reveals minor differences in build times and resource usage. The mean build time for `varianta_main` is 515.286 seconds, while `variantb_agp_8_10_1` is slightly longer at 516.571 seconds, marking a 0.25% increase. The most time-consuming tasks include `com.android.build.gradle.internal.tasks.R8Task` and `com.android.build.gradle.internal.tasks.L8DexDesugarLibTask`, with notable differences in execution times between the variants. CPU and memory usage across all processes and specifically for the build processes are nearly identical, with `variantb_agp_8_10_1` showing a slight decrease in memory usage.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Mean Build Time:**
+  - `varianta_main`: 515.286 seconds
+  - `variantb_agp_8_10_1`: 516.571 seconds (0.25% increase)
+- **P50 Build Time:**
+  - `varianta_main`: 511.657 seconds
+  - `variantb_agp_8_10_1`: 512.299 seconds
+- **P90 Build Time:**
+  - `varianta_main`: 537.893 seconds
+  - `variantb_agp_8_10_1`: 540.428 seconds
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  - `"com.android.build.gradle.internal.tasks.R8Task"`:
+    - `varianta_main`: Mean: 178.689 seconds, P50: 181.689 seconds, P90: 269.306 seconds
+    - `variantb_agp_8_10_1`: Mean: 179.211 seconds, P50: 184.094 seconds, P90: 272.275 seconds
+  - `"com.android.build.gradle.internal.tasks.L8DexDesugarLibTask"`:
+    - `varianta_main`: Mean: 226.21 seconds, P50: 149.54 seconds, P90: 458.59 seconds
+    - `variantb_agp_8_10_1`: Mean: 258.16 seconds, P50: 175.51 seconds, P90: 537.84 seconds
+  - `"com.android.build.gradle.internal.tasks.DexMergingTask"`:
+    - `varianta_main`: Mean: 222.00 seconds, P50: 211.50 seconds, P90: 283.22 seconds
+    - `variantb_agp_8_10_1`: Mean: 301.96 seconds, P50: 291.18 seconds, P90: 361.64 seconds
+
+### 3. Statistical Patterns
+- Tasks with notable timing variations include `"com.android.build.gradle.internal.tasks.L8DexDesugarLibTask"` and `"com.android.build.gradle.internal.tasks.DexMergingTask"`, showing significant increases in execution times in `variantb_agp_8_10_1`.
+
+### 4. Process State Analysis
+- **Kotlin Process State:**
+  - GC Time is almost identical between the variants, with a slight increase in `variantb_agp_8_10_1` at the P90 level.
+- **Gradle Process State:**
+  - Gradle process GC time shows a minimal increase in `variantb_agp_8_10_1`.
+
+### 5. CPU & Memory Usage Analysis
+- **All Processes:**
+  - CPU: Max 100% for both variants.
+  - Memory: Max 11.11 GB for `varianta_main` and 10.99 GB for `variantb_agp_8_10_1`.
+- **Build Process:**
+  - CPU: Max 96.975% for `varianta_main` and 97% for `variantb_agp_8_10_1`.
+  - Memory: Max 5.57 GB for `varianta_main` and 5.54 GB for `variantb_agp_8_10_1`.
+- **Build Child Processes:**
+  - CPU: Max 93.1% for `varianta_main` and 93.2% for `variantb_agp_8_10_1`.
+  - Memory: Max 4.73 GB for `varianta_main` and 4.65 GB for `variantb_agp_8_10_1`.
+
+The analysis indicates that while there are minor differences in build times and resource usage, the overall performance of both variants is comparable, with `variantb_agp_8_10_1` showing slight increases in task execution times and a minor decrease in memory usage.
