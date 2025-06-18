@@ -1,0 +1,49 @@
+---
+layout: post
+title: "Gradle 9.0.0-RC1 vs 8.14.2, Android 350 modules"
+date: 2025-06-18
+report_link: /Telltale/reports/experiment_results_20250618210500.html
+summary: " 
+The analysis of the Gradle build performance data reveals several key insights between the two variants, `varianta_9.0.0-rc1` and `variantb_8.14.2`. The overall build time for `varianta_9.0.0-rc1` is slightly higher at approximately 879 seconds compared to `variantb_8.14.2` at around 878 seconds, showing a minimal difference. Notably, specific tasks such as `:layer_0:module_0_1:compileDebugKotlin` and `:layer_0:module_0_12:compileDebugKotlin` show significant execution time differences, indicating potential areas for optimization. Memory usage across all processes is higher in `varianta_9.0.0-rc1` with a maximum of 12.73 GB compared to 11.99 GB in `variantb_8.14.2`. The CPU usage for the build process is nearly maxed out for both variants, suggesting a CPU-bound scenario. Additionally, the total garbage collection counts are identical for both variants, which might indicate similar memory management efficiency."
+tags: ["dependencies cache"]
+---
+[Report 📊](../../reports/experiment_results_20250618210500.html)
+## Summary
+The analysis of the Gradle build performance data reveals several key insights between the two variants, `varianta_9.0.0-rc1` and `variantb_8.14.2`. The overall build time for `varianta_9.0.0-rc1` is slightly higher at approximately 879 seconds compared to `variantb_8.14.2` at around 878 seconds, showing a minimal difference. Notably, specific tasks such as `:layer_0:module_0_1:compileDebugKotlin` and `:layer_0:module_0_12:compileDebugKotlin` show significant execution time differences, indicating potential areas for optimization. Memory usage across all processes is higher in `varianta_9.0.0-rc1` with a maximum of 12.73 GB compared to 11.99 GB in `variantb_8.14.2`. The CPU usage for the build process is nearly maxed out for both variants, suggesting a CPU-bound scenario. Additionally, the total garbage collection counts are identical for both variants, which might indicate similar memory management efficiency.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - `varianta_9.0.0-rc1`: Mean = 879.322 seconds, P50 = 879.811 seconds, P90 = 908.316 seconds
+  - `variantb_8.14.2`: Mean = 877.705 seconds, P50 = 879.080 seconds, P90 = 903.297 seconds
+  - The percentage difference in mean build time is approximately 0.18%, indicating very similar performance.
+
+### 2. Task Type Differences
+- Top 3 most time-consuming tasks for `varianta_9.0.0-rc1`:
+  1. `:layer_0:module_0_1:compileDebugKotlin`: Mean = 12.415 seconds
+  2. `:layer_0:module_0_12:compileDebugKotlin`: Mean = 11.678 seconds
+  3. `:layer_0:module_0_10:compileDebugKotlin`: Mean = 11.266 seconds
+
+- Comparison with `variantb_8.14.2`:
+  1. `:layer_0:module_0_1:compileDebugKotlin`: Mean = 14.686 seconds (Difference = 18.3%)
+  2. `:layer_0:module_0_12:compileDebugKotlin`: Mean = 14.393 seconds (Difference = 23.2%)
+  3. `:layer_0:module_0_10:compileDebugKotlin`: Mean = 14.466 seconds (Difference = 28.4%)
+
+### 3. Statistical Patterns
+- Tasks with notable timing variations:
+  - `:layer_0:module_0_1:compileDebugKotlin` and `:layer_0:module_0_12:compileDebugKotlin` show over 18% and 23% slower performance in `variantb_8.14.2` respectively.
+
+### 4. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - All processes: Maxed at 100% for both variants.
+  - Build process: Nearly maxed at around 97% for both variants.
+- **Memory Usage:**
+  - All processes: `varianta_9.0.0-rc1` = 12.73 GB; `variantb_8.14.2` = 11.99 GB.
+  - Build process: `varianta_9.0.0-rc1` = 6.56 GB; `variantb_8.14.2` = 6.61 GB.
+
+### 5. Garbage Collection Analysis
+- Total GC collections are identical for both variants at 268 collections, suggesting similar efficiency in memory management.
+
+### 6. Summary
+Overall, the build times are very close, with minor differences in task execution times suggesting areas for potential optimization. Memory usage is slightly higher in `varianta_9.0.0-rc1`, which could be an area of concern if memory resources are limited. CPU usage is high in both variants, indicating a CPU-bound process.
