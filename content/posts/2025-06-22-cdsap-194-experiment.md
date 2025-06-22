@@ -1,0 +1,69 @@
+---
+layout: post
+title: "Parallel vs G1 - 400 modules Project"
+date: 2025-06-22
+report_link: /Telltale/reports/experiment_results_20250622042015.html
+summary: " 
+The performance comparison between `varianta_parallel` and `variantb_g1` reveals several key insights. The overall build time for `variantb_g1` is longer by approximately 55 seconds (6% increase) compared to `varianta_parallel`. Notably, the `DexMergingTask` and `AggregateDepsTask` show significant time increases in `variantb_g1`, suggesting areas where performance optimizations could be targeted.
+
+In task execution, `variantb_g1` generally exhibits longer times across most tasks, particularly in Kotlin compilation tasks like `:layer_0:module_0_10:kspDebugKotlin`, which is about 7% slower in `variantb_g1`. Memory usage is slightly higher in `variantb_g1` by about 0.3 GB, aligning with the increased build times and task durations observed.
+
+The garbage collection logs indicate a similar number of total collections between the variants, suggesting that garbage collection overhead does not significantly differ between them. The Kotlin Build Reports highlight a slower performance in `variantb_g1` across various metrics, including compiler initialization, IR generation, and code generation, which corroborates the observed longer build times."
+tags: ["dependencies cache"]
+---
+[Report 📊](../../reports/experiment_results_20250622042015.html)
+## Summary
+The performance comparison between `varianta_parallel` and `variantb_g1` reveals several key insights. The overall build time for `variantb_g1` is longer by approximately 55 seconds (6% increase) compared to `varianta_parallel`. Notably, the `DexMergingTask` and `AggregateDepsTask` show significant time increases in `variantb_g1`, suggesting areas where performance optimizations could be targeted.
+
+In task execution, `variantb_g1` generally exhibits longer times across most tasks, particularly in Kotlin compilation tasks like `:layer_0:module_0_10:kspDebugKotlin`, which is about 7% slower in `variantb_g1`. Memory usage is slightly higher in `variantb_g1` by about 0.3 GB, aligning with the increased build times and task durations observed.
+
+The garbage collection logs indicate a similar number of total collections between the variants, suggesting that garbage collection overhead does not significantly differ between them. The Kotlin Build Reports highlight a slower performance in `variantb_g1` across various metrics, including compiler initialization, IR generation, and code generation, which corroborates the observed longer build times.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Mean Build Time:**
+  - `varianta_parallel`: 914.496 seconds
+  - `variantb_g1`: 969.364 seconds
+  - **Difference**: `variantb_g1` is slower by 54.868 seconds (6% increase).
+
+- **P50 Build Time:**
+  - `varianta_parallel`: 913.022 seconds
+  - `variantb_g1`: 965.146 seconds
+  - **Difference**: `variantb_g1` is slower by 52.124 seconds.
+
+- **P90 Build Time:**
+  - `varianta_parallel`: 936.113 seconds
+  - `variantb_g1`: 995.622 seconds
+  - **Difference**: `variantb_g1` is slower by 59.509 seconds.
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  - `"DexMergingTask"`: `varianta_parallel` mean time is 4286 ms, `variantb_g1` mean time is 5422 ms.
+  - `"AggregateDepsTask"`: `varianta_parallel` mean time is 3033 ms, `variantb_g1` mean time is 3782 ms.
+  - `"KotlinCompile"`: `varianta_parallel` mean time is 2284 ms, `variantb_g1` mean time is 2349 ms.
+
+### 3. Statistical Patterns
+- Significant timing variations are observed in `"DexMergingTask"` and `"AggregateDepsTask"`, with `variantb_g1` performing slower by approximately 26% and 25% respectively.
+
+### 4. CPU & Memory Usage Analysis
+- **Overall System Usage:**
+  - CPU usage is maxed at 100% for both variants.
+  - Memory usage peaks at 14.13 GB for `varianta_parallel` and 14.43 GB for `variantb_g1`.
+
+- **Main Gradle Process:**
+  - CPU peaks at 96.04% for `varianta_parallel` and 96.44% for `variantb_g1`.
+  - Memory peaks at 7.01 GB for `varianta_parallel` and 7.45 GB for `variantb_g1`.
+
+### 5. Garbage Collection Analysis
+- **Total GC Collections:**
+  - `varianta_parallel`: 198 collections.
+  - `variantb_g1`: 197 collections.
+
+### 6. Kotlin Build Reports Analysis
+- **Compiler Performance Metrics:**
+  - `variantb_g1` shows consistently slower performance across compiler initialization, IR generation, and code generation stages.
+  - Code generation lines per second are 1330 for `varianta_parallel` and 1287 for `variantb_g1`.
+
+### 7. Summary
+`variantb_g1` generally exhibits slower performance across most metrics compared to `varianta_parallel`. This includes longer build times, slower task execution times, slightly higher memory usage, and reduced efficiency in Kotlin compiler performance. These insights suggest potential areas for optimization, particularly in the `DexMergingTask` and `AggregateDepsTask`.
