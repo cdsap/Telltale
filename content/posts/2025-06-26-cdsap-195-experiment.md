@@ -1,0 +1,49 @@
+---
+layout: post
+title: "Kotlin 2.2.0 vs 2.1.21, Android 230 modules"
+date: 2025-06-26
+report_link: /Telltale/reports/experiment_results_20250626231622.html
+summary: " 
+The analysis of the Gradle build performance data reveals subtle yet insightful differences between two Kotlin variants, `varianta_kotlin_2.1.21` and `variantb_kotlin_2.2.0`. The overall build time shows a slight improvement in `variantb` by approximately 0.42 seconds (0.4% faster). Notably, the most time-consuming tasks across variants include `:layer_0:module_0_1:kspDebugKotlin`, `:layer_0:module_0_10:kspDebugKotlin`, and `:layer_0:module_0_12:kspDebugKotlin`, with `variantb` generally showing marginal increases in execution times. CPU and memory usage are closely matched between the variants, with `variantb` showing a slight increase in maximum memory usage by about 0.09 GB. Garbage collection metrics indicate a very similar performance, with total collections slightly lower in `variantb`. The Kotlin Build Reports highlight a faster compiler code generation and analysis in `variantb`, suggesting efficiency improvements in the newer Kotlin version."
+tags: ["dependencies cache"]
+---
+[Report 📊](../../reports/experiment_results_20250626231622.html)
+## Summary
+The analysis of the Gradle build performance data reveals subtle yet insightful differences between two Kotlin variants, `varianta_kotlin_2.1.21` and `variantb_kotlin_2.2.0`. The overall build time shows a slight improvement in `variantb` by approximately 0.42 seconds (0.4% faster). Notably, the most time-consuming tasks across variants include `:layer_0:module_0_1:kspDebugKotlin`, `:layer_0:module_0_10:kspDebugKotlin`, and `:layer_0:module_0_12:kspDebugKotlin`, with `variantb` generally showing marginal increases in execution times. CPU and memory usage are closely matched between the variants, with `variantb` showing a slight increase in maximum memory usage by about 0.09 GB. Garbage collection metrics indicate a very similar performance, with total collections slightly lower in `variantb`. The Kotlin Build Reports highlight a faster compiler code generation and analysis in `variantb`, suggesting efficiency improvements in the newer Kotlin version.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Mean Build Time:** `varianta` 575.195s, `variantb` 572.772s (0.4% faster by 2.423s)
+- **P50 Build Time:** `varianta` 569.609s, `variantb` 571.418s
+- **P90 Build Time:** `varianta` 601.128s, `variantb` 600.337s
+
+### 2. Task Type Differences
+- **Top Tasks:**
+  - `:layer_0:module_0_1:kspDebugKotlin` has a mean time of 10,011ms in `varianta` vs. 10,184ms in `variantb`.
+  - `:layer_0:module_0_10:kspDebugKotlin` shows 9,226ms in `varianta` vs. 9,416ms in `variantb`.
+  - `:layer_0:module_0_12:kspDebugKotlin` recorded 7,955ms in `varianta` vs. 8,149ms in `variantb`.
+
+### 3. Statistical Patterns
+- **Notable Variations:**
+  - `:layer_0:module_0_1:kspDebugKotlin` and `:layer_0:module_0_10:kspDebugKotlin` show an increase in execution time in `variantb` by about 1.73% and 2.06% respectively, indicating slightly slower performance for these tasks in the newer Kotlin version.
+
+### 4. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - All processes maxed out at 100% CPU usage for both variants.
+  - Build process CPU usage was nearly identical with a max of 96.325% for `varianta` and 96.4% for `variantb`.
+- **Memory Usage:**
+  - All processes peaked at 11.27GB for `varianta` and 11.36GB for `variantb`.
+  - Build process memory usage was almost the same, with a slight increase in `variantb` to 4.93GB.
+
+### 5. Garbage Collection Analysis
+- **Total GC Collections:**
+  - Gradle process: `varianta` had 203 collections vs. `variantb` with 202 collections.
+  - Kotlin process: `varianta` had 162 collections vs. `variantb` with 165 collections.
+
+### 6. Kotlin Build Reports Analysis
+- **Compiler Performance:**
+  - Code generation lines per second were higher in `variantb` (1090 vs. 1044 in `varianta`).
+  - Analysis lines per second also improved in `variantb` (1081 vs. 982 in `varianta`).
+
+This analysis underscores the nuanced improvements in build performance and efficiency in the newer Kotlin version, `variantb_kotlin_2.2.0`, particularly in compiler operations, despite slightly increased execution times for specific tasks.
