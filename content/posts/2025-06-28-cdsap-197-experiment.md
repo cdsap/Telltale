@@ -1,0 +1,81 @@
+---
+layout: post
+title: "K2 with Kotlin 2.1.21"
+date: 2025-06-28
+report_link: /Telltale/reports/experiment_results_20250628010216.html
+summary: " 
+The performance comparison between two Gradle build variants shows notable differences in build times and resource usage. Variant B generally exhibits longer build times with a mean build time of 617.338 seconds compared to Variant A's 569.857 seconds, marking an 8.3% increase. The most time-consuming tasks in Variant B are consistently longer than in Variant A, particularly `:layer_0:module_0_1:kspDebugKotlin` which takes 14.614 seconds in Variant B versus 10.220 seconds in Variant A. Memory usage is also higher in Variant B with a maximum of 11.73 GB compared to 11.45 GB in Variant A. CPU usage for the build process is slightly higher in Variant B at 96.98% compared to 96.32% in Variant A. Garbage collection activities are more frequent in Variant B with 280 total collections compared to 204 in Variant A, indicating potential inefficiencies in memory management."
+tags: ["dependencies cache"]
+---
+[Report 📊](../../reports/experiment_results_20250628010216.html)
+## Summary
+The performance comparison between two Gradle build variants shows notable differences in build times and resource usage. Variant B generally exhibits longer build times with a mean build time of 617.338 seconds compared to Variant A's 569.857 seconds, marking an 8.3% increase. The most time-consuming tasks in Variant B are consistently longer than in Variant A, particularly `:layer_0:module_0_1:kspDebugKotlin` which takes 14.614 seconds in Variant B versus 10.220 seconds in Variant A. Memory usage is also higher in Variant B with a maximum of 11.73 GB compared to 11.45 GB in Variant A. CPU usage for the build process is slightly higher in Variant B at 96.98% compared to 96.32% in Variant A. Garbage collection activities are more frequent in Variant B with 280 total collections compared to 204 in Variant A, indicating potential inefficiencies in memory management.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Mean Build Time:**
+  - Variant A: 569.857 seconds
+  - Variant B: 617.338 seconds
+  - Percentage Difference: +8.3% (Variant B is slower by 47.481 seconds)
+
+- **P50 Build Time:**
+  - Variant A: 563.940 seconds
+  - Variant B: 611.293 seconds
+
+- **P90 Build Time:**
+  - Variant A: 585.511 seconds
+  - Variant B: 633.799 seconds
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  1. `:layer_0:module_0_1:kspDebugKotlin`
+     - Variant A: 10.220 seconds
+     - Variant B: 14.614 seconds
+  2. `:layer_0:module_0_10:kspDebugKotlin`
+     - Variant A: 9.149 seconds
+     - Variant B: 14.088 seconds
+  3. `:layer_0:module_0_11:kspDebugKotlin`
+     - Variant A: 8.334 seconds
+     - Variant B: 13.578 seconds
+
+### 3. Statistical Patterns
+- Tasks with significant timing variations:
+  - `:layer_0:module_0_1:kspDebugKotlin` shows a 43% increase in Variant B.
+  - `:layer_0:module_0_10:kspDebugKotlin` shows a 54% increase in Variant B.
+  - `:layer_0:module_0_11:kspDebugKotlin` shows a 63% increase in Variant B.
+
+### 4. Process State Analysis
+- **Kotlin Process State:**
+  - Variant A has higher garbage collection time (0.48) compared to Variant B (0.27).
+- **Gradle Process State:**
+  - Variant B has a higher garbage collection time (0.55) compared to Variant A (0.23).
+
+### 5. CPU & Memory Usage Analysis
+- **Overall System Usage:**
+  - CPU: Both variants reach a maximum of 100%.
+  - Memory: Variant B uses up to 11.73 GB, while Variant A uses up to 11.45 GB.
+
+- **Main Gradle Process:**
+  - CPU: Variant B uses up to 96.98%, slightly higher than Variant A's 96.32%.
+  - Memory: Variant B uses up to 6.63 GB, significantly higher than Variant A's 4.95 GB.
+
+- **Build Child Processes:**
+  - CPU: Both variants have similar usage around 95%.
+  - Memory: Variant A uses more (5.67 GB) compared to Variant B (4.25 GB).
+
+### 6. Garbage Collection Analysis
+- Variant B has more frequent garbage collections (280 total collections) compared to Variant A (204 total collections), which might indicate less efficient memory management.
+
+### 7. Kotlin Build Reports Analysis
+- **Compiler Execution Stages Comparison:**
+  - Variant B generally takes longer in most compiler execution stages such as IR generation and code analysis.
+  - Incremental compilation time is also longer in Variant B by approximately 200 seconds.
+
+- **Classpath and Cache Insights:**
+  - Both variants have similar classpath snapshot sizes and cache hit/miss ratios.
+
+### 8. Summary and Formatting Requirements
+- The report uses markdown formatting for clarity and readability.
+- Tasks and task types are quoted to distinguish them from regular text.
+- The summary provides a concise overview of the key findings, formatted for display on an overview page.
