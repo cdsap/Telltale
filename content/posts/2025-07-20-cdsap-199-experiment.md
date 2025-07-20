@@ -1,0 +1,72 @@
+---
+layout: post
+title: "Gradle 9.0-rc3 vs  8.14.2"
+date: 2025-07-20
+report_link: /Telltale/reports/experiment_results_20250720231558.html
+summary: " 
+The detailed analysis of Gradle build performance between two variants reveals marginal differences in build times, with variantb_9.0.0-rc3 generally showing slight improvements over varianta_8.14.2. The mean build time for variantb is approximately 877.819 seconds compared to varianta's 878.069 seconds, indicating a minor reduction. Notable task execution times, such as for `:layer_0:module_0_1:kspDebugKotlin`, show significant increases in variantb, suggesting potential areas for optimization. Memory usage across all processes shows a slight increase in variantb, with a maximum of 13.2 GB compared to 12.84 GB in varianta. CPU usage remains high in both variants, maxing out at 100%. The total garbage collection counts are very close, with 268 for varianta and 269 for variantb, indicating similar memory management behavior."
+tags: ["dependencies cache"]
+---
+[Report 📊](../../reports/experiment_results_20250720231558.html)
+## Summary
+The detailed analysis of Gradle build performance between two variants reveals marginal differences in build times, with variantb_9.0.0-rc3 generally showing slight improvements over varianta_8.14.2. The mean build time for variantb is approximately 877.819 seconds compared to varianta's 878.069 seconds, indicating a minor reduction. Notable task execution times, such as for `:layer_0:module_0_1:kspDebugKotlin`, show significant increases in variantb, suggesting potential areas for optimization. Memory usage across all processes shows a slight increase in variantb, with a maximum of 13.2 GB compared to 12.84 GB in varianta. CPU usage remains high in both variants, maxing out at 100%. The total garbage collection counts are very close, with 268 for varianta and 269 for variantb, indicating similar memory management behavior.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Mean Build Time:**
+  - Varianta_8.14.2: 878.069 seconds
+  - Variantb_9.0.0-rc3: 877.819 seconds
+- **P50 Build Time:**
+  - Varianta_8.14.2: 868.872 seconds
+  - Variantb_9.0.0-rc3: 873.423 seconds
+- **P90 Build Time:**
+  - Varianta_8.14.2: 925.893 seconds
+  - Variantb_9.0.0-rc3: 909.777 seconds
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  - `org.jetbrains.kotlin.gradle.tasks.KotlinCompile`:
+    - Varianta Mean: 2549 ms
+    - Variantb Mean: 2526 ms
+  - `com.google.devtools.ksp.gradle.KspTaskJvm`:
+    - Varianta Mean: 3217 ms
+    - Variantb Mean: 3252 ms
+  - `com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask`:
+    - Varianta Mean: 2627 ms
+    - Variantb Mean: 2737 ms
+
+### 3. Statistical Patterns
+- Significant timing variations observed in tasks like `:layer_0:module_0_1:kspDebugKotlin`, where execution time increased from 7373 ms in varianta to 10649 ms in variantb.
+
+### 4. CPU & Memory Usage Analysis
+- **All Processes:**
+  - Max CPU: 100% for both variants
+  - Max Memory: 
+    - Varianta: 12.84 GB
+    - Variantb: 13.2 GB
+- **Build Process:**
+  - Max CPU: 
+    - Varianta: 96.62%
+    - Variantb: 96.56%
+  - Max Memory: 
+    - Varianta: 6.65 GB
+    - Variantb: 6.6 GB
+- **Build Child Processes:**
+  - Max CPU: 
+    - Varianta: 95.76%
+    - Variantb: 95.84%
+  - Max Memory: 
+    - Varianta: 5.69 GB
+    - Variantb: 6.18 GB
+
+### 6. Garbage Collection Analysis
+- **Total GC Collections:**
+  - Gradle:
+    - Varianta: 268
+    - Variantb: 269
+  - Kotlin:
+    - Varianta: 281
+    - Variantb: 279
+
+The analysis indicates that while there are minor improvements in build times and slight increases in memory usage, the overall performance between the two variants remains closely matched, with specific tasks showing more significant variations.
