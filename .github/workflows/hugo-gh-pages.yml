@@ -72,6 +72,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Deploying  GitHub Pages
+      - name: Deploying GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4 
