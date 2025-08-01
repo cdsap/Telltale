@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "KGP 2.2.20-Beta2 vs 2.2.0 without cache size"
+title: "KGP 2.2.20-Beta2 vs 2.2.0"
 date: 2025-07-31
 report_link: /Telltale/reports/experiment_results_20250731154917.html
 summary: " 
