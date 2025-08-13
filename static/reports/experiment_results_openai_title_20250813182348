@@ -1,0 +1,3 @@
+ 
+The analysis of the Gradle build performance between variants `varianta_9.0.0` and `variantb_9.1.0-rc-1` reveals slight differences in build times and resource usage. The overall build time for `varianta_9.0.0` averaged 203.511 seconds, while `variantb_9.1.0-rc-1` was slightly slower at 204.142 seconds, marking a 0.31% increase. Notably, the `:app:app:mergeExtDexDebug` task showed a significant increase in execution time in the newer variant. CPU and memory usage across all processes were nearly maxed out for both variants, with a slight increase in memory usage in `variantb_9.1.0-rc-1`. The total garbage collection events also saw a small rise from 101 to 103 events on average.
+

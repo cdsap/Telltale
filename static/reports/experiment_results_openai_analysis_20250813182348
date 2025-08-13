@@ -1,0 +1,41 @@
+## Summary
+The analysis of the Gradle build performance between variants `varianta_9.0.0` and `variantb_9.1.0-rc-1` reveals slight differences in build times and resource usage. The overall build time for `varianta_9.0.0` averaged 203.511 seconds, while `variantb_9.1.0-rc-1` was slightly slower at 204.142 seconds, marking a 0.31% increase. Notably, the `:app:app:mergeExtDexDebug` task showed a significant increase in execution time in the newer variant. CPU and memory usage across all processes were nearly maxed out for both variants, with a slight increase in memory usage in `variantb_9.1.0-rc-1`. The total garbage collection events also saw a small rise from 101 to 103 events on average.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - `varianta_9.0.0`: Mean: 203.511s, P50: 201.350s, P90: 214.991s
+  - `variantb_9.1.0-rc-1`: Mean: 204.142s, P50: 203.778s, P90: 212.330s
+  - Percentage increase from `varianta_9.0.0` to `variantb_9.1.0-rc-1`: 0.31%
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  - `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"`:
+    - `varianta_9.0.0`: Mean: 2.566s, P50: 2.278s, P90: 3.606s
+    - `variantb_9.1.0-rc-1`: Mean: 2.573s, P50: 2.289s, P90: 3.628s
+  - `"com.android.build.gradle.internal.tasks.CheckAarMetadataTask"`:
+    - `varianta_9.0.0`: Mean: 1.252s, P50: 1.210s, P90: 1.462s
+    - `variantb_9.1.0-rc-1`: Mean: 1.249s, P50: 1.240s, P90: 1.454s
+  - `"com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask"`:
+    - `varianta_9.0.0`: Mean: 2.110s, P50: 2.099s, P90: 2.387s
+    - `variantb_9.1.0-rc-1`: Mean: 2.135s, P50: 2.121s, P90: 2.391s
+
+### 5. CPU & Memory Usage Analysis
+- **All Processes:**
+  - CPU Usage: Maxed at 100% for both variants.
+  - Memory Usage: 
+    - `varianta_9.0.0`: Max: 7.75 GB, P50: 7.67 GB, P90: 8.22 GB
+    - `variantb_9.1.0-rc-1`: Max: 7.85 GB, P50: 7.74 GB, P90: 8.55 GB
+- **Build Process:**
+  - CPU Usage: Nearly maxed at around 96% for both variants.
+  - Memory Usage:
+    - `varianta_9.0.0`: Max: 3.28 GB, P50: 3.26 GB, P90: 3.76 GB
+    - `variantb_9.1.0-rc-1`: Max: 3.34 GB, P50: 3.25 GB, P90: 3.86 GB
+
+### 6. Garbage Collection Analysis
+- Total GC Collections:
+  - `varianta_9.0.0`: Mean: 101.0, P50: 102.5, P90: 112.9
+  - `variantb_9.1.0-rc-1`: Mean: 103.0, P50: 106.0, P90: 113.0
+
+This analysis highlights minor performance regressions in the newer variant, particularly in terms of build time and memory usage. The increase in garbage collection events suggests potential areas for optimization in memory management.
