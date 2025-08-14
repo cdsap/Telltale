@@ -3,6 +3,8 @@ languageCode = 'en-us'
 title = 'Telltale'
 theme = 'PaperMod'
 
+# Pagination settings
+paginate = 10
 
 [params]
   description = "Experimentation Framework for Gradle Builds"

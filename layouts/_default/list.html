@@ -17,31 +17,94 @@
 <div class="posts">
   {{ $pages := $pages.ByDate.Reverse }}
   {{ $pages := sort $pages "File.BaseFileName" "desc" }}
-  {{ range $pages }}
-  <article class="post-entry">
-    <header class="entry-header">
-      <h2>
-        <a href="{{ .Permalink }}">{{ .Title }}</a>
-      </h2>
-    </header>
-    <div class="entry-content">
-      {{- if .Params.summary }}
-      <p>{{ .Params.summary | markdownify | safeHTML }}</p>
-      {{- else }}
-      <p>{{ .Summary | safeHTML }}</p>
-      {{- end }}
-    </div>
-    <div class="entry-footer">
-      {{- if .Params.tags }}
-      <div class="entry-tags">
-        {{- range .Params.tags }}
-        <a href="{{ "tags/" | absURL }}{{ . | lower | urlize }}" class="entry-tag">#{{ . }}</a>
+  
+  {{ if .IsHome }}
+    {{ $paginator := .Paginate $pages }}
+    {{ range $paginator.Pages }}
+    <article class="post-entry">
+      <header class="entry-header">
+        <h2>
+          <a href="{{ .Permalink }}">{{ .Title }}</a>
+        </h2>
+      </header>
+      <div class="entry-content">
+        {{- if .Params.summary }}
+        <p>{{ .Params.summary | markdownify | safeHTML }}</p>
+        {{- else }}
+        <p>{{ .Summary | safeHTML }}</p>
         {{- end }}
       </div>
-      {{- end }}
-      <time class="entry-date">{{ .Date.Format "January 2, 2006" }}</time>
-    </div>
-  </article>
+      <div class="entry-footer">
+        {{- if .Params.tags }}
+        <div class="entry-tags">
+          {{- range .Params.tags }}
+          <a href="{{ "tags/" | absURL }}{{ . | lower | urlize }}" class="entry-tag">#{{ . }}</a>
+          {{- end }}
+        </div>
+        {{- end }}
+        <time class="entry-date">{{ .Date.Format "January 2, 2006" }}</time>
+      </div>
+    </article>
+    {{ end }}
+    
+    <!-- Pagination Controls -->
+    {{ if gt $paginator.TotalPages 1 }}
+    <nav class="pagination" aria-label="Pagination">
+      <div class="pagination-info">
+        Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}
+        ({{ $paginator.TotalNumberOfElements }} posts)
+      </div>
+      
+      <div class="pagination-links">
+        {{ if $paginator.HasPrev }}
+          <a href="{{ $paginator.Prev.URL }}" class="pagination-prev" aria-label="Previous page">
+            ← Previous
+          </a>
+        {{ end }}
+        
+        {{ range $paginator.Pagers }}
+          {{ if eq . $paginator }}
+            <span class="pagination-current">{{ .PageNumber }}</span>
+          {{ else }}
+            <a href="{{ .URL }}" class="pagination-link">{{ .PageNumber }}</a>
+          {{ end }}
+        {{ end }}
+        
+        {{ if $paginator.HasNext }}
+          <a href="{{ $paginator.Next.URL }}" class="pagination-next" aria-label="Next page">
+            Next →
+          </a>
+        {{ end }}
+      </div>
+    </nav>
+    {{ end }}
+  {{ else }}
+    {{ range $pages }}
+    <article class="post-entry">
+      <header class="entry-header">
+        <h2>
+          <a href="{{ .Permalink }}">{{ .Title }}</a>
+        </h2>
+      </header>
+      <div class="entry-content">
+        {{- if .Params.summary }}
+        <p>{{ .Params.summary | markdownify | safeHTML }}</p>
+        {{- else }}
+        <p>{{ .Summary | safeHTML }}</p>
+        {{- end }}
+      </div>
+      <div class="entry-footer">
+        {{- if .Params.tags }}
+        <div class="entry-tags">
+          {{- range .Params.tags }}
+          <a href="{{ "tags/" | absURL }}{{ . | lower | urlize }}" class="entry-tag">#{{ . }}</a>
+          {{- end }}
+        </div>
+        {{- end }}
+        <time class="entry-date">{{ .Date.Format "January 2, 2006" }}</time>
+      </div>
+    </article>
+    {{ end }}
   {{ end }}
 </div>
 
