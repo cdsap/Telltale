@@ -1,4 +1,4 @@
-name: Deploy Hugo site to Pages
+name: Deploy Hugo to GH-Pages
 
 on:
   push:
@@ -29,6 +29,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.client_payload.ref || 'gh-pages' }}
           submodules: true
           fetch-depth: 0
 
@@ -44,7 +45,7 @@ jobs:
 
 
       - name: Install theme
-        run: | 
+        run: |
           git submodule add -f https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
           git submodule update --init --recursive
 
