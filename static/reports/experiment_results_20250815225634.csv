@@ -1,0 +1,336 @@
+Category,Metric,varianta_2.2.10 Mean,variantb_2.2.10-ksp2 Mean,varianta_2.2.10 P50,variantb_2.2.10-ksp2 P50,varianta_2.2.10 P90,variantb_2.2.10-ksp2 P90,Unit
+Build,Build time,371257,401582,371581,399533,385551,416519,ms
+Build,Configuration time,41831,40745,40900,40288,47422,44860,ms
+Gradle process state,Gradle-Process-capacity,2.72,4.63,2.69,4.56,3.3,5.13,
+Gradle process state,Gradle-Process-gcTime,0.15,0.34,0.15,0.34,0.16,0.36,
+Gradle process state,Gradle-Process-max,6.0,6.0,6.0,6.0,6.0,6.0,
+Gradle process state,Gradle-Process-uptime,6.17,6.67,6.17,6.64,6.41,6.92,
+Gradle process state,Gradle-Process-usage,1.84,2.59,1.74,2.63,2.44,3.76,
+Kotlin process state,Kotlin-Process-capacity,3.18,3.07,3.12,2.99,3.78,3.44,
+Kotlin process state,Kotlin-Process-gcTime,0.28,0.19,0.29,0.19,0.3,0.21,
+Kotlin process state,Kotlin-Process-max,6.0,6.0,6.0,6.0,6.0,6.0,
+Kotlin process state,Kotlin-Process-uptime,5.97,6.48,5.98,6.45,6.2,6.73,
+Kotlin process state,Kotlin-Process-usage,1.27,1.22,1.23,1.21,2.0,1.76,
+Task Type,org.jetbrains.kotlin.gradle.plugin.diagnostics.CheckKotlinGradlePluginConfigurationErrors,0,0,0,0,1,1,ms
+Task Type,org.gradle.plugin.devel.tasks.GeneratePluginDescriptors,38,31,37,30,57,36,ms
+Task Type,org.gradle.language.jvm.tasks.ProcessResources,34,33,33,33,44,44,ms
+Task Type,org.jetbrains.kotlin.gradle.tasks.KotlinCompile,3726,3981,3260,3460,6885,7093,ms
+Task Type,org.gradle.api.tasks.compile.JavaCompile,672,698,511,544,987,1041,ms
+Task Type,org.gradle.api.DefaultTask,0,0,0,0,0,0,ms
+Task Type,org.gradle.api.tasks.bundling.Jar,38,36,38,36,43,41,ms
+Task Type,com.android.build.gradle.internal.tasks.AndroidVariantTask,0,0,0,0,0,1,ms
+Task Type,com.android.build.gradle.tasks.MergeSourceSetFolders,11,12,6,6,13,13,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeNativeLibsTask,2,2,1,1,4,3,ms
+Task Type,com.android.build.gradle.internal.tasks.StripDebugSymbolsTask,1,1,1,1,2,2,ms
+Task Type,com.android.build.gradle.internal.tasks.LibraryJniLibsTask,10,9,2,3,8,7,ms
+Task Type,com.android.build.gradle.tasks.GenerateResValues,9,9,8,8,15,15,ms
+Task Type,com.android.build.gradle.internal.tasks.ValidateResourcesTask,13,13,12,12,21,20,ms
+Task Type,com.android.build.gradle.tasks.MergeResources,82,82,32,32,51,51,ms
+Task Type,com.android.build.gradle.internal.res.ParseLibraryResourcesTask,38,35,22,22,42,40,ms
+Task Type,com.android.build.gradle.internal.res.GenerateLibraryRFileTask,24,25,22,22,40,38,ms
+Task Type,com.android.build.gradle.tasks.JavaPreCompileTask,13,12,11,11,22,21,ms
+Task Type,com.google.devtools.ksp.gradle.KspTaskJvm,3744,,3551,,5198,,ms
+Task Type,com.android.build.gradle.tasks.TransformClassesWithAsmTask,207,209,180,187,344,345,ms
+Task Type,com.android.build.gradle.internal.tasks.BundleLibraryClassesJar,37,36,25,26,51,49,ms
+Task Type,com.android.build.gradle.tasks.ExtractDeepLinksTask,4,5,3,3,11,12,ms
+Task Type,com.android.build.gradle.tasks.ShaderCompile,2,2,1,1,5,5,ms
+Task Type,com.android.build.gradle.tasks.ProcessLibraryArtProfileTask,1,1,1,1,2,2,ms
+Task Type,com.android.build.gradle.internal.tasks.PrepareLintJarForPublish,2,2,2,2,4,4,ms
+Task Type,com.android.build.gradle.internal.tasks.AarMetadataTask,9,9,8,8,16,15,ms
+Task Type,com.android.build.gradle.tasks.ProcessLibraryManifest,23,25,21,21,33,34,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeNativeDebugMetadataTask,4,3,3,4,7,7,ms
+Task Type,com.android.build.gradle.tasks.CompileLibraryResourcesTask,19,19,14,14,25,25,ms
+Task Type,com.android.build.gradle.internal.tasks.CheckAarMetadataTask,1042,1071,1071,1105,1290,1385,ms
+Task Type,com.android.build.gradle.tasks.MapSourceSetPathsTask,202,216,181,190,309,345,ms
+Task Type,com.android.build.gradle.tasks.CompatibleScreensManifest,12,12,12,11,19,19,ms
+Task Type,com.android.build.gradle.tasks.ExtractAnnotations,16,15,9,10,22,23,ms
+Task Type,com.android.build.gradle.internal.tasks.ProcessJavaResTask,15,16,14,16,24,25,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeFileTask,2,2,2,2,3,4,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeConsumerProguardFilesTask,1,2,1,2,3,3,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeJavaResourceTask,23,23,5,5,11,11,ms
+Task Type,com.android.build.gradle.internal.tasks.LibraryAarJarsTask,39,40,37,39,63,65,ms
+Task Type,com.android.build.gradle.tasks.BundleAar,12,12,11,12,18,19,ms
+Task Type,org.gradle.api.Task,0,0,0,0,0,0,ms
+Task Type,com.android.build.gradle.tasks.ProcessApplicationManifest,416,444,406,436,604,635,ms
+Task Type,com.android.build.gradle.tasks.ProcessMultiApkApplicationManifest,350,339,340,340,514,503,ms
+Task Type,com.android.build.gradle.tasks.ProcessPackagedManifestTask,78,52,32,39,72,62,ms
+Task Type,com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask,2470,2443,2364,2395,3057,2842,ms
+Task Type,com.android.build.gradle.internal.tasks.CompressAssetsTask,9,9,10,9,18,20,ms
+Task Type,com.android.build.gradle.internal.tasks.DexFileDependenciesTask,11,9,10,9,17,16,ms
+Task Type,com.android.build.gradle.internal.tasks.CheckDuplicateClassesTask,246,269,232,264,363,379,ms
+Task Type,com.android.build.gradle.internal.tasks.DexMergingTask,5351,5215,2867,3015,12938,12725,ms
+Task Type,com.android.build.gradle.internal.tasks.BundleLibraryClassesDir,120,108,113,103,203,179,ms
+Task Type,dagger.hilt.android.plugin.task.AggregateDepsTask,511,445,480,432,700,536,ms
+Task Type,com.android.build.gradle.internal.tasks.DexArchiveBuilderTask,1628,1451,1575,1432,2121,1744,ms
+Task Type,com.android.build.gradle.internal.tasks.GlobalSyntheticsMergeTask,83,74,72,69,125,111,ms
+Task Type,com.android.build.gradle.internal.tasks.ValidateSigningTask,851,977,736,926,1120,1452,ms
+Task Type,com.android.build.gradle.internal.tasks.AppMetadataTask,3,6,3,3,6,10,ms
+Task Type,com.android.build.gradle.internal.tasks.SigningConfigVersionsWriterTask,23,20,19,18,33,25,ms
+Task Type,com.android.build.gradle.tasks.PackageApplication,828,806,823,795,1012,985,ms
+Task Type,com.android.build.gradle.internal.tasks.ListingFileRedirectTask,2,2,2,2,3,3,ms
+Task Path,:build-logic:convention:compileKotlin,6452,6323,6426,6291,6774,6584,ms
+Task Path,:api:audio:parseDebugLocalResources,1576,1279,1018,909,4054,2353,ms
+Task Path,:core:cart:kspDebugKotlin,7821,14365,7749,14394,8260,14843,ms
+Task Path,:core:identity:kspDebugKotlin,6025,13202,6024,13264,6359,13585,ms
+Task Path,:core:checkout:kspDebugKotlin,7043,13829,6973,13861,7535,14292,ms
+Task Path,:core:contact:kspDebugKotlin,6543,13627,6505,13672,6897,14024,ms
+Task Path,:core:checkout:compileDebugKotlin,7285,8052,7266,8005,7612,8611,ms
+Task Path,:core:cart:compileDebugKotlin,7979,8964,7960,8936,8467,9448,ms
+Task Path,:core:identity:compileDebugKotlin,8625,9121,8508,9069,9121,9627,ms
+Task Path,:core:contact:compileDebugKotlin,10827,11010,10676,10987,11651,11522,ms
+Task Path,:core:checkout:compileDebugJavaWithJavac,3903,3725,3894,3702,4490,4074,ms
+Task Path,:core:login:kspDebugKotlin,5220,6751,5222,6803,5791,7232,ms
+Task Path,:core:push:kspDebugKotlin,5266,8320,5246,8315,5860,8867,ms
+Task Path,:feature:search:kspDebugKotlin,5464,9281,5503,9339,5974,9854,ms
+Task Path,:feature:user:kspDebugKotlin,4887,8738,4881,8695,5472,9421,ms
+Task Path,:core:login:compileDebugKotlin,7113,9083,7108,8952,7849,9695,ms
+Task Path,:core:login:compileDebugJavaWithJavac,1055,1153,1059,1144,1273,1461,ms
+Task Path,:core:push:compileDebugKotlin,7043,8577,6994,8545,7712,9463,ms
+Task Path,:core:push:compileDebugJavaWithJavac,1068,1249,1054,1255,1239,1461,ms
+Task Path,:feature:user:compileDebugKotlin,8069,8819,7983,8764,8895,9599,ms
+Task Path,:feature:post:kspDebugKotlin,5568,7905,5516,7888,6339,8578,ms
+Task Path,:feature:search:compileDebugKotlin,8663,9184,8557,9146,9558,9914,ms
+Task Path,:feature:user:compileDebugJavaWithJavac,1131,1157,1173,1124,1465,1446,ms
+Task Path,:feature:search:compileDebugJavaWithJavac,1344,1149,1377,1115,1607,1418,ms
+Task Path,:feature:feed:kspDebugKotlin,5203,6442,5152,6477,5643,7268,ms
+Task Path,:domain:group:kspDebugKotlin,4707,6107,4661,6078,5196,6991,ms
+Task Path,:feature:feed:compileDebugKotlin,6376,6706,6321,6679,7261,7134,ms
+Task Path,:feature:feed:compileDebugJavaWithJavac,1017,1168,1023,1182,1159,1431,ms
+Task Path,:feature:comment:kspDebugKotlin,4843,6740,4800,6826,5298,7502,ms
+Task Path,:feature:post:compileDebugKotlin,9124,9608,9065,9473,10234,10262,ms
+Task Path,:domain:group:compileDebugKotlin,3814,4158,3796,4200,4212,4497,ms
+Task Path,:feature:post:compileDebugJavaWithJavac,1193,1075,1223,1078,1468,1517,ms
+Task Path,:feature:comment:compileDebugKotlin,4000,4331,3928,4342,4593,4786,ms
+Task Path,:domain:location:kspDebugKotlin,5017,5661,5009,5694,5584,6438,ms
+Task Path,:feature:profile:kspDebugKotlin,5233,6104,5230,6086,5755,6953,ms
+Task Path,:domain:network:kspDebugKotlin,5235,6540,5272,6635,5739,7559,ms
+Task Path,:repository:report:kspDebugKotlin,5077,6454,5018,6492,5667,7377,ms
+Task Path,:domain:location:compileDebugKotlin,6041,6656,5983,6737,6919,7192,ms
+Task Path,:feature:profile:compileDebugKotlin,6651,6884,6620,6863,7614,7455,ms
+Task Path,:domain:location:compileDebugJavaWithJavac,1005,1188,1014,1176,1222,1429,ms
+Task Path,:feature:profile:compileDebugJavaWithJavac,1036,1191,1099,1180,1205,1474,ms
+Task Path,:domain:network:compileDebugKotlin,7894,7977,7940,8027,8806,8799,ms
+Task Path,:repository:report:compileDebugKotlin,6310,5982,6320,5968,7155,6605,ms
+Task Path,:domain:network:compileDebugJavaWithJavac,1160,1073,1181,1050,1471,1569,ms
+Task Path,:domain:message:kspDebugKotlin,4827,5289,4794,5247,5339,5927,ms
+Task Path,:domain:share:kspDebugKotlin,4650,4694,4593,4606,5279,5475,ms
+Task Path,:domain:sync:kspDebugKotlin,5932,6853,5941,6801,6577,7684,ms
+Task Path,:domain:share:compileDebugKotlin,4090,4239,4086,4192,4489,4743,ms
+Task Path,:domain:message:compileDebugKotlin,6857,6671,6826,6784,7449,7381,ms
+Task Path,:domain:sync:compileDebugKotlin,7503,6745,7399,6812,8585,7611,ms
+Task Path,:repository:account:kspDebugKotlin,4952,4575,4924,4482,5526,5291,ms
+Task Path,:repository:session:kspDebugKotlin,3904,4751,3869,4769,4450,5411,ms
+Task Path,:repository:analytics:kspDebugKotlin,3397,4735,3363,4690,3851,5309,ms
+Task Path,:repository:setting:kspDebugKotlin,4328,5656,4282,5684,4806,6293,ms
+Task Path,:repository:account:compileDebugKotlin,4968,5724,4945,5782,5841,6292,ms
+Task Path,:repository:session:compileDebugKotlin,2690,3396,2723,3345,3039,3869,ms
+Task Path,:repository:setting:compileDebugKotlin,2260,2669,2200,2647,2718,3192,ms
+Task Path,:repository:analytics:compileDebugKotlin,2285,2687,2261,2693,2666,3097,ms
+Task Path,:app:app:checkDebugAarMetadata,1042,1071,1071,1105,1290,1385,ms
+Task Path,:model:calendar:kspDebugKotlin,4038,4392,4020,4361,4594,5093,ms
+Task Path,:repository:notification:kspDebugKotlin,4303,4501,4357,4497,4905,4975,ms
+Task Path,:model:metric:kspDebugKotlin,4521,5073,4583,4974,4920,6062,ms
+Task Path,:model:calendar:compileDebugKotlin,4037,4079,4090,3914,4880,5038,ms
+Task Path,:model:metric:compileDebugKotlin,5428,5577,5412,5457,6381,6529,ms
+Task Path,:repository:notification:compileDebugKotlin,5937,5731,5863,5611,6821,6720,ms
+Task Path,:app:app:mergeDebugResources,5440,5254,5348,5177,6544,6131,ms
+Task Path,:model:log:kspDebugKotlin,4059,4836,4060,4685,4551,5617,ms
+Task Path,:model:event:kspDebugKotlin,4441,5348,4474,5187,5063,6195,ms
+Task Path,:model:status:kspDebugKotlin,3925,4643,3909,4534,4342,5358,ms
+Task Path,:entity:file:kspDebugKotlin,3867,4654,3928,4483,4180,5609,ms
+Task Path,:model:log:compileDebugKotlin,2742,2981,2737,2918,3035,3401,ms
+Task Path,:model:event:compileDebugKotlin,3986,4416,3946,4420,4527,4890,ms
+Task Path,:model:status:compileDebugKotlin,4319,4713,4253,4718,4805,5134,ms
+Task Path,:entity:file:compileDebugKotlin,3968,4323,3997,4375,4551,4852,ms
+Task Path,:model:task:kspDebugKotlin,4029,4306,3905,4246,4530,5368,ms
+Task Path,:entity:document:kspDebugKotlin,4025,4888,4006,4974,4455,5639,ms
+Task Path,:entity:alarm:kspDebugKotlin,3974,4904,4002,4753,4405,5557,ms
+Task Path,:model:task:compileDebugKotlin,3831,3910,3895,3968,4467,4367,ms
+Task Path,:entity:document:compileDebugKotlin,4185,4191,4138,4188,4882,4714,ms
+Task Path,:entity:alarm:compileDebugKotlin,4048,4121,3947,4182,4846,4798,ms
+Task Path,:entity:timer:kspDebugKotlin,3667,3953,3603,3901,4288,4493,ms
+Task Path,:entity:note:kspDebugKotlin,4446,5568,4503,5493,4949,6310,ms
+Task Path,:entity:timer:compileDebugKotlin,2269,2528,2185,2524,3014,3031,ms
+Task Path,:data:news:kspDebugKotlin,3833,4895,3936,4960,4168,5459,ms
+Task Path,:entity:todo:kspDebugKotlin,4015,5134,4056,5062,4548,5738,ms
+Task Path,:entity:note:compileDebugKotlin,4470,5389,4327,5333,5390,6366,ms
+Task Path,:data:article:kspDebugKotlin,4218,5382,4161,5429,4688,6084,ms
+Task Path,:entity:todo:compileDebugKotlin,3569,4437,3530,4441,4059,5210,ms
+Task Path,:data:news:compileDebugKotlin,3933,4972,3886,5064,4469,5680,ms
+Task Path,:data:article:compileDebugKotlin,4655,5100,4599,5057,5460,6172,ms
+Task Path,:data:list:kspDebugKotlin,3472,3970,3463,3996,3900,4763,ms
+Task Path,:data:map:kspDebugKotlin,3991,4907,3905,4766,4370,5661,ms
+Task Path,:data:forecast:kspDebugKotlin,4466,5285,4384,5295,4988,5820,ms
+Task Path,:api:audio:kspDebugKotlin,3767,4392,3677,4421,4372,5065,ms
+Task Path,:data:weather:kspDebugKotlin,4029,5215,4009,5293,4552,5965,ms
+Task Path,:data:forecast:compileDebugKotlin,3891,4531,3816,4453,4745,5294,ms
+Task Path,:data:map:compileDebugKotlin,4729,5512,4735,5379,5191,6612,ms
+Task Path,:api:audio:compileDebugKotlin,2258,2600,2214,2644,2710,3156,ms
+Task Path,:data:weather:compileDebugKotlin,4358,4593,4308,4658,5108,5201,ms
+Task Path,:data:list:compileDebugKotlin,2356,2563,2364,2543,2725,2919,ms
+Task Path,:api:photo:kspDebugKotlin,3688,4173,3632,4288,4216,4906,ms
+Task Path,:api:podcast:kspDebugKotlin,3451,4201,3467,4226,3772,4807,ms
+Task Path,:api:photo:compileDebugKotlin,1770,2151,1733,2076,2080,2597,ms
+Task Path,:api:gallery:kspDebugKotlin,3608,4626,3639,4627,3909,5287,ms
+Task Path,:api:media:kspDebugKotlin,3141,3668,3096,3683,3470,4592,ms
+Task Path,:api:podcast:compileDebugKotlin,3286,4041,3122,4086,4024,4608,ms
+Task Path,:api:media:compileDebugKotlin,2139,2521,2078,2538,2483,2931,ms
+Task Path,:api:video:kspDebugKotlin,3664,4433,3739,4562,4246,5387,ms
+Task Path,:api:gallery:compileDebugKotlin,3928,4655,3986,4680,4352,5158,ms
+Task Path,:api:video:compileDebugKotlin,3942,4066,3941,4077,4582,4968,ms
+Task Path,:app:app:processDebugResources,2470,2443,2364,2395,3057,2842,ms
+Task Path,:presentation:checkout-contact:kspDebugKotlin,2803,3178,2776,2997,3523,3925,ms
+Task Path,:presentation:contact-contact:kspDebugKotlin,3492,4217,3494,4166,3961,4671,ms
+Task Path,:presentation:identity-contact:kspDebugKotlin,3620,4524,3564,4360,4236,5813,ms
+Task Path,:presentation:checkout-contact:compileDebugKotlin,1757,2027,1678,1874,2069,3078,ms
+Task Path,:presentation:playlist:kspDebugKotlin,3226,3966,3207,3904,3660,4690,ms
+Task Path,:presentation:contact-contact:compileDebugKotlin,3750,4907,3750,4723,4283,5782,ms
+Task Path,:presentation:playlist:compileDebugKotlin,2717,3429,2705,3431,3037,3820,ms
+Task Path,:presentation:identity-contact:compileDebugKotlin,3948,4725,3961,4783,4428,5203,ms
+Task Path,:presentation:push-contact:kspDebugKotlin,3574,4380,3664,4383,3938,4872,ms
+Task Path,:presentation:push-contact:compileDebugKotlin,2820,2755,2788,2658,3288,3269,ms
+Task Path,:presentation:login-contact:kspDebugKotlin,3978,4462,3959,4483,4489,5125,ms
+Task Path,:ui:cart-contact:kspDebugKotlin,4028,4322,4019,4186,4807,5178,ms
+Task Path,:ui:cart-contact:compileDebugKotlin,2362,2779,2059,2733,3097,3348,ms
+Task Path,:ui:feed-contact:kspDebugKotlin,3450,4279,3417,4309,3987,4837,ms
+Task Path,:ui:post-contact:kspDebugKotlin,4055,4852,4012,4939,4753,5197,ms
+Task Path,:presentation:login-contact:compileDebugKotlin,4131,4676,3947,4671,5274,5316,ms
+Task Path,:ui:post-contact:compileDebugKotlin,3237,3420,2850,3562,5133,4229,ms
+Task Path,:ui:feed-contact:compileDebugKotlin,3520,4032,3449,4058,4267,4709,ms
+Task Path,:ui:profile-contact:kspDebugKotlin,3689,4167,3761,4111,4259,4910,ms
+Task Path,:ui:user-contact:kspDebugKotlin,3978,4485,3917,4510,4673,5036,ms
+Task Path,:ui:comment-contact:kspDebugKotlin,3346,3847,3349,3802,3698,4572,ms
+Task Path,:ui:profile-contact:compileDebugKotlin,3713,4169,3611,4124,4450,5025,ms
+Task Path,:ui:user-contact:compileDebugKotlin,4232,4725,4060,4550,5606,5847,ms
+Task Path,:ui:comment-contact:compileDebugKotlin,2980,2805,2584,2774,4902,3626,ms
+Task Path,:infra:share-contact:kspDebugKotlin,3967,4687,4038,4598,4736,5684,ms
+Task Path,:infra:location-contact:kspDebugKotlin,3252,3723,3268,3695,3875,4405,ms
+Task Path,:app:app:mergeExtDexDebug,12518,12075,12548,12135,13561,13190,ms
+Task Path,:infra:location-contact:compileDebugKotlin,2978,3307,2861,3228,3653,3877,ms
+Task Path,:infra:network-contact:kspDebugKotlin,3213,3911,3276,3682,3760,5563,ms
+Task Path,:infra:share-contact:compileDebugKotlin,3636,4214,3738,4191,4159,4777,ms
+Task Path,:infra:search-contact:kspDebugKotlin,3068,3539,3093,3596,3516,4187,ms
+Task Path,:infra:network-contact:compileDebugKotlin,2901,3322,2822,3233,3433,4206,ms
+Task Path,:infra:search-contact:compileDebugKotlin,2412,2686,2347,2671,3139,3141,ms
+Task Path,:infra:sync-contact:kspDebugKotlin,3064,3434,3065,3442,3646,4033,ms
+Task Path,:service:setting-contact:kspDebugKotlin,3010,3278,3054,3333,3536,3792,ms
+Task Path,:service:group-contact:kspDebugKotlin,2822,3107,2793,3136,3300,3479,ms
+Task Path,:service:setting-contact:compileDebugKotlin,1876,2096,1797,2021,2217,2551,ms
+Task Path,:infra:sync-contact:compileDebugKotlin,1817,2115,1859,2049,2144,2748,ms
+Task Path,:service:group-contact:compileDebugKotlin,1690,1943,1603,1926,2243,2492,ms
+Task Path,:service:notification-contact:kspDebugKotlin,3240,3476,3266,3525,3752,3957,ms
+Task Path,:service:notification-contact:compileDebugKotlin,2374,2630,2324,2640,2942,3206,ms
+Task Path,:impl:analytics-contact:kspDebugKotlin,2894,3449,2831,3384,3389,4223,ms
+Task Path,:impl:status-contact:kspDebugKotlin,3616,4318,3588,4226,4236,5155,ms
+Task Path,:service:message-contact:kspDebugKotlin,3365,4079,3430,3951,3715,4913,ms
+Task Path,:impl:analytics-contact:compileDebugKotlin,1915,2121,1837,2098,2299,2481,ms
+Task Path,:impl:log-contact:kspDebugKotlin,3146,3818,3116,3731,3591,4754,ms
+Task Path,:impl:report-contact:kspDebugKotlin,2817,3173,2761,3140,3352,3836,ms
+Task Path,:service:message-contact:compileDebugKotlin,3612,3802,3448,3846,4275,4318,ms
+Task Path,:impl:status-contact:compileDebugKotlin,3344,3468,3170,3489,4092,4109,ms
+Task Path,:impl:report-contact:compileDebugKotlin,1808,1933,1788,1879,2132,2384,ms
+Task Path,:impl:log-contact:compileDebugKotlin,3222,3147,3058,3073,3742,3736,ms
+Task Path,:impl:session-contact:kspDebugKotlin,2756,3150,2798,3113,3273,4142,ms
+Task Path,:plugin:metric-contact:kspDebugKotlin,2915,3461,2867,3375,3293,4313,ms
+Task Path,:plugin:alarm-contact:kspDebugKotlin,3361,3800,3275,3794,3995,4430,ms
+Task Path,:plugin:event-contact:kspDebugKotlin,2843,3416,2770,3309,3296,4078,ms
+Task Path,:impl:session-contact:compileDebugKotlin,2003,2080,1929,1999,2322,2603,ms
+Task Path,:plugin:alarm-contact:compileDebugKotlin,2119,2285,2117,2224,2431,2837,ms
+Task Path,:plugin:metric-contact:compileDebugKotlin,1960,2163,1913,2065,2226,2699,ms
+Task Path,:plugin:event-contact:compileDebugKotlin,2475,2523,2390,2446,3058,3029,ms
+Task Path,:plugin:calendar-contact:kspDebugKotlin,3001,3430,2891,3372,3445,4246,ms
+Task Path,:plugin:task-contact:kspDebugKotlin,2658,3056,2602,2971,3165,3685,ms
+Task Path,:plugin:calendar-contact:compileDebugKotlin,2687,2889,2606,2890,3469,3521,ms
+Task Path,:plugin:task-contact:compileDebugKotlin,1604,1645,1511,1631,1995,2023,ms
+Task Path,:remote:todo-contact:kspDebugKotlin,3341,3603,3340,3519,3885,4491,ms
+Task Path,:remote:todo-contact:compileDebugKotlin,2522,2673,2405,2542,3163,3415,ms
+Task Path,:remote:document-contact:kspDebugKotlin,2743,2976,2697,2912,3287,3619,ms
+Task Path,:remote:note-contact:kspDebugKotlin,2862,3012,2746,2947,3354,3519,ms
+Task Path,:remote:file-contact:kspDebugKotlin,3123,3443,3028,3418,3751,4020,ms
+Task Path,:remote:document-contact:compileDebugKotlin,2231,2142,2192,2126,2538,2813,ms
+Task Path,:remote:note-contact:compileDebugKotlin,1860,1775,1837,1783,2274,2097,ms
+Task Path,:local:weather-contact:kspDebugKotlin,2865,2933,2882,2871,3496,3601,ms
+Task Path,:remote:file-contact:compileDebugKotlin,3443,3243,3405,3212,3873,3567,ms
+Task Path,:local:weather-contact:compileDebugKotlin,1506,1514,1412,1463,1949,1871,ms
+Task Path,:local:forecast-contact:kspDebugKotlin,3104,3406,3070,3370,3526,3800,ms
+Task Path,:local:list-contact:kspDebugKotlin,2995,3310,3003,3256,3314,3668,ms
+Task Path,:local:map-contact:kspDebugKotlin,3117,3429,3063,3293,3593,4196,ms
+Task Path,:local:news-contact:kspDebugKotlin,3428,3761,3319,3647,4087,4466,ms
+Task Path,:local:list-contact:compileDebugKotlin,3335,3423,3267,3403,3751,3897,ms
+Task Path,:local:forecast-contact:compileDebugKotlin,3648,3816,3554,3699,4505,4476,ms
+Task Path,:local:map-contact:compileDebugKotlin,2984,2829,2892,2794,3483,3390,ms
+Task Path,:local:news-contact:compileDebugKotlin,2604,2493,2519,2458,3283,2825,ms
+Task Path,:config:podcast-contact:kspDebugKotlin,2773,3285,2800,3215,3261,4065,ms
+Task Path,:config:photo-contact:kspDebugKotlin,3003,3288,2977,3241,3784,4259,ms
+Task Path,:config:video-contact:kspDebugKotlin,3216,3618,3264,3502,3598,4653,ms
+Task Path,:config:gallery-contact:kspDebugKotlin,3322,3798,3291,3699,3861,4592,ms
+Task Path,:config:podcast-contact:compileDebugKotlin,2847,2826,2848,2787,3340,3259,ms
+Task Path,:config:photo-contact:compileDebugKotlin,2621,2505,2646,2513,3009,2823,ms
+Task Path,:config:gallery-contact:compileDebugKotlin,2899,2940,2852,2819,3327,3380,ms
+Task Path,:config:video-contact:compileDebugKotlin,3699,3493,3574,3533,4520,3917,ms
+Task Path,:config:article-contact:kspDebugKotlin,2888,3003,2772,2963,3673,3477,ms
+Task Path,:network:audio-contact:kspDebugKotlin,3075,3353,2975,3266,3713,3923,ms
+Task Path,:network:media-contact:kspDebugKotlin,2862,3122,2815,3102,3368,3566,ms
+Task Path,:config:article-contact:compileDebugKotlin,3004,3076,2944,3076,3612,3624,ms
+Task Path,:network:playlist-contact:kspDebugKotlin,2767,2987,2760,2994,3175,3370,ms
+Task Path,:network:media-contact:compileDebugKotlin,1782,1763,1706,1719,2268,2209,ms
+Task Path,:network:audio-contact:compileDebugKotlin,3423,3429,3379,3398,3957,3891,ms
+Task Path,:network:playlist-contact:compileDebugKotlin,1950,1881,1910,1856,2404,2248,ms
+Task Path,:network:push-login:kspDebugKotlin,2470,2664,2446,2677,3060,3132,ms
+Task Path,:network:push-login:compileDebugKotlin,1431,1466,1358,1379,2085,1860,ms
+Task Path,:common:login-login:kspDebugKotlin,2407,2634,2348,2556,3014,3041,ms
+Task Path,:network:contact-login:kspDebugKotlin,3053,3383,2992,3276,3641,3965,ms
+Task Path,:common:user-login:kspDebugKotlin,3148,3692,3249,3516,3741,4347,ms
+Task Path,:common:login-login:compileDebugKotlin,1374,1410,1333,1358,1768,1744,ms
+Task Path,:common:checkout-login:kspDebugKotlin,3056,3425,3014,3299,3710,4077,ms
+Task Path,:common:identity-login:kspDebugKotlin,3229,3559,3257,3553,3663,4155,ms
+Task Path,:common:user-login:compileDebugKotlin,3302,3477,3253,3444,3745,4004,ms
+Task Path,:app:comment-login:kspDebugKotlin,3059,3191,3080,3168,3648,4066,ms
+Task Path,:common:checkout-login:compileDebugKotlin,3232,3311,3207,3269,3769,3824,ms
+Task Path,:network:contact-login:compileDebugKotlin,1488,1494,1450,1435,1902,1930,ms
+Task Path,:app:comment-login:compileDebugKotlin,2007,1949,2038,1943,2296,2500,ms
+Task Path,:common:identity-login:compileDebugKotlin,3559,3582,3492,3556,4152,4400,ms
+Task Path,:app:feed-login:kspDebugKotlin,2447,2647,2365,2568,3053,3274,ms
+Task Path,:common:cart-login:kspDebugKotlin,3117,3328,3175,3312,3610,4019,ms
+Task Path,:app:post-login:kspDebugKotlin,2749,2938,2710,2890,3470,3326,ms
+Task Path,:app:search-login:kspDebugKotlin,3355,3582,3234,3547,4048,4142,ms
+Task Path,:app:feed-login:compileDebugKotlin,1457,1613,1378,1615,1841,1920,ms
+Task Path,:app:post-login:compileDebugKotlin,2304,2472,2252,2354,2877,3063,ms
+Task Path,:app:search-login:compileDebugKotlin,2491,2441,2378,2367,2985,3364,ms
+Task Path,:common:cart-login:compileDebugKotlin,3399,3491,3306,3465,3882,4261,ms
+Task Path,:app:profile-login:kspDebugKotlin,2971,3109,2831,2964,3796,3942,ms
+Task Path,:app:profile-login:compileDebugKotlin,3738,3305,3599,3246,4418,4021,ms
+Task Path,:app:app:kspDebugKotlin,2977,3002,2872,2991,3803,3237,ms
+Task Path,:app:app:compileDebugKotlin,4882,4127,4745,4088,6012,4720,ms
+Task Path,:app:app:hiltJavaCompileDebug,9218,8574,9337,8630,9947,9144,ms
+Task Path,:app:app:mergeDebugJavaResource,1691,1707,1672,1682,2119,2032,ms
+Task Path,:app:app:dexBuilderDebug,1628,1451,1575,1432,2121,1744,ms
+Task Path,:app:app:mergeLibDexDebug,2930,2993,2867,3015,3381,3320,ms
+Task Path,:remote:timer-contact:kspDebugKotlin,1965,2210,1881,2144,2419,2716,ms
+Task Path,:service:account-contact:kspDebugKotlin,2079,2357,2029,2304,2518,2809,ms
+Task Path,:remote:timer-contact:compileDebugKotlin,2168,2277,2110,2236,2628,2656,ms
+Task Path,:service:account-contact:compileDebugKotlin,1558,1591,1513,1541,1913,1930,ms
+All processes cpu,Max,100.0,100.0,100.0,100.0,100,100,%
+All processes memory,Max,10.8,12.45,10.79,12.37,11.4,13.25,Gb
+Build process cpu,Max,96.1,96.66666666666667,96.0,97.0,97,97,%
+Build processes memory,Max,5.36,7.68,5.3,7.54,6.03,8.32,Gb
+Build child processes cpu,Max,95.23333333333333,94.06666666666666,95.0,94.0,96,95,%
+Build child processes memory,Max,4.54,3.88,4.53,3.8,5.17,4.29,Gb
+gc-gradle_gc.log,Concurrent Mark Cycle,31.0,28.0,32.0,29.0,36.0,31.0,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (CodeCache GC Threshold),1.0,12.0,1.0,12.5,2.1,14.0,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (G1 Evacuation Pause),25.0,12.0,26.0,12.5,29.9,15.9,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (G1 Humongous Allocation),1.0,1.0,1.0,1.0,3.0,3.0,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (Metadata GC Threshold),3.0,3.0,3.0,3.0,3.0,3.0,
+gc-gradle_gc.log,Pause Young (Mixed) (G1 Evacuation Pause),34.0,83.0,35.5,82.5,39.0,90.0,
+gc-gradle_gc.log,Pause Young (Mixed) (G1 Evacuation Pause) (Evacuation Failure: Pinned),1.0,6.0,1.5,6.5,3.5,10.0,
+gc-gradle_gc.log,Pause Young (Normal) (G1 Evacuation Pause),45.0,43.0,47.0,44.0,55.9,52.0,
+gc-gradle_gc.log,Pause Young (Normal) (G1 Evacuation Pause) (Evacuation Failure: Pinned),2.0,2.0,2.0,2.0,4.9,4.0,
+gc-gradle_gc.log,Pause Young (Prepare Mixed) (G1 Evacuation Pause),29.0,26.0,30.0,27.0,33.0,29.0,
+gc-gradle_gc.log,Pause Young (Prepare Mixed) (G1 Evacuation Pause) (Evacuation Failure: Pinned),1.0,1.0,1.0,1.0,3.0,3.0,
+gc-gradle_gc.log,total-collections,146.0,193.0,147.0,193.5,161.0,205.4,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (G1 Evacuation Pause) (Evacuation Failure: Pinned),1.0,1.0,1.0,1.0,3.0,1.0,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (G1 Humongous Allocation) (Evacuation Failure: Pinned),1.0,,1.0,,2.0,,
+gc-gradle_gc.log,Pause Young (Mixed) (Metadata GC Threshold),1.0,1.0,1.0,1.0,1.0,1.0,
+gc-gradle_gc.log,Pause Remark,1.0,1.0,1.0,1.0,1.0,1.0,
+Task Type,com.google.devtools.ksp.gradle.KspAATask,,4640,,4103,,6729,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (CodeCache GC Threshold) (Evacuation Failure: Pinned),,1.0,,1.0,,2.0,
