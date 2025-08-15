@@ -1,8 +1,10 @@
-name: Deploy Hugo site to Pages
+name: Deploy Hugo to GH-Pages
 
 on:
+  push:
+    branches: ["gh-pages"]
   repository_dispatch:
-    types: [deploy-hugo]
+    types: [deploy-hugo]     
   workflow_dispatch:
 
 permissions:
@@ -22,12 +24,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: 0.121.0
+      HUGO_VERSION: 0.145.0
     steps:
-      - name: Checkout gh-pages branch
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: gh-pages
+          ref: ${{ github.event.client_payload.ref || 'gh-pages' }}
           submodules: true
           fetch-depth: 0
 
@@ -38,11 +40,16 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: 'latest'
           extended: true
+          hugo-version: '0.145.0'
+
 
       - name: Install theme
-        run: git submodule add -f https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
+        run: |
+          git submodule add -f https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
+          git submodule update --init --recursive
+
+
 
       - name: Build with Hugo
         env:
@@ -66,6 +73,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploying  GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v4 
