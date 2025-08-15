@@ -1,0 +1,49 @@
+---
+layout: post
+title: "KGP 2.2.10 vs 2.2.0"
+date: 2025-08-15
+report_link: /Telltale/reports/experiment_results_20250815221305.html
+summary: " 
+The analysis of the Gradle build performance data reveals minor differences between the two variants, `varianta_2.2.0` and `variantb_2.2.10`. The overall build time for `varianta_2.2.0` averages around 372.6 seconds, while `variantb_2.2.10` is slightly faster at 370.4 seconds, marking a modest improvement of approximately 0.6%. The most time-consuming tasks across both variants include `:core:identity:compileDebugKotlin`, `:core:contact:compileDebugKotlin`, and `:feature:post:compileDebugKotlin`, with each showing minor time differences between the variants. Memory usage is slightly higher in `variantb_2.2.10` with a peak of 10.94 GB compared to 10.74 GB in `varianta_2.2.0`. CPU usage for both variants reached the maximum capacity of 100%. The Kotlin build reports indicate a slight efficiency improvement in `variantb_2.2.10` in terms of incremental compilation and compiler code generation."
+tags: ["dependencies cache"]
+---
+[Report 📊](../../reports/experiment_results_20250815221305.html)
+## Summary
+The analysis of the Gradle build performance data reveals minor differences between the two variants, `varianta_2.2.0` and `variantb_2.2.10`. The overall build time for `varianta_2.2.0` averages around 372.6 seconds, while `variantb_2.2.10` is slightly faster at 370.4 seconds, marking a modest improvement of approximately 0.6%. The most time-consuming tasks across both variants include `:core:identity:compileDebugKotlin`, `:core:contact:compileDebugKotlin`, and `:feature:post:compileDebugKotlin`, with each showing minor time differences between the variants. Memory usage is slightly higher in `variantb_2.2.10` with a peak of 10.94 GB compared to 10.74 GB in `varianta_2.2.0`. CPU usage for both variants reached the maximum capacity of 100%. The Kotlin build reports indicate a slight efficiency improvement in `variantb_2.2.10` in terms of incremental compilation and compiler code generation.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Mean Build Time:** `varianta_2.2.0` has a mean build time of 372.6 seconds, while `variantb_2.2.10` is at 370.4 seconds.
+- **P50 Build Time:** `varianta_2.2.0` records a median (P50) build time of 372.1 seconds compared to 369.9 seconds for `variantb_2.2.10`.
+- **P90 Build Time:** At the 90th percentile, `varianta_2.2.0` shows a build time of 386.1 seconds, whereas `variantb_2.2.10` slightly increases to 390.2 seconds.
+- **Percentage Difference:** The overall build time shows a decrease of about 0.6% in `variantb_2.2.10` compared to `varianta_2.2.0`.
+
+### 2. Task Type Differences
+- **Top Time-Consuming Tasks:**
+  - `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"`: Mean times are 3755 ms for `varianta_2.2.0` and 3728 ms for `variantb_2.2.10`.
+  - `"com.google.devtools.ksp.gradle.KspTaskJvm"`: Mean times are 3772 ms for `varianta_2.2.0` and 3752 ms for `variantb_2.2.10`.
+  - `"com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask"`: Mean times are 2543 ms for `varianta_2.2.0` and 2380 ms for `variantb_2.2.10`.
+
+### 3. Statistical Patterns
+- **Notable Timing Variations:**
+  - `"com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask"` shows a significant reduction in execution time in `variantb_2.2.10` by about 6.4%.
+
+### 4. CPU & Memory Usage Analysis
+- **Overall System Usage:**
+  - **CPU:** Both variants reached the maximum of 100%.
+  - **Memory:** `varianta_2.2.0` peaked at 10.74 GB, and `variantb_2.2.10` at 10.94 GB, indicating a slight increase.
+- **Main Gradle Process:**
+  - **CPU:** Both variants showed a high CPU usage near the maximum, with `variantb_2.2.10` marginally higher.
+  - **Memory:** `varianta_2.2.0` used up to 5.41 GB, slightly less than `variantb_2.2.10` at 5.42 GB.
+- **Build Child Processes:**
+  - **Memory:** `variantb_2.2.10` shows higher memory usage, peaking at 5.23 GB compared to 4.94 GB in `varianta_2.2.0`.
+
+### 5. Garbage Collection Analysis
+- **Total GC Collections:** `varianta_2.2.0` had slightly more collections (143) compared to `variantb_2.2.10` (142), indicating a marginal improvement in memory management.
+
+### 6. Kotlin Build Reports Analysis
+- **Incremental Compilation:** `variantb_2.2.10` shows a slight improvement in incremental compilation times.
+- **Compiler Performance Metrics:** Both variants are closely matched in terms of code generation and analysis lines per second, with `variantb_2.2.10` showing a slight edge.
+
+This analysis underscores the subtle performance enhancements in `variantb_2.2.10`, particularly in build time efficiency and memory management, despite high resource utilization.
