@@ -1,0 +1,61 @@
+---
+layout: post
+title: "AGP 9-alpha02"
+date: 2025-08-27
+report_link: /Telltale/reports/experiment_results_20250827171600.html
+summary: " 
+The performance comparison between two Gradle build variants, `varianta_agp_8.12` and `variantb_agp_9-alpha02`, shows that the newer variant generally improves build performance. The mean build time decreased from 376.749 seconds in `varianta` to 370.775 seconds in `variantb`, a reduction of approximately 1.58%. The P50 and P90 values also show improvements with reductions of 1.58% and 5.44% respectively. Notably, the most time-consuming tasks across both variants include `:core:identity:compileDebugKotlin`, `:core:cart:compileDebugKotlin`, and `:app:app:mergeExtDexDebug`, with `variantb` showing slight improvements in execution times for these tasks. Memory and CPU usage metrics indicate marginal differences, with `variantb` generally using slightly less memory. The total garbage collection counts are very similar between the variants, suggesting stable memory management across builds."
+tags: ["dependencies cache"]
+---
+[Report 📊](../../reports/experiment_results_20250827171600.html)
+## Summary
+The performance comparison between two Gradle build variants, `varianta_agp_8.12` and `variantb_agp_9-alpha02`, shows that the newer variant generally improves build performance. The mean build time decreased from 376.749 seconds in `varianta` to 370.775 seconds in `variantb`, a reduction of approximately 1.58%. The P50 and P90 values also show improvements with reductions of 1.58% and 5.44% respectively. Notably, the most time-consuming tasks across both variants include `:core:identity:compileDebugKotlin`, `:core:cart:compileDebugKotlin`, and `:app:app:mergeExtDexDebug`, with `variantb` showing slight improvements in execution times for these tasks. Memory and CPU usage metrics indicate marginal differences, with `variantb` generally using slightly less memory. The total garbage collection counts are very similar between the variants, suggesting stable memory management across builds.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Mean Build Time:**
+  - `varianta_agp_8.12`: 376.749 seconds
+  - `variantb_agp_9-alpha02`: 370.775 seconds
+  - **Reduction**: 1.58%
+- **P50 Build Time:**
+  - `varianta_agp_8.12`: 370.493 seconds
+  - `variantb_agp_9-alpha02`: 368.749 seconds
+  - **Reduction**: 1.58%
+- **P90 Build Time:**
+  - `varianta_agp_8.12`: 408.203 seconds
+  - `variantb_agp_9-alpha02`: 386.005 seconds
+  - **Reduction**: 5.44%
+
+### 2. Task Type Differences
+- **Top Time-Consuming Tasks:**
+  1. `:core:identity:compileDebugKotlin`
+     - `varianta_agp_8.12`: 9548 ms
+     - `variantb_agp_9-alpha02`: 9539 ms
+  2. `:core:cart:compileDebugKotlin`
+     - `varianta_agp_8.12`: 9956 ms
+     - `variantb_agp_9-alpha02`: 9958 ms
+  3. `:app:app:mergeExtDexDebug`
+     - `varianta_agp_8.12`: 11651 ms
+     - `variantb_agp_9-alpha02`: 10600 ms
+     - **Reduction**: 9.02%
+
+### 3. Statistical Patterns
+- Notable timing variations are observed in `:app:app:mergeExtDexDebug` with a significant reduction in build time in `variantb`.
+- `variantb` shows a consistent trend of slight improvements across most tasks, particularly in those with higher execution times.
+
+### 4. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - All processes maxed out at 100% for both variants.
+  - Build process CPU usage was slightly higher in `variantb` (96.65% vs. 96.5%).
+- **Memory Usage:**
+  - All processes: `varianta` peaked at 10.73 GB, `variantb` at 10.63 GB.
+  - Build process memory: `varianta` used up to 5.28 GB, `variantb` 5.12 GB.
+
+### 6. Garbage Collection Analysis
+- **Total GC Collections:**
+  - `varianta_agp_8.12`: 141.0
+  - `variantb_agp_9-alpha02`: 142.0
+  - The slight increase in GC collections in `variantb` does not significantly impact overall performance.
+
+In summary, `variantb_agp_9-alpha02` shows a modest but consistent improvement in build performance compared to `varianta_agp_8.12`, particularly in reducing the execution time of the most demanding tasks. Memory and CPU usage are slightly optimized in the newer variant, contributing to its enhanced performance.
