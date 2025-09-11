@@ -1,0 +1,57 @@
+---
+layout: post
+title: "KGP 2.2.10 vs 2.2.20"
+date: 2025-09-11
+report_link: /Telltale/reports/experiment_results_20250911192755.html
+summary: " 
+The analysis of the Gradle build performance between variants `2.2.10` and `2.2.20` reveals subtle differences in build times and task execution. The overall build time for variant `2.2.20` is slightly higher by about 3.3 seconds (0.92% increase) compared to variant `2.2.10`. The configuration time also shows a minor increase of 0.63 seconds (1.46% increase) in variant `2.2.20`. Notably, the most time-consuming tasks across both variants include `:app:app:hiltJavaCompileDebug`, `:app:app:mergeExtDexDebug`, and `:core:cart:compileDebugKotlin`, with variant `2.2.20` generally showing a marginal increase in execution times. Memory usage is slightly lower in variant `2.2.20` by about 0.21 GB (2.01% decrease), while CPU usage remains maximized at 100% for both variants. The total garbage collection counts are very close, with variant `2.2.20` having just one more collection than `2.2.10`."
+tags: ["dependencies cache"]
+---
+[Report 📊](../../reports/experiment_results_20250911192755.html)
+## Summary
+The analysis of the Gradle build performance between variants `2.2.10` and `2.2.20` reveals subtle differences in build times and task execution. The overall build time for variant `2.2.20` is slightly higher by about 3.3 seconds (0.92% increase) compared to variant `2.2.10`. The configuration time also shows a minor increase of 0.63 seconds (1.46% increase) in variant `2.2.20`. Notably, the most time-consuming tasks across both variants include `:app:app:hiltJavaCompileDebug`, `:app:app:mergeExtDexDebug`, and `:core:cart:compileDebugKotlin`, with variant `2.2.20` generally showing a marginal increase in execution times. Memory usage is slightly lower in variant `2.2.20` by about 0.21 GB (2.01% decrease), while CPU usage remains maximized at 100% for both variants. The total garbage collection counts are very close, with variant `2.2.20` having just one more collection than `2.2.10`.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - Variant `2.2.10`: Mean = 360.189s, P50 = 359.379s, P90 = 375.017s
+  - Variant `2.2.20`: Mean = 363.518s, P50 = 361.534s, P90 = 379.325s
+  - Percentage Increase: Mean = 0.92%, P50 = 0.60%, P90 = 1.15%
+
+- **Configuration Time:**
+  - Variant `2.2.10`: Mean = 43.379s, P50 = 42.911s, P90 = 46.514s
+  - Variant `2.2.20`: Mean = 44.011s, P50 = 43.688s, P90 = 46.617s
+  - Percentage Increase: Mean = 1.46%, P50 = 1.81%, P90 = 0.22%
+
+### 2. Task Type Differences
+- **Top Time-Consuming Tasks:**
+  - `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"`: Minor increase in mean time from 3139ms to 3150ms.
+  - `"com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask"`: Nearly consistent, slight increase in P90.
+  - `"com.google.devtools.ksp.gradle.KspTaskJvm"`: Increase in mean time from 3664ms to 3715ms.
+
+### 3. Statistical Patterns
+- Tasks such as `"com.android.build.gradle.internal.tasks.DexMergingTask"` and `"com.android.build.gradle.internal.tasks.DexArchiveBuilderTask"` show notable timing variations, with variant `2.2.20` generally taking longer.
+
+### 4. Process State Analysis
+- **Kotlin Process State:**
+  - No significant change in garbage collection time between the variants.
+- **Gradle Process State:**
+  - Garbage collection time remains consistent at 0.14s for both variants.
+
+### 5. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - Both variants maximally utilize CPU resources at 100%.
+- **Memory Usage:**
+  - All processes: Variant `2.2.10` max = 10.43 GB, Variant `2.2.20` max = 10.22 GB (2.01% decrease).
+  - Build process: Variant `2.2.10` max = 5.0 GB, Variant `2.2.20` max = 4.97 GB (0.6% decrease).
+
+### 6. Garbage Collection Analysis
+- Total GC collections are slightly higher in variant `2.2.20` (145) compared to variant `2.2.10` (144).
+
+### 7. Kotlin Build Reports Analysis
+- **Compiler Performance Metrics:**
+  - Code generation lines per second increased from 907 to 932 in variant `2.2.20`.
+  - Analysis lines per second decreased from 829 to 733 in variant `2.2.20`, indicating a slower analysis phase.
+
+This report highlights the nuanced performance differences between the two Gradle build variants, with variant `2.2.20` showing marginal increases in build and configuration times, alongside a slight decrease in memory usage.
