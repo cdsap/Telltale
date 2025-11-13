@@ -1,0 +1,55 @@
+---
+layout: post
+title: "AGP 9.0.0-beta01 vs 8.13.1"
+date: 2025-11-13
+report_link: /Telltale/reports/experiment_results_20251113190739.html
+summary: " 
+The performance analysis between two Gradle build variants, `varianta_agp_9_0_0_beta01` and `variantb_agp_8_13_1`, reveals several key insights. The overall build time for `varianta` is slightly faster, averaging 554.782 seconds compared to `variantb`'s 566.004 seconds, a difference of approximately 2%. Notably, `varianta` also shows a quicker configuration time, averaging 53.077 seconds versus `variantb`'s 59.078 seconds, indicating a 10% improvement.
+
+In task execution, `varianta` generally performs better in CPU and memory usage, with a maximum CPU usage slightly lower than `variantb` (97.14% vs. 96.96%) and a more efficient memory usage profile. The analysis of garbage collection shows `varianta` having fewer total collections (251) compared to `variantb` (259), suggesting better memory management."
+tags: ["dependencies cache"]
+---
+[Report 📊](../../reports/experiment_results_20251113190739.html)
+## Summary
+The performance analysis between two Gradle build variants, `varianta_agp_9_0_0_beta01` and `variantb_agp_8_13_1`, reveals several key insights. The overall build time for `varianta` is slightly faster, averaging 554.782 seconds compared to `variantb`'s 566.004 seconds, a difference of approximately 2%. Notably, `varianta` also shows a quicker configuration time, averaging 53.077 seconds versus `variantb`'s 59.078 seconds, indicating a 10% improvement.
+
+In task execution, `varianta` generally performs better in CPU and memory usage, with a maximum CPU usage slightly lower than `variantb` (97.14% vs. 96.96%) and a more efficient memory usage profile. The analysis of garbage collection shows `varianta` having fewer total collections (251) compared to `variantb` (259), suggesting better memory management.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - Mean: `varianta`: 554.782s, `variantb`: 566.004s
+  - P50: `varianta`: 554.790s, `variantb`: 565.163s
+  - P90: `varianta`: 578.403s, `variantb`: 591.394s
+  - `varianta` is faster by approximately 2% across all percentiles.
+
+- **Configuration Time:**
+  - Mean: `varianta`: 53.077s, `variantb`: 59.078s
+  - P50: `varianta`: 50.971s, `variantb`: 57.442s
+  - P90: `varianta`: 62.880s, `variantb`: 66.441s
+  - `varianta` is faster by approximately 10% across all percentiles.
+
+### 2. Task Type Differences
+- Top 3 most time-consuming tasks for `varianta`:
+  - `"com.android.build.gradle.internal.tasks.DexMergingTask"`: Mean: 4924ms, P50: 2457ms, P90: 12417ms
+  - `"com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask"`: Mean: 2181ms, P50: 2103ms, P90: 2726ms
+  - `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"`: Mean: 2078ms, P50: 1729ms, P90: 3222ms
+
+- Comparisons with `variantb`:
+  - `"DexMergingTask"` shows a significant difference, with `varianta` being 29% slower on average.
+  - `"LinkApplicationAndroidResourcesTask"` and `"KotlinCompile"` show minor differences, with `varianta` being faster in the latter.
+
+### 3. Statistical Patterns
+- Notable timing variations are observed in `"DexMergingTask"`, with `varianta` performing slower, indicating potential areas for optimization.
+
+### 4. Process State Analysis
+- **CPU & Memory Usage Analysis:**
+  - All processes: Max CPU usage is 100% for both variants; max memory usage is slightly higher for `varianta` (13.08 GB vs. 13.05 GB).
+  - Build process: `varianta` uses slightly less CPU (97.14% vs. 96.96%) and has a lower memory footprint (8.33 GB vs. 8.42 GB).
+  - Build child processes: `varianta` shows more efficient memory usage (3.83 GB vs. 3.72 GB).
+
+### 5. Garbage Collection Analysis
+- Total GC collections are fewer in `varianta` (251) compared to `variantb` (259), suggesting more efficient memory management.
+
+This analysis highlights `varianta`'s strengths in configuration speed and overall resource efficiency, though some tasks like `"DexMergingTask"` could be further optimized.
