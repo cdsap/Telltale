@@ -1,7 +1,0 @@
- 
-The analysis of the Gradle build performance data reveals modest differences between the two variants, `varianta_agp_9_0_0_beta01` and `variantb_agp_9_0_0_beta01_no_builtInKotlin`. The overall build time for `varianta` averaged 560.768 seconds, slightly higher than `variantb` at 555.408 seconds, showing a minor improvement of about 0.96%. Configuration times were also close, with `varianta` averaging 56.552 seconds compared to `variantb` at 57.775 seconds. Notably, `variantb` shows a slight increase in configuration time by about 2.16%.
-
-In terms of resource usage, `variantb` consistently used less memory across all processes, with a maximum of 11.71 GB compared to `varianta`'s 12.82 GB. CPU usage was nearly identical for both variants, maxing out at 100% for overall processes and hovering around 97% for the main build process.
-
-The most time-consuming tasks across both variants included `:core:cart:kspDebugKotlin`, `:core:contact:kspDebugKotlin`, and `:core:comment:kspDebugKotlin`, with `varianta` generally taking slightly longer to execute these tasks.
-
