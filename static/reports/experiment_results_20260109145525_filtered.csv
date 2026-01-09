@@ -1,0 +1,56 @@
+Category,Metric,varianta_useMetro_true Mean,variantb_useMetro_false Mean,varianta_useMetro_true P50,variantb_useMetro_false P50,varianta_useMetro_true P90,variantb_useMetro_false P90,Unit
+Build,Build time,120548,139476,121150,138161,124045,146975,ms
+Build,Configuration time,36237,37654,36210,37402,37997,39389,ms
+Gradle process state,Gradle-Process-gcTime,0.06,0.07,0.05,0.07,0.06,0.08,
+Kotlin process state,Kotlin-Process-gcTime,0.05,0.04,0.05,0.04,0.05,0.04,
+Task Type,org.jetbrains.kotlin.gradle.tasks.KotlinCompile,6524,5683,5232,3759,12403,12693,ms
+Task Type,com.android.build.gradle.internal.tasks.CheckAarMetadataTask,1366,1151,1436,1116,1594,1394,ms
+Task Type,com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask,1872,2355,1860,2383,2060,2583,ms
+Task Type,com.android.build.gradle.internal.tasks.L8DexDesugarLibTask,8348,10050,8370,10119,9159,10717,ms
+Task Type,com.android.build.gradle.internal.tasks.CheckDuplicateClassesTask,1254,1010,1205,967,1552,1299,ms
+Task Type,com.google.devtools.ksp.gradle.KspAATask,23170,5587,22817,4512,24752,12603,ms
+Task Type,com.android.build.gradle.internal.tasks.ValidateSigningTask,2730,2918,2638,2885,3668,3813,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeJavaResourceTask,2047,2074,2048,2041,2243,2408,ms
+Task Path,:build-logic:convention:compileKotlin,12299,12485,12241,12414,12952,12993,ms
+Task Path,:app:checkDemoDebugAarMetadata,1366,1151,1436,1116,1594,1394,ms
+Task Path,:app:parseDemoDebugLocalResources,1920,1700,1205,1204,3752,4083,ms
+Task Path,:app:mergeDemoDebugResources,4203,4845,4220,4782,4625,5254,ms
+Task Path,:app:processDemoDebugResources,1872,2355,1860,2383,2060,2583,ms
+Task Path,:core:model:compileKotlin,12391,16079,12301,16059,13236,17030,ms
+Task Path,:core:common:compileKotlin,12412,2535,12315,2390,13252,3215,ms
+Task Path,:core:datastore-proto:compileDemoDebugKotlin,5436,5547,5392,5514,5996,6078,ms
+Task Path,:core:metro:compileDemoDebugKotlin,9439,10656,9354,10460,10292,11684,ms
+Task Path,:core:metro:compileDemoDebugJavaWithJavac,2732,1579,2760,1141,3323,2687,ms
+Task Path,:core:datastore-proto:compileDemoDebugJavaWithJavac,5107,3754,5058,3738,5639,4112,ms
+Task Path,:core:analytics:compileDemoDebugKotlin,2583,2335,2602,2344,2810,2680,ms
+Task Path,:ui-test-hilt-manifest:compileDemoDebugKotlin,3619,2722,3624,2701,3973,2979,ms
+Task Path,:app:l8DexDesugarLibDemoDebug,8348,10050,8370,10119,9159,10717,ms
+Task Path,:core:datastore:compileDemoDebugKotlin,4496,3318,4458,3340,4898,3643,ms
+Task Path,:core:network:compileDemoDebugKotlin,5593,4044,5606,3986,5982,4455,ms
+Task Path,:core:notifications:compileDemoDebugKotlin,3306,1433,3313,1388,3708,1786,ms
+Task Path,:app:checkDemoDebugDuplicateClasses,1254,1010,1205,967,1552,1299,ms
+Task Path,:core:designsystem:compileDemoDebugKotlin,20930,22173,20816,22173,22139,23755,ms
+Task Path,:core:ui:compileDemoDebugKotlin,6578,6512,6608,6449,7636,7243,ms
+Task Path,:core:database:kspDemoDebugKotlin,23170,13137,22817,13094,24752,14021,ms
+Task Path,:core:database:compileDemoDebugKotlin,7447,7176,7621,7138,8764,8078,ms
+Task Path,:app:validateSigningDemoDebug,2730,2918,2638,2885,3668,3813,ms
+Task Path,:core:data:compileDemoDebugKotlin,4211,4342,4262,4303,4873,5074,ms
+Task Path,:core:domain:compileDemoDebugKotlin,1846,2246,1841,2228,2134,3044,ms
+Task Path,:feature:bookmarks:compileDemoDebugKotlin,4201,3239,3988,3178,5520,3879,ms
+Task Path,:feature:settings:compileDemoDebugKotlin,5232,3227,5487,3113,6415,4129,ms
+Task Path,:feature:foryou:compileDemoDebugKotlin,5304,4859,5349,4739,6104,5413,ms
+Task Path,:feature:interests:compileDemoDebugKotlin,3872,3813,3829,3253,4991,5697,ms
+Task Path,:sync:work:compileDemoDebugKotlin,2472,1611,2250,1587,3088,1890,ms
+Task Path,:feature:search:compileDemoDebugKotlin,6334,4463,5856,4273,8784,5770,ms
+Task Path,:feature:topic:compileDemoDebugKotlin,4159,3521,4182,3504,4705,4056,ms
+Task Path,:app:mergeExtDexDemoDebug,41241,37218,41515,37481,43815,39169,ms
+Task Path,:app:compileDemoDebugKotlin,5894,2364,5915,2350,6711,2576,ms
+Task Path,:app:mergeDemoDebugJavaResource,2047,2074,2048,2041,2243,2408,ms
+All processes cpu,Max,100.0,100.0,100.0,100.0,100,100,%
+All processes memory,Max,7.69,8.06,7.69,8.02,8.0,8.45,Gb
+Build process cpu,Max,95.16,95.64,95.0,96.0,96,96,%
+Build processes memory,Max,3.88,4.58,3.85,4.53,4.06,4.91,Gb
+Build child processes cpu,Max,88.14,88.92,88.0,89.0,91,92,%
+Build child processes memory,Max,2.96,2.63,2.95,2.64,3.13,2.74,Gb
+gc-gradle_gc.log,total-collections,40.0,47.0,40.0,47.0,44.0,50.9,
+gc-kotlin_gc.log,total-collections,28.0,27.0,29.0,27.0,31.0,30.0,
