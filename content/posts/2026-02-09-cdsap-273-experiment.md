@@ -1,0 +1,71 @@
+---
+layout: post
+title: "Gradle 9.4.0-rc-1 vs 9.3.1"
+date: 2026-02-09
+report_link: /Telltale/reports/experiment_results_20260209181907.html
+summary: " 
+The analysis of the Gradle build performance comparison between variants 9.3.1 and 9.4.0-rc-1 reveals a slight increase in overall build time by approximately 4.6 seconds (0.9% increase). The configuration time also saw a minor increase of about 1.02 seconds (2.3% increase). Notably, the top three most time-consuming tasks across both variants were `:core:cart:kspDebugKotlin`, `:core:contact:kspDebugKotlin`, and `:core:comment:kspDebugKotlin`, with marginal increases in their execution times in the newer variant. Memory usage across all processes slightly decreased in the newer variant, while CPU usage remained maximally utilized at 100% for all processes. The total garbage collection counts increased in the newer variant, suggesting a potential area for optimization."
+tags: ["dependencies cache"]
+---
+[Report 📊](../../reports/experiment_results_20260209181907.html)
+## Summary
+The analysis of the Gradle build performance comparison between variants 9.3.1 and 9.4.0-rc-1 reveals a slight increase in overall build time by approximately 4.6 seconds (0.9% increase). The configuration time also saw a minor increase of about 1.02 seconds (2.3% increase). Notably, the top three most time-consuming tasks across both variants were `:core:cart:kspDebugKotlin`, `:core:contact:kspDebugKotlin`, and `:core:comment:kspDebugKotlin`, with marginal increases in their execution times in the newer variant. Memory usage across all processes slightly decreased in the newer variant, while CPU usage remained maximally utilized at 100% for all processes. The total garbage collection counts increased in the newer variant, suggesting a potential area for optimization.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - **Mean:** Increased from 503.917s to 508.496s (0.9% increase, 4.579s more).
+  - **P50:** Increased from 499.491s to 503.940s.
+  - **P90:** Increased from 526.273s to 539.733s.
+
+- **Configuration Time:**
+  - **Mean:** Increased from 45.383s to 46.405s (2.3% increase, 1.022s more).
+  - **P50:** Increased from 44.998s to 45.421s.
+  - **P90:** Increased from 49.567s to 50.707s.
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  - `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"`: Slight increase from 2541ms to 2547ms.
+  - `"com.google.devtools.ksp.gradle.KspAATask"`: Increased from 3672ms to 3718ms.
+  - `"com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask"`: Decreased from 2098ms to 2088ms.
+
+### 3. Statistical Patterns
+- Tasks like `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"` and `"com.google.devtools.ksp.gradle.KspAATask"` showed consistent increases across mean, P50, and P90 values, indicating a trend of increased task execution times in the newer variant.
+
+### 4. Process State Analysis
+- **Kotlin Process State:**
+  - Slight increase in garbage collection time from 0.19 to 0.2.
+
+- **Gradle Process State:**
+  - Gradle process garbage collection time increased from 0.44 to 0.45.
+
+### 5. CPU & Memory Usage Analysis
+- **All Processes:**
+  - **CPU Usage:** Maxed at 100% for both variants.
+  - **Memory Usage:** Slightly decreased from 13.0GB to 12.9GB.
+
+- **Build Process:**
+  - **CPU Usage:** Remained high at around 97% for both variants.
+  - **Memory Usage:** Slightly decreased from 8.19GB to 8.13GB.
+
+- **Build Child Processes:**
+  - **CPU Usage:** Increased slightly from 94.52% to 94.72%.
+  - **Memory Usage:** Decreased from 3.88GB to 3.86GB.
+
+### 6. Garbage Collection Analysis
+- Total garbage collection counts increased from 227 to 233, suggesting more frequent memory management activities in the newer variant.
+
+### 7. Kotlin Build Reports Analysis
+- **Compiler Execution Stages Comparison:**
+  - Slight increases in times for stages like "Compiler code analysis" and "Compiler IR lowering".
+  - "Run compilation" time increased from 2330.48ms to 2336.23ms.
+
+- **Incremental Compilation Insights:**
+  - Incremental compilation time in daemon slightly increased from 2308.65ms to 2314.4ms.
+
+- **Compilation Performance Metrics:**
+  - "Code generation lines per second" slightly decreased from 1021 to 1014.
+  - "Analysis lines per second" decreased from 696 to 689.
+
+This detailed analysis highlights the areas where the newer variant of the build process has increased resource usage and execution times, suggesting potential areas for optimization to enhance performance.
