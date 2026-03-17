@@ -1,0 +1,52 @@
+## Summary
+The analysis of the Gradle build performance comparison between two Kotlin variants (2.3.10 and 2.3.20) reveals minor differences in build times and task execution. The overall build time for variant B (Kotlin 2.3.20) is slightly higher by approximately 0.76 seconds (0.76% increase). Configuration times are nearly identical with a negligible difference. Notably, the most time-consuming tasks such as `:app:app:mergeExtDexDebug` and `:app:app:hiltJavaCompileDebug` show minimal variation between the two variants.
+
+In terms of CPU and memory usage, both variants reach the maximum CPU usage, but variant B uses slightly more memory (0.03 GB more for the build process). The garbage collection metrics indicate a very close number of total collections between the two variants, suggesting similar memory management efficiency.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - Variant A (Kotlin 2.3.10): Mean: 553.994s, P50: 555.706s, P90: 578.186s
+  - Variant B (Kotlin 2.3.20): Mean: 558.244s, P50: 554.566s, P90: 584.637s
+  - **Difference:** Mean: +4.25s (+0.76%), P50: -1.14s (-0.21%), P90: +6.451s (+1.12%)
+
+- **Configuration Time:**
+  - Variant A: Mean: 61.276s, P50: 61.099s, P90: 69.528s
+  - Variant B: Mean: 61.172s, P50: 60.613s, P90: 66.824s
+  - **Difference:** Mean: -0.104s (-0.17%), P50: -0.486s (-0.79%), P90: -2.704s (-3.89%)
+
+### 2. Task Type Differences
+- **Top Time-consuming Tasks:**
+  - `:app:app:mergeExtDexDebug`: Variant A: 12.288s, Variant B: 12.247s
+  - `:app:app:hiltJavaCompileDebug`: Variant A: 4.908s, Variant B: 4.851s
+  - `:app:app:mergeDebugResources`: Variant A: 4.296s, Variant B: 4.518s
+  - **Significant Variation:** `:app:app:mergeDebugResources` shows a noticeable increase in build time in Variant B by 0.222s (5.17%).
+
+### 3. Statistical Patterns
+- Tasks such as `:app:app:mergeDebugResources` and `:app:app:mergeExtDexDebug` show a trend where Variant B tends to have slightly higher execution times, particularly noticeable at the P90 percentile.
+
+### 4. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - All processes: Max 100% for both variants.
+  - Build process: Max 96.38% for Variant A, 96.34% for Variant B.
+  - Build child processes: Max 92.94% for Variant A, 93.54% for Variant B.
+
+- **Memory Usage:**
+  - All processes: Max 11.49 GB for both variants.
+  - Build process: Max 6.49 GB for Variant A, 6.52 GB for Variant B.
+  - Build child processes: Max 3.98 GB for Variant A, 3.95 GB for Variant B.
+
+### 6. Garbage Collection Analysis
+- **Total GC Collections:**
+  - Variant A: 215.0 (mean), 217.0 (P50), 221.0 (P90)
+  - Variant B: 216.0 (mean), 218.0 (P50), 221.0 (P90)
+  - **Difference:** Minimal, indicating similar efficiency in memory management across both variants.
+
+### 7. Kotlin Build Reports Analysis
+- **Compiler Execution Stages Comparison:**
+  - Code generation: Slightly faster in Variant B by 1.04 ms.
+  - Incremental compilation: Variant A is slightly more efficient, with a lower mean time by 16 ms.
+  - Classpath snapshot size: No significant change, indicating stable dependency management.
+
+Overall, the performance differences between the two Kotlin variants are minimal, with slight increases in build and configuration times for Variant B. Memory usage is slightly higher in Variant B, but CPU usage is nearly identical. The efficiency of garbage collection and Kotlin compiler performance is comparable between the two variants.
