@@ -147,7 +147,9 @@ runs:
           gcreport="--no-gc-report"
         fi 
 
-        if [ "${{ inputs.open-ai-request }}" == "true" ]; then
+        # OpenAI analysis is only useful when results are deployed to gh-pages.
+        # Avoid unnecessary API calls when deploy_results is false.
+        if [ "${{ inputs.open-ai-request }}" == "true" ] && [ "${{ inputs.deploy_results }}" == "true" ]; then
           openai_request="--open-ai-request"
         else
           openai_request="--no-open-ai-request"

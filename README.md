@@ -88,7 +88,7 @@ This workflow executes Gradle tasks across two specified variants (branches) wit
     - **Options (keys in the JSON string)**:
       - `deploy_results`: Enable or disable deployment of results to https://cdsap.github.io/Telltale/ (`'true'` or `'false'`).
       - `experiment_title`: Title for the experiment (string).
-      - `open_ai_request`: Enable or disable OpenAI request (`'true'` or `'false'`).
+      - `open_ai_request`: Enable or disable OpenAI request (`'true'` or `'false'`). Note: OpenAI analysis only runs when `deploy_results` is also `'true'`.
       - `report_enabled`: Enable or disable report generation (`'true'` or `'false'`).
       - `tasktype_report`: Include task type reports (`'true'` or `'false'`).
       - `taskpath_report`: Include task path reports (`'true'` or `'false'`).

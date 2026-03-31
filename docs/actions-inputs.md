@@ -151,7 +151,7 @@ This section describes the inputs for the reusable `report/action.yaml` workflow
   - Description: A custom title for the experiment report.
   - Required: `false`.
 - **`open-ai-request`**:
-  - Description: Enable or disable requesting analysis from OpenAI.
+  - Description: Enable or disable requesting analysis from OpenAI. Analysis is only requested when `deploy_results` is also `'true'`.
   - Required: `true`.
   - Default: `false`.
   - Type: String (`'true'` or `'false'`).
