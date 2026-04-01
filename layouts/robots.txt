@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Sitemap: {{ "sitemap.xml" | absURL }}
+
+# AI agent discovery
+# See /Telltale/llms.txt for structured site description
+# See /Telltale/experiments.json for machine-readable experiment data
+# See /Telltale/index.xml for RSS feed

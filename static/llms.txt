@@ -1,0 +1,55 @@
+# Telltale - Gradle Build Experiment Results
+
+> Telltale is an automated framework for running, analyzing, and publishing Gradle build experiments. This site hosts the results of A/B comparisons between different build configurations.
+
+## Site Overview
+
+This site publishes experiment results comparing Gradle build variants (e.g., G1 vs Parallel GC, different Kotlin versions, R8 configurations). Each experiment runs multiple builds of two variants and compares performance metrics.
+
+## Machine-Readable Endpoints
+
+- Experiments JSON index: https://cdsap.github.io/Telltale/experiments.json
+  Complete index of all experiments with metadata, tags, dates, summaries, and links to reports and CSV data.
+
+- RSS Feed: https://cdsap.github.io/Telltale/index.xml
+  Subscribe to new experiment results.
+
+- Sitemap: https://cdsap.github.io/Telltale/sitemap.xml
+  Full list of all pages on the site.
+
+## Data Formats
+
+### experiments.json
+JSON array of all experiments. Each entry contains:
+- `title`: Experiment name (e.g., "Comparing G1 vs Parallel in nowinandroid")
+- `date`: Publication date (ISO 8601)
+- `url`: Full URL to the experiment post
+- `summary`: AI-generated analysis summary
+- `tags`: Array of category tags (e.g., "dependencies cache", "gradle-profiler")
+- `report_url`: URL to the interactive HTML report with charts
+- `csv_files`: Links to raw CSV data when available
+
+### CSV Data (per experiment)
+Tab-separated files at /Telltale/reports/experiment_results_*.csv containing:
+- Columns: Category | Metric | Variant A (Mean/P50/P90) | Variant B (Mean/P50/P90) | Unit
+- Categories: Build time, Task types, Memory, CPU, GC statistics
+
+### HTML Reports (per experiment)
+Interactive reports at /Telltale/reports/experiment_results_*.html containing:
+- Build duration time series charts
+- Memory usage trends
+- Task execution statistics
+- Links to build scans in Develocity
+
+## Typical Agent Workflows
+
+1. **List all experiments**: Fetch /Telltale/experiments.json
+2. **Get details for one experiment**: Follow the `url` field to the post page
+3. **Get raw data**: Follow the `report_url` to the HTML report, or find CSV files in /Telltale/reports/
+4. **Subscribe to new results**: Use the RSS feed at /Telltale/index.xml
+5. **Compare experiments**: Use experiments.json to filter by tags and dates, then fetch individual CSV files for detailed metrics
+
+## Source Code
+
+- Framework: https://github.com/cdsap/Telltale
+- Report generator: https://github.com/cdsap/BuildExperimentResults

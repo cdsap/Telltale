@@ -1,0 +1,32 @@
+{{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections -}}
+{{- $pages = $pages.ByDate.Reverse -}}
+{
+  "generated": "{{ now.Format "2006-01-02T15:04:05Z07:00" }}",
+  "site": "{{ site.Title }}",
+  "description": "{{ site.Params.description }}",
+  "base_url": "{{ site.BaseURL }}",
+  "total_experiments": {{ len $pages }},
+  "feeds": {
+    "rss": "{{ "index.xml" | absURL }}",
+    "json": "{{ "experiments.json" | absURL }}",
+    "sitemap": "{{ "sitemap.xml" | absURL }}",
+    "llms_txt": "{{ "llms.txt" | absURL }}"
+  },
+  "experiments": [
+    {{- range $index, $page := $pages }}
+    {{- if $index }},{{ end }}
+    {
+      "title": {{ $page.Title | jsonify }},
+      "date": "{{ $page.Date.Format "2006-01-02" }}",
+      "url": "{{ $page.Permalink }}",
+      "summary": {{ ($page.Params.summary | default "") | jsonify }},
+      "tags": {{ $page.Params.tags | default slice | jsonify }},
+      {{- with $page.Params.report_link }}
+      "report_url": "{{ . | absURL }}"
+      {{- else }}
+      "report_url": null
+      {{- end }}
+    }
+    {{- end }}
+  ]
+}

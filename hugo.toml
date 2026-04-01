@@ -2,10 +2,25 @@ baseURL = 'https://cdsap.github.io/Telltale/'
 languageCode = 'en-us'
 title = 'Telltale'
 theme = 'PaperMod'
+enableRobotsTXT = true
 
 # Pagination settings
 [pagination]
   pagerSize = 10
+
+# Custom output formats
+[outputFormats]
+  [outputFormats.ExperimentsJSON]
+    mediaType = "application/json"
+    baseName = "experiments"
+    isPlainText = true
+    notAlternative = true
+
+# Define outputs per section
+[outputs]
+  home = ["HTML", "RSS", "ExperimentsJSON"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML", "RSS"]
 
 [params]
   description = "Experimentation Framework for Gradle Builds"
@@ -15,7 +30,7 @@ theme = 'PaperMod'
   ShowPostNavLinks = true
   ShowBreadCrumbs = true
   ShowCodeCopyButtons = true
-  ShowRssButtonInSectionTermList = false
+  ShowRssButtonInSectionTermList = true
   ShowToc = false
   mainSections = ["posts"]
   assets = {customCSS = ["css/extended.css"]}
