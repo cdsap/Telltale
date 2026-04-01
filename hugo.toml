@@ -24,6 +24,7 @@ enableRobotsTXT = true
 
 [params]
   description = "Experimentation Framework for Gradle Builds"
+  images = ["og-image.png"]
   defaultTheme = "auto"
   ShowReadingTime = false
   ShowShareButtons = false
