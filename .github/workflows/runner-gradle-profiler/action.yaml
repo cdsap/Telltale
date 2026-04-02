@@ -45,6 +45,10 @@ inputs:
   cache-url:
     description: 'URL for the cache node, if applicable'
     required: true
+  clean-between-iterations:
+    description: 'Run clean between profiler iterations (set false to profile incremental builds)'
+    required: false
+    default: 'true'
 
 runs:
   using: 'composite'
@@ -81,19 +85,26 @@ runs:
           EXTRA_ARG="${{ inputs.extra-args }}"
         fi
 
+        # Gradle Profiler: cleanup-tasks run between iterations; [] = incremental re-runs
+        if [ "${{ inputs.clean-between-iterations }}" = "true" ]; then
+          CLEANUP_TASKS='["clean"]'
+        else
+          CLEANUP_TASKS='[]'
+        fi
+
         # Generate scenario file based on provided inputs
         if [ -z "${{ inputs.class }}" ]; then
           echo "assemble {
             title = \"assemble\"
             tasks = [\"${{ inputs.task }}\"]
-            cleanup-tasks = [\"clean\"]
+            cleanup-tasks = $CLEANUP_TASKS
             gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
           }" > scenario
         else
           echo "assemble {
             title = \"assemble\"
             tasks = [\"${{ inputs.task }}\"]
-            cleanup-tasks = [\"clean\"]
+            cleanup-tasks = $CLEANUP_TASKS
             apply-abi-change-to = [${{ inputs.class }}]
             gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
           }" > scenario

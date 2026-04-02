@@ -26,6 +26,11 @@ on:
         description: "Number of iterations for the experiment"
         required: false
         default: 5
+      clean_between_iterations:
+        description: "Run clean between profiler iterations (disable for incremental measurement)"
+        required: false
+        type: boolean
+        default: true
       os_args:
         description: "Operating system configurations for variants"
         type: string
@@ -80,6 +85,7 @@ jobs:
           class: ${{ github.event.inputs.class }}
           cache-url: ${{ secrets.CI_URL_CACHE_NODE }}
           warmups: 1
+          clean-between-iterations: ${{ github.event.inputs.clean_between_iterations }}
 
       - uses: actions/checkout@v4
 
