@@ -67,6 +67,7 @@ runs:
         TRANSFORM_CACHE_ENTRY="caches/**/transforms"
         MODULES_CACHE_ENTRY="caches/modules-*/*"
         JAR_CACHE_ENTRY="caches/jars-*/*"
+        JAVA_COMPILE_CACHE_ENTRY="caches/*/javaCompile"
 
         case "${{ inputs.mode }}" in
           "dependencies cache")
@@ -97,6 +98,9 @@ runs:
             echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$TRANSFORM_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
             ;;
           "remote task cache + dependencies cache - transforms cache")
+            echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$BUILD_CACHE_ENTRY\n$TRANSFORM_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
+            ;;
+          "dependencies cache + javaCompile cache")
             echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$BUILD_CACHE_ENTRY\n$TRANSFORM_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
             ;;
           "no caching")
