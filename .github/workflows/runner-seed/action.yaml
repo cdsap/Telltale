@@ -100,8 +100,8 @@ runs:
           "remote task cache + dependencies cache - transforms cache")
             echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$BUILD_CACHE_ENTRY\n$TRANSFORM_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
             ;;
-          "dependencies cache + javaCompile cache")
-            echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$BUILD_CACHE_ENTRY\n$TRANSFORM_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
+          "dependencies cache - javaCompile cache")
+            echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$BUILD_CACHE_ENTRY\n$JAVA_COMPILE_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
             ;;
           "no caching")
             echo "GRADLE_HOME_CACHE_EXCLUDES=**" >> $GITHUB_ENV
