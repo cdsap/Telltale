@@ -39,7 +39,7 @@ on:
       java_args:
         description: "JDK vendor and version for each variant"
         type: string
-        default: "{javaVersionVariantA:'17',javaVersionVariantB:'17',javaVendorVariantA:'zulu',javaVendorVariantB:'zulu'}"
+        default: "{javaVersionVariantA:'23',javaVersionVariantB:'23',javaVendorVariantA:'zulu',javaVendorVariantB:'zulu'}"
         required: false
       extra_build_args:
         description: "Extra build arguments for each variant"
@@ -49,7 +49,7 @@ on:
       extra_report_args:
         description: "Configuration for generating reports"
         type: string
-        default: "{deploy_results:'false',experiment_title:'',open_ai_request:'true',report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',gc_report:'false',only_cacheable_outcome:'false',threshold_task_duration:'1000'}"
+        default: "{deploy_results:'false',experiment_title:'',open_ai_request:'false',report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',gc_report:'false',only_cacheable_outcome:'false',threshold_task_duration:'1000'}"
         required: false
 
 run-name: "profiler-${{ github.event.inputs.repository }}-${{ github.event.inputs.variantA }}-${{ github.event.inputs.variantB }}-${{ github.event.inputs.task }}"
