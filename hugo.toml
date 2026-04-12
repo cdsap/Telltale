@@ -1,6 +1,8 @@
 baseURL = 'https://cdsap.github.io/Telltale/'
 languageCode = 'en-us'
-title = 'Telltale'
+ignoreLogs = ['warning-goldmark-raw-html']
+# Used in <title>, RSS, and JSON feeds. Nav logo text is params.label.text below.
+title = 'Telltale — Gradle build experiment results'
 theme = 'PaperMod'
 enableRobotsTXT = true
 
@@ -28,9 +30,11 @@ enableRobotsTXT = true
   taxonomy = ["HTML", "RSS"]
 
 [params]
-  [params.author]
-    name = "Telltale"
-  description = "Experimentation Framework for Gradle Builds"
+  description = "Experimentation Framework for Gradle Builds. Published A/B Gradle build comparisons, metrics, and reports."
+  # PaperMod author partial expects a string (not [params.author] map) for <meta name="author">.
+  author = "Telltale"
+  [params.label]
+    text = "Telltale"
   images = ["og-image.png"]
   defaultTheme = "auto"
   ShowReadingTime = false
@@ -59,3 +63,8 @@ enableRobotsTXT = true
     name = "Info"
     url = "/info/"
     weight = 20
+  [[menu.main]]
+    identifier = "experiment-data"
+    name = "Experiment data"
+    url = "/experiment-data/"
+    weight = 25

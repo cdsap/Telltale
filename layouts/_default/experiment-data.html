@@ -1,0 +1,37 @@
+{{- define "main" -}}
+<article class="experiment-data-page">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{- with .Content }}
+    <div class="experiment-data-intro">{{ . | markdownify }}</div>
+    {{- end }}
+  </header>
+
+  <div class="experiment-data-table-wrap">
+    <table class="experiment-data-table">
+      <thead>
+        <tr>
+          <th scope="col">Experiment</th>
+          <th scope="col">CSV</th>
+          <th scope="col">Report</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{- $pages := where site.RegularPages "Section" "posts" }}
+        {{- $pages = sort $pages "Date" "desc" }}
+        {{- range $pages }}
+          {{- with .Params.report_link }}
+            {{- $rep := . | absURL }}
+            {{- $csv := printf "%s.csv" (strings.TrimSuffix ".html" $rep) }}
+            <tr>
+              <td><a href="{{ $.Permalink }}">{{ $.Title }}</a></td>
+              <td><a href="{{ $csv }}">CSV</a></td>
+              <td><a href="{{ . | absURL }}">HTML report</a></td>
+            </tr>
+          {{- end }}
+        {{- end }}
+      </tbody>
+    </table>
+  </div>
+</article>
+{{- end -}}

@@ -22,9 +22,12 @@
       "summary": {{ ($page.Params.summary | default "") | jsonify }},
       "tags": {{ $page.Params.tags | default slice | jsonify }},
       {{- with $page.Params.report_link }}
-      "report_url": "{{ . | absURL }}"
+      {{- $reportAbs := . | absURL }}
+      "report_url": "{{ $reportAbs }}",
+      "csv_url": "{{ printf "%s.csv" (strings.TrimSuffix ".html" $reportAbs) }}"
       {{- else }}
-      "report_url": null
+      "report_url": null,
+      "csv_url": null
       {{- end }}
     }
     {{- end }}

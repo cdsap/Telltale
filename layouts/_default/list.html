@@ -14,7 +14,7 @@
   {{- end }}
 {{- if site.Params.homeInfoParams }}
 <header class="page-header home-hero">
-  <h1>{{ site.Params.homeInfoParams.Title }}</h1>
+  <h1>{{ replace (replace site.Params.homeInfoParams.Title "🔍" "") "🔎" "" }}</h1>
   <div class="home-hero-desc">{{ site.Params.homeInfoParams.Content | markdownify }}</div>
 </header>
 {{- end }}
@@ -87,6 +87,7 @@
 
   <div class="home-layout__browse">
     {{- partial "home-tags-column.html" . }}
+    {{- partial "home-experiment-data-aside.html" . }}
   </div>
 </div>
 
