@@ -4,6 +4,11 @@ title = 'Telltale'
 theme = 'PaperMod'
 enableRobotsTXT = true
 
+[taxonomies]
+  tag = "tags"
+  cache = "caches"
+  component = "components"
+
 # Pagination settings
 [pagination]
   pagerSize = 10
@@ -23,6 +28,8 @@ enableRobotsTXT = true
   taxonomy = ["HTML", "RSS"]
 
 [params]
+  [params.author]
+    name = "Telltale"
   description = "Experimentation Framework for Gradle Builds"
   images = ["og-image.png"]
   defaultTheme = "auto"
@@ -34,10 +41,11 @@ enableRobotsTXT = true
   ShowRssButtonInSectionTermList = true
   ShowToc = false
   mainSections = ["posts"]
-  assets = {customCSS = ["css/extended.css"]}
+  # PaperMod bundles assets/css/extended/*.css into the main stylesheet (not assets/css/extended.css).
+  assets = {customCSS = ["css/extended/site.css"]}
 
 [params.homeInfoParams]
-  Title = "Telltale 🔍"
+  Title = "Telltale"
   Content = "A framework for running and analyzing Gradle build experiments"
 
 [menu]
