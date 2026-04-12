@@ -1,6 +1,8 @@
 {{- $s := .Params.experiment_snapshot -}}
 {{- $a := $s.variant_a -}}
 {{- $b := $s.variant_b -}}
+{{- $ca := $s.config_variant_a -}}
+{{- $cb := $s.config_variant_b -}}
 {{- if and $a $b -}}
 {{- $pct := dict
   "mean" (mul (div (sub $b.mean $a.mean) $a.mean) 100.0)
@@ -46,6 +48,45 @@
       </tr>
     </tbody>
   </table>
+  {{- if and $ca $cb -}}
+  {{- $pctc := dict
+    "mean" (mul (div (sub $cb.mean $ca.mean) $ca.mean) 100.0)
+    "p50"  (mul (div (sub $cb.p50 $ca.p50) $ca.p50) 100.0)
+    "p90"  (mul (div (sub $cb.p90 $ca.p90) $ca.p90) 100.0)
+  -}}
+  {{- $cu := $s.config_unit | default $s.unit -}}
+  <p class="experiment-snapshot-metric experiment-snapshot-metric--secondary">{{ $s.config_metric | default "Configuration time" }}{{ with $cu }} ({{ . }}){{ end }}</p>
+  <table class="experiment-snapshot-table">
+    <thead>
+      <tr>
+        <th scope="col">Metric</th>
+        <th scope="col" class="num">{{ $a.label }}</th>
+        <th scope="col" class="num">{{ $b.label }}</th>
+        <th scope="col" class="num">Δ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Mean</th>
+        <td class="num">{{ printf "%.3f" $ca.mean }}</td>
+        <td class="num">{{ printf "%.3f" $cb.mean }}</td>
+        <td class="num delta">{{ printf "%+.2f" (index $pctc "mean") }}%</td>
+      </tr>
+      <tr>
+        <th scope="row">P50</th>
+        <td class="num">{{ printf "%.3f" $ca.p50 }}</td>
+        <td class="num">{{ printf "%.3f" $cb.p50 }}</td>
+        <td class="num delta">{{ printf "%+.2f" (index $pctc "p50") }}%</td>
+      </tr>
+      <tr>
+        <th scope="row">P90</th>
+        <td class="num">{{ printf "%.3f" $ca.p90 }}</td>
+        <td class="num">{{ printf "%.3f" $cb.p90 }}</td>
+        <td class="num delta">{{ printf "%+.2f" (index $pctc "p90") }}%</td>
+      </tr>
+    </tbody>
+  </table>
+  {{- end -}}
   {{- with .Params.report_link }}
   <p class="experiment-snapshot-more"><a href="{{ . | absURL }}">Open HTML report →</a></p>
   {{- end }}

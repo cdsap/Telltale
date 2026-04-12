@@ -19,6 +19,16 @@ experiment_snapshot:
     mean: 496.417
     p50: 492.510
     p90: 520.371
+  config_metric: "Configuration time"
+  config_unit: "seconds"
+  config_variant_a:
+    mean: 53.798
+    p50: 53.609
+    p90: 57.270
+  config_variant_b:
+    mean: 53.409
+    p50: 53.535
+    p90: 57.586
 ---
 [Report 📊](../../reports/experiment_results_20260404005622.html)
 ## Summary

@@ -369,6 +369,12 @@ body.dark .home-tags-column {
     letter-spacing: 0.03em;
 }
 
+.experiment-snapshot-metric--secondary {
+    margin-top: 1.1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border);
+}
+
 .experiment-snapshot-chart-wrap {
     margin-bottom: 1rem;
     height: 260px;
@@ -489,10 +495,12 @@ body.dark .home-data-index {
 .experiment-data-table-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    max-width: 100%;
 }
 
 .experiment-data-table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
     font-size: 0.9rem;
 }
@@ -513,17 +521,40 @@ body.dark .home-data-index {
     letter-spacing: 0.03em;
 }
 
+.experiment-data-table thead th:nth-child(1),
+.experiment-data-table tbody td:nth-child(1) {
+    width: 16%;
+    min-width: 0;
+}
+
+.experiment-data-table thead th:nth-child(2),
+.experiment-data-table tbody td:nth-child(2) {
+    width: 58%;
+    min-width: 0;
+}
+
+.experiment-data-table thead th:nth-child(3),
 .experiment-data-table tbody td:nth-child(3),
+.experiment-data-table thead th:nth-child(4),
 .experiment-data-table tbody td:nth-child(4) {
+    width: 13%;
+    min-width: 0;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
 }
 
+.experiment-data-table tbody td:nth-child(1) a {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
 .experiment-data-llm {
-    max-width: min(36rem, 55vw);
     font-size: 0.85rem;
     line-height: 1.5;
     color: var(--primary);
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .experiment-data-llm p {
