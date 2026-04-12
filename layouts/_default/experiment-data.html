@@ -12,6 +12,7 @@
       <thead>
         <tr>
           <th scope="col">Experiment</th>
+          <th scope="col">LLM analysis</th>
           <th scope="col">CSV</th>
           <th scope="col">Report</th>
         </tr>
@@ -20,13 +21,17 @@
         {{- $pages := where site.RegularPages "Section" "posts" }}
         {{- $pages = sort $pages "Date" "desc" }}
         {{- range $pages }}
+          {{- $p := . }}
           {{- with .Params.report_link }}
             {{- $rep := . | absURL }}
             {{- $csv := printf "%s.csv" (strings.TrimSuffix ".html" $rep) }}
             <tr>
-              <td><a href="{{ $.Permalink }}">{{ $.Title }}</a></td>
+              <td><a href="{{ $p.Permalink }}">{{ $p.Title }}</a></td>
+              <td class="experiment-data-llm">
+                {{- with $p.Params.summary }}{{ . | markdownify }}{{ else }}—{{ end -}}
+              </td>
               <td><a href="{{ $csv }}">CSV</a></td>
-              <td><a href="{{ . | absURL }}">HTML report</a></td>
+              <td><a href="{{ $rep }}">HTML report</a></td>
             </tr>
           {{- end }}
         {{- end }}
