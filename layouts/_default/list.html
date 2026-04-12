@@ -48,10 +48,13 @@
           {{- end }}
         </div>
         <div class="entry-footer">
-          {{- if .Params.tags }}
+          {{- if or .Params.tags .Params.components }}
           <div class="entry-tags">
             {{- range .Params.tags }}
             <a href="{{ "tags/" | absURL }}{{ . | lower | urlize }}" class="entry-tag">#{{ . }}</a>
+            {{- end }}
+            {{- range .Params.components }}
+            <a href="{{ "components/" | absURL }}{{ . | urlize }}" class="entry-tag entry-tag--component">#{{ . }}</a>
             {{- end }}
           </div>
           {{- end }}
@@ -121,10 +124,13 @@
         {{- end }}
       </div>
       <div class="entry-footer">
-        {{- if .Params.tags }}
+        {{- if or .Params.tags .Params.components }}
         <div class="entry-tags">
           {{- range .Params.tags }}
           <a href="{{ "tags/" | absURL }}{{ . | lower | urlize }}" class="entry-tag">#{{ . }}</a>
+          {{- end }}
+          {{- range .Params.components }}
+          <a href="{{ "components/" | absURL }}{{ . | urlize }}" class="entry-tag entry-tag--component">#{{ . }}</a>
           {{- end }}
         </div>
         {{- end }}
