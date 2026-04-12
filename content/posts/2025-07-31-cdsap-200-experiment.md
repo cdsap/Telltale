@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20250731015745.html
 summary: " 
 The analysis of Gradle build performance data reveals a slight increase in overall build time when transitioning from variant A (8.14.2) to variant B (9.0.0-rc4). Specifically, the mean build time increased by approximately 7.5 seconds (0.85% increase), with the P90 time showing an increase of about 8.6 seconds (0.95% increase). Notably, the `:layer_0:module_0_1:kspDebugKotlin` task showed a significant increase in mean execution time by approximately 3.4 seconds (46.5% increase). In contrast, the `:layer_0:module_0_1:parseDebugLocalResources` task saw a decrease in mean execution time by about 4.9 seconds (-28.5%). Memory usage across all processes slightly increased in variant B, with a peak usage of 13.98 GB compared to 13.53 GB in variant A. CPU usage remained maximally utilized at 100% for all processes in both variants."
 tags: ["dependencies cache"]
+components: ["gradle"]
 ---
 [Report 📊](../../reports/experiment_results_20250731015745.html)
 ## Summary

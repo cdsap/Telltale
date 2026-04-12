@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20250321183537.html
 summary: " 
 The Gradle build performance comparison shows a slight improvement in overall build times for variantb_kotlin_2_1_20 compared to varianta_main_2_1_0, with a mean time of 213.747 seconds versus 214.317 seconds, respectively. The most time-consuming tasks across both variants were 'org.jetbrains.kotlin.gradle.tasks.KotlinCompile', 'com.android.build.gradle.internal.tasks.DexMergingTask', and 'com.android.build.gradle.tasks.PackageApplication'. Notably, the 'com.google.devtools.ksp.gradle.KspTaskJvm' task showed a significant timing variation of more than 10% between the two variants. In terms of resource consumption, both variants showed similar CPU and memory usage, with a slight increase in memory usage for variantb_kotlin_2_1_20."
 tags: ["dependencies cache"]
+components: ["kotlin"]
 ---
 [Report 📊](../../reports/experiment_results_20250321183537.html)
 ## Summary

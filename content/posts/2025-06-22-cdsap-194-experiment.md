@@ -10,6 +10,7 @@ In task execution, `variantb_g1` generally exhibits longer times across most tas
 
 The garbage collection logs indicate a similar number of total collections between the variants, suggesting that garbage collection overhead does not significantly differ between them. The Kotlin Build Reports highlight a slower performance in `variantb_g1` across various metrics, including compiler initialization, IR generation, and code generation, which corroborates the observed longer build times."
 tags: ["dependencies cache"]
+components: ["jvm"]
 ---
 [Report 📊](../../reports/experiment_results_20250622042015.html)
 ## Summary

@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20250813174036.html
 summary: " 
 The performance comparison between Gradle build variants `varianta_9.0.0` and `variantb_9.1.0-rc-1` reveals a slight increase in overall build time in the newer variant by approximately 2.36 seconds (1.16% increase). Notably, the `hiltJavaCompileDebug` task in `variantb_9.1.0-rc-1` shows a significant improvement, reducing its execution time by almost 50%. However, this variant also exhibits increased execution times for several Kotlin compilation tasks (`kspDebugKotlin`), particularly in the `domain` and `repository` modules. Memory usage across all processes is slightly reduced in the newer variant, while CPU usage remains maximally utilized in both variants. The total garbage collection counts remain unchanged across variants."
 tags: ["dependencies cache"]
+components: ["gradle"]
 ---
 [Report 📊](../../reports/experiment_results_20250813174036.html)
 ## Summary

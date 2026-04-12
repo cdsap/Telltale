@@ -8,6 +8,7 @@ The performance analysis between two Gradle build variants, `varianta_agp_9_0_0_
 
 In task execution, `varianta` generally performs better in CPU and memory usage, with a maximum CPU usage slightly lower than `variantb` (97.14% vs. 96.96%) and a more efficient memory usage profile. The analysis of garbage collection shows `varianta` having fewer total collections (251) compared to `variantb` (259), suggesting better memory management."
 tags: ["dependencies cache"]
+components: ["agp"]
 ---
 [Report 📊](../../reports/experiment_results_20251113190739.html)
 ## Summary

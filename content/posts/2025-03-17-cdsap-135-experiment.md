@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20250317175549.html
 summary: " 
 The Gradle build performance comparison data reveals that variant B (`variantb_main_parallel`) generally performs better than variant A (`varianta_main_g1`). The mean build time for variant B is approximately 14.3 seconds, which is 6.6% faster than variant A's mean build time of around 21.5 seconds. The most time-consuming tasks across both variants are `:app:l8DexDesugarLibDemoDebug`, `:app:mergeExtDexDemoDebug`, and `:core:designsystem:compileDemoDebugKotlin`. Significant differences in task execution times are observed in `:app:transformDemoDebugClassesWithAsm` and `:core:designsystem:bundleLibCompileToJarDemoDebug`. The CPU and memory usage are also slightly lower for variant B."
 tags: ["dependencies cache"]
+components: ["jvm"]
 ---
 [Report 📊](../../reports/experiment_results_20250317175549.html)
 ## Summary

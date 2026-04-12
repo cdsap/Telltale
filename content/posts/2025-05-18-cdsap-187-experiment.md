@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20250518002644.html
 summary: " 
 The performance analysis of the two Gradle build variants, `varianta_anvil` and `variantb_metro_0_3_2`, reveals significant differences in build times and task execution. `variantb_metro_0_3_2` shows a faster overall build time by approximately 22.2 seconds (14.1%) compared to `varianta_anvil`. Notably, the `com.google.devtools.ksp.gradle.KspAATask` and `org.jetbrains.kotlin.gradle.tasks.KotlinCompile` tasks in `variantb_metro_0_3_2` are considerably slower, indicating potential areas for optimization. Memory usage is slightly lower in `variantb_metro_0_3_2` across all processes, with a maximum difference of about 0.19 GB. The Kotlin Build Reports highlight `variantb_metro_0_3_2` as having a higher compiler IR translation time and more intensive code analysis, suggesting more complex operations despite the overall faster build time."
 tags: ["dependencies cache"]
+components: ["metro"]
 ---
 [Report 📊](../../reports/experiment_results_20250518002644.html)
 ## Summary

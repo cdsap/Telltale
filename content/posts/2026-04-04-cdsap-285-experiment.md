@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20260404005622.html
 summary: " 
 The performance comparison between `varianta_main` and `variantb_9.5.0-rc-1` reveals minor differences in build times and task execution times. The overall build time for `variantb_9.5.0-rc-1` is slightly higher by about 0.9% compared to `varianta_main`, translating to an increase of approximately 4.376 seconds. The configuration time shows a negligible decrease of about 0.7% in `variantb_9.5.0-rc-1`. Notably, the most time-consuming tasks across both variants are similar, with minor variations in execution times. Memory and CPU usage metrics for all processes and specifically for the build processes are closely matched between the two variants, indicating similar resource consumption. The total garbage collection counts are also comparable, suggesting efficient memory management in both scenarios."
 tags: ["dependencies cache"]
+components: ["gradle"]
 experiment_snapshot:
   metric: "Overall build time"
   unit: "seconds"

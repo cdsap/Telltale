@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20250831165451.html
 summary: " 
 The analysis of the Gradle build performance between `varianta_jdk_17` and `variantb_jdk_21` reveals several key insights. The overall build time for `varianta_jdk_17` averages 396.626 seconds, while `variantb_jdk_21` is slightly faster at 381.929 seconds, showing a reduction of approximately 14.697 seconds (3.7%). The configuration times are very close, with `varianta_jdk_17` averaging 44.278 seconds and `variantb_jdk_21` at 43.845 seconds. Notably, the most time-consuming tasks across both variants include `:core:cart:compileDebugKotlin`, `:core:identity:compileDebugKotlin`, and `:core:contact:compileDebugKotlin`, with `variantb_jdk_21` generally performing better in these areas. Memory usage is higher in `variantb_jdk_21` across all processes, with a maximum of 10.84 GB compared to 10.31 GB in `varianta_jdk_17`. CPU usage is nearly maxed out for both variants. The total garbage collection counts are slightly higher in `variantb_jdk_21` with 139 collections compared to 131 in `varianta_jdk_17`."
 tags: ["dependencies cache"]
+components: ["jdk"]
 ---
 [Report 📊](../../reports/experiment_results_20250831165451.html)
 ## Summary

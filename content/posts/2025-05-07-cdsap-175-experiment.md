@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20250507175828.html
 summary: " 
 The performance comparison between two Gradle build variants shows a slight improvement in overall build time for variant B (218.791s) compared to variant A (221.317s), with a decrease of about 1.14%. The most time-consuming tasks across both variants include `:app:l8DexDesugarLibDemoDebug`, `:app:mergeExtDexDemoDebug`, and `:core:designsystem:compileDemoDebugKotlin`, with variant B generally showing better performance in these tasks. Memory usage is slightly lower in variant B for all processes and build child processes. The total garbage collection counts are slightly higher in variant B for both Gradle and Kotlin processes."
 tags: ["dependencies cache"]
+components: ["gradle"]
 ---
 [Report 📊](../../reports/experiment_results_20250507175828.html)
 ## Summary

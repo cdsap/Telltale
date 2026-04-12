@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20260209181907.html
 summary: " 
 The analysis of the Gradle build performance comparison between variants 9.3.1 and 9.4.0-rc-1 reveals a slight increase in overall build time by approximately 4.6 seconds (0.9% increase). The configuration time also saw a minor increase of about 1.02 seconds (2.3% increase). Notably, the top three most time-consuming tasks across both variants were `:core:cart:kspDebugKotlin`, `:core:contact:kspDebugKotlin`, and `:core:comment:kspDebugKotlin`, with marginal increases in their execution times in the newer variant. Memory usage across all processes slightly decreased in the newer variant, while CPU usage remained maximally utilized at 100% for all processes. The total garbage collection counts increased in the newer variant, suggesting a potential area for optimization."
 tags: ["dependencies cache"]
+components: ["gradle"]
 ---
 [Report 📊](../../reports/experiment_results_20260209181907.html)
 ## Summary

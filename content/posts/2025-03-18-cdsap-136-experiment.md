@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20250318005824.html
 summary: " 
 The Gradle build performance comparison shows that the build times between the two variants are almost identical with a mean difference of just 99ms (0.05%). The variant with the Kotlin compiler and 3 workers (variantb_kotlin_compiler_3_workers) has slightly higher P90 values in most tasks, indicating that it might be slower in worst-case scenarios. The most time-consuming tasks across both variants are `:app:l8DexDesugarLibDemoDebug`, `:app:mergeExtDexDemoDebug`, and `:core:designsystem:compileDemoDebugKotlin`. Notably, the `:app:mergeExtDexDemoDebug` task is faster in variantb_kotlin_compiler_3_workers by 10.3%. CPU and memory usage are almost identical between the two variants."
 tags: ["dependencies cache"]
+components: ["kotlin"]
 ---
 [Report 📊](../../reports/experiment_results_20250318005824.html)
 ## Summary

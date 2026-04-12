@@ -8,6 +8,7 @@ The analysis of the Gradle build performance data reveals that the transition fr
 
 CPU and memory usage across all processes and specifically for the build processes show no significant change, maintaining near-maximum CPU usage and similar memory footprints in both variants. The garbage collection metrics indicate a minor decrease in total collections in variant B, suggesting a slight improvement in memory management efficiency."
 tags: ["dependencies cache"]
+components: ["gradle"]
 ---
 [Report 📊](../../reports/experiment_results_20251118005859.html)
 ## Summary

@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20251215230916.html
 summary: " 
 The analysis of the Gradle build performance data reveals that variant B (`kill_process_before_r8`) generally performs better than variant A (`r8`). Specifically, the overall build time for variant B is shorter by approximately 8.3 seconds (1.7% improvement). This trend is consistent across various task types, where variant B often shows reduced execution times. Notably, the `R8Task`, one of the most time-consuming tasks, executes about 4.4 seconds faster in variant B. Memory usage is also slightly lower in variant B across all processes, with a maximum reduction of about 1.55 GB in overall system memory usage. CPU usage remains high and nearly maxed out for both variants, indicating a CPU-bound process."
 tags: ["dependencies cache"]
+components: ["kotlin"]
 ---
 [Report 📊](../../reports/experiment_results_20251215230916.html)
 ## Summary

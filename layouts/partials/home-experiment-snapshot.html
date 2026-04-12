@@ -56,6 +56,9 @@
   -}}
   {{- $cu := $s.config_unit | default $s.unit -}}
   <p class="experiment-snapshot-metric experiment-snapshot-metric--secondary">{{ $s.config_metric | default "Configuration time" }}{{ with $cu }} ({{ . }}){{ end }}</p>
+  <div class="experiment-snapshot-chart-wrap experiment-snapshot-chart-wrap--config">
+    <canvas id="experiment-snapshot-chart-config" width="400" height="260" role="img" aria-label="Bar chart comparing configuration time percentiles for both variants"></canvas>
+  </div>
   <table class="experiment-snapshot-table">
     <thead>
       <tr>
@@ -94,14 +97,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 (function () {
-  var canvas = document.getElementById('experiment-snapshot-chart');
-  if (!canvas || typeof Chart === 'undefined') return;
-  var data = {
-    labels: ['{{ replace $a.label "'" "\\'" }}', '{{ replace $b.label "'" "\\'" }}'],
-    p50: [{{ $a.p50 }}, {{ $b.p50 }}],
-    p90: [{{ $a.p90 }}, {{ $b.p90 }}],
-    mean: [{{ $a.mean }}, {{ $b.mean }}]
-  };
+  if (typeof Chart === 'undefined') return;
   var isDark = document.body.classList.contains('dark')
     || document.documentElement.getAttribute('data-theme') === 'dark';
   /* PaperMod uses rgb() for --primary in dark mode; appending 'cc' to rgb() breaks Chart colors. */
@@ -109,48 +105,105 @@
   var muted = isDark ? 'rgba(155,156,157,0.85)' : 'rgba(108,117,125,0.85)';
   var grid = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
   var tick = isDark ? '#cbd5e1' : '#64748b';
-  new Chart(canvas.getContext('2d'), {
-    type: 'bar',
-    data: {
-      labels: ['P50', 'P90', 'Mean'],
-      datasets: [
-        {
-          label: data.labels[0],
-          data: [data.p50[0], data.p90[0], data.mean[0]],
-          backgroundColor: fg,
-          borderWidth: 0
-        },
-        {
-          label: data.labels[1],
-          data: [data.p50[1], data.p90[1], data.mean[1]],
-          backgroundColor: muted,
-          borderWidth: 0
-        }
-      ]
+  var barOpts = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
-        tooltip: {
-          callbacks: {
-            label: function (ctx) {
-              return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + ' s';
-            }
-          }
-        }
-      },
-      scales: {
-        x: { grid: { display: false } },
-        y: {
-          title: { display: true, text: 'Seconds', color: tick, font: { size: 11 } },
-          grid: { color: grid },
-          ticks: { color: tick, font: { size: 10 } }
-        }
+    scales: {
+      x: { grid: { display: false } },
+      y: {
+        title: { display: true, text: 'Seconds', color: tick, font: { size: 11 } },
+        grid: { color: grid },
+        ticks: { color: tick, font: { size: 10 } }
       }
     }
-  });
+  };
+
+  var canvas = document.getElementById('experiment-snapshot-chart');
+  if (canvas) {
+    var data = {
+      labels: ['{{ replace $a.label "'" "\\'" }}', '{{ replace $b.label "'" "\\'" }}'],
+      p50: [{{ $a.p50 }}, {{ $b.p50 }}],
+      p90: [{{ $a.p90 }}, {{ $b.p90 }}],
+      mean: [{{ $a.mean }}, {{ $b.mean }}]
+    };
+    new Chart(canvas.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['P50', 'P90', 'Mean'],
+        datasets: [
+          {
+            label: data.labels[0],
+            data: [data.p50[0], data.p90[0], data.mean[0]],
+            backgroundColor: fg,
+            borderWidth: 0
+          },
+          {
+            label: data.labels[1],
+            data: [data.p50[1], data.p90[1], data.mean[1]],
+            backgroundColor: muted,
+            borderWidth: 0
+          }
+        ]
+      },
+      options: Object.assign({}, barOpts, {
+        plugins: Object.assign({}, barOpts.plugins, {
+          tooltip: {
+            callbacks: {
+              label: function (ctx) {
+                return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + ' s';
+              }
+            }
+          }
+        })
+      })
+    });
+  }
+
+  {{- if and $ca $cb }}
+  var canvasCfg = document.getElementById('experiment-snapshot-chart-config');
+  if (canvasCfg) {
+    var dataCfg = {
+      labels: ['{{ replace $a.label "'" "\\'" }}', '{{ replace $b.label "'" "\\'" }}'],
+      p50: [{{ $ca.p50 }}, {{ $cb.p50 }}],
+      p90: [{{ $ca.p90 }}, {{ $cb.p90 }}],
+      mean: [{{ $ca.mean }}, {{ $cb.mean }}]
+    };
+    new Chart(canvasCfg.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['P50', 'P90', 'Mean'],
+        datasets: [
+          {
+            label: dataCfg.labels[0],
+            data: [dataCfg.p50[0], dataCfg.p90[0], dataCfg.mean[0]],
+            backgroundColor: fg,
+            borderWidth: 0
+          },
+          {
+            label: dataCfg.labels[1],
+            data: [dataCfg.p50[1], dataCfg.p90[1], dataCfg.mean[1]],
+            backgroundColor: muted,
+            borderWidth: 0
+          }
+        ]
+      },
+      options: Object.assign({}, barOpts, {
+        plugins: Object.assign({}, barOpts.plugins, {
+          tooltip: {
+            callbacks: {
+              label: function (ctx) {
+                return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(3) + ' s';
+              }
+            }
+          }
+        })
+      })
+    });
+  }
+  {{- end }}
 })();
 </script>
 {{- end -}}

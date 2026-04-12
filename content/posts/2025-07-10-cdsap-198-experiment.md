@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20250710004726.html
 summary: " 
 The analysis of the Gradle build performance data reveals several key insights between the two variants, `varianta_k2_kotlin_2.2.0` and `variantb_k2_increase_memory_gradle`. The overall build time for `variantb_k2_increase_memory_gradle` is slightly higher at approximately 626.643 seconds compared to 618.083 seconds for `varianta_k2_kotlin_2.2.0`, marking a 1.38% increase. Among the most time-consuming tasks, significant differences are observed in tasks like `com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask` and `dagger.hilt.android.plugin.task.AggregateDepsTask`, where `variantb_k2_increase_memory_gradle` shows increased execution times. Memory usage also shows a notable increase in `variantb_k2_increase_memory_gradle` with a maximum of 13.57 GB compared to 11.65 GB in `varianta_k2_kotlin_2.2.0`. The total garbage collection (GC) counts are slightly lower in `variantb_k2_increase_memory_gradle` across both Gradle and Kotlin processes."
 tags: ["dependencies cache"]
+components: ["kotlin"]
 ---
 [Report 📊](../../reports/experiment_results_20250710004726.html)
 ## Summary

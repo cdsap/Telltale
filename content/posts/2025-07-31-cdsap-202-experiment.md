@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20250731154917.html
 summary: " 
 The analysis of the Gradle build performance comparison between `varianta_2.2.0` and `variantb_2.2.20-Beta2` reveals several key findings. The overall build time for `variantb_2.2.20-Beta2` is slightly longer, with a mean time of 762.133 seconds compared to 750.638 seconds for `varianta_2.2.0`, marking a 1.53% increase. Significant differences are noted in task execution times, particularly for `:core:account:kspDebugKotlin` which shows a 44% increase in mean execution time in `variantb_2.2.20-Beta2`. The CPU and memory usage are closely matched between the variants, with both maxing out CPU usage at 100% and memory usage peaking around 14 GB. The Kotlin Build Reports indicate that `variantb_2.2.20-Beta2` has a slightly longer compiler code analysis time but a quicker code generation rate."
 tags: ["dependencies cache"]
+components: ["kotlin"]
 ---
 [Report 📊](../../reports/experiment_results_20250731154917.html)
 ## Summary

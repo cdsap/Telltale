@@ -8,6 +8,7 @@ The analysis of the Gradle build performance comparison between two Kotlin varia
 
 In terms of CPU and memory usage, both variants reach the maximum CPU usage, but variant B uses slightly more memory (0.03 GB more for the build process). The garbage collection metrics indicate a very close number of total collections between the two variants, suggesting similar memory management efficiency."
 tags: ["dependencies cache"]
+components: ["kotlin"]
 ---
 [Report 📊](../../reports/experiment_results_20260317002315.html)
 ## Summary

@@ -8,6 +8,7 @@ The analysis of the Gradle build performance comparison between variant A (Gradl
 
 CPU and memory usage remained nearly at capacity for both variants, with a maximum CPU usage of 100% and memory peaking around 11.6 GB. The garbage collection metrics indicate a slight decrease in total collections from 169 in variant A to 167 in variant B, suggesting marginally better memory management in the newer Gradle version."
 tags: ["dependencies cache"]
+components: ["gradle"]
 ---
 [Report 📊](../../reports/experiment_results_20251003180446.html)
 ## Summary

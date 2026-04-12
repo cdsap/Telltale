@@ -475,7 +475,7 @@ body.dark .home-data-index {
     text-decoration: underline;
 }
 
-/* /experiment-data/ — experiment, LLM summary, CSV, report */
+/* /experiment-data/ — experiment, CSV, report, LLM summary */
 .experiment-data-page {
     width: 100%;
     max-width: 100%;
@@ -528,19 +528,19 @@ body.dark .home-data-index {
 }
 
 .experiment-data-table thead th:nth-child(2),
-.experiment-data-table tbody td:nth-child(2) {
-    width: 58%;
-    min-width: 0;
-}
-
+.experiment-data-table tbody td:nth-child(2),
 .experiment-data-table thead th:nth-child(3),
-.experiment-data-table tbody td:nth-child(3),
-.experiment-data-table thead th:nth-child(4),
-.experiment-data-table tbody td:nth-child(4) {
+.experiment-data-table tbody td:nth-child(3) {
     width: 13%;
     min-width: 0;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
+}
+
+.experiment-data-table thead th:nth-child(4),
+.experiment-data-table tbody td:nth-child(4) {
+    width: 58%;
+    min-width: 0;
 }
 
 .experiment-data-table tbody td:nth-child(1) a {

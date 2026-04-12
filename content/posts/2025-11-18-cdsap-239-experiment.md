@@ -6,6 +6,7 @@ report_link: /Telltale/reports/experiment_results_20251118202114.html
 summary: " 
 The performance comparison between two Gradle build variants, `varianta_agp_9_0_0_beta01_no_builtInKotlin` and `variantb_agp_9_0_0_beta01_builtInKotlin`, reveals minor differences in build times and task execution. The overall build time for variant A averages 555.578 seconds, slightly longer than variant B's 551.235 seconds. Notably, the configuration time for variant A is also higher at 55.243 seconds compared to 52.432 seconds for variant B. The most time-consuming tasks across both variants include `:core:cart:kspDebugKotlin`, `:core:contact:kspDebugKotlin`, and `:core:comment:kspDebugKotlin`, with marginal differences in execution times between the two variants. CPU and memory usage are nearly identical for both variants, with maximum values reaching up to 100% CPU usage and 11.78 GB of memory for all processes."
 tags: ["dependencies cache"]
+components: ["agp"]
 ---
 [Report 📊](../../reports/experiment_results_20251118202114.html)
 ## Summary
