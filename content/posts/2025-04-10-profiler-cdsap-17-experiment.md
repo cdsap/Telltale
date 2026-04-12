@@ -6,6 +6,8 @@ report_link: /Telltale/reports/experiment_results_20250410030420.html
 summary: " 
 The performance comparison between `varianta_main` and `variantb_z/metro` reveals that `variantb_z/metro` generally has a shorter build time with a mean reduction of 25.1% (6.622 seconds). Notably, `variantb_z/metro` also exhibits higher CPU usage in build child processes, suggesting more intensive parallel task execution. In the Kotlin Build Reports, `variantb_z/metro` shows a significant increase in Compiler IR translation time, which could indicate more complex translation processes. Memory usage is slightly lower in `variantb_z/metro` across all processes, contributing to its efficiency."
 tags: ["gradle-profiler"]
+caches: ["gradle-profiler"]
+components: ["gradle"]
 ---
 [Report 📊](../../reports/experiment_results_20250410030420.html)
 ## Summary

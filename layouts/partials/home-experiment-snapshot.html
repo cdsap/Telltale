@@ -1,0 +1,115 @@
+{{- $s := .Params.experiment_snapshot -}}
+{{- $a := $s.variant_a -}}
+{{- $b := $s.variant_b -}}
+{{- if and $a $b -}}
+{{- $pct := dict
+  "mean" (mul (div (sub $b.mean $a.mean) $a.mean) 100.0)
+  "p50"  (mul (div (sub $b.p50 $a.p50) $a.p50) 100.0)
+  "p90"  (mul (div (sub $b.p90 $a.p90) $a.p90) 100.0)
+-}}
+<aside class="experiment-snapshot" aria-labelledby="snapshot-heading">
+  <h3 id="snapshot-heading" class="experiment-snapshot-title">Latest experiment</h3>
+  <p class="experiment-snapshot-compare">
+    <a href="{{ .Permalink }}">{{ $a.label }} vs {{ $b.label }}</a>
+  </p>
+  <p class="experiment-snapshot-metric">{{ $s.metric }}{{ with $s.unit }} ({{ . }}){{ end }}</p>
+  <div class="experiment-snapshot-chart-wrap">
+    <canvas id="experiment-snapshot-chart" width="400" height="260" role="img" aria-label="Bar chart comparing build duration percentiles for both Gradle versions"></canvas>
+  </div>
+  <table class="experiment-snapshot-table">
+    <thead>
+      <tr>
+        <th scope="col">Metric</th>
+        <th scope="col" class="num">{{ $a.label }}</th>
+        <th scope="col" class="num">{{ $b.label }}</th>
+        <th scope="col" class="num">Δ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Mean</th>
+        <td class="num">{{ printf "%.1f" $a.mean }}</td>
+        <td class="num">{{ printf "%.1f" $b.mean }}</td>
+        <td class="num delta">{{ printf "%+.2f" (index $pct "mean") }}%</td>
+      </tr>
+      <tr>
+        <th scope="row">P50</th>
+        <td class="num">{{ printf "%.1f" $a.p50 }}</td>
+        <td class="num">{{ printf "%.1f" $b.p50 }}</td>
+        <td class="num delta">{{ printf "%+.2f" (index $pct "p50") }}%</td>
+      </tr>
+      <tr>
+        <th scope="row">P90</th>
+        <td class="num">{{ printf "%.1f" $a.p90 }}</td>
+        <td class="num">{{ printf "%.1f" $b.p90 }}</td>
+        <td class="num delta">{{ printf "%+.2f" (index $pct "p90") }}%</td>
+      </tr>
+    </tbody>
+  </table>
+  {{- with .Params.report_link }}
+  <p class="experiment-snapshot-more"><a href="{{ . | absURL }}">Open HTML report →</a></p>
+  {{- end }}
+</aside>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function () {
+  var canvas = document.getElementById('experiment-snapshot-chart');
+  if (!canvas || typeof Chart === 'undefined') return;
+  var data = {
+    labels: ['{{ replace $a.label "'" "\\'" }}', '{{ replace $b.label "'" "\\'" }}'],
+    p50: [{{ $a.p50 }}, {{ $b.p50 }}],
+    p90: [{{ $a.p90 }}, {{ $b.p90 }}],
+    mean: [{{ $a.mean }}, {{ $b.mean }}]
+  };
+  var isDark = document.body.classList.contains('dark')
+    || document.documentElement.getAttribute('data-theme') === 'dark';
+  /* PaperMod uses rgb() for --primary in dark mode; appending 'cc' to rgb() breaks Chart colors. */
+  var fg = isDark ? 'rgba(218,218,219,0.85)' : 'rgba(0,123,255,0.85)';
+  var muted = isDark ? 'rgba(155,156,157,0.85)' : 'rgba(108,117,125,0.85)';
+  var grid = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
+  var tick = isDark ? '#cbd5e1' : '#64748b';
+  new Chart(canvas.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['P50', 'P90', 'Mean'],
+      datasets: [
+        {
+          label: data.labels[0],
+          data: [data.p50[0], data.p90[0], data.mean[0]],
+          backgroundColor: fg,
+          borderWidth: 0
+        },
+        {
+          label: data.labels[1],
+          data: [data.p50[1], data.p90[1], data.mean[1]],
+          backgroundColor: muted,
+          borderWidth: 0
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
+        tooltip: {
+          callbacks: {
+            label: function (ctx) {
+              return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + ' s';
+            }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: {
+          title: { display: true, text: 'Seconds', color: tick, font: { size: 11 } },
+          grid: { color: grid },
+          ticks: { color: tick, font: { size: 10 } }
+        }
+      }
+    }
+  });
+})();
+</script>
+{{- end -}}

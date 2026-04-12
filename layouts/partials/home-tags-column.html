@@ -1,0 +1,30 @@
+<aside class="home-tags-column" aria-labelledby="browse-heading">
+  <h2 id="browse-heading" class="home-tags-title">Browse experiments</h2>
+  <p class="home-tags-lede">Filter by cache type and component. Counts show how many experiments use each label.</p>
+
+  <section class="home-tags-section" aria-labelledby="cache-heading">
+    <h3 id="cache-heading" class="home-tags-section-title">Cache</h3>
+    <ul class="home-tags-list">
+      {{- range (index site.Taxonomies "caches").ByCount }}
+      <li>
+        <a href="{{ .Page.Permalink }}">{{ .Page.Title }}</a>
+        <span class="home-tags-count">{{ .Count }}</span>
+      </li>
+      {{- end }}
+    </ul>
+  </section>
+
+  <section class="home-tags-section" aria-labelledby="component-heading">
+    <h3 id="component-heading" class="home-tags-section-title">Components</h3>
+    <ul class="home-tags-list">
+      {{- range (index site.Taxonomies "components").ByCount }}
+      <li>
+        <a href="{{ .Page.Permalink }}">{{ .Page.Title }}</a>
+        <span class="home-tags-count">{{ .Count }}</span>
+      </li>
+      {{- end }}
+    </ul>
+  </section>
+
+  <p class="home-tags-all"><a href="{{ "posts/" | relURL }}">All experiments →</a></p>
+</aside>

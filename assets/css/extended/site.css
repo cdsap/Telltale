@@ -1,0 +1,424 @@
+/* Do not redefine :root --primary / --theme — PaperMod uses --primary for text + pagination pills */
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.page-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.post-entry {
+    background: var(--entry);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 2rem;
+}
+
+.post-entry:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.entry-header h2 a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.entry-header h2 a:hover {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.entry-content p {
+    color: var(--secondary);
+    line-height: 1.6;
+}
+
+.entry-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--secondary);
+}
+
+.entry-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.entry-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 1rem;
+    font-size: 0.75rem;
+    border-radius: 1rem;
+    text-decoration: none;
+    background: var(--code-bg);
+    color: var(--secondary);
+    border: 1px solid var(--border);
+    transition: all 0.3s ease;
+}
+
+.entry-tag:hover {
+    background: var(--primary);
+    color: var(--theme);
+    border-color: var(--primary);
+}
+
+.home-hero {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.home-hero-desc {
+    margin: 0 auto;
+    max-width: 40rem;
+    color: var(--secondary);
+    line-height: 1.6;
+    font-size: 1.05rem;
+}
+
+.home-hero-desc p {
+    margin: 0;
+}
+
+/* PaperMod .main defaults to ~720px — too narrow for 3 columns */
+.main:has(.home-layout--three) {
+    max-width: min(1320px, calc(100vw - 2 * var(--gap, 24px)));
+}
+
+/* Home: 3 columns — latest experiment | posts | browse counts */
+.home-layout {
+    display: grid;
+    align-items: start;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.home-layout--three {
+    grid-template-columns: minmax(260px, 1fr) minmax(300px, 1.45fr) minmax(240px, 320px);
+    gap: 1.75rem 2rem;
+}
+
+.home-layout__snapshot,
+.home-layout__posts,
+.home-layout__browse {
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* Middle column: same “card” treatment as the other two panels */
+.home-layout__posts {
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.35rem 1.4rem 1.5rem;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
+}
+
+.home-layout__browse {
+    position: relative;
+}
+
+/* Sticky browse column only when 3 columns are actually in a row */
+@media (min-width: 769px) {
+    .home-layout__browse {
+        position: sticky;
+        top: calc(var(--header-height, 60px) + 0.75rem);
+        z-index: 1;
+        align-self: start;
+    }
+}
+
+.home-layout-posts-heading {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--primary);
+    margin: 0 0 1.15rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 2px solid var(--border);
+}
+
+.home-posts-in-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.home-posts-in-grid .post-entry {
+    padding: 1.15rem 1.2rem;
+    margin-bottom: 0;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.home-posts-in-grid .post-entry .entry-header h2 {
+    font-size: 1.08rem;
+    line-height: 1.35;
+}
+
+.home-posts-in-grid .entry-content p {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin-bottom: 0;
+}
+
+.home-posts-in-grid .post-entry:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.home-layout__posts .pagination {
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    justify-content: center;
+}
+
+.experiment-snapshot--empty {
+    min-height: 8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.experiment-snapshot-empty-msg {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--secondary);
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* Stack vertically only on narrow viewports */
+@media (max-width: 768px) {
+    .home-layout--three {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .home-layout__browse {
+        position: static;
+    }
+
+    .main:has(.home-layout--three) {
+        max-width: calc(var(--main-width) + var(--gap, 24px) * 2);
+    }
+}
+
+/* Dark theme: slightly stronger card depth */
+body.dark .home-layout__posts,
+body.dark .experiment-snapshot,
+body.dark .home-tags-column {
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+}
+
+.home-tags-column {
+    background: var(--entry);
+    border-radius: 0.75rem;
+    padding: 1.35rem 1.35rem 1.5rem;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--border);
+}
+
+.home-tags-title {
+    margin: 0 0 0.4rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--primary);
+}
+
+.home-tags-lede {
+    margin: 0 0 1.25rem;
+    font-size: 0.875rem;
+    color: var(--secondary);
+    line-height: 1.5;
+}
+
+.home-tags-section {
+    margin-bottom: 1.25rem;
+}
+
+.home-tags-section:last-of-type {
+    margin-bottom: 0.75rem;
+}
+
+.home-tags-section-title {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.home-tags-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.home-tags-list li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+}
+
+.home-tags-list li:last-child {
+    border-bottom: none;
+}
+
+.home-tags-list a {
+    color: var(--primary);
+    text-decoration: none;
+    flex: 1;
+    min-width: 0;
+}
+
+.home-tags-list a:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.home-tags-count {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--secondary);
+    background: var(--code-bg);
+    padding: 0.15rem 0.45rem;
+    border-radius: 0.25rem;
+}
+
+.home-tags-all {
+    margin: 1rem 0 0;
+    font-size: 0.9rem;
+}
+
+.home-tags-all a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.home-tags-all a:hover {
+    text-decoration: underline;
+}
+
+.experiment-snapshot {
+    background: var(--entry);
+    border-radius: 0.75rem;
+    padding: 1.35rem 1.35rem 1.5rem;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--border);
+    position: relative;
+    min-width: 0;
+    max-width: 100%;
+    z-index: 0;
+}
+
+.experiment-snapshot-title {
+    margin: 0 0 0.35rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--primary);
+}
+
+.experiment-snapshot-compare {
+    margin: 0 0 0.5rem;
+    font-size: 0.95rem;
+}
+
+.experiment-snapshot-compare a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.experiment-snapshot-compare a:hover {
+    text-decoration: underline;
+}
+
+.experiment-snapshot-metric {
+    margin: 0 0 0.75rem;
+    font-size: 0.8rem;
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.experiment-snapshot-chart-wrap {
+    margin-bottom: 1rem;
+    height: 260px;
+    width: 100%;
+    position: relative;
+}
+
+.experiment-snapshot-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+.experiment-snapshot-table th,
+.experiment-snapshot-table td {
+    padding: 0.4rem 0.35rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.experiment-snapshot-table thead th {
+    font-weight: 600;
+    color: var(--secondary);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.experiment-snapshot-table th.num,
+.experiment-snapshot-table td.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.experiment-snapshot-table tbody th {
+    font-weight: 500;
+    color: var(--content);
+}
+
+.experiment-snapshot-table td.delta {
+    color: var(--secondary);
+}
+
+.experiment-snapshot-more {
+    margin: 1rem 0 0;
+    font-size: 0.85rem;
+}
+
+.experiment-snapshot-more a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.experiment-snapshot-more a:hover {
+    text-decoration: underline;
+}
