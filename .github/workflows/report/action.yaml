@@ -45,6 +45,10 @@ inputs:
   onlycacheableoutcome:
     description: 'Enable or disable reporting only for cacheable outcomes'
     required: true
+  gcreport:
+    description: 'Garbage collection report toggle'
+    required: true
+    default: false
   thresholdtaskduration:
     description: 'Threshold of task duration for the task path report'
     required: true
@@ -77,7 +81,14 @@ inputs:
     description: 'Deployment key'
     required: true
     default: ""
-
+  snapshot-label-a:
+    description: 'Optional label for variant A in Hugo experiment_snapshot (derived from CSV if empty)'
+    required: false
+    default: ''
+  snapshot-label-b:
+    description: 'Optional label for variant B in Hugo experiment_snapshot (derived from CSV if empty)'
+    required: false
+    default: ''
 
 runs:
   using: 'composite'
@@ -185,12 +196,33 @@ runs:
         echo "$CONTENT" >> $GITHUB_STEP_SUMMARY
       shell: bash
 
+    - name: Generate Hugo experiment_snapshot YAML
+      run: |
+        set -euo pipefail
+        CSV=""
+        shopt -s nullglob
+        for f in experiment_results_*.csv; do CSV="$f"; break; done
+        if [[ -z "$CSV" && -f build_comparison.csv ]]; then CSV=build_comparison.csv; fi
+        if [[ -z "$CSV" ]]; then
+          echo "::error::No experiment_results_*.csv or build_comparison.csv in workspace — cannot build experiment_snapshot"
+          ls -la
+          exit 1
+        fi
+        ARGS=()
+        if [[ -n "${{ inputs.snapshot-label-a }}" ]]; then ARGS+=(--label-a "${{ inputs.snapshot-label-a }}"); fi
+        if [[ -n "${{ inputs.snapshot-label-b }}" ]]; then ARGS+=(--label-b "${{ inputs.snapshot-label-b }}"); fi
+        echo "Using CSV for experiment_snapshot: ${CSV}"
+        python3 scripts/experiment_snapshot_from_csv.py "${ARGS[@]}" "$CSV" | tee experiment_snapshot.yaml
+      shell: bash
+
     - name: Archive Comparison Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: build-comparison-reports
         path: |
           experiment_results*
+          experiment_snapshot.yaml
+          *.csv
         if-no-files-found: error
 
     - name: Checkout gh-pages branch

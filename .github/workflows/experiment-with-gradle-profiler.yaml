@@ -51,6 +51,14 @@ on:
         type: string
         default: "{deploy_results:'false',experiment_title:'',open_ai_request:'false',report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',gc_report:'false',only_cacheable_outcome:'false',threshold_task_duration:'1000'}"
         required: false
+      snapshot_label_a:
+        description: "Optional label for Hugo home 'Latest experiment' variant A (from CSV slug if omitted)"
+        required: false
+        default: ""
+      snapshot_label_b:
+        description: "Optional label for Hugo home 'Latest experiment' variant B (from CSV slug if omitted)"
+        required: false
+        default: ""
 
 run-name: "profiler-${{ github.event.inputs.repository }}-${{ github.event.inputs.variantA }}-${{ github.event.inputs.variantB }}-${{ github.event.inputs.task }}"
 
@@ -120,10 +128,11 @@ jobs:
           kotlinreport: ${{ fromJson(github.event.inputs.extra_report_args).kotlin_build_report }}
           resourceusagereport: ${{ fromJson(github.event.inputs.extra_report_args).resource_usage_report }}
           onlycacheableoutcome: ${{ fromJson(github.event.inputs.extra_report_args).only_cacheable_outcome }}
-          thresholdtaskduration: ${{ fromJson(github.event.inputs.extra_report_args).threshold_task_duration }} 
+          thresholdtaskduration: ${{ fromJson(github.event.inputs.extra_report_args).threshold_task_duration }}
           deploy_results: ${{ fromJson(github.event.inputs.extra_report_args).deploy_results }}
           open-ai-request: ${{ fromJson(github.event.inputs.extra_report_args).open_ai_request }}
           open-ai-api-key: ${{ secrets.OPEN_API_KEY }}
           deployment-key: ${{ secrets.GH_BUILD_DEPLOYMENT }}
-
+          snapshot-label-a: ${{ github.event.inputs.snapshot_label_a }}
+          snapshot-label-b: ${{ github.event.inputs.snapshot_label_b }}
       - uses: actions/checkout@v4
