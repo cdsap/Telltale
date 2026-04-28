@@ -6,6 +6,30 @@ report_link: /Telltale/reports/experiment_results_20260428193059.html
 summary: " 
 The analysis of the Gradle build performance data reveals notable improvements in build times and resource utilization between the two variants, `varianta_9.1.0` and `variantb_9.2.0`. The overall build time decreased by 4.45% from an average of 588.322 seconds in `varianta_9.1.0` to 562.176 seconds in `variantb_9.2.0`. Configuration times also saw a slight improvement. The most time-consuming tasks such as `:app:app:mergeExtDexDebug` and `:core:analytics:kspDebugKotlin` showed significant reductions in execution times, contributing to the overall efficiency. Memory usage and CPU utilization during the build process were slightly better in `variantb_9.2.0`. Furthermore, Kotlin Build Reports indicate an increase in code generation lines per second, suggesting enhanced compiler performance in the newer variant."
 tags: ["dependencies cache"]
+components: ["android"]
+experiment_snapshot:
+  metric: "Overall build time"
+  unit: "seconds"
+  variant_a:
+    label: "AGP 9.1.0"
+    mean: 588.322
+    p50: 592.534
+    p90: 619.333
+  variant_b:
+    label: "AGP 9.2.0"
+    mean: 562.176
+    p50: 560.925
+    p90: 593.537
+  config_metric: "Configuration time"
+  config_unit: "seconds"
+  config_variant_a:
+    mean: 59.942
+    p50: 61.264
+    p90: 68.165
+  config_variant_b:
+    mean: 59.527
+    p50: 59.080
+    p90: 67.752
 ---
 [Report 📊](../../reports/experiment_results_20260428193059.html)
 ## Summary
