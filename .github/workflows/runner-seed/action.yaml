@@ -67,6 +67,7 @@ runs:
         TRANSFORM_CACHE_ENTRY="caches/**/transforms"
         MODULES_CACHE_ENTRY="caches/modules-*/*"
         JAR_CACHE_ENTRY="caches/jars-*/*"
+        JAVA_COMPILE_CACHE_ENTRY="caches/*/javaCompile"
 
         case "${{ inputs.mode }}" in
           "dependencies cache")
@@ -99,6 +100,9 @@ runs:
           "remote task cache + dependencies cache - transforms cache")
             echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$BUILD_CACHE_ENTRY\n$TRANSFORM_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
             ;;
+          "dependencies cache - javaCompile cache")
+            echo -e "GRADLE_HOME_CACHE_EXCLUDES<<EOF\n$BUILD_CACHE_ENTRY\n$JAVA_COMPILE_CACHE_ENTRY\nEOF" >> $GITHUB_ENV
+            ;;
           "no caching")
             echo "GRADLE_HOME_CACHE_EXCLUDES=**" >> $GITHUB_ENV
             ;;
@@ -112,7 +116,7 @@ runs:
 
     - name: Setup Gradle
       if: github.event.inputs.mode != 'no caching'
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v4
       with:
         cache-write-only: true
         cache-overwrite-existing: true

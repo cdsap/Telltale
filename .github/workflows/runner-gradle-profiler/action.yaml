@@ -45,6 +45,10 @@ inputs:
   cache-url:
     description: 'URL for the cache node, if applicable'
     required: true
+  clean-between-iterations:
+    description: 'Run clean between profiler iterations (set false to profile incremental builds)'
+    required: false
+    default: 'true'
 
 runs:
   using: 'composite'
@@ -66,7 +70,7 @@ runs:
       id: sdkman
       with:
         candidate: gradleprofiler
-        version: 0.20.0
+        version: 0.23.0
 
     - name: Execute Gradle Build with Profiler
       id: geapix
@@ -81,26 +85,33 @@ runs:
           EXTRA_ARG="${{ inputs.extra-args }}"
         fi
 
+        # Gradle Profiler: cleanup-tasks run between iterations; [] = incremental re-runs
+        if [ "${{ inputs.clean-between-iterations }}" = "true" ]; then
+          CLEANUP_TASKS='["clean"]'
+        else
+          CLEANUP_TASKS='[]'
+        fi
+
         # Generate scenario file based on provided inputs
         if [ -z "${{ inputs.class }}" ]; then
           echo "assemble {
             title = \"assemble\"
             tasks = [\"${{ inputs.task }}\"]
-            cleanup-tasks = [\"clean\"]
-            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
+            cleanup-tasks = $CLEANUP_TASKS
+            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
           }" > scenario
         else
           echo "assemble {
             title = \"assemble\"
             tasks = [\"${{ inputs.task }}\"]
-            cleanup-tasks = [\"clean\"]
+            cleanup-tasks = $CLEANUP_TASKS
             apply-abi-change-to = [${{ inputs.class }}]
-            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
+            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
           }" > scenario
         fi 
 
         # Execute the Gradle Profiler
-        gradle-profiler-0.20.0/bin/gradle-profiler --benchmark --scenario-file scenario assemble --warmups ${{ inputs.warmups }} --iterations ${{ inputs.iterations }}
+        gradle-profiler-0.23.0/bin/gradle-profiler --benchmark --scenario-file scenario assemble --warmups ${{ inputs.warmups }} --iterations ${{ inputs.iterations }}
 
         # Generate table output from benchmark results
         TABLE_OUTPUT="<table><tr><td>Build</td><td>Time</td></tr>"
@@ -114,9 +125,17 @@ runs:
         DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
 
+    - name: Sanitize variant name
+      id: sanitize
+      run: |
+        VARIANT="${{ inputs.variant }}"
+        SAFE_VARIANT="${VARIANT//\//-}"
+        echo "safe_variant=$SAFE_VARIANT" >> $GITHUB_OUTPUT
+      shell: bash  
+  
     - name: Archive Profiler Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: profiler-${{ inputs.variant-prefix }}${{ inputs.variant }}
+        name: profiler-${{ inputs.variant-prefix }}${{ steps.sanitize.outputs.safe_variant }}
         path: |
           profile-out/*

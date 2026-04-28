@@ -60,7 +60,7 @@ runs:
 
     - name: Setup Gradle (Cache Mode)
       if: github.event.inputs.mode != 'no caching'
-      uses: gradle/actions/setup-gradle@v3
+      uses: gradle/actions/setup-gradle@v4
       with:
         cache-read-only: true
         add-job-summary: 'never'
@@ -73,7 +73,7 @@ runs:
       id: gradle-build
       run: |
         ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} \
-          -Dscan.tag.${{ inputs.variant-prefix }}${{ inputs.variant }} \
+          -Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }} \
           -Dscan.tag."${{ inputs.mode }}" \
           -Dscan.tag.experiment \
           -Dscan.tag.${{ inputs.experiment-id }}

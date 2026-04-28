@@ -40,6 +40,7 @@ on:
           - 'remote task cache + dependencies cache'
           - 'remote task cache - transforms cache'
           - 'remote task cache + dependencies cache - transforms cache'
+          - 'dependencies cache - javaCompile cache'
       os_args:
         description: "Operating system configurations for variants"
         type: string
@@ -48,7 +49,7 @@ on:
       java_args:
         description: "JDK vendor and version for each variant"
         type: string
-        default: "{javaVersionVariantA:'17',javaVersionVariantB:'17',javaVendorVariantA:'zulu',javaVendorVariantB:'zulu'}"
+        default: "{javaVersionVariantA:'23',javaVersionVariantB:'23',javaVendorVariantA:'zulu',javaVendorVariantB:'zulu'}"
         required: true
       extra_build_args:
         description: "Extra build arguments for each variant"
@@ -58,8 +59,16 @@ on:
       extra_report_args:
         description: "Configuration for generating reports"
         type: string
-        default: "{report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',only_cacheable_outcome:'false',threshold_task_duration:'1000'}"
+        default: "{deploy_results:'false',experiment_title:'', open_ai_request:'false', report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',gc_report:'false',only_cacheable_outcome:'false',threshold_task_duration:'1000'}"
         required: true
+      snapshot_label_a:
+        description: "Optional label for Hugo home 'Latest experiment' variant A (from CSV slug if omitted)"
+        required: false
+        default: ""
+      snapshot_label_b:
+        description: "Optional label for Hugo home 'Latest experiment' variant B (from CSV slug if omitted)"
+        required: false
+        default: ""
 
 run-name: "${{ github.event.inputs.repository }}-${{ github.event.inputs.mode }}-${{ github.event.inputs.variantA }}-${{ github.event.inputs.variantB }}-${{ github.event.inputs.task }}"
 
@@ -186,6 +195,9 @@ jobs:
       - uses: actions/checkout@v4
 
   report-no-caching:
+    permissions:
+      contents: write
+      actions: write
     name: Report for No Caching
     if: fromJson(github.event.inputs.extra_report_args).report_enabled == 'true'
     runs-on: ubuntu-latest
@@ -196,20 +208,34 @@ jobs:
         with:
           task: "${{ github.event.inputs.task }}"
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
-          tags: "varianta_${{ github.event.inputs.variantA }},variantb_${{ github.event.inputs.variantB }}"
+          tags: "${{ github.repository_owner }}-${{ github.run_number }}_varianta_${{ github.event.inputs.variantA }},${{ github.repository_owner }}-${{ github.run_number }}_variantb_${{ github.event.inputs.variantB }}"
           api-key: ${{ secrets.DV_API_KEY }}
           url: ${{ secrets.DV_URL }}
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           profile: false
-          taskpathreport: fromJson(github.event.inputs.extra_report_args).taskpath_report
-          tasktypereport: fromJson(github.event.inputs.extra_report_args).tasktype_report
-          processreport: fromJson(github.event.inputs.extra_report_args).process_report
-          kotlinreport: fromJson(github.event.inputs.extra_report_args).kotlin_build_report
-          resourceusagereport: fromJson(github.event.inputs.extra_report_args).resource_usage_report
-          onlycacheableoutcome: fromJson(github.event.inputs.extra_report_args).only_cacheable_outcome
-          thresholdtaskduration: ${{ fromJson(github.event.inputs.extra_report_args).threshold_task_duration }} 
+          mode: "${{ github.event.inputs.mode }}"
+          repository: ${{ github.event.inputs.repository }}
+          run_id: ${{ github.run_id }}      
+          experiment_title: ${{ fromJson(github.event.inputs.extra_report_args).experiment_title }}      
+          taskpathreport: ${{ fromJson(github.event.inputs.extra_report_args).taskpath_report }}
+          tasktypereport: ${{ fromJson(github.event.inputs.extra_report_args).tasktype_report }}
+          processreport: ${{ fromJson(github.event.inputs.extra_report_args).process_report }}
+          gcreport: ${{ fromJson(github.event.inputs.extra_report_args).gc_report }}
+          kotlinreport: ${{ fromJson(github.event.inputs.extra_report_args).kotlin_build_report }}
+          resourceusagereport: ${{ fromJson(github.event.inputs.extra_report_args).resource_usage_report }}
+          onlycacheableoutcome: ${{ fromJson(github.event.inputs.extra_report_args).only_cacheable_outcome }}
+          thresholdtaskduration: ${{ fromJson(github.event.inputs.extra_report_args).threshold_task_duration }}
+          deploy_results: ${{ fromJson(github.event.inputs.extra_report_args).deploy_results }}
+          open-ai-request: ${{ fromJson(github.event.inputs.extra_report_args).open_ai_request }}
+          open-ai-api-key: ${{ secrets.OPEN_API_KEY }}
+          deployment-key: ${{ secrets.GH_BUILD_DEPLOYMENT }}
+          snapshot-label-a: ${{ github.event.inputs.snapshot_label_a }}
+          snapshot-label-b: ${{ github.event.inputs.snapshot_label_b }}
 
   report:
+    permissions:
+      contents: write
+      actions: write
     name: Report with Caching
     if: fromJson(github.event.inputs.extra_report_args).report_enabled == 'true'
     runs-on: ubuntu-latest
@@ -220,15 +246,26 @@ jobs:
         with:
           task: "${{ github.event.inputs.task }}"
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
-          tags: "varianta_${{ github.event.inputs.variantA }},variantb_${{ github.event.inputs.variantB }}"
+          tags: "${{ github.repository_owner }}-${{ github.run_number }}_varianta_${{ github.event.inputs.variantA }},${{ github.repository_owner }}-${{ github.run_number }}_variantb_${{ github.event.inputs.variantB }}"
           api-key: ${{ secrets.DV_API_KEY }}
           url: ${{ secrets.DV_URL }}
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           profile: false
+          mode: "${{ github.event.inputs.mode }}"
+          repository: ${{ github.event.inputs.repository }}
+          run_id: ${{ github.run_id }}
+          experiment_title: ${{ fromJson(github.event.inputs.extra_report_args).experiment_title }}
           taskpathreport: ${{ fromJson(github.event.inputs.extra_report_args).taskpath_report }}
           tasktypereport: ${{ fromJson(github.event.inputs.extra_report_args).tasktype_report }}
           processreport: ${{ fromJson(github.event.inputs.extra_report_args).process_report }}
+          gcreport: ${{ fromJson(github.event.inputs.extra_report_args).gc_report }}
           kotlinreport: ${{ fromJson(github.event.inputs.extra_report_args).kotlin_build_report }}
           resourceusagereport: ${{ fromJson(github.event.inputs.extra_report_args).resource_usage_report }}
           onlycacheableoutcome: ${{ fromJson(github.event.inputs.extra_report_args).only_cacheable_outcome }}
-          thresholdtaskduration: ${{ fromJson(github.event.inputs.extra_report_args).threshold_task_duration }} 
+          thresholdtaskduration: ${{ fromJson(github.event.inputs.extra_report_args).threshold_task_duration }}
+          deploy_results: ${{ fromJson(github.event.inputs.extra_report_args).deploy_results }}
+          open-ai-request: ${{ fromJson(github.event.inputs.extra_report_args).open_ai_request }}
+          open-ai-api-key: ${{ secrets.OPEN_API_KEY }}
+          deployment-key: ${{ secrets.GH_BUILD_DEPLOYMENT }}
+          snapshot-label-a: ${{ github.event.inputs.snapshot_label_a }}
+          snapshot-label-b: ${{ github.event.inputs.snapshot_label_b }}
