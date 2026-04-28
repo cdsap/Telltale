@@ -201,7 +201,15 @@ runs:
         set -euo pipefail
         CSV=""
         shopt -s nullglob
-        for f in experiment_results_*.csv; do CSV="$f"; break; done
+        # Prefer the full CSV; ignore *_filtered.csv (often sorts first alphabetically).
+        for f in experiment_results_*.csv; do
+          [[ "$f" == *filtered* ]] && continue
+          CSV="$f"
+          break
+        done
+        if [[ -z "$CSV" ]]; then
+          for f in experiment_results_*.csv; do CSV="$f"; break; done
+        fi
         if [[ -z "$CSV" && -f build_comparison.csv ]]; then CSV=build_comparison.csv; fi
         if [[ -z "$CSV" ]]; then
           echo "::error::No experiment_results_*.csv or build_comparison.csv in workspace — cannot build experiment_snapshot"
@@ -279,15 +287,17 @@ runs:
           EXPERIMENT_TITLE="${{ inputs.repository }}-${{ inputs.task }}"
         fi
 
+        VARIANTS="${{ inputs.tags }}"
+        EXPERIMENT_ID="${{ inputs.experiment-id }}"
         if [[ -n "$title_content" ]]; then
            DESCRIPTION="\"$title_content\""
         else
            DESCRIPTION= "\"variants: ${VARIANTS//${EXPERIMENT_ID}_/}\""
         fi
 
+        SNAP_FILE="temp-results/experiment_snapshot.yaml"
+
         if [ ! -f "$EXPERIMENT_FILE" ]; then
-          VARIANTS="${{ inputs.tags }}"
-          EXPERIMENT_ID="${{ inputs.experiment-id }}"
           echo "---" > "$EXPERIMENT_FILE"
           echo "layout: post" >> "$EXPERIMENT_FILE"
           echo "title: \"$EXPERIMENT_TITLE\"" >> "$EXPERIMENT_FILE"
@@ -295,6 +305,11 @@ runs:
           echo "report_link: /Telltale/reports/$html_filename" >> "$EXPERIMENT_FILE"
           echo "summary: $DESCRIPTION" >> "$EXPERIMENT_FILE"
           echo "tags: [\"$tagsreport\"]" >> "$EXPERIMENT_FILE"
+          if [[ -f "$SNAP_FILE" ]]; then
+            cat "$SNAP_FILE" >> "$EXPERIMENT_FILE"
+          else
+            echo "::warning::No experiment_snapshot.yaml in artifact — home page snapshot chart will stay on the previous experiment until you add snapshot YAML."
+          fi
           echo "---" >> "$EXPERIMENT_FILE"
           echo "[Report 📊](../../reports/$html_filename)" >> "$EXPERIMENT_FILE"
           echo "$analysis_content" >> "$EXPERIMENT_FILE"
