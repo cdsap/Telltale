@@ -125,6 +125,11 @@ runs:
       env:
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB_INSTANCE: ${{ inputs.experiment-id }}-${{ inputs.variant }}
 
+    - uses: cdsap/build-process-watcher@v0.6.1
+      with:
+        remote_monitoring: 'true'          
+        export_to_bigquery: 'true'
+
     - name: Execute Gradle Build
       id: gradle-build
       run: |
