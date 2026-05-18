@@ -1,0 +1,43 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["config:recommended"],
+    "customManagers": [
+      {
+        "customType": "regex",
+        "managerFilePatterns": ["/(^|/)versions_to_monitor\\.json$/"],
+        "matchStrings": ["\"agp\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""],
+        "depNameTemplate": "com.android.tools.build:gradle",
+        "packageNameTemplate": "com.android.tools.build:gradle",
+        "datasourceTemplate": "maven",
+        "registryUrlTemplate": "https://dl.google.com/dl/android/maven2/"
+      },
+      {
+        "customType": "regex",
+        "managerFilePatterns": ["/(^|/)versions_to_monitor\\.json$/"],
+        "matchStrings": ["\"kotlin\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""],
+        "depNameTemplate": "org.jetbrains.kotlin:kotlin-gradle-plugin",
+        "packageNameTemplate": "org.jetbrains.kotlin:kotlin-gradle-plugin",
+        "datasourceTemplate": "maven",
+        "registryUrlTemplate": "https://repo.maven.apache.org/maven2/"
+      },
+      {
+        "customType": "regex",
+        "managerFilePatterns": ["/(^|/)versions_to_monitor\\.json$/"],
+        "matchStrings": ["\"gradle\"\\s*:\\s*\"(?<currentValue>[^\"]+)\""],
+        "depNameTemplate": "gradle",
+        "packageNameTemplate": "gradle",
+        "datasourceTemplate": "gradle-version"
+      }
+    ],
+    "packageRules": [
+      {
+        "matchPackageNames": [
+          "com.android.tools.build:gradle",
+          "org.jetbrains.kotlin:kotlin-gradle-plugin",
+          "gradle"
+        ],
+        "labels": ["telltale-experiment"],
+        "automerge": false
+      }
+    ]
+  }
