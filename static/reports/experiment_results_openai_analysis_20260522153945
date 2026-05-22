@@ -1,0 +1,45 @@
+## Summary
+The analysis of the Gradle build performance data between `varianta_baseline` and `variantb_agp-9.2.1` reveals several key insights. The overall build time for `variantb_agp-9.2.1` increased slightly by about 2.77 seconds (1.07%) compared to `varianta_baseline`. Configuration times also saw a notable increase in `variantb_agp-9.2.1` by about 6.54 seconds (16.39%). Among the most time-consuming tasks, `:core:cart:compileDebugKotlin` and `:build-logic:convention:compileKotlin` exhibited the most significant increases in execution times. CPU and memory usage across all processes remained at their maximum capacity for both variants, indicating a high level of resource utilization during the builds.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - `varianta_baseline`: Mean = 259.862s, P50 = 260.737s, P90 = 282.223s
+  - `variantb_agp-9.2.1`: Mean = 267.061s, P50 = 266.979s, P90 = 284.491s
+  - Percentage Increase: Mean = 1.07%, P50 = 0.85%, P90 = 0.80%
+
+- **Configuration Time:**
+  - `varianta_baseline`: Mean = 39.901s, P50 = 39.323s, P90 = 56.435s
+  - `variantb_agp-9.2.1`: Mean = 46.440s, P50 = 41.601s, P90 = 61.817s
+  - Percentage Increase: Mean = 16.39%, P50 = 5.79%, P90 = 9.53%
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  - `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"`:
+    - `varianta_baseline`: Mean = 3116ms, P50 = 2730ms, P90 = 4581ms
+    - `variantb_agp-9.2.1`: Mean = 3142ms, P50 = 2732ms, P90 = 4615ms
+  - `"com.google.devtools.ksp.gradle.KspAATask"`:
+    - `varianta_baseline`: Mean = 2314ms, P50 = 2057ms, P90 = 3135ms
+    - `variantb_agp-9.2.1`: Mean = 2314ms, P50 = 2034ms, P90 = 3018ms
+  - `"com.android.build.gradle.internal.tasks.GlobalSyntheticsGeneratorTask"`:
+    - `varianta_baseline`: Mean = 3023ms, P50 = 3088ms, P90 = 3639ms
+    - `variantb_agp-9.2.1`: Mean = 2811ms, P50 = 2824ms, P90 = 3567ms
+
+### 3. Statistical Patterns
+- Notable timing variations were observed in tasks such as `"com.android.build.gradle.internal.tasks.DexMergingTask"` and `"com.android.build.gradle.internal.tasks.DexArchiveBuilderTask"`, with the former showing a decrease in execution time in `variantb_agp-9.2.1`.
+
+### 5. CPU & Memory Usage Analysis
+- **Overall System Usage:**
+  - CPU: Max = 100% for both variants
+  - Memory: Max = 8.65GB for `variantb_agp-9.2.1` vs. 8.34GB for `varianta_baseline` (Increase of 3.71%)
+
+- **Main Gradle Process:**
+  - CPU: Max = 95.9% for `variantb_agp-9.2.1` vs. 96.2% for `varianta_baseline`
+  - Memory: Max = 4.17GB for `variantb_agp-9.2.1` vs. 3.94GB for `varianta_baseline` (Increase of 5.84%)
+
+- **Build Child Processes:**
+  - CPU: Max = 94.4% for `variantb_agp-9.2.1` vs. 94.8% for `varianta_baseline`
+  - Memory: Max = 3.41GB for `variantb_agp-9.2.1` vs. 3.34GB for `varianta_baseline` (Increase of 2.10%)
+
+This analysis highlights the slight increase in build and configuration times in `variantb_agp-9.2.1`, along with a consistent high resource utilization across both variants.
