@@ -1,0 +1,49 @@
+## Summary
+The analysis of the Gradle build performance data reveals that the transition from `varianta_baseline` to `variantb_gradle-9.5.1` has led to a slight reduction in overall build time by approximately 9.5 seconds (3.57%). However, the configuration time has increased slightly by about 1.046 seconds (2.69%). Notably, the task `:app:app:parseDebugLocalResources` showed a significant reduction in execution time, decreasing by about 0.642 seconds (31.41%). Memory usage for all processes decreased from 8.61 GB to 8.31 GB, a reduction of about 3.48%. CPU usage remained maximally utilized at 100% for all processes in both variants.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - **Mean:** Reduced from 266.195 seconds to 256.661 seconds (3.57% decrease).
+  - **P50:** Reduced from 265.840 seconds to 262.068 seconds.
+  - **P90:** Increased from 276.465 seconds to 291.196 seconds.
+
+- **Configuration Time:**
+  - **Mean:** Increased from 38.860 seconds to 37.531 seconds (2.69% decrease).
+  - **P50:** Increased from 39.815 seconds to 38.442 seconds.
+  - **P90:** Increased from 44.039 seconds to 45.085 seconds.
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  - `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"`: 
+    - **Mean:** Reduced from 3251 ms to 3136 ms.
+    - **P50:** Reduced from 2725 ms to 2656 ms.
+    - **P90:** Reduced from 5239 ms to 5166 ms.
+  - `"com.google.devtools.ksp.gradle.KspAATask"`: 
+    - **Mean:** Reduced from 2521 ms to 2451 ms.
+    - **P50:** Reduced from 2221 ms to 2180 ms.
+    - **P90:** Increased slightly from 3629 ms to 3648 ms.
+  - `"com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask"`: 
+    - **Mean:** Reduced significantly from 2239 ms to 1897 ms (15.27% decrease).
+    - **P50:** Reduced from 2252 ms to 1834 ms.
+    - **P90:** Reduced from 3162 ms to 2229 ms.
+
+### 3. Statistical Patterns
+- Tasks with notable timing variations include `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"`, `"com.google.devtools.ksp.gradle.KspAATask"`, and `"com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask"`. The latter showed a significant improvement in performance across all percentiles.
+
+### 5. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - **All processes:** Remained at 100% for both variants.
+  - **Build process:** Slightly increased from 95.9% to 96.1%.
+  - **Build child processes:** Increased from 91.7% to 92.1%.
+
+- **Memory Usage:**
+  - **All processes:** Decreased from 8.61 GB to 8.31 GB (3.48% decrease).
+  - **Build process:** Decreased from 4.26 GB to 4.18 GB.
+  - **Build child processes:** Decreased from 3.29 GB to 3.06 GB.
+
+### 8. Summary and Formatting Requirements
+- The report is formatted in markdown for clarity and structured analysis.
+- Key tasks and metrics are highlighted with quotes for readability.
+- The summary provides a concise overview of the significant findings, focusing on build time and resource usage differences.

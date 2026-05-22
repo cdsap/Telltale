@@ -1,0 +1,837 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gradle Build Performance Report</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 12px;
+        background-color: #f5f5f5;
+    }
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 16px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    .chart-container {
+        background-color: white;
+        padding: 12px;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        min-height: 260px;
+    }
+    .chart-container canvas {
+        width: 100% !important;
+        height: 240px !important;
+    }
+    .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        margin: 8px 0 16px;
+    }
+    .controls select,
+    .task-picker input[type="search"] {
+        max-width: 100%;
+        min-width: 220px;
+        padding: 6px;
+        font: inherit;
+        box-sizing: border-box;
+    }
+    .task-picker {
+        position: relative;
+        flex: 1;
+        min-width: 220px;
+        max-width: min(100%, 720px);
+    }
+    .task-dropdown {
+        display: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        margin-top: 2px;
+        max-height: 280px;
+        overflow-y: auto;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 100;
+    }
+    .task-dropdown.open {
+        display: block;
+    }
+    .task-dropdown-hint {
+        padding: 6px 10px;
+        font-size: 11px;
+        color: #666;
+        border-bottom: 1px solid #eee;
+        line-height: 1.35;
+    }
+    .task-dropdown-item {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 6px 10px;
+        border: none;
+        background: none;
+        font: 12px 'Roboto Mono', monospace;
+        cursor: pointer;
+        color: #222;
+    }
+    .task-dropdown-item:hover,
+    .task-dropdown-item:focus {
+        background: #f0f0f0;
+        outline: none;
+    }
+    .task-dropdown-item-active {
+        background: #e8f0fe !important;
+    }
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 760px;
+        margin: 20px 0;
+        font-size: 14px;
+        background-color: white;
+    }
+    th, td {
+        border: 1px solid #e0e0e0;
+        padding: 8px;
+        text-align: left;
+        white-space: nowrap;
+    }
+    th {
+        background-color: #f5f5f5;
+        color: #333;
+        font-weight: 500;
+        text-align: center;
+    }
+    .stats-header {
+        background-color: #f0f0f0;
+    }
+    tr:nth-child(even) {
+        background-color: #fafafa;
+    }
+    .metric-value {
+        text-align: right;
+        font-family: 'Roboto Mono', monospace;
+    }
+    .unit-column {
+        color: #666;
+        font-size: 12px;
+    }
+    h1, h2 {
+        color: #333;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+    h2 {
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+    @media (max-width: 768px) {
+        body {
+            padding: 8px;
+        }
+        .container {
+            padding: 10px;
+        }
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+        h1 {
+            font-size: 20px;
+        }
+        h2 {
+            font-size: 16px;
+        }
+        table {
+            font-size: 12px;
+            min-width: 640px;
+        }
+    }
+</style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Gradle Build Performance Report</h1>
+                <div class='table-wrapper'><table><tr><td colspan=12>Results</td></tr><tr><td>Repository</td><td colspan=11>cdsap/experiment-gradle-9.5.1</td></tr><tr><td>Task</td><td colspan=11>assembleDebug</td></tr><tr><td>varianta_baseline</td><td>10 builds processed</td><td colspan=10><a href="https://ge.solutions-team.gradle.com/scans?search.startTimeMax=1779639129967&search.startTimeMin=1779293529967&search.tags=cdsap-316_varianta_baseline">Build Scans</a></td></tr><tr><td>variantb_gradle-9.5.1</td><td>10 builds processed</td><td colspan=10><a href="https://ge.solutions-team.gradle.com/scans?search.startTimeMax=1779639129967&search.startTimeMin=1779293529967&search.tags=cdsap-316_variantb_gradle-9.5.1">Build Scans</a></td></tr><tr><td>Execution raw data</td><td colspan=11><a href="experiment_results_20260522161744.csv">Download csv</a></td></tr><tr><td>Experiment run execution</td><td colspan=11><a href="https://github.com/cdsap/Telltale/actions/runs/26298412113">Workflow</a></td></tr></table></div>        <div class="charts-grid">
+                    <div class="chart-container">
+                <h2>Build Duration Time Series</h2>
+                <canvas id="buildDurationChart"></canvas>
+            </div>
+             <div class="chart-container">
+                <h2>Configuration Time</h2>
+                <canvas id="configurationTimeChart"></canvas>
+            </div>
+            <div class="chart-container">
+    <h2>Build Process Memory</h2>
+    <canvas id="buildProcessMemoryChart"></canvas>
+</div>
+<div class="chart-container">
+    <h2>Build Child Processes Memory</h2>
+    <canvas id="buildChildProcessMemoryChart"></canvas>
+</div>
+            <div class="chart-container">
+    <h2 id="taskChartTitle">Task Duration: :app:app:mergeExtDexDebug</h2>
+    <div class="controls">
+        <label for="taskSearchInput">Task:</label>
+        <div class="task-picker">
+            <input type="search" id="taskSearchInput" autocomplete="off" spellcheck="false" placeholder="Search tasks — type to filter" />
+            <div id="taskDropdown" class="task-dropdown"></div>
+        </div>
+    </div>
+    <canvas id="expensiveTaskChart"></canvas>
+</div>
+        
+        
+        
+          </div>
+                                                                            <script>
+                                                                                            new Chart(document.getElementById('buildDurationChart'), {
+                type: 'line',
+                data: {
+                    labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                    datasets: [{
+    label: 'varianta_baseline',
+    data: [269342.0,276831.0,273166.0,264943.0,269474.0,266736.0,264786.0,259418.0,262238.0,255021.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_gradle-9.5.1',
+    data: [294061.0,263359.0,262042.0,262695.0,265412.0,262093.0,256711.0,252608.0,247471.0,200160.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+                },
+                options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Build Duration (seconds)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+            });
+            new Chart(document.getElementById('configurationTimeChart'), {
+                type: 'line',
+                data: {
+                    labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                    datasets: [{
+    label: 'varianta_baseline',
+    data: [39844.0,41735.0,39785.0,37570.0,44295.0,34501.0,36617.0,33852.0,40019.0,40382.0],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_gradle-9.5.1',
+    data: [45482.0,38322.0,38561.0,41512.0,34597.0,35072.0,38871.0,39049.0,33251.0,30598.0],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+                },
+                options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Configuration time Duration (seconds)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+            });
+            new Chart(document.getElementById('buildProcessMemoryChart'), {
+                type: 'line',
+                data: {
+                    labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                    datasets: [{
+    label: 'varianta_baseline',
+    data: [4.354813952E9,4.445691904E9,4.57261056E9,5.149106176E9,4.318048256E9,4.4793856E9,4.59823104E9,4.650278912E9,4.096212992E9,5.055807488E9],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_gradle-9.5.1',
+    data: [5.102047232E9,3.860799488E9,4.318769152E9,4.105752576E9,4.128538624E9,4.683485184E9,4.940017664E9,4.513026048E9,4.912832512E9,4.313432064E9],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+                },
+                options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Memory Usage (MB)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+            });
+            new Chart(document.getElementById('buildChildProcessMemoryChart'), {
+                type: 'line',
+                data: {
+                    labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                    datasets: [{
+    label: 'varianta_baseline',
+    data: [3.305742336E9,3.572502528E9,3.50928896E9,3.562655744E9,3.78841088E9,3.619098624E9,3.567767552E9,3.515633664E9,3.643420672E9,3.239366656E9],
+    borderColor: '#36A2EB',
+    tension: 0.1
+},{
+    label: 'variantb_gradle-9.5.1',
+    data: [3.189129216E9,3.308498944E9,3.439665152E9,3.25607424E9,3.07716096E9,3.331170304E9,3.365732352E9,3.330195456E9,3.15062272E9,3.460161536E9],
+    borderColor: '#FF6384',
+    tension: 0.1
+}]
+                },
+                options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Memory Usage (MB)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+            });
+            const taskData = {':app:app:compileDebugKotlin': {'varianta_baseline': [3246.0,2656.0,2370.0,3727.0,2243.0,3511.0,2950.0,2548.0,2166.0,2269.0],'variantb_gradle-9.5.1': [2888.0,2913.0,3632.0,3515.0,3512.0,3051.0,2258.0,2891.0,2731.0,1866.0]},
+':app:app:dexBuilderDebug': {'varianta_baseline': [2034.0,1404.0,697.0,1794.0,1138.0,1350.0,1269.0,1641.0,812.0,617.0],'variantb_gradle-9.5.1': [1979.0,1281.0,1336.0,1444.0,1452.0,1755.0,710.0,1179.0,1528.0,1169.0]},
+':app:app:hiltJavaCompileDebug': {'varianta_baseline': [3390.0,7311.0,3199.0,2940.0,3875.0,3267.0,6671.0,3376.0,3290.0,3388.0],'variantb_gradle-9.5.1': [3517.0,3096.0,3185.0,3548.0,3148.0,3975.0,3555.0,3643.0,3518.0,2444.0]},
+':app:app:kspDebugKotlin': {'varianta_baseline': [3700.0,3741.0,3462.0,2800.0,3159.0,2675.0,3650.0,4021.0,3713.0,2605.0],'variantb_gradle-9.5.1': [3600.0,3156.0,2658.0,2554.0,3414.0,2906.0,2812.0,2602.0,2337.0,2750.0]},
+':app:app:mergeDebugJavaResource': {'varianta_baseline': [2661.0,1822.0,2570.0,2390.0,1529.0,2191.0,2118.0,1151.0,2286.0,2193.0],'variantb_gradle-9.5.1': [2377.0,2307.0,1827.0,1763.0,1980.0,2034.0,2233.0,1642.0,1991.0,2106.0]},
+':app:app:mergeDebugResources': {'varianta_baseline': [4840.0,4070.0,4001.0,5222.0,3992.0,4866.0,4545.0,4624.0,4891.0,4100.0],'variantb_gradle-9.5.1': [5480.0,4916.0,5352.0,4721.0,4582.0,4771.0,3774.0,4234.0,4292.0,3167.0]},
+':app:app:mergeExtDexDebug': {'varianta_baseline': [14165.0,12718.0,13070.0,14051.0,13151.0,13551.0,11034.0,15126.0,13413.0,13412.0],'variantb_gradle-9.5.1': [15279.0,13258.0,12855.0,13366.0,14011.0,13023.0,13596.0,13222.0,13862.0,9892.0]},
+':app:app:mergeLibDexDebug': {'varianta_baseline': [887.0,1149.0,1264.0,975.0,898.0,1038.0,849.0,1499.0,1071.0,1110.0],'variantb_gradle-9.5.1': [1107.0,1517.0,1135.0,891.0,939.0,1044.0,1295.0,996.0,878.0,902.0]},
+':app:app:parseDebugLocalResources': {'varianta_baseline': [976.0,1317.0,1938.0,4518.0,1377.0,852.0,4586.0,2264.0,1393.0,1210.0],'variantb_gradle-9.5.1': [4408.0,965.0,941.0,1447.0,769.0,1089.0,1120.0,1335.0,1259.0,683.0]},
+':app:app:processDebugResources': {'varianta_baseline': [2413.0,2437.0,2305.0,1903.0,1732.0,2050.0,3242.0,2276.0,1809.0,2227.0],'variantb_gradle-9.5.1': [1753.0,2089.0,2233.0,1914.0,1696.0,2016.0,2191.0,1684.0,1659.0,1739.0]},
+':build-logic:convention:compileKotlin': {'varianta_baseline': [8291.0,9282.0,8455.0,7990.0,8220.0,8177.0,7944.0,7891.0,7954.0,8496.0],'variantb_gradle-9.5.1': [7933.0,8300.0,8449.0,8575.0,8370.0,8335.0,7958.0,7771.0,8030.0,6332.0]},
+':core:cart:compileDebugKotlin': {'varianta_baseline': [8854.0,9524.0,9009.0,8569.0,8726.0,8945.0,8031.0,8747.0,8467.0,8183.0],'variantb_gradle-9.5.1': [8788.0,8330.0,9124.0,8615.0,8237.0,9281.0,8268.0,7949.0,7977.0,6576.0]},
+':core:cart:kspDebugKotlin': {'varianta_baseline': [8077.0,7942.0,8172.0,8144.0,7586.0,8512.0,8188.0,7951.0,7662.0,8151.0],'variantb_gradle-9.5.1': [7920.0,7383.0,8219.0,8241.0,8195.0,7760.0,7646.0,7970.0,8251.0,5749.0]},
+':core:checkout:compileDebugJavaWithJavac': {'varianta_baseline': [323.0,469.0,1859.0,366.0,454.0,362.0,2328.0,451.0,1744.0,381.0],'variantb_gradle-9.5.1': [606.0,406.0,415.0,2032.0,1916.0,1849.0,331.0,591.0,1706.0,1514.0]},
+':core:checkout:compileDebugKotlin': {'varianta_baseline': [8797.0,8746.0,8924.0,8205.0,8198.0,8484.0,7964.0,8234.0,7911.0,7682.0],'variantb_gradle-9.5.1': [8232.0,8307.0,8520.0,7981.0,8144.0,8784.0,8177.0,7511.0,7919.0,6281.0]},
+':core:checkout:kspDebugKotlin': {'varianta_baseline': [7600.0,8279.0,7791.0,7908.0,7769.0,8196.0,7773.0,7930.0,7621.0,7955.0],'variantb_gradle-9.5.1': [7940.0,7292.0,8113.0,7996.0,7665.0,7536.0,7118.0,7561.0,7634.0,5476.0]},
+':core:comment:compileDebugKotlin': {'varianta_baseline': [8724.0,8840.0,8893.0,8171.0,8058.0,8435.0,7915.0,8117.0,7844.0,7621.0],'variantb_gradle-9.5.1': [8198.0,8242.0,8427.0,7827.0,8129.0,8752.0,8075.0,7477.0,7864.0,6276.0]},
+':core:comment:kspDebugKotlin': {'varianta_baseline': [7225.0,7920.0,7526.0,7685.0,7246.0,7838.0,7569.0,7721.0,7438.0,7673.0],'variantb_gradle-9.5.1': [7648.0,6951.0,7900.0,7698.0,7422.0,7430.0,6850.0,7398.0,7397.0,5238.0]},
+':core:contact:compileDebugKotlin': {'varianta_baseline': [9303.0,8665.0,9350.0,8065.0,8011.0,8345.0,8366.0,8065.0,7743.0,7564.0],'variantb_gradle-9.5.1': [8069.0,9039.0,8367.0,7769.0,8728.0,8688.0,8673.0,7391.0,8297.0,6244.0]},
+':core:contact:kspDebugKotlin': {'varianta_baseline': [6989.0,7060.0,7323.0,6999.0,6690.0,7356.0,7343.0,7017.0,6827.0,7250.0],'variantb_gradle-9.5.1': [6935.0,6350.0,7311.0,7175.0,6932.0,6759.0,6624.0,6899.0,7186.0,5002.0]},
+':core:feed:compileDebugKotlin': {'varianta_baseline': [6288.0,7429.0,7192.0,6676.0,5678.0,7039.0,5845.0,6182.0,6018.0,6555.0],'variantb_gradle-9.5.1': [7095.0,6382.0,5821.0,6304.0,6606.0,5942.0,6692.0,5727.0,6631.0,4619.0]},
+':core:feed:kspDebugKotlin': {'varianta_baseline': [2603.0,2815.0,2168.0,2804.0,3127.0,2678.0,2918.0,2482.0,2501.0,2507.0],'variantb_gradle-9.5.1': [2636.0,2603.0,2463.0,3319.0,2964.0,2507.0,2212.0,2586.0,2908.0,2094.0]},
+':core:group:compileDebugKotlin': {'varianta_baseline': [6468.0,7032.0,5835.0,5376.0,5274.0,6283.0,6040.0,5606.0,5310.0,5317.0],'variantb_gradle-9.5.1': [6321.0,5377.0,5912.0,5235.0,6068.0,5276.0,5289.0,5722.0,4895.0,4429.0]},
+':core:group:kspDebugKotlin': {'varianta_baseline': [4144.0,3494.0,3818.0,3934.0,4347.0,3568.0,2943.0,3416.0,3321.0,4026.0],'variantb_gradle-9.5.1': [3276.0,3955.0,3846.0,3802.0,4464.0,3722.0,4303.0,4033.0,3562.0,3141.0]},
+':core:identity:compileDebugKotlin': {'varianta_baseline': [6822.0,6462.0,5615.0,6363.0,5900.0,5324.0,6024.0,5528.0,5559.0,5213.0],'variantb_gradle-9.5.1': [5779.0,5440.0,5773.0,5518.0,5826.0,5491.0,5253.0,5214.0,5001.0,4186.0]},
+':core:identity:kspDebugKotlin': {'varianta_baseline': [3767.0,3867.0,4046.0,3473.0,4024.0,4275.0,3019.0,3295.0,3164.0,3695.0],'variantb_gradle-9.5.1': [3714.0,3686.0,4034.0,3507.0,4460.0,3664.0,4436.0,4285.0,3690.0,3131.0]},
+':core:location:compileDebugKotlin': {'varianta_baseline': [5718.0,5676.0,4813.0,6157.0,5820.0,6256.0,6013.0,5529.0,5164.0,4653.0],'variantb_gradle-9.5.1': [4858.0,4875.0,5475.0,4806.0,5077.0,5388.0,5604.0,5137.0,4964.0,4275.0]},
+':core:location:kspDebugKotlin': {'varianta_baseline': [4150.0,3681.0,4122.0,3856.0,3965.0,4279.0,3542.0,3434.0,3133.0,3855.0],'variantb_gradle-9.5.1': [3911.0,3682.0,3830.0,3710.0,4389.0,3504.0,4284.0,4270.0,3562.0,2543.0]},
+':core:login:compileDebugKotlin': {'varianta_baseline': [5209.0,5121.0,4602.0,5501.0,5693.0,5174.0,5581.0,5134.0,5435.0,5372.0],'variantb_gradle-9.5.1': [6664.0,5166.0,4888.0,4863.0,6135.0,6203.0,5223.0,4825.0,5633.0,3720.0]},
+':core:login:kspDebugKotlin': {'varianta_baseline': [3378.0,2479.0,3140.0,2830.0,2892.0,3036.0,3038.0,2611.0,2498.0,2312.0],'variantb_gradle-9.5.1': [2841.0,2955.0,3753.0,2517.0,2684.0,3011.0,2782.0,3043.0,2312.0,2346.0]},
+':core:message:compileDebugKotlin': {'varianta_baseline': [4607.0,4799.0,5587.0,5128.0,4919.0,3774.0,5324.0,4411.0,4687.0,4724.0],'variantb_gradle-9.5.1': [5296.0,5113.0,4756.0,5186.0,4919.0,4227.0,5021.0,4537.0,4849.0,3855.0]},
+':core:message:kspDebugKotlin': {'varianta_baseline': [3083.0,4194.0,3402.0,2668.0,2818.0,3804.0,3568.0,4023.0,3202.0,3563.0],'variantb_gradle-9.5.1': [4711.0,3326.0,3081.0,3830.0,3688.0,3782.0,2668.0,2637.0,3855.0,2255.0]},
+':core:network:compileDebugKotlin': {'varianta_baseline': [4118.0,4824.0,5727.0,4598.0,4847.0,4443.0,4886.0,4169.0,4003.0,4841.0],'variantb_gradle-9.5.1': [5351.0,5184.0,4625.0,3960.0,4380.0,4722.0,4892.0,5163.0,4683.0,4138.0]},
+':core:network:kspDebugKotlin': {'varianta_baseline': [3111.0,3777.0,3332.0,3293.0,3301.0,3305.0,3901.0,4326.0,3161.0,3528.0],'variantb_gradle-9.5.1': [4784.0,2991.0,2705.0,3649.0,3769.0,3659.0,2687.0,2895.0,3632.0,2145.0]},
+':core:notification:compileDebugKotlin': {'varianta_baseline': [4505.0,5274.0,5422.0,4814.0,4409.0,4326.0,5470.0,4265.0,4771.0,4462.0],'variantb_gradle-9.5.1': [5057.0,5417.0,4789.0,5462.0,4599.0,4653.0,5361.0,4284.0,4519.0,3846.0]},
+':core:notification:kspDebugKotlin': {'varianta_baseline': [2806.0,3767.0,3332.0,3224.0,2898.0,2994.0,4121.0,4037.0,3146.0,3446.0],'variantb_gradle-9.5.1': [3964.0,3092.0,3032.0,3524.0,3270.0,3792.0,2577.0,3115.0,4116.0,2116.0]},
+':core:post:compileDebugKotlin': {'varianta_baseline': [4479.0,4402.0,4698.0,4615.0,4867.0,4994.0,5242.0,5169.0,4788.0,5322.0],'variantb_gradle-9.5.1': [4947.0,3847.0,5009.0,5464.0,4209.0,4527.0,4045.0,4462.0,4519.0,3197.0]},
+':core:post:kspDebugKotlin': {'varianta_baseline': [2749.0,2582.0,3212.0,3195.0,2912.0,2824.0,2940.0,2825.0,2902.0,2858.0],'variantb_gradle-9.5.1': [2925.0,2890.0,2885.0,2943.0,2893.0,3063.0,2632.0,2454.0,2703.0,2366.0]},
+':core:profile:compileDebugKotlin': {'varianta_baseline': [4591.0,5151.0,6023.0,5208.0,5026.0,5179.0,4917.0,4509.0,4371.0,4940.0],'variantb_gradle-9.5.1': [6036.0,5300.0,5502.0,4644.0,5214.0,3786.0,5093.0,4434.0,4865.0,4212.0]},
+':core:profile:kspDebugKotlin': {'varianta_baseline': [3118.0,2625.0,3234.0,3394.0,4140.0,3564.0,3540.0,3528.0,3604.0,4028.0],'variantb_gradle-9.5.1': [3286.0,2881.0,2690.0,3122.0,3700.0,2970.0,2857.0,3445.0,2908.0,2108.0]},
+':core:push:compileDebugKotlin': {'varianta_baseline': [4467.0,4997.0,5679.0,5023.0,4515.0,5024.0,4183.0,4874.0,4492.0,4456.0],'variantb_gradle-9.5.1': [5705.0,4936.0,5324.0,4529.0,5383.0,5254.0,4904.0,5061.0,4069.0,3854.0]},
+':core:push:kspDebugKotlin': {'varianta_baseline': [3080.0,2527.0,2753.0,3406.0,4109.0,3345.0,2450.0,2983.0,3483.0,3787.0],'variantb_gradle-9.5.1': [3067.0,2349.0,3322.0,3068.0,3117.0,2651.0,2359.0,3056.0,3282.0,2103.0]},
+':core:search:compileDebugKotlin': {'varianta_baseline': [4631.0,4418.0,5254.0,4450.0,4535.0,4500.0,4354.0,4686.0,4196.0,5017.0],'variantb_gradle-9.5.1': [5463.0,4964.0,5166.0,4415.0,4833.0,4903.0,4419.0,4635.0,4520.0,3798.0]},
+':core:search:kspDebugKotlin': {'varianta_baseline': [3381.0,3157.0,2962.0,3293.0,3742.0,2953.0,2730.0,3107.0,3727.0,3652.0],'variantb_gradle-9.5.1': [3109.0,2609.0,3040.0,2691.0,3417.0,2725.0,3083.0,3403.0,3412.0,2144.0]},
+':core:setting:compileDebugKotlin': {'varianta_baseline': [4342.0,3611.0,4298.0,4685.0,4653.0,4379.0,3911.0,4185.0,3839.0,4017.0],'variantb_gradle-9.5.1': [5174.0,4314.0,3829.0,3130.0,4275.0,4197.0,3772.0,3563.0,3759.0,2535.0]},
+':core:setting:kspDebugKotlin': {'varianta_baseline': [3619.0,4451.0,4077.0,4069.0,3031.0,3684.0,2962.0,4088.0,3078.0,3077.0],'variantb_gradle-9.5.1': [4055.0,4158.0,3776.0,3219.0,4320.0,4121.0,3268.0,3123.0,2606.0,2663.0]},
+':core:share:compileDebugKotlin': {'varianta_baseline': [4005.0,4565.0,4654.0,3982.0,3588.0,4785.0,4395.0,4332.0,3511.0,4105.0],'variantb_gradle-9.5.1': [4557.0,3674.0,4137.0,4926.0,4698.0,3898.0,4225.0,3155.0,3724.0,3133.0]},
+':core:share:kspDebugKotlin': {'varianta_baseline': [3025.0,2199.0,2430.0,2844.0,3342.0,3340.0,1870.0,2226.0,3436.0,2715.0],'variantb_gradle-9.5.1': [3316.0,2431.0,3350.0,1711.0,3731.0,2410.0,2960.0,2650.0,3672.0,2623.0]},
+':core:sync:compileDebugKotlin': {'varianta_baseline': [4093.0,3712.0,3641.0,3675.0,3217.0,3339.0,4303.0,3752.0,2874.0,3973.0],'variantb_gradle-9.5.1': [4245.0,3560.0,3560.0,3902.0,3731.0,3972.0,4188.0,3238.0,3309.0,3337.0]},
+':core:sync:kspDebugKotlin': {'varianta_baseline': [4145.0,2828.0,3213.0,3545.0,3835.0,4220.0,2846.0,4454.0,3724.0,3288.0],'variantb_gradle-9.5.1': [3971.0,3053.0,4329.0,2890.0,5215.0,4695.0,4014.0,3046.0,3745.0,3108.0]},
+':core:user:compileDebugKotlin': {'varianta_baseline': [4178.0,4406.0,4034.0,3563.0,3045.0,3997.0,3877.0,3690.0,3169.0,3985.0],'variantb_gradle-9.5.1': [4426.0,4053.0,4092.0,4083.0,3660.0,3973.0,4055.0,3790.0,3805.0,3254.0]},
+':core:user:kspDebugKotlin': {'varianta_baseline': [3364.0,1956.0,2593.0,3006.0,2882.0,3527.0,2075.0,3278.0,2756.0,2193.0],'variantb_gradle-9.5.1': [3166.0,2132.0,3333.0,2332.0,3806.0,3003.0,2547.0,2434.0,3017.0,2086.0]},
+':domain:article:compileDebugKotlin': {'varianta_baseline': [3010.0,3577.0,3191.0,2982.0,3312.0,3467.0,3595.0,3165.0,2650.0,3374.0],'variantb_gradle-9.5.1': [3908.0,3444.0,2698.0,3326.0,3554.0,3996.0,3100.0,2375.0,2554.0,2684.0]},
+':domain:article:kspDebugKotlin': {'varianta_baseline': [1949.0,2352.0,1553.0,2464.0,1919.0,2987.0,2629.0,1992.0,1977.0,1410.0],'variantb_gradle-9.5.1': [2639.0,1554.0,2242.0,1681.0,3640.0,2480.0,2890.0,2388.0,1873.0,1477.0]},
+':domain:audio:compileDebugKotlin': {'varianta_baseline': [1859.0,3317.0,3365.0,3123.0,3027.0,3379.0,3327.0,2909.0,2591.0,2423.0],'variantb_gradle-9.5.1': [3113.0,3062.0,3062.0,2348.0,2431.0,2836.0,2140.0,3059.0,3162.0,2841.0]},
+':domain:audio:kspDebugKotlin': {'varianta_baseline': [2825.0,1799.0,2499.0,2505.0,2918.0,1799.0,2489.0,2377.0,2287.0,1878.0],'variantb_gradle-9.5.1': [2753.0,2447.0,3046.0,1716.0,2243.0,2613.0,1538.0,2844.0,2418.0,1959.0]},
+':domain:cart-contact:compileDebugKotlin': {'varianta_baseline': [3530.0,3299.0,2985.0,3006.0,2559.0,2630.0,2496.0,2175.0,3118.0,2436.0],'variantb_gradle-9.5.1': [2851.0,2408.0,2664.0,2425.0,2373.0,3212.0,3001.0,2140.0,3108.0,2180.0]},
+':domain:cart-contact:kspDebugKotlin': {'varianta_baseline': [3095.0,3095.0,3328.0,3153.0,3190.0,3250.0,2366.0,2460.0,3064.0,2697.0],'variantb_gradle-9.5.1': [3379.0,2624.0,3535.0,2229.0,2904.0,2625.0,2976.0,3346.0,2537.0,2205.0]},
+':domain:checkout-contact:compileDebugKotlin': {'varianta_baseline': [2967.0,2727.0,2961.0,2796.0,2731.0,2919.0,2864.0,2730.0,2859.0,2821.0],'variantb_gradle-9.5.1': [2999.0,2667.0,2596.0,2856.0,3133.0,2770.0,2917.0,2818.0,2656.0,2496.0]},
+':domain:checkout-contact:kspDebugKotlin': {'varianta_baseline': [1584.0,1756.0,2150.0,2186.0,2498.0,2172.0,2294.0,1843.0,2537.0,1946.0],'variantb_gradle-9.5.1': [2851.0,1645.0,2377.0,2735.0,2532.0,1726.0,2388.0,2104.0,2096.0,1345.0]},
+':domain:comment-contact:compileDebugKotlin': {'varianta_baseline': [2748.0,2860.0,3039.0,2560.0,2898.0,3314.0,3340.0,2552.0,2724.0,3029.0],'variantb_gradle-9.5.1': [2990.0,3123.0,2929.0,2367.0,3189.0,2659.0,2845.0,3130.0,3322.0,2391.0]},
+':domain:comment-contact:kspDebugKotlin': {'varianta_baseline': [1700.0,1732.0,2181.0,2022.0,2658.0,2582.0,2209.0,1824.0,2833.0,1709.0],'variantb_gradle-9.5.1': [3019.0,2537.0,2015.0,2493.0,2527.0,2023.0,2344.0,1961.0,1918.0,1683.0]},
+':domain:contact-contact:compileDebugKotlin': {'varianta_baseline': [2461.0,2480.0,2271.0,2621.0,2646.0,3364.0,2317.0,2264.0,2504.0,2251.0],'variantb_gradle-9.5.1': [3320.0,2755.0,3207.0,2653.0,2337.0,3040.0,2407.0,2345.0,2483.0,1785.0]},
+':domain:contact-contact:kspDebugKotlin': {'varianta_baseline': [1827.0,1809.0,1577.0,2309.0,2321.0,2598.0,2287.0,1598.0,2195.0,2298.0],'variantb_gradle-9.5.1': [2595.0,2310.0,2152.0,1838.0,2246.0,2040.0,1735.0,2090.0,2262.0,1510.0]},
+':domain:feed-contact:compileDebugKotlin': {'varianta_baseline': [2989.0,2548.0,2333.0,2612.0,3218.0,2775.0,2701.0,3255.0,2606.0,2249.0],'variantb_gradle-9.5.1': [2914.0,3094.0,2880.0,3371.0,2414.0,2644.0,2664.0,2427.0,2383.0,2179.0]},
+':domain:feed-contact:kspDebugKotlin': {'varianta_baseline': [1913.0,1807.0,1940.0,1816.0,2477.0,2328.0,1640.0,1812.0,1767.0,2287.0],'variantb_gradle-9.5.1': [2587.0,2694.0,2057.0,1619.0,2260.0,2397.0,1954.0,1717.0,2268.0,1627.0]},
+':domain:gallery:compileDebugKotlin': {'varianta_baseline': [2663.0,2434.0,2625.0,2805.0,2707.0,3221.0,2739.0,2618.0,2592.0,2366.0],'variantb_gradle-9.5.1': [3606.0,2773.0,2946.0,2480.0,2589.0,2683.0,3386.0,2082.0,2550.0,2416.0]},
+':domain:gallery:kspDebugKotlin': {'varianta_baseline': [1654.0,1673.0,1527.0,2510.0,2093.0,2569.0,2442.0,1421.0,2248.0,2107.0],'variantb_gradle-9.5.1': [2047.0,2214.0,2056.0,2030.0,2347.0,2234.0,1699.0,2213.0,2491.0,1668.0]},
+':domain:identity-contact:compileDebugKotlin': {'varianta_baseline': [3348.0,2430.0,2525.0,2913.0,2313.0,3185.0,2506.0,2583.0,2550.0,2192.0],'variantb_gradle-9.5.1': [3646.0,2576.0,3047.0,2406.0,3020.0,3597.0,3181.0,2147.0,1986.0,2440.0]},
+':domain:identity-contact:kspDebugKotlin': {'varianta_baseline': [1762.0,1693.0,1809.0,2762.0,2055.0,2499.0,2095.0,1544.0,2180.0,2003.0],'variantb_gradle-9.5.1': [2349.0,2036.0,1902.0,1987.0,2565.0,2376.0,1741.0,1902.0,2458.0,1703.0]},
+':domain:login-contact:compileDebugKotlin': {'varianta_baseline': [3597.0,2707.0,2765.0,2725.0,2497.0,3071.0,2495.0,2740.0,2505.0,2368.0],'variantb_gradle-9.5.1': [2731.0,2013.0,2290.0,2419.0,2202.0,3127.0,2201.0,2596.0,2813.0,2208.0]},
+':domain:login-contact:kspDebugKotlin': {'varianta_baseline': [2452.0,2321.0,1608.0,2267.0,2333.0,2359.0,2189.0,2524.0,2196.0,2022.0],'variantb_gradle-9.5.1': [3324.0,1972.0,2244.0,2377.0,2157.0,2491.0,1641.0,2305.0,2257.0,1325.0]},
+':domain:media:compileDebugKotlin': {'varianta_baseline': [2788.0,3158.0,2763.0,3364.0,3147.0,2587.0,2805.0,2382.0,3123.0,3305.0],'variantb_gradle-9.5.1': [2818.0,3053.0,2464.0,3313.0,3693.0,2389.0,2127.0,2792.0,3340.0,2280.0]},
+':domain:media:kspDebugKotlin': {'varianta_baseline': [2040.0,2003.0,1736.0,1888.0,2313.0,1933.0,1770.0,1717.0,1554.0,1687.0],'variantb_gradle-9.5.1': [2269.0,1304.0,1446.0,1946.0,1257.0,1797.0,1841.0,1258.0,1419.0,1261.0]},
+':domain:news:compileDebugKotlin': {'varianta_baseline': [3933.0,2965.0,1828.0,3618.0,3461.0,2576.0,2973.0,2371.0,2388.0,3551.0],'variantb_gradle-9.5.1': [2832.0,2874.0,2455.0,2885.0,3134.0,2520.0,2519.0,2629.0,2980.0,2346.0]},
+':domain:news:kspDebugKotlin': {'varianta_baseline': [2208.0,2687.0,2092.0,2495.0,2828.0,2170.0,1875.0,2417.0,1985.0,1761.0],'variantb_gradle-9.5.1': [3342.0,1670.0,2000.0,2387.0,1654.0,2414.0,2128.0,1936.0,1470.0,1346.0]},
+':domain:photo:compileDebugKotlin': {'varianta_baseline': [2528.0,2959.0,3429.0,2250.0,1906.0,3279.0,3147.0,2870.0,2215.0,2969.0],'variantb_gradle-9.5.1': [2308.0,2194.0,2097.0,2300.0,2196.0,2701.0,2861.0,2612.0,2052.0,2098.0]},
+':domain:photo:kspDebugKotlin': {'varianta_baseline': [2564.0,3109.0,3053.0,2458.0,2556.0,2713.0,2811.0,2085.0,2808.0,2774.0],'variantb_gradle-9.5.1': [2693.0,2651.0,2076.0,3745.0,2794.0,2694.0,2691.0,1875.0,2164.0,2279.0]},
+':domain:playlist:compileDebugKotlin': {'varianta_baseline': [2343.0,3515.0,3571.0,2780.0,2242.0,3370.0,3154.0,2891.0,2431.0,3123.0],'variantb_gradle-9.5.1': [2742.0,2410.0,2306.0,2904.0,2524.0,3031.0,3351.0,2480.0,2199.0,1853.0]},
+':domain:playlist:kspDebugKotlin': {'varianta_baseline': [1794.0,1544.0,2654.0,1930.0,1881.0,2288.0,2436.0,1602.0,2267.0,1976.0],'variantb_gradle-9.5.1': [2020.0,1818.0,1677.0,3046.0,2397.0,2000.0,1895.0,1810.0,1631.0,1429.0]},
+':domain:podcast:compileDebugKotlin': {'varianta_baseline': [2562.0,3042.0,3344.0,2562.0,2629.0,2779.0,2739.0,3341.0,2559.0,1946.0],'variantb_gradle-9.5.1': [3423.0,2839.0,2533.0,3228.0,3566.0,3048.0,3091.0,2572.0,2277.0,1931.0]},
+':domain:podcast:kspDebugKotlin': {'varianta_baseline': [1791.0,2053.0,2582.0,2112.0,1539.0,2473.0,1954.0,1757.0,2095.0,1774.0],'variantb_gradle-9.5.1': [2427.0,1573.0,1534.0,2396.0,1506.0,2292.0,1804.0,1699.0,1973.0,1766.0]},
+':domain:post-contact:compileDebugKotlin': {'varianta_baseline': [2694.0,2768.0,2458.0,2751.0,2690.0,2659.0,3277.0,2793.0,1726.0,2320.0],'variantb_gradle-9.5.1': [2903.0,2343.0,1961.0,2973.0,2870.0,2308.0,2059.0,2510.0,2367.0,2020.0]},
+':domain:post-contact:kspDebugKotlin': {'varianta_baseline': [2610.0,3274.0,2232.0,2097.0,2799.0,3213.0,2110.0,2527.0,2526.0,2120.0],'variantb_gradle-9.5.1': [3013.0,2628.0,2550.0,2394.0,2692.0,3533.0,2984.0,1609.0,2540.0,2427.0]},
+':domain:profile-contact:compileDebugKotlin': {'varianta_baseline': [2674.0,2544.0,2651.0,1948.0,2922.0,2590.0,2390.0,2342.0,2684.0,2427.0],'variantb_gradle-9.5.1': [2750.0,2694.0,2687.0,2261.0,2830.0,2491.0,2243.0,2911.0,2314.0,1866.0]},
+':domain:profile-contact:kspDebugKotlin': {'varianta_baseline': [1624.0,2739.0,1864.0,2324.0,2144.0,1991.0,2622.0,1512.0,1439.0,1744.0],'variantb_gradle-9.5.1': [2964.0,1474.0,1264.0,2302.0,1789.0,1984.0,1602.0,1546.0,1999.0,1928.0]},
+':domain:push-contact:compileDebugKotlin': {'varianta_baseline': [2907.0,3677.0,2522.0,2139.0,2516.0,2613.0,2537.0,2027.0,2583.0,1992.0],'variantb_gradle-9.5.1': [2611.0,2277.0,2971.0,2509.0,2780.0,2706.0,2194.0,2403.0,2110.0,1805.0]},
+':domain:push-contact:kspDebugKotlin': {'varianta_baseline': [3234.0,2260.0,2501.0,3522.0,2842.0,2826.0,3778.0,2358.0,2469.0,1942.0],'variantb_gradle-9.5.1': [3170.0,2593.0,2500.0,2727.0,2684.0,2687.0,2106.0,2482.0,2404.0,2016.0]},
+':domain:user-contact:compileDebugKotlin': {'varianta_baseline': [2632.0,3515.0,2709.0,2321.0,1673.0,3101.0,2488.0,2147.0,3011.0,2262.0],'variantb_gradle-9.5.1': [2606.0,2827.0,2651.0,2673.0,2242.0,2474.0,2035.0,3101.0,2357.0,1974.0]},
+':domain:user-contact:kspDebugKotlin': {'varianta_baseline': [2386.0,1919.0,2019.0,2782.0,2420.0,2081.0,2703.0,1904.0,1851.0,1668.0],'variantb_gradle-9.5.1': [1952.0,1435.0,2483.0,2243.0,1634.0,2187.0,1896.0,2179.0,1364.0,1348.0]},
+':domain:video:compileDebugKotlin': {'varianta_baseline': [2214.0,3465.0,2076.0,2599.0,2289.0,2005.0,2192.0,2114.0,2393.0,1871.0],'variantb_gradle-9.5.1': [2640.0,2947.0,2780.0,1992.0,2306.0,1871.0,2295.0,2398.0,1980.0,1791.0]},
+':domain:video:kspDebugKotlin': {'varianta_baseline': [2653.0,2102.0,2109.0,1920.0,1862.0,2588.0,1879.0,1709.0,2066.0,1519.0],'variantb_gradle-9.5.1': [2186.0,1767.0,2199.0,2193.0,1345.0,1660.0,1812.0,2707.0,1545.0,1267.0]},
+':feature:account:compileDebugKotlin': {'varianta_baseline': [3824.0,3047.0,3053.0,2984.0,3496.0,3074.0,2906.0,3539.0,2700.0,2534.0],'variantb_gradle-9.5.1': [3458.0,3619.0,3298.0,3541.0,2806.0,3579.0,2938.0,2385.0,2745.0,2011.0]},
+':feature:account:kspDebugKotlin': {'varianta_baseline': [2234.0,2179.0,2723.0,2423.0,2428.0,2703.0,1911.0,2061.0,2468.0,1782.0],'variantb_gradle-9.5.1': [3284.0,2089.0,2563.0,1873.0,2700.0,2174.0,2605.0,2069.0,2321.0,1375.0]},
+':feature:alarm:compileDebugKotlin': {'varianta_baseline': [3657.0,3122.0,2841.0,3899.0,2708.0,2981.0,3156.0,3693.0,2584.0,2820.0],'variantb_gradle-9.5.1': [4053.0,3607.0,2338.0,3057.0,3164.0,3015.0,3176.0,2560.0,2761.0,1827.0]},
+':feature:alarm:kspDebugKotlin': {'varianta_baseline': [2514.0,2578.0,2838.0,2407.0,2657.0,2315.0,2065.0,2542.0,2031.0,1865.0],'variantb_gradle-9.5.1': [3332.0,2262.0,1834.0,2327.0,2651.0,2877.0,2028.0,2015.0,2136.0,1438.0]},
+':feature:analytics:compileDebugKotlin': {'varianta_baseline': [3624.0,2936.0,2816.0,2865.0,3216.0,2893.0,2768.0,2510.0,3298.0,2641.0],'variantb_gradle-9.5.1': [2971.0,2549.0,3247.0,2903.0,2771.0,2832.0,2261.0,2982.0,2786.0,2365.0]},
+':feature:analytics:kspDebugKotlin': {'varianta_baseline': [2223.0,2453.0,2438.0,2570.0,2694.0,2749.0,2346.0,2932.0,2381.0,2074.0],'variantb_gradle-9.5.1': [2670.0,2380.0,2665.0,1917.0,1835.0,2175.0,2035.0,2583.0,2113.0,1731.0]},
+':feature:calendar:compileDebugKotlin': {'varianta_baseline': [2829.0,3101.0,3154.0,3178.0,3084.0,3533.0,3201.0,2619.0,3063.0,2881.0],'variantb_gradle-9.5.1': [3444.0,3253.0,3736.0,2509.0,2779.0,2937.0,2314.0,3037.0,3099.0,2567.0]},
+':feature:calendar:kspDebugKotlin': {'varianta_baseline': [2609.0,2293.0,2207.0,2562.0,2328.0,2652.0,2647.0,2040.0,1902.0,3029.0],'variantb_gradle-9.5.1': [3106.0,2518.0,2106.0,1897.0,2255.0,2062.0,2184.0,1732.0,2470.0,1796.0]},
+':feature:document:compileDebugKotlin': {'varianta_baseline': [4061.0,3996.0,3862.0,3468.0,3579.0,3472.0,3664.0,4057.0,3263.0,3913.0],'variantb_gradle-9.5.1': [3999.0,3927.0,3409.0,3646.0,4288.0,3931.0,3616.0,2792.0,3440.0,2981.0]},
+':feature:document:kspDebugKotlin': {'varianta_baseline': [3633.0,2227.0,2712.0,2504.0,3184.0,3308.0,1814.0,2315.0,3162.0,2633.0],'variantb_gradle-9.5.1': [3090.0,2422.0,3208.0,1928.0,3002.0,1886.0,2907.0,2343.0,2495.0,2696.0]},
+':feature:event:compileDebugKotlin': {'varianta_baseline': [3680.0,2544.0,4234.0,3492.0,2648.0,2642.0,3323.0,3284.0,3030.0,3296.0],'variantb_gradle-9.5.1': [3611.0,3211.0,2899.0,2873.0,3074.0,3943.0,2892.0,3422.0,3151.0,2938.0]},
+':feature:event:kspDebugKotlin': {'varianta_baseline': [3871.0,3029.0,2266.0,3939.0,3179.0,3845.0,2559.0,3228.0,2595.0,2713.0],'variantb_gradle-9.5.1': [3343.0,3022.0,3045.0,2588.0,4461.0,3982.0,3283.0,3327.0,2680.0,2032.0]},
+':feature:file:compileDebugKotlin': {'varianta_baseline': [3464.0,3397.0,3408.0,3255.0,3925.0,3293.0,3310.0,3727.0,3739.0,4306.0],'variantb_gradle-9.5.1': [4144.0,3975.0,3318.0,3755.0,4093.0,3326.0,3739.0,3229.0,3083.0,2461.0]},
+':feature:file:kspDebugKotlin': {'varianta_baseline': [3219.0,2124.0,2677.0,1995.0,3275.0,3741.0,1864.0,2546.0,3011.0,3259.0],'variantb_gradle-9.5.1': [2881.0,2337.0,3462.0,1706.0,2980.0,2581.0,2767.0,3190.0,2688.0,2469.0]},
+':feature:forecast:compileDebugKotlin': {'varianta_baseline': [3002.0,3231.0,3181.0,3392.0,4067.0,4154.0,3285.0,3310.0,4266.0,3955.0],'variantb_gradle-9.5.1': [4648.0,3112.0,3922.0,3148.0,3967.0,4310.0,3601.0,3697.0,2911.0,2361.0]},
+':feature:forecast:kspDebugKotlin': {'varianta_baseline': [4477.0,4645.0,3688.0,3078.0,3367.0,2949.0,3473.0,2943.0,3050.0,4072.0],'variantb_gradle-9.5.1': [3122.0,3708.0,3225.0,3743.0,3044.0,3126.0,3267.0,3416.0,3155.0,2856.0]},
+':feature:list:compileDebugKotlin': {'varianta_baseline': [2201.0,2976.0,2870.0,2381.0,2941.0,3337.0,3316.0,2445.0,2054.0,2475.0],'variantb_gradle-9.5.1': [2844.0,3348.0,2778.0,2397.0,2808.0,2816.0,2758.0,2747.0,2532.0,2365.0]},
+':feature:list:kspDebugKotlin': {'varianta_baseline': [2124.0,1818.0,1750.0,1886.0,2228.0,2531.0,2278.0,1995.0,1391.0,1903.0],'variantb_gradle-9.5.1': [2392.0,2585.0,2585.0,2379.0,1652.0,2466.0,1759.0,2290.0,2319.0,1213.0]},
+':feature:log:compileDebugKotlin': {'varianta_baseline': [3533.0,2721.0,2084.0,2991.0,2595.0,2688.0,2681.0,2567.0,2688.0,2282.0],'variantb_gradle-9.5.1': [2898.0,2557.0,2478.0,3413.0,2567.0,3329.0,2438.0,2554.0,2606.0,2349.0]},
+':feature:log:kspDebugKotlin': {'varianta_baseline': [2536.0,2653.0,2423.0,2543.0,2969.0,3630.0,3321.0,2648.0,2700.0,2640.0],'variantb_gradle-9.5.1': [3127.0,3095.0,2721.0,3695.0,3394.0,3265.0,2663.0,2743.0,2626.0,1982.0]},
+':feature:map:compileDebugKotlin': {'varianta_baseline': [3550.0,3942.0,3278.0,3098.0,3416.0,2892.0,3160.0,4086.0,3240.0,3689.0],'variantb_gradle-9.5.1': [3669.0,3702.0,2869.0,3546.0,3389.0,2813.0,3160.0,2908.0,3827.0,2910.0]},
+':feature:map:kspDebugKotlin': {'varianta_baseline': [3306.0,1828.0,2569.0,2419.0,2676.0,3883.0,1877.0,2670.0,2914.0,3126.0],'variantb_gradle-9.5.1': [3501.0,2296.0,3030.0,2804.0,3779.0,3348.0,2799.0,2784.0,2478.0,2282.0]},
+':feature:metric:compileDebugKotlin': {'varianta_baseline': [2715.0,3574.0,2740.0,2866.0,2904.0,2863.0,3330.0,2897.0,2453.0,2151.0],'variantb_gradle-9.5.1': [4245.0,2597.0,2535.0,3034.0,3079.0,3197.0,3656.0,2825.0,3781.0,2192.0]},
+':feature:metric:kspDebugKotlin': {'varianta_baseline': [2986.0,2508.0,2319.0,1998.0,2261.0,2510.0,1860.0,2445.0,1936.0,2392.0],'variantb_gradle-9.5.1': [2116.0,2530.0,2452.0,3050.0,2833.0,2540.0,2286.0,2256.0,2146.0,2040.0]},
+':feature:note:compileDebugKotlin': {'varianta_baseline': [3356.0,3330.0,3896.0,3934.0,3731.0,3394.0,4430.0,3532.0,2697.0,2721.0],'variantb_gradle-9.5.1': [3996.0,3835.0,2954.0,3438.0,3391.0,4095.0,3132.0,2856.0,3160.0,2263.0]},
+':feature:note:kspDebugKotlin': {'varianta_baseline': [2432.0,3022.0,2233.0,3184.0,3093.0,3056.0,2643.0,3186.0,2935.0,2627.0],'variantb_gradle-9.5.1': [3929.0,2337.0,3625.0,2475.0,3484.0,3185.0,4086.0,2808.0,3781.0,1934.0]},
+':feature:report:compileDebugKotlin': {'varianta_baseline': [3436.0,3295.0,3695.0,3210.0,2793.0,3156.0,3134.0,2286.0,2683.0,3789.0],'variantb_gradle-9.5.1': [3620.0,2696.0,3011.0,3054.0,2731.0,3863.0,2356.0,3029.0,3246.0,2518.0]},
+':feature:report:kspDebugKotlin': {'varianta_baseline': [2162.0,2100.0,3609.0,1825.0,1896.0,2863.0,2068.0,2332.0,2808.0,2015.0],'variantb_gradle-9.5.1': [3350.0,2393.0,2244.0,2136.0,2422.0,2258.0,2507.0,2585.0,2523.0,1886.0]},
+':feature:session:compileDebugKotlin': {'varianta_baseline': [3592.0,3321.0,2969.0,2752.0,2502.0,3055.0,3556.0,3021.0,2710.0,3291.0],'variantb_gradle-9.5.1': [3855.0,2954.0,3214.0,3008.0,2790.0,4085.0,2845.0,2674.0,2821.0,2874.0]},
+':feature:session:kspDebugKotlin': {'varianta_baseline': [1958.0,2003.0,3537.0,1990.0,1870.0,2638.0,1732.0,2027.0,2610.0,2036.0],'variantb_gradle-9.5.1': [3834.0,2313.0,2478.0,2087.0,2334.0,2208.0,1988.0,2254.0,2346.0,1954.0]},
+':feature:status:compileDebugKotlin': {'varianta_baseline': [2988.0,3152.0,4008.0,3591.0,3275.0,2904.0,4248.0,3458.0,3433.0,3887.0],'variantb_gradle-9.5.1': [4190.0,3662.0,3473.0,3017.0,3562.0,4295.0,3252.0,3793.0,3879.0,2633.0]},
+':feature:status:kspDebugKotlin': {'varianta_baseline': [2631.0,2464.0,2204.0,2984.0,1680.0,2984.0,2683.0,2229.0,1912.0,1795.0],'variantb_gradle-9.5.1': [2769.0,2073.0,2222.0,1835.0,2762.0,2519.0,2731.0,2469.0,1993.0,1507.0]},
+':feature:task:compileDebugKotlin': {'varianta_baseline': [3773.0,3774.0,3306.0,3244.0,3666.0,3269.0,4450.0,3553.0,2636.0,3039.0],'variantb_gradle-9.5.1': [4293.0,3777.0,3404.0,3125.0,3206.0,3048.0,3324.0,3003.0,3200.0,2380.0]},
+':feature:task:kspDebugKotlin': {'varianta_baseline': [2886.0,2265.0,2660.0,2438.0,2631.0,2734.0,1908.0,2062.0,2500.0,2303.0],'variantb_gradle-9.5.1': [3206.0,2012.0,2730.0,1654.0,2929.0,2169.0,2342.0,2242.0,2428.0,1427.0]},
+':feature:timer:compileDebugKotlin': {'varianta_baseline': [2987.0,2878.0,4062.0,3136.0,2649.0,2672.0,4116.0,2667.0,3032.0,3545.0],'variantb_gradle-9.5.1': [3419.0,3558.0,3151.0,3536.0,2599.0,2871.0,2658.0,3585.0,3367.0,2913.0]},
+':feature:timer:kspDebugKotlin': {'varianta_baseline': [2956.0,2685.0,2430.0,2759.0,2351.0,2631.0,2950.0,1609.0,2191.0,1947.0],'variantb_gradle-9.5.1': [2283.0,2286.0,2278.0,2140.0,2087.0,3012.0,1985.0,2167.0,2038.0,1766.0]},
+':feature:todo:compileDebugKotlin': {'varianta_baseline': [3526.0,4368.0,3022.0,3154.0,3151.0,4047.0,3095.0,2740.0,3069.0,2342.0],'variantb_gradle-9.5.1': [2681.0,3747.0,2946.0,3101.0,2955.0,2686.0,2357.0,3023.0,3128.0,2972.0]},
+':feature:todo:kspDebugKotlin': {'varianta_baseline': [2659.0,1878.0,1692.0,2616.0,1828.0,1522.0,2272.0,1557.0,1760.0,1774.0],'variantb_gradle-9.5.1': [2767.0,1835.0,2165.0,2126.0,2102.0,1997.0,2233.0,1923.0,1937.0,1484.0]},
+':feature:weather:compileDebugKotlin': {'varianta_baseline': [2740.0,3935.0,3150.0,2745.0,2115.0,3578.0,3126.0,2223.0,2918.0,3100.0],'variantb_gradle-9.5.1': [3511.0,2727.0,2814.0,3546.0,3206.0,3044.0,3185.0,2836.0,3494.0,2750.0]},
+':feature:weather:kspDebugKotlin': {'varianta_baseline': [2589.0,2035.0,2757.0,1943.0,1797.0,2475.0,2160.0,1840.0,3115.0,2218.0],'variantb_gradle-9.5.1': [2513.0,2098.0,2411.0,1906.0,1969.0,2195.0,1853.0,2656.0,1757.0,1291.0]},
+':model:article-contact:compileDebugKotlin': {'varianta_baseline': [2180.0,2364.0,2370.0,2185.0,3292.0,2108.0,2708.0,3090.0,1824.0,2607.0],'variantb_gradle-9.5.1': [2741.0,2483.0,2379.0,2527.0,3284.0,2501.0,2395.0,2352.0,1946.0,1920.0]},
+':model:article-contact:kspDebugKotlin': {'varianta_baseline': [2097.0,1372.0,1616.0,1421.0,1700.0,1164.0,2426.0,1886.0,1845.0,1954.0],'variantb_gradle-9.5.1': [2316.0,2578.0,1368.0,2226.0,1857.0,1661.0,1471.0,2403.0,1787.0,913.0]},
+':model:audio-contact:compileDebugKotlin': {'varianta_baseline': [2020.0,2287.0,2813.0,2373.0,2015.0,2374.0,3336.0,2330.0,2006.0,2084.0],'variantb_gradle-9.5.1': [3035.0,2295.0,1858.0,2166.0,1881.0,2352.0,2095.0,1734.0,2526.0,1397.0]},
+':model:audio-contact:kspDebugKotlin': {'varianta_baseline': [1219.0,1596.0,2411.0,1585.0,1330.0,1596.0,1572.0,2207.0,1288.0,1175.0],'variantb_gradle-9.5.1': [1563.0,1850.0,1511.0,1124.0,1447.0,1436.0,1366.0,1591.0,1212.0,981.0]},
+':model:contact-login:compileDebugKotlin': {'varianta_baseline': [2239.0,2193.0,2576.0,2424.0,1520.0,2170.0,2222.0,2545.0,2247.0,2153.0],'variantb_gradle-9.5.1': [1972.0,2656.0,1798.0,1801.0,2093.0,2276.0,2959.0,2238.0,2238.0,1520.0]},
+':model:contact-login:kspDebugKotlin': {'varianta_baseline': [2045.0,2694.0,2384.0,1763.0,1779.0,2336.0,2845.0,2274.0,3228.0,1965.0],'variantb_gradle-9.5.1': [2897.0,2223.0,2396.0,2131.0,2308.0,1761.0,2584.0,2263.0,1943.0,1588.0]},
+':model:document-contact:compileDebugKotlin': {'varianta_baseline': [2149.0,2821.0,2725.0,2525.0,2443.0,2136.0,2473.0,2385.0,2154.0,1948.0],'variantb_gradle-9.5.1': [2651.0,2622.0,2072.0,2018.0,2365.0,2338.0,2419.0,2481.0,2117.0,1933.0]},
+':model:document-contact:kspDebugKotlin': {'varianta_baseline': [1529.0,1539.0,1799.0,1478.0,1508.0,1513.0,2030.0,2230.0,1971.0,1290.0],'variantb_gradle-9.5.1': [1747.0,2068.0,1836.0,1635.0,1384.0,1399.0,1898.0,1747.0,1344.0,1020.0]},
+':model:file-contact:compileDebugKotlin': {'varianta_baseline': [2359.0,2728.0,2435.0,2435.0,2207.0,2412.0,1851.0,1781.0,1990.0,1922.0],'variantb_gradle-9.5.1': [2757.0,2946.0,2364.0,1946.0,2157.0,1812.0,2856.0,1788.0,1943.0,1766.0]},
+':model:file-contact:kspDebugKotlin': {'varianta_baseline': [1871.0,1788.0,1795.0,1558.0,1805.0,1646.0,1579.0,1960.0,1712.0,1364.0],'variantb_gradle-9.5.1': [1691.0,1982.0,1856.0,1622.0,1834.0,1226.0,1988.0,1440.0,1420.0,1815.0]},
+':model:forecast-contact:compileDebugKotlin': {'varianta_baseline': [2381.0,2171.0,2658.0,2700.0,2089.0,2278.0,2494.0,2177.0,2382.0,1969.0],'variantb_gradle-9.5.1': [2558.0,2845.0,1984.0,1928.0,2124.0,1596.0,2158.0,1902.0,1851.0,1716.0]},
+':model:forecast-contact:kspDebugKotlin': {'varianta_baseline': [1858.0,1617.0,1793.0,1359.0,1583.0,1189.0,1866.0,2146.0,2172.0,1424.0],'variantb_gradle-9.5.1': [1541.0,2104.0,1402.0,1726.0,1798.0,1381.0,2000.0,2187.0,1374.0,1913.0]},
+':model:gallery-contact:compileDebugKotlin': {'varianta_baseline': [2582.0,2364.0,1995.0,1855.0,1869.0,2187.0,1728.0,2185.0,1740.0,1414.0],'variantb_gradle-9.5.1': [1981.0,2379.0,2356.0,1498.0,1966.0,1689.0,1771.0,1897.0,1254.0,1546.0]},
+':model:gallery-contact:kspDebugKotlin': {'varianta_baseline': [2550.0,1732.0,2261.0,1521.0,2154.0,2300.0,1831.0,2069.0,1865.0,1943.0],'variantb_gradle-9.5.1': [2419.0,2322.0,3093.0,2061.0,2469.0,1843.0,2110.0,2006.0,1929.0,2487.0]},
+':model:list-contact:compileDebugKotlin': {'varianta_baseline': [2001.0,2741.0,1818.0,2234.0,2186.0,1960.0,2168.0,2384.0,2298.0,2199.0],'variantb_gradle-9.5.1': [2463.0,2247.0,2771.0,1615.0,2122.0,1694.0,1971.0,2126.0,1744.0,1497.0]},
+':model:list-contact:kspDebugKotlin': {'varianta_baseline': [1413.0,2654.0,1785.0,1237.0,1104.0,1828.0,1577.0,1673.0,1500.0,1299.0],'variantb_gradle-9.5.1': [1509.0,1357.0,2249.0,1068.0,1605.0,1500.0,1679.0,1675.0,1536.0,807.0]},
+':model:map-contact:compileDebugKotlin': {'varianta_baseline': [2101.0,2305.0,2241.0,1865.0,1912.0,2135.0,2390.0,2136.0,2168.0,2348.0],'variantb_gradle-9.5.1': [1791.0,1976.0,1766.0,1914.0,2299.0,2205.0,2090.0,1762.0,1870.0,1346.0]},
+':model:map-contact:kspDebugKotlin': {'varianta_baseline': [1065.0,2601.0,1596.0,1624.0,1266.0,1639.0,1787.0,1733.0,1475.0,1469.0],'variantb_gradle-9.5.1': [1839.0,1371.0,1994.0,1925.0,1693.0,1352.0,1440.0,1402.0,1649.0,999.0]},
+':model:media-contact:compileDebugKotlin': {'varianta_baseline': [1841.0,2433.0,1987.0,1865.0,2199.0,1859.0,2294.0,1556.0,2019.0,1957.0],'variantb_gradle-9.5.1': [2302.0,2057.0,1469.0,2309.0,2351.0,2317.0,2212.0,1652.0,1775.0,1578.0]},
+':model:media-contact:kspDebugKotlin': {'varianta_baseline': [1684.0,2484.0,1723.0,1525.0,1325.0,2034.0,1958.0,2489.0,1771.0,1747.0],'variantb_gradle-9.5.1': [2725.0,1952.0,1761.0,1995.0,1679.0,1664.0,1397.0,1371.0,1605.0,980.0]},
+':model:news-contact:compileDebugKotlin': {'varianta_baseline': [2098.0,1576.0,1922.0,2426.0,1829.0,1775.0,2123.0,1982.0,2493.0,1565.0],'variantb_gradle-9.5.1': [2173.0,2207.0,2629.0,2368.0,2287.0,2153.0,2037.0,1600.0,1626.0,1504.0]},
+':model:news-contact:kspDebugKotlin': {'varianta_baseline': [2426.0,2067.0,1810.0,1494.0,2072.0,2160.0,2561.0,1830.0,1895.0,2374.0],'variantb_gradle-9.5.1': [2711.0,2185.0,1884.0,2375.0,1831.0,2476.0,1901.0,1361.0,2208.0,1410.0]},
+':model:note-contact:compileDebugKotlin': {'varianta_baseline': [2594.0,2573.0,1995.0,1885.0,1685.0,1830.0,1983.0,1746.0,2426.0,2234.0],'variantb_gradle-9.5.1': [2312.0,1939.0,2688.0,2026.0,2152.0,2444.0,2143.0,1804.0,1901.0,1475.0]},
+':model:note-contact:kspDebugKotlin': {'varianta_baseline': [1866.0,1302.0,1681.0,1806.0,1150.0,1847.0,1922.0,1663.0,1936.0,1306.0],'variantb_gradle-9.5.1': [1817.0,1876.0,1586.0,1515.0,2045.0,2033.0,1411.0,1303.0,1155.0,1100.0]},
+':model:photo-contact:compileDebugKotlin': {'varianta_baseline': [1844.0,2735.0,1928.0,1833.0,2223.0,1945.0,1914.0,2014.0,2027.0,2292.0],'variantb_gradle-9.5.1': [2232.0,2338.0,2211.0,1918.0,1912.0,1990.0,1913.0,1659.0,2128.0,1883.0]},
+':model:photo-contact:kspDebugKotlin': {'varianta_baseline': [1751.0,1574.0,1471.0,1961.0,1229.0,1435.0,1845.0,1525.0,1866.0,1285.0],'variantb_gradle-9.5.1': [1959.0,1915.0,1598.0,1499.0,1062.0,1100.0,1337.0,1346.0,1361.0,956.0]},
+':model:playlist-contact:compileDebugKotlin': {'varianta_baseline': [1452.0,2531.0,1820.0,1585.0,2029.0,2215.0,2403.0,1812.0,1904.0,2091.0],'variantb_gradle-9.5.1': [2098.0,1715.0,1709.0,1715.0,1933.0,2297.0,1386.0,1703.0,2706.0,1906.0]},
+':model:playlist-contact:kspDebugKotlin': {'varianta_baseline': [1476.0,1750.0,1644.0,2111.0,1122.0,1397.0,1724.0,1404.0,1775.0,1485.0],'variantb_gradle-9.5.1': [2105.0,1926.0,1532.0,1370.0,1383.0,1146.0,1642.0,1347.0,1573.0,945.0]},
+':model:podcast-contact:compileDebugKotlin': {'varianta_baseline': [2222.0,2276.0,2175.0,1393.0,1774.0,2124.0,1945.0,2830.0,1986.0,2106.0],'variantb_gradle-9.5.1': [2405.0,2430.0,2303.0,2049.0,1954.0,2505.0,2846.0,2193.0,2483.0,1525.0]},
+':model:podcast-contact:kspDebugKotlin': {'varianta_baseline': [1709.0,1782.0,1246.0,1433.0,1300.0,1552.0,1466.0,1654.0,1050.0,1603.0],'variantb_gradle-9.5.1': [1781.0,1732.0,1180.0,1677.0,1577.0,1497.0,1513.0,937.0,1713.0,1584.0]},
+':model:push-login:compileDebugKotlin': {'varianta_baseline': [2068.0,2004.0,2478.0,1818.0,2094.0,1904.0,1649.0,2517.0,1911.0,1795.0],'variantb_gradle-9.5.1': [1727.0,1909.0,2096.0,1879.0,1671.0,2574.0,2456.0,2313.0,1630.0,1251.0]},
+':model:push-login:kspDebugKotlin': {'varianta_baseline': [1503.0,1337.0,1521.0,1337.0,1172.0,1471.0,1737.0,1792.0,1585.0,1241.0],'variantb_gradle-9.5.1': [1796.0,1632.0,1272.0,1923.0,1512.0,2020.0,1658.0,1367.0,1543.0,1582.0]},
+':model:timer-contact:compileDebugKotlin': {'varianta_baseline': [2076.0,2004.0,2247.0,2242.0,2237.0,1958.0,1414.0,2271.0,1776.0,1701.0],'variantb_gradle-9.5.1': [1640.0,2256.0,1940.0,1724.0,1834.0,2143.0,2581.0,2049.0,2194.0,1377.0]},
+':model:timer-contact:kspDebugKotlin': {'varianta_baseline': [1561.0,1449.0,1450.0,1628.0,1332.0,1417.0,1438.0,1835.0,1549.0,1185.0],'variantb_gradle-9.5.1': [2156.0,1627.0,1490.0,1809.0,1246.0,1838.0,1600.0,2024.0,1129.0,890.0]},
+':model:todo-contact:compileDebugKotlin': {'varianta_baseline': [1651.0,2140.0,1850.0,2417.0,2342.0,3063.0,1814.0,1493.0,1517.0,1520.0],'variantb_gradle-9.5.1': [2700.0,1904.0,1626.0,2346.0,2005.0,2618.0,2101.0,1728.0,1978.0,1374.0]},
+':model:todo-contact:kspDebugKotlin': {'varianta_baseline': [2410.0,2036.0,2290.0,2082.0,2551.0,1426.0,1754.0,2881.0,1946.0,1669.0],'variantb_gradle-9.5.1': [2425.0,1723.0,2153.0,2288.0,2250.0,2906.0,2547.0,3109.0,2266.0,1285.0]},
+':model:video-contact:compileDebugKotlin': {'varianta_baseline': [2203.0,2129.0,2240.0,1773.0,2713.0,2933.0,1732.0,1726.0,1419.0,1651.0],'variantb_gradle-9.5.1': [2031.0,2113.0,2199.0,2144.0,2215.0,2753.0,1726.0,1593.0,1785.0,1224.0]},
+':model:video-contact:kspDebugKotlin': {'varianta_baseline': [1532.0,1663.0,1197.0,1865.0,2022.0,1502.0,1588.0,984.0,1555.0,1306.0],'variantb_gradle-9.5.1': [1846.0,1320.0,1366.0,1897.0,1920.0,1912.0,1364.0,1463.0,1939.0,1013.0]},
+':model:weather-contact:compileDebugKotlin': {'varianta_baseline': [1608.0,2479.0,2098.0,1684.0,1942.0,2790.0,1730.0,2046.0,1741.0,1597.0],'variantb_gradle-9.5.1': [2050.0,2035.0,2293.0,2114.0,2219.0,2032.0,1632.0,1930.0,2042.0,1269.0]},
+':model:weather-contact:kspDebugKotlin': {'varianta_baseline': [1523.0,1393.0,1330.0,1656.0,1411.0,1673.0,1567.0,1493.0,1502.0,1105.0],'variantb_gradle-9.5.1': [2183.0,1196.0,1794.0,1817.0,1852.0,2187.0,1534.0,1635.0,2070.0,1025.0]},
+':repository:account-contact:compileDebugKotlin': {'varianta_baseline': [2523.0,2831.0,2199.0,2284.0,2276.0,2122.0,2397.0,2620.0,2426.0,2240.0],'variantb_gradle-9.5.1': [2717.0,2597.0,2628.0,2183.0,2011.0,1917.0,1938.0,2284.0,1848.0,1946.0]},
+':repository:account-contact:kspDebugKotlin': {'varianta_baseline': [2404.0,2303.0,2298.0,3051.0,2410.0,2096.0,2472.0,2536.0,2375.0,2089.0],'variantb_gradle-9.5.1': [2538.0,2384.0,1962.0,3081.0,2729.0,2162.0,1860.0,2321.0,2303.0,1758.0]},
+':repository:alarm-contact:compileDebugKotlin': {'varianta_baseline': [2711.0,2487.0,2138.0,2253.0,1980.0,2115.0,2400.0,2116.0,2303.0,2267.0],'variantb_gradle-9.5.1': [2173.0,2605.0,2405.0,2134.0,1982.0,1991.0,2041.0,1951.0,2212.0,2069.0]},
+':repository:alarm-contact:kspDebugKotlin': {'varianta_baseline': [2809.0,2036.0,2482.0,2688.0,3356.0,1924.0,2647.0,3406.0,2443.0,2226.0],'variantb_gradle-9.5.1': [3071.0,2537.0,2316.0,2699.0,2688.0,2166.0,2170.0,2216.0,2346.0,1749.0]},
+':repository:analytics-contact:compileDebugKotlin': {'varianta_baseline': [2050.0,2682.0,2720.0,2228.0,1963.0,2335.0,2260.0,2425.0,2456.0,2092.0],'variantb_gradle-9.5.1': [3174.0,2530.0,2847.0,2079.0,1887.0,2565.0,1947.0,1872.0,2144.0,1562.0]},
+':repository:analytics-contact:kspDebugKotlin': {'varianta_baseline': [1623.0,2148.0,2628.0,1449.0,2181.0,2111.0,2206.0,1799.0,2230.0,2131.0],'variantb_gradle-9.5.1': [1847.0,1880.0,1650.0,1714.0,2212.0,1752.0,1501.0,1791.0,1818.0,1559.0]},
+':repository:calendar-contact:compileDebugKotlin': {'varianta_baseline': [2017.0,2012.0,2739.0,1954.0,2778.0,2218.0,1684.0,2764.0,3158.0,1287.0],'variantb_gradle-9.5.1': [2069.0,2333.0,2105.0,1582.0,1877.0,1707.0,2727.0,1760.0,1621.0,1485.0]},
+':repository:calendar-contact:kspDebugKotlin': {'varianta_baseline': [1859.0,1353.0,2288.0,1565.0,1635.0,1492.0,1894.0,2717.0,1660.0,1310.0],'variantb_gradle-9.5.1': [1474.0,1778.0,1684.0,1447.0,1859.0,1928.0,2165.0,2238.0,1306.0,1121.0]},
+':repository:event-contact:compileDebugKotlin': {'varianta_baseline': [2681.0,2794.0,1942.0,2200.0,2657.0,2314.0,2371.0,2379.0,2416.0,2117.0],'variantb_gradle-9.5.1': [2818.0,2597.0,2155.0,2389.0,1937.0,2042.0,1913.0,2627.0,2294.0,1983.0]},
+':repository:event-contact:kspDebugKotlin': {'varianta_baseline': [2030.0,1541.0,1791.0,2168.0,1873.0,1445.0,1846.0,2219.0,1908.0,1947.0],'variantb_gradle-9.5.1': [1772.0,1889.0,1460.0,2630.0,1920.0,1591.0,1469.0,2089.0,1666.0,1340.0]},
+':repository:group-contact:compileDebugKotlin': {'varianta_baseline': [2151.0,2167.0,2404.0,2310.0,1827.0,2040.0,2790.0,3059.0,2736.0,2222.0],'variantb_gradle-9.5.1': [2589.0,1992.0,1976.0,2093.0,2255.0,1580.0,1957.0,1503.0,2094.0,1428.0]},
+':repository:group-contact:kspDebugKotlin': {'varianta_baseline': [1562.0,1811.0,2498.0,1979.0,1300.0,1977.0,1531.0,2765.0,1639.0,1561.0],'variantb_gradle-9.5.1': [2380.0,2256.0,1771.0,1633.0,1522.0,1639.0,2687.0,1909.0,1722.0,1204.0]},
+':repository:location-contact:compileDebugKotlin': {'varianta_baseline': [2117.0,2464.0,2307.0,2459.0,2310.0,2562.0,2011.0,2407.0,2311.0,2404.0],'variantb_gradle-9.5.1': [2586.0,2204.0,2794.0,2487.0,2058.0,2112.0,1973.0,2264.0,1446.0,1939.0]},
+':repository:location-contact:kspDebugKotlin': {'varianta_baseline': [1833.0,1903.0,1527.0,2316.0,1622.0,1484.0,1825.0,2363.0,1929.0,2008.0],'variantb_gradle-9.5.1': [1925.0,1652.0,1491.0,2356.0,1718.0,1794.0,1774.0,2006.0,1647.0,1367.0]},
+':repository:log-contact:compileDebugKotlin': {'varianta_baseline': [2525.0,2312.0,1776.0,1666.0,2113.0,2321.0,3460.0,2685.0,2019.0,1823.0],'variantb_gradle-9.5.1': [2055.0,2520.0,2137.0,2460.0,2142.0,2330.0,2525.0,2524.0,1886.0,1356.0]},
+':repository:log-contact:kspDebugKotlin': {'varianta_baseline': [1976.0,1422.0,1249.0,1428.0,1692.0,1441.0,1038.0,1316.0,1384.0,2060.0],'variantb_gradle-9.5.1': [2095.0,1278.0,1329.0,1798.0,1264.0,1351.0,1200.0,1764.0,1217.0,1110.0]},
+':repository:message-contact:compileDebugKotlin': {'varianta_baseline': [1866.0,2315.0,2533.0,2742.0,2307.0,2375.0,2893.0,2585.0,2180.0,1974.0],'variantb_gradle-9.5.1': [1899.0,2050.0,2261.0,2640.0,2703.0,2375.0,2568.0,1801.0,1799.0,1664.0]},
+':repository:message-contact:kspDebugKotlin': {'varianta_baseline': [2335.0,1492.0,1468.0,1473.0,1925.0,1616.0,2045.0,1368.0,1584.0,1581.0],'variantb_gradle-9.5.1': [1501.0,1472.0,1304.0,1724.0,1461.0,1734.0,1441.0,1545.0,1373.0,1054.0]},
+':repository:metric-contact:compileDebugKotlin': {'varianta_baseline': [2226.0,2017.0,2380.0,2831.0,2201.0,2241.0,2655.0,2367.0,2236.0,1817.0],'variantb_gradle-9.5.1': [1991.0,2244.0,2046.0,2194.0,2110.0,2116.0,2334.0,2207.0,1754.0,1597.0]},
+':repository:metric-contact:kspDebugKotlin': {'varianta_baseline': [2560.0,1830.0,1942.0,1881.0,1795.0,1554.0,2134.0,1316.0,1759.0,1446.0],'variantb_gradle-9.5.1': [1894.0,1634.0,1680.0,2065.0,1564.0,1879.0,1569.0,1364.0,1601.0,1188.0]},
+':repository:network-contact:compileDebugKotlin': {'varianta_baseline': [2450.0,2262.0,2472.0,2363.0,3048.0,2376.0,2504.0,2359.0,2054.0,2375.0],'variantb_gradle-9.5.1': [2364.0,2119.0,2448.0,2161.0,2930.0,2142.0,1680.0,1998.0,1908.0,1792.0]},
+':repository:network-contact:kspDebugKotlin': {'varianta_baseline': [1769.0,2044.0,2384.0,1513.0,1705.0,2083.0,2101.0,1923.0,2292.0,1886.0],'variantb_gradle-9.5.1': [2181.0,2177.0,1655.0,2079.0,1824.0,1789.0,1608.0,1539.0,1605.0,1064.0]},
+':repository:notification-contact:compileDebugKotlin': {'varianta_baseline': [2241.0,2075.0,2301.0,2435.0,1995.0,2109.0,2588.0,2180.0,2139.0,1865.0],'variantb_gradle-9.5.1': [2068.0,2139.0,1728.0,1886.0,2304.0,1966.0,2050.0,2520.0,1966.0,1333.0]},
+':repository:notification-contact:kspDebugKotlin': {'varianta_baseline': [2185.0,1598.0,2048.0,2331.0,1808.0,1502.0,2214.0,1524.0,1877.0,1459.0],'variantb_gradle-9.5.1': [2081.0,1740.0,1826.0,2070.0,1598.0,1915.0,1679.0,1560.0,1527.0,1287.0]},
+':repository:report-contact:compileDebugKotlin': {'varianta_baseline': [2570.0,2605.0,2670.0,2827.0,1980.0,2370.0,1770.0,2356.0,2123.0,1952.0],'variantb_gradle-9.5.1': [2223.0,2285.0,2550.0,1945.0,2236.0,2325.0,2184.0,2055.0,1537.0,1507.0]},
+':repository:report-contact:kspDebugKotlin': {'varianta_baseline': [2055.0,1557.0,1499.0,2017.0,2877.0,1523.0,2016.0,1184.0,1557.0,1758.0],'variantb_gradle-9.5.1': [2251.0,999.0,1499.0,2161.0,1041.0,1215.0,1788.0,1852.0,1590.0,714.0]},
+':repository:search-contact:compileDebugKotlin': {'varianta_baseline': [2648.0,2538.0,2404.0,1738.0,2371.0,2219.0,1896.0,2571.0,2359.0,2508.0],'variantb_gradle-9.5.1': [2577.0,2575.0,2384.0,1831.0,2315.0,2338.0,2281.0,2082.0,1813.0,1897.0]},
+':repository:search-contact:kspDebugKotlin': {'varianta_baseline': [1454.0,1968.0,2677.0,2034.0,1632.0,1814.0,1833.0,1555.0,1891.0,1621.0],'variantb_gradle-9.5.1': [2234.0,2473.0,1741.0,2048.0,1908.0,1357.0,1650.0,1533.0,1555.0,1243.0]},
+':repository:session-contact:compileDebugKotlin': {'varianta_baseline': [2056.0,3201.0,2355.0,2410.0,1752.0,2241.0,2622.0,2488.0,2304.0,1724.0],'variantb_gradle-9.5.1': [2349.0,2599.0,2202.0,1972.0,2148.0,2340.0,2118.0,2195.0,1776.0,1862.0]},
+':repository:session-contact:kspDebugKotlin': {'varianta_baseline': [1928.0,2405.0,2931.0,1649.0,2038.0,1888.0,1649.0,1535.0,1709.0,1756.0],'variantb_gradle-9.5.1': [1990.0,2399.0,1907.0,1365.0,1888.0,1582.0,1570.0,1739.0,1895.0,1309.0]},
+':repository:setting-contact:compileDebugKotlin': {'varianta_baseline': [2105.0,2120.0,2391.0,2086.0,1686.0,2231.0,2904.0,2149.0,2373.0,2090.0],'variantb_gradle-9.5.1': [2467.0,1823.0,1937.0,1977.0,1988.0,2167.0,1466.0,2231.0,1993.0,1562.0]},
+':repository:setting-contact:kspDebugKotlin': {'varianta_baseline': [1638.0,1804.0,1737.0,1779.0,1427.0,1673.0,1776.0,1414.0,2039.0,1612.0],'variantb_gradle-9.5.1': [2238.0,2346.0,1756.0,1588.0,1547.0,1214.0,1356.0,1643.0,1635.0,1174.0]},
+':repository:share-contact:compileDebugKotlin': {'varianta_baseline': [3226.0,2712.0,2010.0,2325.0,2469.0,1640.0,3162.0,2225.0,2010.0,2212.0],'variantb_gradle-9.5.1': [2421.0,2478.0,1686.0,2473.0,2190.0,2142.0,1566.0,2230.0,2102.0,1793.0]},
+':repository:share-contact:kspDebugKotlin': {'varianta_baseline': [2522.0,2926.0,3110.0,1941.0,2154.0,2356.0,1717.0,2376.0,2405.0,2250.0],'variantb_gradle-9.5.1': [3479.0,2320.0,2371.0,1902.0,2321.0,2075.0,2222.0,2314.0,2056.0,2190.0]},
+':repository:status-contact:compileDebugKotlin': {'varianta_baseline': [3178.0,2381.0,1752.0,2645.0,1987.0,2529.0,2670.0,2032.0,2729.0,2234.0],'variantb_gradle-9.5.1': [2224.0,2635.0,3397.0,2261.0,2321.0,2431.0,1947.0,2305.0,2165.0,1835.0]},
+':repository:status-contact:kspDebugKotlin': {'varianta_baseline': [2232.0,2759.0,2182.0,1892.0,2345.0,2541.0,2297.0,2199.0,1603.0,2245.0],'variantb_gradle-9.5.1': [3012.0,2327.0,1733.0,2007.0,2239.0,2074.0,1669.0,2367.0,1916.0,1829.0]},
+':repository:sync-contact:compileDebugKotlin': {'varianta_baseline': [2940.0,2251.0,2497.0,2303.0,2173.0,2840.0,2543.0,2462.0,3279.0,2398.0],'variantb_gradle-9.5.1': [2055.0,2567.0,2974.0,2317.0,2417.0,2758.0,1940.0,1873.0,2226.0,1909.0]},
+':repository:sync-contact:kspDebugKotlin': {'varianta_baseline': [2087.0,1795.0,2379.0,1875.0,1798.0,2018.0,1819.0,1912.0,1567.0,1541.0],'variantb_gradle-9.5.1': [2407.0,1780.0,1608.0,1811.0,1933.0,1622.0,1532.0,1756.0,1369.0,1866.0]},
+':repository:task-contact:compileDebugKotlin': {'varianta_baseline': [2196.0,2236.0,2313.0,2380.0,3051.0,2480.0,2506.0,2845.0,2382.0,2384.0],'variantb_gradle-9.5.1': [2675.0,2444.0,2422.0,1957.0,2782.0,1959.0,2926.0,3376.0,1998.0,1578.0]},
+':repository:task-contact:kspDebugKotlin': {'varianta_baseline': [1932.0,1989.0,1995.0,1461.0,1632.0,1398.0,2342.0,1435.0,1904.0,1731.0],'variantb_gradle-9.5.1': [2005.0,2066.0,1394.0,2137.0,1985.0,2028.0,1808.0,1873.0,1462.0,1128.0]}};
+            const taskSearchInput = document.getElementById('taskSearchInput');
+            const taskDropdown = document.getElementById('taskDropdown');
+            const taskChartTitle = document.getElementById('taskChartTitle');
+            const variantColors = {'varianta_baseline': '#36A2EB','variantb_gradle-9.5.1': '#FF6384'};
+            let selectedTask = ':app:app:mergeExtDexDebug';
+            const allTaskPaths = Object.keys(taskData).sort(function(a, b) { return a.localeCompare(b); });
+            const MAX_TASK_SUGGESTIONS = 100;
+            let highlightIndex = -1;
+            let currentMatches = [];
+
+            function createTaskDatasets(taskPath) {
+                const series = taskData[taskPath] || {};
+                return Object.keys(series).map(variant => ({
+                    label: variant,
+                    data: series[variant],
+                    borderColor: variantColors[variant],
+                    tension: 0.1
+                }));
+            }
+
+            const expensiveTaskChart = new Chart(document.getElementById('expensiveTaskChart'), {
+                type: 'line',
+                data: {
+                    labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                    datasets: createTaskDatasets(':app:app:mergeExtDexDebug')
+                },
+                options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        title: {
+            display: true
+        }
+    },
+    scales: {
+        y: {
+            
+            ticks: {
+                callback: function(value, index, ticks) {
+                    if (this.chart.options.scales.y.title.text.includes('Memory')) {
+                        return (value / (1024 * 1024)).toFixed(2) + ' MB';
+                    } else if (this.chart.options.scales.y.title.text.includes('Duration')) {
+                        return (value / 1000).toFixed(2) + ' s';
+                    }
+                    return value;
+                }
+            },
+            title: {
+                display: true,
+                text: 'Task Duration (seconds)'
+            }
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Build Number'
+            }
+        }
+    }
+}
+            });
+
+            function applyTask(taskPath) {
+                if (!taskData[taskPath]) return;
+                selectedTask = taskPath;
+                if (taskSearchInput) taskSearchInput.value = taskPath;
+                expensiveTaskChart.data.datasets = createTaskDatasets(taskPath);
+                expensiveTaskChart.update();
+                if (taskChartTitle) {
+                    taskChartTitle.textContent = 'Task Duration: ' + taskPath;
+                }
+                hideTaskDropdown();
+            }
+
+            function hideTaskDropdown() {
+                if (!taskDropdown) return;
+                taskDropdown.classList.remove('open');
+                taskDropdown.innerHTML = '';
+                highlightIndex = -1;
+                currentMatches = [];
+            }
+
+            function getFilteredMatches(query) {
+                const q = query.trim().toLowerCase();
+                if (!q) {
+                    return allTaskPaths.slice(0, MAX_TASK_SUGGESTIONS);
+                }
+                const out = [];
+                for (let i = 0; i < allTaskPaths.length && out.length < MAX_TASK_SUGGESTIONS; i++) {
+                    if (allTaskPaths[i].toLowerCase().indexOf(q) !== -1) {
+                        out.push(allTaskPaths[i]);
+                    }
+                }
+                return out;
+            }
+
+            function updateTaskHighlight() {
+                if (!taskDropdown) return;
+                const items = taskDropdown.querySelectorAll('.task-dropdown-item');
+                for (let i = 0; i < items.length; i++) {
+                    items[i].classList.toggle('task-dropdown-item-active', i === highlightIndex);
+                }
+                if (highlightIndex >= 0 && items[highlightIndex]) {
+                    items[highlightIndex].scrollIntoView({ block: 'nearest' });
+                }
+            }
+
+            function renderTaskDropdown(matches, query) {
+                if (!taskDropdown) return;
+                taskDropdown.innerHTML = '';
+                const hint = document.createElement('div');
+                hint.className = 'task-dropdown-hint';
+                const total = allTaskPaths.length;
+                if (matches.length === 0) {
+                    hint.textContent = 'No tasks match your filter.';
+                    taskDropdown.appendChild(hint);
+                } else {
+                    if (!query.trim()) {
+                        hint.textContent = 'Showing first ' + matches.length + ' of ' + total + ' tasks — type to narrow the list';
+                    } else if (matches.length === MAX_TASK_SUGGESTIONS) {
+                        hint.textContent = 'Showing first ' + MAX_TASK_SUGGESTIONS + ' matches — refine your search';
+                    } else {
+                        hint.textContent = matches.length + (matches.length === 1 ? ' match' : ' matches');
+                    }
+                    taskDropdown.appendChild(hint);
+                    for (let j = 0; j < matches.length; j++) {
+                        const path = matches[j];
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'task-dropdown-item';
+                        btn.textContent = path;
+                        btn.addEventListener('mousedown', function(e) {
+                            e.preventDefault();
+                            applyTask(path);
+                        });
+                        taskDropdown.appendChild(btn);
+                    }
+                }
+                taskDropdown.classList.add('open');
+                highlightIndex = matches.length > 0 ? 0 : -1;
+                updateTaskHighlight();
+            }
+
+            if (taskSearchInput && taskDropdown) {
+                taskSearchInput.value = selectedTask;
+
+                taskSearchInput.addEventListener('focus', function() {
+                    const q = taskSearchInput.value;
+                    currentMatches = getFilteredMatches(q);
+                    renderTaskDropdown(currentMatches, q);
+                });
+
+                taskSearchInput.addEventListener('input', function() {
+                    const q = taskSearchInput.value;
+                    currentMatches = getFilteredMatches(q);
+                    renderTaskDropdown(currentMatches, q);
+                });
+
+                taskSearchInput.addEventListener('keydown', function(e) {
+                    if (!taskDropdown.classList.contains('open')) return;
+                    const items = taskDropdown.querySelectorAll('.task-dropdown-item');
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        highlightIndex = Math.min(highlightIndex + 1, items.length - 1);
+                        updateTaskHighlight();
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        highlightIndex = Math.max(highlightIndex - 1, 0);
+                        updateTaskHighlight();
+                    } else if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (highlightIndex >= 0 && items[highlightIndex]) {
+                            applyTask(items[highlightIndex].textContent);
+                        } else if (currentMatches.length === 1) {
+                            applyTask(currentMatches[0]);
+                        } else {
+                            const v = taskSearchInput.value.trim();
+                            if (taskData[v]) applyTask(v);
+                        }
+                    } else if (e.key === 'Escape') {
+                        e.preventDefault();
+                        taskSearchInput.value = selectedTask;
+                        hideTaskDropdown();
+                    }
+                });
+
+                taskSearchInput.addEventListener('blur', function() {
+                    setTimeout(function() {
+                        const v = taskSearchInput.value.trim();
+                        if (taskData[v]) {
+                            if (v !== selectedTask) applyTask(v);
+                        } else {
+                            taskSearchInput.value = selectedTask;
+                        }
+                        hideTaskDropdown();
+                    }, 200);
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (taskSearchInput.contains(e.target) || taskDropdown.contains(e.target)) return;
+                    hideTaskDropdown();
+                });
+            }
+                                                                            </script><div class='table-wrapper'><table id='metricsTable' class='metric-table'><tr><th>Category</th><th>Metric</th><th colspan=7 class='stats-header'>Statistics</th></tr><tr><th colspan='2'></th><th colspan=2>Mean</th><th colspan=2>P50</th><th colspan=2>P90</th><th>Unit</th></tr><tr class='variant-headers'><th colspan='2'></th><th>varianta_baseline</th><th>variantb_gradle-9.5.1</th><th>varianta_baseline</th><th>variantb_gradle-9.5.1</th><th>varianta_baseline</th><th>variantb_gradle-9.5.1</th><th></th></tr><tr><td>Build</td><td>Build time</td><td class='metric-value'>266195</td><td class='metric-value'>256661</td><td class='metric-value'>265840</td><td class='metric-value'>262068</td><td class='metric-value'>276465</td><td class='metric-value'>291196</td><td class='unit-column'>ms</td></tr><tr><td>Build</td><td>Configuration time</td><td class='metric-value'>38860</td><td class='metric-value'>37531</td><td class='metric-value'>39815</td><td class='metric-value'>38442</td><td class='metric-value'>44039</td><td class='metric-value'>45085</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.jetbrains.kotlin.gradle.plugin.diagnostics.CheckKotlinGradlePluginConfigurationErrors</td><td class='metric-value'>4</td><td class='metric-value'>3</td><td class='metric-value'>4</td><td class='metric-value'>4</td><td class='metric-value'>6</td><td class='metric-value'>5</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.plugin.devel.tasks.GeneratePluginDescriptors</td><td class='metric-value'>34</td><td class='metric-value'>31</td><td class='metric-value'>32</td><td class='metric-value'>29</td><td class='metric-value'>48</td><td class='metric-value'>48</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.language.jvm.tasks.ProcessResources</td><td class='metric-value'>52</td><td class='metric-value'>43</td><td class='metric-value'>50</td><td class='metric-value'>38</td><td class='metric-value'>98</td><td class='metric-value'>58</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.jetbrains.kotlin.gradle.tasks.KotlinCompile</td><td class='metric-value'>3251</td><td class='metric-value'>3136</td><td class='metric-value'>2725</td><td class='metric-value'>2656</td><td class='metric-value'>5239</td><td class='metric-value'>5166</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.api.tasks.compile.JavaCompile</td><td class='metric-value'>412</td><td class='metric-value'>394</td><td class='metric-value'>340</td><td class='metric-value'>332</td><td class='metric-value'>619</td><td class='metric-value'>605</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.api.DefaultTask</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.api.tasks.bundling.Jar</td><td class='metric-value'>48</td><td class='metric-value'>41</td><td class='metric-value'>47</td><td class='metric-value'>42</td><td class='metric-value'>77</td><td class='metric-value'>46</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.AndroidVariantTask</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.MergeNativeDebugMetadataTask</td><td class='metric-value'>3</td><td class='metric-value'>3</td><td class='metric-value'>3</td><td class='metric-value'>4</td><td class='metric-value'>5</td><td class='metric-value'>8</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.ValidateResourcesTask</td><td class='metric-value'>12</td><td class='metric-value'>11</td><td class='metric-value'>11</td><td class='metric-value'>10</td><td class='metric-value'>20</td><td class='metric-value'>19</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.MergeResources</td><td class='metric-value'>81</td><td class='metric-value'>80</td><td class='metric-value'>34</td><td class='metric-value'>33</td><td class='metric-value'>59</td><td class='metric-value'>58</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.ProcessNavigationXmlTask</td><td class='metric-value'>9</td><td class='metric-value'>10</td><td class='metric-value'>5</td><td class='metric-value'>5</td><td class='metric-value'>8</td><td class='metric-value'>9</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.res.ParseLibraryResourcesTask</td><td class='metric-value'>54</td><td class='metric-value'>47</td><td class='metric-value'>31</td><td class='metric-value'>31</td><td class='metric-value'>55</td><td class='metric-value'>54</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.res.GenerateLibraryRFileTask</td><td class='metric-value'>27</td><td class='metric-value'>26</td><td class='metric-value'>25</td><td class='metric-value'>23</td><td class='metric-value'>43</td><td class='metric-value'>42</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.JavaPreCompileTask</td><td class='metric-value'>16</td><td class='metric-value'>15</td><td class='metric-value'>13</td><td class='metric-value'>13</td><td class='metric-value'>25</td><td class='metric-value'>24</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.google.devtools.ksp.gradle.KspAATask</td><td class='metric-value'>2521</td><td class='metric-value'>2451</td><td class='metric-value'>2221</td><td class='metric-value'>2180</td><td class='metric-value'>3629</td><td class='metric-value'>3648</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.TransformClassesWithAsmTask</td><td class='metric-value'>119</td><td class='metric-value'>115</td><td class='metric-value'>110</td><td class='metric-value'>106</td><td class='metric-value'>183</td><td class='metric-value'>179</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.BundleLibraryClassesJar</td><td class='metric-value'>19</td><td class='metric-value'>19</td><td class='metric-value'>17</td><td class='metric-value'>16</td><td class='metric-value'>28</td><td class='metric-value'>29</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.MergeSourceSetFolders</td><td class='metric-value'>8</td><td class='metric-value'>9</td><td class='metric-value'>4</td><td class='metric-value'>4</td><td class='metric-value'>10</td><td class='metric-value'>12</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.CompressAssetsTask</td><td class='metric-value'>12</td><td class='metric-value'>13</td><td class='metric-value'>12</td><td class='metric-value'>12</td><td class='metric-value'>25</td><td class='metric-value'>19</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.DexFileDependenciesTask</td><td class='metric-value'>10</td><td class='metric-value'>10</td><td class='metric-value'>9</td><td class='metric-value'>11</td><td class='metric-value'>19</td><td class='metric-value'>17</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.AarMetadataTask</td><td class='metric-value'>6</td><td class='metric-value'>6</td><td class='metric-value'>5</td><td class='metric-value'>5</td><td class='metric-value'>10</td><td class='metric-value'>10</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.MapSourceSetPathsTask</td><td class='metric-value'>7</td><td class='metric-value'>5</td><td class='metric-value'>7</td><td class='metric-value'>5</td><td class='metric-value'>12</td><td class='metric-value'>9</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.CheckAarMetadataTask</td><td class='metric-value'>26</td><td class='metric-value'>22</td><td class='metric-value'>16</td><td class='metric-value'>16</td><td class='metric-value'>26</td><td class='metric-value'>25</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.CompileNavigationXmlTask</td><td class='metric-value'>57</td><td class='metric-value'>72</td><td class='metric-value'>63</td><td class='metric-value'>62</td><td class='metric-value'>88</td><td class='metric-value'>197</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.CompatibleScreensManifest</td><td class='metric-value'>24</td><td class='metric-value'>14</td><td class='metric-value'>19</td><td class='metric-value'>16</td><td class='metric-value'>60</td><td class='metric-value'>18</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ExtractDeepLinksTask</td><td class='metric-value'>4</td><td class='metric-value'>4</td><td class='metric-value'>3</td><td class='metric-value'>3</td><td class='metric-value'>9</td><td class='metric-value'>9</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ProcessLibraryManifest</td><td class='metric-value'>30</td><td class='metric-value'>28</td><td class='metric-value'>20</td><td class='metric-value'>19</td><td class='metric-value'>33</td><td class='metric-value'>32</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ProcessApplicationManifest</td><td class='metric-value'>304</td><td class='metric-value'>327</td><td class='metric-value'>301</td><td class='metric-value'>339</td><td class='metric-value'>392</td><td class='metric-value'>405</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ProcessMultiApkApplicationManifest</td><td class='metric-value'>262</td><td class='metric-value'>236</td><td class='metric-value'>259</td><td class='metric-value'>253</td><td class='metric-value'>430</td><td class='metric-value'>327</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>dagger.hilt.android.plugin.task.HiltSyncTask</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>1</td><td class='metric-value'>1</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ProcessPackagedManifestTask</td><td class='metric-value'>42</td><td class='metric-value'>38</td><td class='metric-value'>34</td><td class='metric-value'>34</td><td class='metric-value'>86</td><td class='metric-value'>95</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.CompileLibraryResourcesTask</td><td class='metric-value'>13</td><td class='metric-value'>10</td><td class='metric-value'>11</td><td class='metric-value'>9</td><td class='metric-value'>18</td><td class='metric-value'>15</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>dagger.hilt.android.plugin.task.AggregateDepsTask</td><td class='metric-value'>257</td><td class='metric-value'>228</td><td class='metric-value'>238</td><td class='metric-value'>224</td><td class='metric-value'>428</td><td class='metric-value'>356</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.ProcessJavaResTask</td><td class='metric-value'>12</td><td class='metric-value'>8</td><td class='metric-value'>11</td><td class='metric-value'>6</td><td class='metric-value'>21</td><td class='metric-value'>16</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.BundleLibraryClassesDir</td><td class='metric-value'>54</td><td class='metric-value'>53</td><td class='metric-value'>51</td><td class='metric-value'>49</td><td class='metric-value'>74</td><td class='metric-value'>75</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.CheckDuplicateClassesTask</td><td class='metric-value'>155</td><td class='metric-value'>193</td><td class='metric-value'>171</td><td class='metric-value'>156</td><td class='metric-value'>193</td><td class='metric-value'>335</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask</td><td class='metric-value'>2239</td><td class='metric-value'>1897</td><td class='metric-value'>2252</td><td class='metric-value'>1834</td><td class='metric-value'>3162</td><td class='metric-value'>2229</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.MergeJavaResourceTask</td><td class='metric-value'>27</td><td class='metric-value'>28</td><td class='metric-value'>5</td><td class='metric-value'>5</td><td class='metric-value'>11</td><td class='metric-value'>10</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.DexArchiveBuilderTask</td><td class='metric-value'>1275</td><td class='metric-value'>1383</td><td class='metric-value'>1310</td><td class='metric-value'>1390</td><td class='metric-value'>2010</td><td class='metric-value'>1957</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.GlobalSyntheticsMergeTask</td><td class='metric-value'>346</td><td class='metric-value'>472</td><td class='metric-value'>260</td><td class='metric-value'>322</td><td class='metric-value'>926</td><td class='metric-value'>1208</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.DexMergingTask</td><td class='metric-value'>4936</td><td class='metric-value'>4888</td><td class='metric-value'>1055</td><td class='metric-value'>1020</td><td class='metric-value'>14001</td><td class='metric-value'>13835</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.MergeNativeLibsTask</td><td class='metric-value'>2</td><td class='metric-value'>2</td><td class='metric-value'>1</td><td class='metric-value'>1</td><td class='metric-value'>2</td><td class='metric-value'>3</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.LibraryJniLibsTask</td><td class='metric-value'>7</td><td class='metric-value'>6</td><td class='metric-value'>2</td><td class='metric-value'>2</td><td class='metric-value'>5</td><td class='metric-value'>6</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.ValidateSigningTask</td><td class='metric-value'>925</td><td class='metric-value'>899</td><td class='metric-value'>901</td><td class='metric-value'>853</td><td class='metric-value'>1206</td><td class='metric-value'>1247</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.AppMetadataTask</td><td class='metric-value'>4</td><td class='metric-value'>4</td><td class='metric-value'>4</td><td class='metric-value'>4</td><td class='metric-value'>7</td><td class='metric-value'>9</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.SigningConfigVersionsWriterTask</td><td class='metric-value'>20</td><td class='metric-value'>20</td><td class='metric-value'>21</td><td class='metric-value'>21</td><td class='metric-value'>24</td><td class='metric-value'>26</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.StripDebugSymbolsTask</td><td class='metric-value'>9</td><td class='metric-value'>7</td><td class='metric-value'>1</td><td class='metric-value'>1</td><td class='metric-value'>1</td><td class='metric-value'>1</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ExtractAnnotations</td><td class='metric-value'>10</td><td class='metric-value'>12</td><td class='metric-value'>9</td><td class='metric-value'>8</td><td class='metric-value'>14</td><td class='metric-value'>13</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.MergeFileTask</td><td class='metric-value'>2</td><td class='metric-value'>2</td><td class='metric-value'>2</td><td class='metric-value'>2</td><td class='metric-value'>3</td><td class='metric-value'>3</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.MergeConsumerProguardFilesTask</td><td class='metric-value'>1</td><td class='metric-value'>1</td><td class='metric-value'>2</td><td class='metric-value'>2</td><td class='metric-value'>3</td><td class='metric-value'>2</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.ProcessLibraryArtProfileTask</td><td class='metric-value'>1</td><td class='metric-value'>1</td><td class='metric-value'>2</td><td class='metric-value'>1</td><td class='metric-value'>2</td><td class='metric-value'>2</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.PrepareLintJarForPublish</td><td class='metric-value'>2</td><td class='metric-value'>4</td><td class='metric-value'>2</td><td class='metric-value'>2</td><td class='metric-value'>4</td><td class='metric-value'>3</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.LibraryAarJarsTask</td><td class='metric-value'>17</td><td class='metric-value'>16</td><td class='metric-value'>15</td><td class='metric-value'>15</td><td class='metric-value'>22</td><td class='metric-value'>22</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.BundleAar</td><td class='metric-value'>7</td><td class='metric-value'>7</td><td class='metric-value'>7</td><td class='metric-value'>6</td><td class='metric-value'>10</td><td class='metric-value'>9</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>org.gradle.api.Task</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='metric-value'>0</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.tasks.PackageApplication</td><td class='metric-value'>859</td><td class='metric-value'>889</td><td class='metric-value'>830</td><td class='metric-value'>857</td><td class='metric-value'>1145</td><td class='metric-value'>1252</td><td class='unit-column'>ms</td></tr><tr><td>Task Type</td><td>com.android.build.gradle.internal.tasks.ListingFileRedirectTask</td><td class='metric-value'>3</td><td class='metric-value'>4</td><td class='metric-value'>4</td><td class='metric-value'>3</td><td class='metric-value'>6</td><td class='metric-value'>8</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:build-logic:convention:compileKotlin</td><td class='metric-value'>8270</td><td class='metric-value'>8005</td><td class='metric-value'>8199</td><td class='metric-value'>8165</td><td class='metric-value'>9203</td><td class='metric-value'>8562</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:app:parseDebugLocalResources</td><td class='metric-value'>2043</td><td class='metric-value'>1401</td><td class='metric-value'>1385</td><td class='metric-value'>1105</td><td class='metric-value'>4579</td><td class='metric-value'>4112</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:contact:kspDebugKotlin</td><td class='metric-value'>7085</td><td class='metric-value'>6717</td><td class='metric-value'>7039</td><td class='metric-value'>6916</td><td class='metric-value'>7355</td><td class='metric-value'>7299</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:cart:kspDebugKotlin</td><td class='metric-value'>8038</td><td class='metric-value'>7733</td><td class='metric-value'>8111</td><td class='metric-value'>7945</td><td class='metric-value'>8480</td><td class='metric-value'>8250</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:comment:kspDebugKotlin</td><td class='metric-value'>7584</td><td class='metric-value'>7193</td><td class='metric-value'>7621</td><td class='metric-value'>7410</td><td class='metric-value'>7912</td><td class='metric-value'>7880</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:checkout:kspDebugKotlin</td><td class='metric-value'>7882</td><td class='metric-value'>7433</td><td class='metric-value'>7850</td><td class='metric-value'>7598</td><td class='metric-value'>8271</td><td class='metric-value'>8101</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:contact:compileDebugKotlin</td><td class='metric-value'>8347</td><td class='metric-value'>8126</td><td class='metric-value'>8205</td><td class='metric-value'>8332</td><td class='metric-value'>9345</td><td class='metric-value'>9008</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:comment:compileDebugKotlin</td><td class='metric-value'>8261</td><td class='metric-value'>7926</td><td class='metric-value'>8144</td><td class='metric-value'>8102</td><td class='metric-value'>8888</td><td class='metric-value'>8720</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:cart:compileDebugKotlin</td><td class='metric-value'>8705</td><td class='metric-value'>8314</td><td class='metric-value'>8737</td><td class='metric-value'>8299</td><td class='metric-value'>9473</td><td class='metric-value'>9265</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:checkout:compileDebugKotlin</td><td class='metric-value'>8314</td><td class='metric-value'>7985</td><td class='metric-value'>8220</td><td class='metric-value'>8161</td><td class='metric-value'>8911</td><td class='metric-value'>8758</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:feed:kspDebugKotlin</td><td class='metric-value'>2660</td><td class='metric-value'>2629</td><td class='metric-value'>2641</td><td class='metric-value'>2595</td><td class='metric-value'>3106</td><td class='metric-value'>3284</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:identity:kspDebugKotlin</td><td class='metric-value'>3662</td><td class='metric-value'>3860</td><td class='metric-value'>3731</td><td class='metric-value'>3702</td><td class='metric-value'>4252</td><td class='metric-value'>4458</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:group:kspDebugKotlin</td><td class='metric-value'>3701</td><td class='metric-value'>3810</td><td class='metric-value'>3693</td><td class='metric-value'>3824</td><td class='metric-value'>4327</td><td class='metric-value'>4448</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:location:kspDebugKotlin</td><td class='metric-value'>3801</td><td class='metric-value'>3768</td><td class='metric-value'>3856</td><td class='metric-value'>3770</td><td class='metric-value'>4266</td><td class='metric-value'>4379</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:feed:compileDebugKotlin</td><td class='metric-value'>6490</td><td class='metric-value'>6181</td><td class='metric-value'>6422</td><td class='metric-value'>6343</td><td class='metric-value'>7405</td><td class='metric-value'>7055</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:login:kspDebugKotlin</td><td class='metric-value'>2821</td><td class='metric-value'>2824</td><td class='metric-value'>2861</td><td class='metric-value'>2812</td><td class='metric-value'>3354</td><td class='metric-value'>3682</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:group:compileDebugKotlin</td><td class='metric-value'>5854</td><td class='metric-value'>5452</td><td class='metric-value'>5721</td><td class='metric-value'>5333</td><td class='metric-value'>6976</td><td class='metric-value'>6296</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:location:compileDebugKotlin</td><td class='metric-value'>5579</td><td class='metric-value'>5045</td><td class='metric-value'>5697</td><td class='metric-value'>5021</td><td class='metric-value'>6246</td><td class='metric-value'>5591</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:identity:compileDebugKotlin</td><td class='metric-value'>5881</td><td class='metric-value'>5348</td><td class='metric-value'>5758</td><td class='metric-value'>5466</td><td class='metric-value'>6786</td><td class='metric-value'>5821</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:login:compileDebugKotlin</td><td class='metric-value'>5282</td><td class='metric-value'>5332</td><td class='metric-value'>5291</td><td class='metric-value'>5195</td><td class='metric-value'>5682</td><td class='metric-value'>6618</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:message:kspDebugKotlin</td><td class='metric-value'>3432</td><td class='metric-value'>3383</td><td class='metric-value'>3483</td><td class='metric-value'>3507</td><td class='metric-value'>4177</td><td class='metric-value'>4625</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:network:kspDebugKotlin</td><td class='metric-value'>3503</td><td class='metric-value'>3291</td><td class='metric-value'>3319</td><td class='metric-value'>3312</td><td class='metric-value'>4284</td><td class='metric-value'>4683</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:notification:kspDebugKotlin</td><td class='metric-value'>3377</td><td class='metric-value'>3259</td><td class='metric-value'>3278</td><td class='metric-value'>3193</td><td class='metric-value'>4113</td><td class='metric-value'>4101</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:post:kspDebugKotlin</td><td class='metric-value'>2899</td><td class='metric-value'>2775</td><td class='metric-value'>2880</td><td class='metric-value'>2888</td><td class='metric-value'>3210</td><td class='metric-value'>3051</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:message:compileDebugKotlin</td><td class='metric-value'>4796</td><td class='metric-value'>4775</td><td class='metric-value'>4762</td><td class='metric-value'>4884</td><td class='metric-value'>5561</td><td class='metric-value'>5285</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:network:compileDebugKotlin</td><td class='metric-value'>4645</td><td class='metric-value'>4709</td><td class='metric-value'>4711</td><td class='metric-value'>4703</td><td class='metric-value'>5643</td><td class='metric-value'>5334</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:notification:compileDebugKotlin</td><td class='metric-value'>4771</td><td class='metric-value'>4798</td><td class='metric-value'>4638</td><td class='metric-value'>4721</td><td class='metric-value'>5465</td><td class='metric-value'>5458</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:post:compileDebugKotlin</td><td class='metric-value'>4857</td><td class='metric-value'>4422</td><td class='metric-value'>4828</td><td class='metric-value'>4491</td><td class='metric-value'>5314</td><td class='metric-value'>5419</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:profile:kspDebugKotlin</td><td class='metric-value'>3477</td><td class='metric-value'>2996</td><td class='metric-value'>3534</td><td class='metric-value'>2939</td><td class='metric-value'>4129</td><td class='metric-value'>3675</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:push:kspDebugKotlin</td><td class='metric-value'>3192</td><td class='metric-value'>2837</td><td class='metric-value'>3213</td><td class='metric-value'>3062</td><td class='metric-value'>4077</td><td class='metric-value'>3318</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:search:kspDebugKotlin</td><td class='metric-value'>3270</td><td class='metric-value'>2963</td><td class='metric-value'>3225</td><td class='metric-value'>3062</td><td class='metric-value'>3741</td><td class='metric-value'>3417</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:setting:kspDebugKotlin</td><td class='metric-value'>3613</td><td class='metric-value'>3530</td><td class='metric-value'>3652</td><td class='metric-value'>3522</td><td class='metric-value'>4415</td><td class='metric-value'>4304</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:profile:compileDebugKotlin</td><td class='metric-value'>4991</td><td class='metric-value'>4908</td><td class='metric-value'>4983</td><td class='metric-value'>4979</td><td class='metric-value'>5942</td><td class='metric-value'>5983</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:push:compileDebugKotlin</td><td class='metric-value'>4771</td><td class='metric-value'>4901</td><td class='metric-value'>4695</td><td class='metric-value'>4999</td><td class='metric-value'>5614</td><td class='metric-value'>5673</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:search:compileDebugKotlin</td><td class='metric-value'>4604</td><td class='metric-value'>4711</td><td class='metric-value'>4518</td><td class='metric-value'>4734</td><td class='metric-value'>5230</td><td class='metric-value'>5433</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:setting:compileDebugKotlin</td><td class='metric-value'>4192</td><td class='metric-value'>3854</td><td class='metric-value'>4242</td><td class='metric-value'>3801</td><td class='metric-value'>4682</td><td class='metric-value'>5088</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:share:kspDebugKotlin</td><td class='metric-value'>2742</td><td class='metric-value'>2885</td><td class='metric-value'>2780</td><td class='metric-value'>2805</td><td class='metric-value'>3427</td><td class='metric-value'>3725</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:share:compileDebugKotlin</td><td class='metric-value'>4192</td><td class='metric-value'>4012</td><td class='metric-value'>4219</td><td class='metric-value'>4018</td><td class='metric-value'>4772</td><td class='metric-value'>4903</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:user:kspDebugKotlin</td><td class='metric-value'>2763</td><td class='metric-value'>2785</td><td class='metric-value'>2819</td><td class='metric-value'>2775</td><td class='metric-value'>3511</td><td class='metric-value'>3759</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:sync:kspDebugKotlin</td><td class='metric-value'>3609</td><td class='metric-value'>3806</td><td class='metric-value'>3635</td><td class='metric-value'>3858</td><td class='metric-value'>4431</td><td class='metric-value'>5163</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:forecast:kspDebugKotlin</td><td class='metric-value'>3574</td><td class='metric-value'>3266</td><td class='metric-value'>3420</td><td class='metric-value'>3190</td><td class='metric-value'>4628</td><td class='metric-value'>3740</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:user:compileDebugKotlin</td><td class='metric-value'>3794</td><td class='metric-value'>3919</td><td class='metric-value'>3931</td><td class='metric-value'>4013</td><td class='metric-value'>4383</td><td class='metric-value'>4393</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:core:sync:compileDebugKotlin</td><td class='metric-value'>3657</td><td class='metric-value'>3704</td><td class='metric-value'>3694</td><td class='metric-value'>3646</td><td class='metric-value'>4282</td><td class='metric-value'>4239</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:task:kspDebugKotlin</td><td class='metric-value'>2438</td><td class='metric-value'>2313</td><td class='metric-value'>2469</td><td class='metric-value'>2292</td><td class='metric-value'>2871</td><td class='metric-value'>3178</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:forecast:compileDebugKotlin</td><td class='metric-value'>3584</td><td class='metric-value'>3567</td><td class='metric-value'>3351</td><td class='metric-value'>3649</td><td class='metric-value'>4255</td><td class='metric-value'>4614</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:task:compileDebugKotlin</td><td class='metric-value'>3471</td><td class='metric-value'>3276</td><td class='metric-value'>3430</td><td class='metric-value'>3203</td><td class='metric-value'>4382</td><td class='metric-value'>4241</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:document:kspDebugKotlin</td><td class='metric-value'>2749</td><td class='metric-value'>2597</td><td class='metric-value'>2673</td><td class='metric-value'>2596</td><td class='metric-value'>3601</td><td class='metric-value'>3196</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:file:kspDebugKotlin</td><td class='metric-value'>2771</td><td class='metric-value'>2706</td><td class='metric-value'>2844</td><td class='metric-value'>2728</td><td class='metric-value'>3694</td><td class='metric-value'>3435</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:map:kspDebugKotlin</td><td class='metric-value'>2726</td><td class='metric-value'>2910</td><td class='metric-value'>2673</td><td class='metric-value'>2802</td><td class='metric-value'>3825</td><td class='metric-value'>3751</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:metric:kspDebugKotlin</td><td class='metric-value'>2321</td><td class='metric-value'>2424</td><td class='metric-value'>2356</td><td class='metric-value'>2369</td><td class='metric-value'>2938</td><td class='metric-value'>3028</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:file:compileDebugKotlin</td><td class='metric-value'>3582</td><td class='metric-value'>3512</td><td class='metric-value'>3436</td><td class='metric-value'>3533</td><td class='metric-value'>4268</td><td class='metric-value'>4139</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:document:compileDebugKotlin</td><td class='metric-value'>3733</td><td class='metric-value'>3602</td><td class='metric-value'>3763</td><td class='metric-value'>3631</td><td class='metric-value'>4061</td><td class='metric-value'>4259</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:map:compileDebugKotlin</td><td class='metric-value'>3435</td><td class='metric-value'>3279</td><td class='metric-value'>3347</td><td class='metric-value'>3275</td><td class='metric-value'>4072</td><td class='metric-value'>3815</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:metric:compileDebugKotlin</td><td class='metric-value'>2849</td><td class='metric-value'>3114</td><td class='metric-value'>2865</td><td class='metric-value'>3057</td><td class='metric-value'>3550</td><td class='metric-value'>4199</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:note:kspDebugKotlin</td><td class='metric-value'>2841</td><td class='metric-value'>3164</td><td class='metric-value'>2979</td><td class='metric-value'>3335</td><td class='metric-value'>3186</td><td class='metric-value'>4070</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:account:kspDebugKotlin</td><td class='metric-value'>2291</td><td class='metric-value'>2305</td><td class='metric-value'>2329</td><td class='metric-value'>2248</td><td class='metric-value'>2721</td><td class='metric-value'>3226</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:alarm:kspDebugKotlin</td><td class='metric-value'>2381</td><td class='metric-value'>2290</td><td class='metric-value'>2461</td><td class='metric-value'>2199</td><td class='metric-value'>2820</td><td class='metric-value'>3287</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:note:compileDebugKotlin</td><td class='metric-value'>3502</td><td class='metric-value'>3312</td><td class='metric-value'>3463</td><td class='metric-value'>3276</td><td class='metric-value'>4380</td><td class='metric-value'>4085</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:event:kspDebugKotlin</td><td class='metric-value'>3122</td><td class='metric-value'>3176</td><td class='metric-value'>3104</td><td class='metric-value'>3164</td><td class='metric-value'>3932</td><td class='metric-value'>4413</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:account:compileDebugKotlin</td><td class='metric-value'>3115</td><td class='metric-value'>3038</td><td class='metric-value'>3050</td><td class='metric-value'>3118</td><td class='metric-value'>3796</td><td class='metric-value'>3615</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:alarm:compileDebugKotlin</td><td class='metric-value'>3146</td><td class='metric-value'>2955</td><td class='metric-value'>3052</td><td class='metric-value'>3036</td><td class='metric-value'>3878</td><td class='metric-value'>4008</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:article:kspDebugKotlin</td><td class='metric-value'>2123</td><td class='metric-value'>2286</td><td class='metric-value'>1985</td><td class='metric-value'>2315</td><td class='metric-value'>2951</td><td class='metric-value'>3565</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:event:compileDebugKotlin</td><td class='metric-value'>3217</td><td class='metric-value'>3201</td><td class='metric-value'>3290</td><td class='metric-value'>3113</td><td class='metric-value'>4179</td><td class='metric-value'>3910</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:status:kspDebugKotlin</td><td class='metric-value'>2356</td><td class='metric-value'>2288</td><td class='metric-value'>2347</td><td class='metric-value'>2346</td><td class='metric-value'>2984</td><td class='metric-value'>2768</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:article:compileDebugKotlin</td><td class='metric-value'>3232</td><td class='metric-value'>3163</td><td class='metric-value'>3252</td><td class='metric-value'>3213</td><td class='metric-value'>3593</td><td class='metric-value'>3987</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:timer:kspDebugKotlin</td><td class='metric-value'>2450</td><td class='metric-value'>2204</td><td class='metric-value'>2531</td><td class='metric-value'>2154</td><td class='metric-value'>2955</td><td class='metric-value'>2939</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:todo:kspDebugKotlin</td><td class='metric-value'>1955</td><td class='metric-value'>2056</td><td class='metric-value'>1801</td><td class='metric-value'>2050</td><td class='metric-value'>2655</td><td class='metric-value'>2714</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:status:compileDebugKotlin</td><td class='metric-value'>3494</td><td class='metric-value'>3575</td><td class='metric-value'>3446</td><td class='metric-value'>3612</td><td class='metric-value'>4224</td><td class='metric-value'>4285</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:weather:kspDebugKotlin</td><td class='metric-value'>2292</td><td class='metric-value'>2064</td><td class='metric-value'>2189</td><td class='metric-value'>2034</td><td class='metric-value'>3079</td><td class='metric-value'>2642</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:timer:compileDebugKotlin</td><td class='metric-value'>3174</td><td class='metric-value'>3165</td><td class='metric-value'>3010</td><td class='metric-value'>3259</td><td class='metric-value'>4111</td><td class='metric-value'>3582</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:todo:compileDebugKotlin</td><td class='metric-value'>3251</td><td class='metric-value'>2959</td><td class='metric-value'>3123</td><td class='metric-value'>2964</td><td class='metric-value'>4336</td><td class='metric-value'>3685</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:weather:compileDebugKotlin</td><td class='metric-value'>2963</td><td class='metric-value'>3111</td><td class='metric-value'>3009</td><td class='metric-value'>3115</td><td class='metric-value'>3899</td><td class='metric-value'>3543</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:report:kspDebugKotlin</td><td class='metric-value'>2367</td><td class='metric-value'>2430</td><td class='metric-value'>2131</td><td class='metric-value'>2408</td><td class='metric-value'>3534</td><td class='metric-value'>3274</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:session:kspDebugKotlin</td><td class='metric-value'>2240</td><td class='metric-value'>2379</td><td class='metric-value'>2015</td><td class='metric-value'>2284</td><td class='metric-value'>3447</td><td class='metric-value'>3698</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:audio:kspDebugKotlin</td><td class='metric-value'>2337</td><td class='metric-value'>2357</td><td class='metric-value'>2433</td><td class='metric-value'>2433</td><td class='metric-value'>2909</td><td class='metric-value'>3026</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:report:compileDebugKotlin</td><td class='metric-value'>3147</td><td class='metric-value'>3012</td><td class='metric-value'>3183</td><td class='metric-value'>3020</td><td class='metric-value'>3780</td><td class='metric-value'>3839</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:calendar:kspDebugKotlin</td><td class='metric-value'>2426</td><td class='metric-value'>2212</td><td class='metric-value'>2445</td><td class='metric-value'>2145</td><td class='metric-value'>2991</td><td class='metric-value'>3047</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:session:compileDebugKotlin</td><td class='metric-value'>3076</td><td class='metric-value'>3112</td><td class='metric-value'>3038</td><td class='metric-value'>2914</td><td class='metric-value'>3588</td><td class='metric-value'>4062</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:audio:compileDebugKotlin</td><td class='metric-value'>2932</td><td class='metric-value'>2805</td><td class='metric-value'>3075</td><td class='metric-value'>2950</td><td class='metric-value'>3378</td><td class='metric-value'>3157</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:calendar:compileDebugKotlin</td><td class='metric-value'>3064</td><td class='metric-value'>2967</td><td class='metric-value'>3093</td><td class='metric-value'>2987</td><td class='metric-value'>3500</td><td class='metric-value'>3707</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:analytics:kspDebugKotlin</td><td class='metric-value'>2486</td><td class='metric-value'>2210</td><td class='metric-value'>2446</td><td class='metric-value'>2144</td><td class='metric-value'>2914</td><td class='metric-value'>2670</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:cart-contact:kspDebugKotlin</td><td class='metric-value'>2969</td><td class='metric-value'>2836</td><td class='metric-value'>3095</td><td class='metric-value'>2765</td><td class='metric-value'>3320</td><td class='metric-value'>3519</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:list:kspDebugKotlin</td><td class='metric-value'>1990</td><td class='metric-value'>2164</td><td class='metric-value'>1949</td><td class='metric-value'>2349</td><td class='metric-value'>2506</td><td class='metric-value'>2585</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:checkout-contact:kspDebugKotlin</td><td class='metric-value'>2096</td><td class='metric-value'>2179</td><td class='metric-value'>2161</td><td class='metric-value'>2241</td><td class='metric-value'>2533</td><td class='metric-value'>2839</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:comment-contact:kspDebugKotlin</td><td class='metric-value'>2145</td><td class='metric-value'>2252</td><td class='metric-value'>2102</td><td class='metric-value'>2184</td><td class='metric-value'>2816</td><td class='metric-value'>2971</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:cart-contact:compileDebugKotlin</td><td class='metric-value'>2823</td><td class='metric-value'>2636</td><td class='metric-value'>2808</td><td class='metric-value'>2545</td><td class='metric-value'>3507</td><td class='metric-value'>3202</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:checkout-contact:compileDebugKotlin</td><td class='metric-value'>2837</td><td class='metric-value'>2790</td><td class='metric-value'>2840</td><td class='metric-value'>2794</td><td class='metric-value'>2966</td><td class='metric-value'>3120</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:analytics:compileDebugKotlin</td><td class='metric-value'>2956</td><td class='metric-value'>2766</td><td class='metric-value'>2879</td><td class='metric-value'>2809</td><td class='metric-value'>3591</td><td class='metric-value'>3221</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:comment-contact:compileDebugKotlin</td><td class='metric-value'>2906</td><td class='metric-value'>2894</td><td class='metric-value'>2879</td><td class='metric-value'>2960</td><td class='metric-value'>3337</td><td class='metric-value'>3309</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:list:compileDebugKotlin</td><td class='metric-value'>2699</td><td class='metric-value'>2739</td><td class='metric-value'>2673</td><td class='metric-value'>2768</td><td class='metric-value'>3335</td><td class='metric-value'>3298</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:feed-contact:kspDebugKotlin</td><td class='metric-value'>1978</td><td class='metric-value'>2118</td><td class='metric-value'>1865</td><td class='metric-value'>2159</td><td class='metric-value'>2462</td><td class='metric-value'>2683</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:log:kspDebugKotlin</td><td class='metric-value'>2806</td><td class='metric-value'>2931</td><td class='metric-value'>2651</td><td class='metric-value'>2919</td><td class='metric-value'>3599</td><td class='metric-value'>3665</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:news:kspDebugKotlin</td><td class='metric-value'>2251</td><td class='metric-value'>2034</td><td class='metric-value'>2189</td><td class='metric-value'>1968</td><td class='metric-value'>2814</td><td class='metric-value'>3249</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:login-contact:kspDebugKotlin</td><td class='metric-value'>2227</td><td class='metric-value'>2209</td><td class='metric-value'>2294</td><td class='metric-value'>2251</td><td class='metric-value'>2517</td><td class='metric-value'>3241</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:feed-contact:compileDebugKotlin</td><td class='metric-value'>2728</td><td class='metric-value'>2697</td><td class='metric-value'>2657</td><td class='metric-value'>2654</td><td class='metric-value'>3251</td><td class='metric-value'>3343</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:feature:log:compileDebugKotlin</td><td class='metric-value'>2683</td><td class='metric-value'>2718</td><td class='metric-value'>2685</td><td class='metric-value'>2562</td><td class='metric-value'>3479</td><td class='metric-value'>3405</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:news:compileDebugKotlin</td><td class='metric-value'>2966</td><td class='metric-value'>2717</td><td class='metric-value'>2969</td><td class='metric-value'>2731</td><td class='metric-value'>3902</td><td class='metric-value'>3119</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:login-contact:compileDebugKotlin</td><td class='metric-value'>2747</td><td class='metric-value'>2460</td><td class='metric-value'>2716</td><td class='metric-value'>2355</td><td class='metric-value'>3544</td><td class='metric-value'>3096</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:podcast:kspDebugKotlin</td><td class='metric-value'>2013</td><td class='metric-value'>1897</td><td class='metric-value'>2004</td><td class='metric-value'>1785</td><td class='metric-value'>2571</td><td class='metric-value'>2424</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:contact-contact:kspDebugKotlin</td><td class='metric-value'>2081</td><td class='metric-value'>2077</td><td class='metric-value'>2241</td><td class='metric-value'>2121</td><td class='metric-value'>2570</td><td class='metric-value'>2567</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:gallery:kspDebugKotlin</td><td class='metric-value'>2024</td><td class='metric-value'>2099</td><td class='metric-value'>2100</td><td class='metric-value'>2135</td><td class='metric-value'>2563</td><td class='metric-value'>2477</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:identity-contact:kspDebugKotlin</td><td class='metric-value'>2040</td><td class='metric-value'>2101</td><td class='metric-value'>2029</td><td class='metric-value'>2012</td><td class='metric-value'>2736</td><td class='metric-value'>2554</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:contact-contact:compileDebugKotlin</td><td class='metric-value'>2517</td><td class='metric-value'>2633</td><td class='metric-value'>2471</td><td class='metric-value'>2568</td><td class='metric-value'>3292</td><td class='metric-value'>3309</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:media:kspDebugKotlin</td><td class='metric-value'>1864</td><td class='metric-value'>1579</td><td class='metric-value'>1829</td><td class='metric-value'>1433</td><td class='metric-value'>2286</td><td class='metric-value'>2237</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:gallery:compileDebugKotlin</td><td class='metric-value'>2677</td><td class='metric-value'>2751</td><td class='metric-value'>2644</td><td class='metric-value'>2636</td><td class='metric-value'>3179</td><td class='metric-value'>3584</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:identity-contact:compileDebugKotlin</td><td class='metric-value'>2654</td><td class='metric-value'>2804</td><td class='metric-value'>2538</td><td class='metric-value'>2798</td><td class='metric-value'>3332</td><td class='metric-value'>3641</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:media:compileDebugKotlin</td><td class='metric-value'>2942</td><td class='metric-value'>2826</td><td class='metric-value'>2964</td><td class='metric-value'>2805</td><td class='metric-value'>3358</td><td class='metric-value'>3658</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:playlist:kspDebugKotlin</td><td class='metric-value'>2037</td><td class='metric-value'>1972</td><td class='metric-value'>1953</td><td class='metric-value'>1857</td><td class='metric-value'>2632</td><td class='metric-value'>2981</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:photo:kspDebugKotlin</td><td class='metric-value'>2693</td><td class='metric-value'>2566</td><td class='metric-value'>2744</td><td class='metric-value'>2671</td><td class='metric-value'>3103</td><td class='metric-value'>3650</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:podcast:compileDebugKotlin</td><td class='metric-value'>2750</td><td class='metric-value'>2850</td><td class='metric-value'>2684</td><td class='metric-value'>2944</td><td class='metric-value'>3344</td><td class='metric-value'>3552</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:playlist:compileDebugKotlin</td><td class='metric-value'>2942</td><td class='metric-value'>2580</td><td class='metric-value'>3007</td><td class='metric-value'>2502</td><td class='metric-value'>3565</td><td class='metric-value'>3319</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:photo:compileDebugKotlin</td><td class='metric-value'>2755</td><td class='metric-value'>2341</td><td class='metric-value'>2915</td><td class='metric-value'>2248</td><td class='metric-value'>3414</td><td class='metric-value'>2845</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:post-contact:kspDebugKotlin</td><td class='metric-value'>2550</td><td class='metric-value'>2637</td><td class='metric-value'>2527</td><td class='metric-value'>2589</td><td class='metric-value'>3268</td><td class='metric-value'>3481</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:profile-contact:kspDebugKotlin</td><td class='metric-value'>2000</td><td class='metric-value'>1885</td><td class='metric-value'>1928</td><td class='metric-value'>1859</td><td class='metric-value'>2727</td><td class='metric-value'>2898</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:post-contact:compileDebugKotlin</td><td class='metric-value'>2613</td><td class='metric-value'>2431</td><td class='metric-value'>2692</td><td class='metric-value'>2355</td><td class='metric-value'>3229</td><td class='metric-value'>2966</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:user-contact:kspDebugKotlin</td><td class='metric-value'>2173</td><td class='metric-value'>1872</td><td class='metric-value'>2050</td><td class='metric-value'>1924</td><td class='metric-value'>2774</td><td class='metric-value'>2459</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:profile-contact:compileDebugKotlin</td><td class='metric-value'>2517</td><td class='metric-value'>2504</td><td class='metric-value'>2567</td><td class='metric-value'>2589</td><td class='metric-value'>2898</td><td class='metric-value'>2903</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:push-contact:kspDebugKotlin</td><td class='metric-value'>2773</td><td class='metric-value'>2536</td><td class='metric-value'>2664</td><td class='metric-value'>2547</td><td class='metric-value'>3752</td><td class='metric-value'>3126</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:user-contact:compileDebugKotlin</td><td class='metric-value'>2585</td><td class='metric-value'>2494</td><td class='metric-value'>2560</td><td class='metric-value'>2540</td><td class='metric-value'>3474</td><td class='metric-value'>3074</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:video:kspDebugKotlin</td><td class='metric-value'>2040</td><td class='metric-value'>1868</td><td class='metric-value'>1993</td><td class='metric-value'>1790</td><td class='metric-value'>2647</td><td class='metric-value'>2656</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:push-contact:compileDebugKotlin</td><td class='metric-value'>2551</td><td class='metric-value'>2436</td><td class='metric-value'>2530</td><td class='metric-value'>2456</td><td class='metric-value'>3600</td><td class='metric-value'>2952</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:search-contact:kspDebugKotlin</td><td class='metric-value'>1847</td><td class='metric-value'>1774</td><td class='metric-value'>1824</td><td class='metric-value'>1696</td><td class='metric-value'>2613</td><td class='metric-value'>2449</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:domain:video:compileDebugKotlin</td><td class='metric-value'>2321</td><td class='metric-value'>2300</td><td class='metric-value'>2203</td><td class='metric-value'>2301</td><td class='metric-value'>3378</td><td class='metric-value'>2930</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:report-contact:kspDebugKotlin</td><td class='metric-value'>1804</td><td class='metric-value'>1511</td><td class='metric-value'>1658</td><td class='metric-value'>1545</td><td class='metric-value'>2795</td><td class='metric-value'>2242</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:alarm-contact:kspDebugKotlin</td><td class='metric-value'>2601</td><td class='metric-value'>2395</td><td class='metric-value'>2565</td><td class='metric-value'>2331</td><td class='metric-value'>3401</td><td class='metric-value'>3034</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:search-contact:compileDebugKotlin</td><td class='metric-value'>2325</td><td class='metric-value'>2209</td><td class='metric-value'>2388</td><td class='metric-value'>2298</td><td class='metric-value'>2640</td><td class='metric-value'>2577</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:event-contact:kspDebugKotlin</td><td class='metric-value'>1876</td><td class='metric-value'>1782</td><td class='metric-value'>1891</td><td class='metric-value'>1719</td><td class='metric-value'>2214</td><td class='metric-value'>2576</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:report-contact:compileDebugKotlin</td><td class='metric-value'>2322</td><td class='metric-value'>2084</td><td class='metric-value'>2363</td><td class='metric-value'>2204</td><td class='metric-value'>2811</td><td class='metric-value'>2528</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:account-contact:kspDebugKotlin</td><td class='metric-value'>2403</td><td class='metric-value'>2309</td><td class='metric-value'>2390</td><td class='metric-value'>2312</td><td class='metric-value'>3000</td><td class='metric-value'>3046</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:alarm-contact:compileDebugKotlin</td><td class='metric-value'>2277</td><td class='metric-value'>2156</td><td class='metric-value'>2260</td><td class='metric-value'>2102</td><td class='metric-value'>2689</td><td class='metric-value'>2585</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:location-contact:kspDebugKotlin</td><td class='metric-value'>1881</td><td class='metric-value'>1773</td><td class='metric-value'>1868</td><td class='metric-value'>1746</td><td class='metric-value'>2358</td><td class='metric-value'>2321</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:event-contact:compileDebugKotlin</td><td class='metric-value'>2387</td><td class='metric-value'>2275</td><td class='metric-value'>2375</td><td class='metric-value'>2225</td><td class='metric-value'>2783</td><td class='metric-value'>2799</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:account-contact:compileDebugKotlin</td><td class='metric-value'>2391</td><td class='metric-value'>2206</td><td class='metric-value'>2341</td><td class='metric-value'>2097</td><td class='metric-value'>2810</td><td class='metric-value'>2708</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:log-contact:kspDebugKotlin</td><td class='metric-value'>1500</td><td class='metric-value'>1440</td><td class='metric-value'>1425</td><td class='metric-value'>1304</td><td class='metric-value'>2052</td><td class='metric-value'>2065</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:location-contact:compileDebugKotlin</td><td class='metric-value'>2335</td><td class='metric-value'>2186</td><td class='metric-value'>2358</td><td class='metric-value'>2158</td><td class='metric-value'>2552</td><td class='metric-value'>2773</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:message-contact:kspDebugKotlin</td><td class='metric-value'>1688</td><td class='metric-value'>1460</td><td class='metric-value'>1583</td><td class='metric-value'>1467</td><td class='metric-value'>2306</td><td class='metric-value'>1733</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:log-contact:compileDebugKotlin</td><td class='metric-value'>2270</td><td class='metric-value'>2193</td><td class='metric-value'>2213</td><td class='metric-value'>2236</td><td class='metric-value'>3383</td><td class='metric-value'>2525</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:metric-contact:kspDebugKotlin</td><td class='metric-value'>1821</td><td class='metric-value'>1643</td><td class='metric-value'>1813</td><td class='metric-value'>1618</td><td class='metric-value'>2517</td><td class='metric-value'>2048</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:notification-contact:kspDebugKotlin</td><td class='metric-value'>1854</td><td class='metric-value'>1728</td><td class='metric-value'>1843</td><td class='metric-value'>1710</td><td class='metric-value'>2319</td><td class='metric-value'>2080</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:message-contact:compileDebugKotlin</td><td class='metric-value'>2377</td><td class='metric-value'>2176</td><td class='metric-value'>2345</td><td class='metric-value'>2156</td><td class='metric-value'>2878</td><td class='metric-value'>2697</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:metric-contact:compileDebugKotlin</td><td class='metric-value'>2297</td><td class='metric-value'>2059</td><td class='metric-value'>2239</td><td class='metric-value'>2113</td><td class='metric-value'>2813</td><td class='metric-value'>2325</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:session-contact:kspDebugKotlin</td><td class='metric-value'>1948</td><td class='metric-value'>1764</td><td class='metric-value'>1822</td><td class='metric-value'>1814</td><td class='metric-value'>2878</td><td class='metric-value'>2358</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:notification-contact:compileDebugKotlin</td><td class='metric-value'>2192</td><td class='metric-value'>1996</td><td class='metric-value'>2160</td><td class='metric-value'>2008</td><td class='metric-value'>2573</td><td class='metric-value'>2498</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:share-contact:kspDebugKotlin</td><td class='metric-value'>2375</td><td class='metric-value'>2325</td><td class='metric-value'>2366</td><td class='metric-value'>2268</td><td class='metric-value'>3092</td><td class='metric-value'>3368</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:session-contact:compileDebugKotlin</td><td class='metric-value'>2315</td><td class='metric-value'>2156</td><td class='metric-value'>2330</td><td class='metric-value'>2172</td><td class='metric-value'>3143</td><td class='metric-value'>2574</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:status-contact:kspDebugKotlin</td><td class='metric-value'>2229</td><td class='metric-value'>2117</td><td class='metric-value'>2239</td><td class='metric-value'>2041</td><td class='metric-value'>2737</td><td class='metric-value'>2948</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:sync-contact:kspDebugKotlin</td><td class='metric-value'>1879</td><td class='metric-value'>1768</td><td class='metric-value'>1847</td><td class='metric-value'>1768</td><td class='metric-value'>2350</td><td class='metric-value'>2360</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:share-contact:compileDebugKotlin</td><td class='metric-value'>2399</td><td class='metric-value'>2108</td><td class='metric-value'>2275</td><td class='metric-value'>2166</td><td class='metric-value'>3220</td><td class='metric-value'>2478</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:analytics-contact:kspDebugKotlin</td><td class='metric-value'>2050</td><td class='metric-value'>1772</td><td class='metric-value'>2140</td><td class='metric-value'>1772</td><td class='metric-value'>2588</td><td class='metric-value'>2179</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:sync-contact:compileDebugKotlin</td><td class='metric-value'>2568</td><td class='metric-value'>2303</td><td class='metric-value'>2480</td><td class='metric-value'>2272</td><td class='metric-value'>3245</td><td class='metric-value'>2952</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:status-contact:compileDebugKotlin</td><td class='metric-value'>2413</td><td class='metric-value'>2352</td><td class='metric-value'>2455</td><td class='metric-value'>2283</td><td class='metric-value'>3133</td><td class='metric-value'>3321</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:analytics-contact:compileDebugKotlin</td><td class='metric-value'>2321</td><td class='metric-value'>2260</td><td class='metric-value'>2298</td><td class='metric-value'>2112</td><td class='metric-value'>2716</td><td class='metric-value'>3141</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:article-contact:kspDebugKotlin</td><td class='metric-value'>1748</td><td class='metric-value'>1858</td><td class='metric-value'>1773</td><td class='metric-value'>1822</td><td class='metric-value'>2393</td><td class='metric-value'>2561</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:network-contact:kspDebugKotlin</td><td class='metric-value'>1970</td><td class='metric-value'>1752</td><td class='metric-value'>1984</td><td class='metric-value'>1722</td><td class='metric-value'>2375</td><td class='metric-value'>2181</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:task-contact:kspDebugKotlin</td><td class='metric-value'>1781</td><td class='metric-value'>1788</td><td class='metric-value'>1818</td><td class='metric-value'>1929</td><td class='metric-value'>2307</td><td class='metric-value'>2130</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:calendar-contact:kspDebugKotlin</td><td class='metric-value'>1777</td><td class='metric-value'>1700</td><td class='metric-value'>1648</td><td class='metric-value'>1731</td><td class='metric-value'>2674</td><td class='metric-value'>2231</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:article-contact:compileDebugKotlin</td><td class='metric-value'>2472</td><td class='metric-value'>2452</td><td class='metric-value'>2367</td><td class='metric-value'>2439</td><td class='metric-value'>3272</td><td class='metric-value'>3230</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:network-contact:compileDebugKotlin</td><td class='metric-value'>2426</td><td class='metric-value'>2154</td><td class='metric-value'>2376</td><td class='metric-value'>2131</td><td class='metric-value'>2994</td><td class='metric-value'>2882</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:task-contact:compileDebugKotlin</td><td class='metric-value'>2477</td><td class='metric-value'>2411</td><td class='metric-value'>2383</td><td class='metric-value'>2433</td><td class='metric-value'>3030</td><td class='metric-value'>3331</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:calendar-contact:compileDebugKotlin</td><td class='metric-value'>2261</td><td class='metric-value'>1926</td><td class='metric-value'>2118</td><td class='metric-value'>1819</td><td class='metric-value'>3120</td><td class='metric-value'>2688</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:audio-contact:kspDebugKotlin</td><td class='metric-value'>1597</td><td class='metric-value'>1408</td><td class='metric-value'>1579</td><td class='metric-value'>1442</td><td class='metric-value'>2391</td><td class='metric-value'>1824</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:group-contact:kspDebugKotlin</td><td class='metric-value'>1862</td><td class='metric-value'>1872</td><td class='metric-value'>1725</td><td class='metric-value'>1747</td><td class='metric-value'>2738</td><td class='metric-value'>2656</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:contact-login:kspDebugKotlin</td><td class='metric-value'>2331</td><td class='metric-value'>2209</td><td class='metric-value'>2305</td><td class='metric-value'>2243</td><td class='metric-value'>3190</td><td class='metric-value'>2866</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:setting-contact:kspDebugKotlin</td><td class='metric-value'>1689</td><td class='metric-value'>1649</td><td class='metric-value'>1705</td><td class='metric-value'>1612</td><td class='metric-value'>2016</td><td class='metric-value'>2335</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:audio-contact:compileDebugKotlin</td><td class='metric-value'>2363</td><td class='metric-value'>2133</td><td class='metric-value'>2309</td><td class='metric-value'>2131</td><td class='metric-value'>3284</td><td class='metric-value'>2984</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:group-contact:compileDebugKotlin</td><td class='metric-value'>2370</td><td class='metric-value'>1946</td><td class='metric-value'>2266</td><td class='metric-value'>1984</td><td class='metric-value'>3032</td><td class='metric-value'>2556</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:repository:setting-contact:compileDebugKotlin</td><td class='metric-value'>2213</td><td class='metric-value'>1961</td><td class='metric-value'>2135</td><td class='metric-value'>1983</td><td class='metric-value'>2853</td><td class='metric-value'>2443</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:contact-login:compileDebugKotlin</td><td class='metric-value'>2228</td><td class='metric-value'>2155</td><td class='metric-value'>2231</td><td class='metric-value'>2166</td><td class='metric-value'>2573</td><td class='metric-value'>2929</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:list-contact:kspDebugKotlin</td><td class='metric-value'>1607</td><td class='metric-value'>1498</td><td class='metric-value'>1539</td><td class='metric-value'>1523</td><td class='metric-value'>2571</td><td class='metric-value'>2192</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:document-contact:kspDebugKotlin</td><td class='metric-value'>1688</td><td class='metric-value'>1607</td><td class='metric-value'>1534</td><td class='metric-value'>1691</td><td class='metric-value'>2210</td><td class='metric-value'>2051</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:forecast-contact:kspDebugKotlin</td><td class='metric-value'>1700</td><td class='metric-value'>1742</td><td class='metric-value'>1705</td><td class='metric-value'>1762</td><td class='metric-value'>2169</td><td class='metric-value'>2179</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:file-contact:kspDebugKotlin</td><td class='metric-value'>1707</td><td class='metric-value'>1687</td><td class='metric-value'>1750</td><td class='metric-value'>1753</td><td class='metric-value'>1951</td><td class='metric-value'>1987</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:gallery-contact:kspDebugKotlin</td><td class='metric-value'>2022</td><td class='metric-value'>2273</td><td class='metric-value'>2006</td><td class='metric-value'>2216</td><td class='metric-value'>2525</td><td class='metric-value'>3032</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:document-contact:compileDebugKotlin</td><td class='metric-value'>2375</td><td class='metric-value'>2301</td><td class='metric-value'>2414</td><td class='metric-value'>2352</td><td class='metric-value'>2811</td><td class='metric-value'>2648</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:forecast-contact:compileDebugKotlin</td><td class='metric-value'>2329</td><td class='metric-value'>2066</td><td class='metric-value'>2330</td><td class='metric-value'>1956</td><td class='metric-value'>2696</td><td class='metric-value'>2816</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:file-contact:compileDebugKotlin</td><td class='metric-value'>2212</td><td class='metric-value'>2233</td><td class='metric-value'>2283</td><td class='metric-value'>2052</td><td class='metric-value'>2699</td><td class='metric-value'>2937</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:gallery-contact:compileDebugKotlin</td><td class='metric-value'>1991</td><td class='metric-value'>1833</td><td class='metric-value'>1932</td><td class='metric-value'>1834</td><td class='metric-value'>2560</td><td class='metric-value'>2377</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:list-contact:compileDebugKotlin</td><td class='metric-value'>2198</td><td class='metric-value'>2025</td><td class='metric-value'>2193</td><td class='metric-value'>2047</td><td class='metric-value'>2705</td><td class='metric-value'>2740</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:map-contact:kspDebugKotlin</td><td class='metric-value'>1625</td><td class='metric-value'>1566</td><td class='metric-value'>1610</td><td class='metric-value'>1545</td><td class='metric-value'>2520</td><td class='metric-value'>1987</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:media-contact:kspDebugKotlin</td><td class='metric-value'>1874</td><td class='metric-value'>1712</td><td class='metric-value'>1759</td><td class='metric-value'>1672</td><td class='metric-value'>2489</td><td class='metric-value'>2652</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:note-contact:kspDebugKotlin</td><td class='metric-value'>1647</td><td class='metric-value'>1584</td><td class='metric-value'>1744</td><td class='metric-value'>1551</td><td class='metric-value'>1935</td><td class='metric-value'>2044</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:map-contact:compileDebugKotlin</td><td class='metric-value'>2160</td><td class='metric-value'>1901</td><td class='metric-value'>2152</td><td class='metric-value'>1892</td><td class='metric-value'>2386</td><td class='metric-value'>2290</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:news-contact:kspDebugKotlin</td><td class='metric-value'>2068</td><td class='metric-value'>2034</td><td class='metric-value'>2070</td><td class='metric-value'>2043</td><td class='metric-value'>2548</td><td class='metric-value'>2688</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:media-contact:compileDebugKotlin</td><td class='metric-value'>2001</td><td class='metric-value'>2002</td><td class='metric-value'>1972</td><td class='metric-value'>2135</td><td class='metric-value'>2419</td><td class='metric-value'>2348</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:photo-contact:kspDebugKotlin</td><td class='metric-value'>1594</td><td class='metric-value'>1413</td><td class='metric-value'>1550</td><td class='metric-value'>1354</td><td class='metric-value'>1952</td><td class='metric-value'>1955</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:note-contact:compileDebugKotlin</td><td class='metric-value'>2095</td><td class='metric-value'>2088</td><td class='metric-value'>1989</td><td class='metric-value'>2085</td><td class='metric-value'>2592</td><td class='metric-value'>2664</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:news-contact:compileDebugKotlin</td><td class='metric-value'>1978</td><td class='metric-value'>2058</td><td class='metric-value'>1952</td><td class='metric-value'>2163</td><td class='metric-value'>2486</td><td class='metric-value'>2603</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:playlist-contact:kspDebugKotlin</td><td class='metric-value'>1588</td><td class='metric-value'>1496</td><td class='metric-value'>1565</td><td class='metric-value'>1458</td><td class='metric-value'>2077</td><td class='metric-value'>2087</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:photo-contact:compileDebugKotlin</td><td class='metric-value'>2075</td><td class='metric-value'>2018</td><td class='metric-value'>1980</td><td class='metric-value'>1954</td><td class='metric-value'>2691</td><td class='metric-value'>2327</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:playlist-contact:compileDebugKotlin</td><td class='metric-value'>1984</td><td class='metric-value'>1916</td><td class='metric-value'>1967</td><td class='metric-value'>1811</td><td class='metric-value'>2518</td><td class='metric-value'>2665</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:push-login:kspDebugKotlin</td><td class='metric-value'>1469</td><td class='metric-value'>1630</td><td class='metric-value'>1487</td><td class='metric-value'>1607</td><td class='metric-value'>1787</td><td class='metric-value'>2010</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:podcast-contact:kspDebugKotlin</td><td class='metric-value'>1479</td><td class='metric-value'>1519</td><td class='metric-value'>1509</td><td class='metric-value'>1581</td><td class='metric-value'>1775</td><td class='metric-value'>1776</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:timer-contact:kspDebugKotlin</td><td class='metric-value'>1484</td><td class='metric-value'>1580</td><td class='metric-value'>1450</td><td class='metric-value'>1614</td><td class='metric-value'>1814</td><td class='metric-value'>2143</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:push-login:compileDebugKotlin</td><td class='metric-value'>2023</td><td class='metric-value'>1950</td><td class='metric-value'>1958</td><td class='metric-value'>1894</td><td class='metric-value'>2513</td><td class='metric-value'>2562</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:podcast-contact:compileDebugKotlin</td><td class='metric-value'>2083</td><td class='metric-value'>2269</td><td class='metric-value'>2115</td><td class='metric-value'>2354</td><td class='metric-value'>2775</td><td class='metric-value'>2812</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:todo-contact:kspDebugKotlin</td><td class='metric-value'>2104</td><td class='metric-value'>2295</td><td class='metric-value'>2059</td><td class='metric-value'>2277</td><td class='metric-value'>2848</td><td class='metric-value'>3089</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:timer-contact:compileDebugKotlin</td><td class='metric-value'>1992</td><td class='metric-value'>1973</td><td class='metric-value'>2040</td><td class='metric-value'>1995</td><td class='metric-value'>2269</td><td class='metric-value'>2549</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:todo-contact:compileDebugKotlin</td><td class='metric-value'>1980</td><td class='metric-value'>2038</td><td class='metric-value'>1832</td><td class='metric-value'>1992</td><td class='metric-value'>2998</td><td class='metric-value'>2692</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:video-contact:kspDebugKotlin</td><td class='metric-value'>1521</td><td class='metric-value'>1604</td><td class='metric-value'>1544</td><td class='metric-value'>1655</td><td class='metric-value'>2006</td><td class='metric-value'>1937</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:weather-contact:kspDebugKotlin</td><td class='metric-value'>1465</td><td class='metric-value'>1729</td><td class='metric-value'>1498</td><td class='metric-value'>1806</td><td class='metric-value'>1671</td><td class='metric-value'>2187</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:weather-contact:compileDebugKotlin</td><td class='metric-value'>1971</td><td class='metric-value'>1961</td><td class='metric-value'>1842</td><td class='metric-value'>2039</td><td class='metric-value'>2759</td><td class='metric-value'>2286</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:model:video-contact:compileDebugKotlin</td><td class='metric-value'>2051</td><td class='metric-value'>1978</td><td class='metric-value'>1951</td><td class='metric-value'>2072</td><td class='metric-value'>2911</td><td class='metric-value'>2699</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:app:kspDebugKotlin</td><td class='metric-value'>3352</td><td class='metric-value'>2878</td><td class='metric-value'>3556</td><td class='metric-value'>2781</td><td class='metric-value'>3993</td><td class='metric-value'>3581</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:app:mergeDebugResources</td><td class='metric-value'>4515</td><td class='metric-value'>4528</td><td class='metric-value'>4585</td><td class='metric-value'>4652</td><td class='metric-value'>5189</td><td class='metric-value'>5467</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:app:compileDebugKotlin</td><td class='metric-value'>2768</td><td class='metric-value'>2925</td><td class='metric-value'>2602</td><td class='metric-value'>2902</td><td class='metric-value'>3705</td><td class='metric-value'>3620</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:app:hiltJavaCompileDebug</td><td class='metric-value'>4070</td><td class='metric-value'>3362</td><td class='metric-value'>3382</td><td class='metric-value'>3518</td><td class='metric-value'>7247</td><td class='metric-value'>3942</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:app:processDebugResources</td><td class='metric-value'>2239</td><td class='metric-value'>1897</td><td class='metric-value'>2252</td><td class='metric-value'>1834</td><td class='metric-value'>3162</td><td class='metric-value'>2229</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:app:mergeDebugJavaResource</td><td class='metric-value'>2091</td><td class='metric-value'>2026</td><td class='metric-value'>2192</td><td class='metric-value'>2013</td><td class='metric-value'>2652</td><td class='metric-value'>2370</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:app:dexBuilderDebug</td><td class='metric-value'>1275</td><td class='metric-value'>1383</td><td class='metric-value'>1310</td><td class='metric-value'>1390</td><td class='metric-value'>2010</td><td class='metric-value'>1957</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:app:mergeExtDexDebug</td><td class='metric-value'>13369</td><td class='metric-value'>13236</td><td class='metric-value'>13413</td><td class='metric-value'>13312</td><td class='metric-value'>15030</td><td class='metric-value'>15152</td><td class='unit-column'>ms</td></tr><tr><td>Task Path</td><td>:app:app:mergeLibDexDebug</td><td class='metric-value'>1074</td><td class='metric-value'>1070</td><td class='metric-value'>1055</td><td class='metric-value'>1020</td><td class='metric-value'>1476</td><td class='metric-value'>1495</td><td class='unit-column'>ms</td></tr><tr><td>All processes cpu</td><td>Max</td><td class='metric-value'>100.0</td><td class='metric-value'>100.0</td><td class='metric-value'>100.0</td><td class='metric-value'>100.0</td><td class='metric-value'>100</td><td class='metric-value'>100</td><td class='unit-column'>%</td></tr><tr><td>All processes memory</td><td>Max</td><td class='metric-value'>8.61</td><td class='metric-value'>8.31</td><td class='metric-value'>8.6</td><td class='metric-value'>8.35</td><td class='metric-value'>9.13</td><td class='metric-value'>8.8</td><td class='unit-column'>Gb</td></tr><tr><td>Build process cpu</td><td>Max</td><td class='metric-value'>95.9</td><td class='metric-value'>96.1</td><td class='metric-value'>96.0</td><td class='metric-value'>96.0</td><td class='metric-value'>97</td><td class='metric-value'>97</td><td class='unit-column'>%</td></tr><tr><td>Build processes memory</td><td>Max</td><td class='metric-value'>4.26</td><td class='metric-value'>4.18</td><td class='metric-value'>4.22</td><td class='metric-value'>4.11</td><td class='metric-value'>4.79</td><td class='metric-value'>4.74</td><td class='unit-column'>Gb</td></tr><tr><td>Build child processes cpu</td><td>Max</td><td class='metric-value'>91.7</td><td class='metric-value'>92.1</td><td class='metric-value'>91.5</td><td class='metric-value'>92.0</td><td class='metric-value'>94</td><td class='metric-value'>95</td><td class='unit-column'>%</td></tr><tr><td>Build child processes memory</td><td>Max</td><td class='metric-value'>3.29</td><td class='metric-value'>3.06</td><td class='metric-value'>3.32</td><td class='metric-value'>3.09</td><td class='metric-value'>3.51</td><td class='metric-value'>3.22</td><td class='unit-column'>Gb</td></tr></table></div>
+            </div>
+        </body>
+        </html>
