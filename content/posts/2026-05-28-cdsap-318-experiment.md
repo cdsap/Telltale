@@ -1,0 +1,80 @@
+---
+layout: post
+title: "Gradle 9.6.0-rc-1 vs 9.5.1"
+date: 2026-05-28
+report_link: /Telltale/reports/experiment_results_20260528184000.html
+summary: " 
+The analysis of the Gradle build performance data between two variants, `varianta_9.5.1` and `variantb_9.6.0-rc-1`, reveals several key insights. The overall build time has decreased from 516.886 seconds in `varianta_9.5.1` to 499.350 seconds in `variantb_9.6.0-rc-1`, marking a 3.4% improvement. Configuration time also saw a reduction, decreasing by about 5.1%. The most time-consuming tasks across both variants include `:app:app:mergeExtDexDebug`, `:app:app:hiltJavaCompileDebug`, and `:app:app:compileDebugKotlin`, with `variantb_9.6.0-rc-1` generally showing better performance in these areas.
+
+CPU and memory usage metrics indicate that both variants are pushing the limits with 100% CPU usage observed at peak times. Memory usage peaked at 10.34 GB in `variantb_9.6.0-rc-1` compared to 10.09 GB in `varianta_9.5.1`. The garbage collection logs show a slight decrease in total collections from 197 in `varianta_9.5.1` to 196 in `variantb_9.6.0-rc-1`."
+tags: ["dependencies cache"]
+experiment_snapshot:
+  metric: "Overall build time"
+  unit: "seconds"
+  variant_a:
+    label: "Gradle 9.5.1"
+    mean: 516.886
+    p50: 513.343
+    p90: 545.133
+  variant_b:
+    label: "Gradle 9.6.0-rc-1"
+    mean: 499.350
+    p50: 505.648
+    p90: 532.651
+  config_metric: "Configuration time"
+  config_unit: "seconds"
+  config_variant_a:
+    mean: 57.099
+    p50: 56.822
+    p90: 61.338
+  config_variant_b:
+    mean: 54.210
+    p50: 53.753
+    p90: 60.276
+---
+[Report 📊](../../reports/experiment_results_20260528184000.html)
+## Summary
+The analysis of the Gradle build performance data between two variants, `varianta_9.5.1` and `variantb_9.6.0-rc-1`, reveals several key insights. The overall build time has decreased from 516.886 seconds in `varianta_9.5.1` to 499.350 seconds in `variantb_9.6.0-rc-1`, marking a 3.4% improvement. Configuration time also saw a reduction, decreasing by about 5.1%. The most time-consuming tasks across both variants include `:app:app:mergeExtDexDebug`, `:app:app:hiltJavaCompileDebug`, and `:app:app:compileDebugKotlin`, with `variantb_9.6.0-rc-1` generally showing better performance in these areas.
+
+CPU and memory usage metrics indicate that both variants are pushing the limits with 100% CPU usage observed at peak times. Memory usage peaked at 10.34 GB in `variantb_9.6.0-rc-1` compared to 10.09 GB in `varianta_9.5.1`. The garbage collection logs show a slight decrease in total collections from 197 in `varianta_9.5.1` to 196 in `variantb_9.6.0-rc-1`.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - `varianta_9.5.1`: Mean = 516.886s, P50 = 513.343s, P90 = 545.133s
+  - `variantb_9.6.0-rc-1`: Mean = 499.350s, P50 = 505.648s, P90 = 532.651s
+  - Percentage decrease from `varianta_9.5.1` to `variantb_9.6.0-rc-1`: Mean = 3.4%, P50 = 1.5%, P90 = 2.3%
+
+- **Configuration Time:**
+  - `varianta_9.5.1`: Mean = 57.099s, P50 = 56.822s, P90 = 61.338s
+  - `variantb_9.6.0-rc-1`: Mean = 54.210s, P50 = 53.753s, P90 = 60.276s
+  - Percentage decrease: Mean = 5.1%, P50 = 5.4%, P90 = 1.7%
+
+### 2. Task Type Differences
+- Top time-consuming tasks:
+  - `"mergeExtDexDebug"`: Mean time decreased from 18.758s in `varianta_9.5.1` to 18.086s in `variantb_9.6.0-rc-1`.
+  - `"hiltJavaCompileDebug"`: Mean time decreased from 7.183s to 6.754s.
+  - `"compileDebugKotlin"`: Mean time decreased from 4.381s to 3.854s.
+
+### 3. Statistical Patterns
+- Tasks with notable timing variations:
+  - `"mergeExtDexDebug"` and `"compileDebugKotlin"` showed improvements in all percentile metrics.
+  - `"hiltJavaCompileDebug"` showed a consistent decrease across mean, P50, and P90 times.
+
+### 4. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - Both variants hit the maximum of 100% CPU usage.
+- **Memory Usage:**
+  - `varianta_9.5.1`: Max = 10.09 GB
+  - `variantb_9.6.0-rc-1`: Max = 10.34 GB
+  - Increase in peak memory usage by `variantb_9.6.0-rc-1` by approximately 2.5%.
+
+### 5. Garbage Collection Analysis
+- Total GC collections slightly decreased from 197 in `varianta_9.5.1` to 196 in `variantb_9.6.0-rc-1`.
+
+### 6. Kotlin Build Reports Analysis
+- Improvements observed in several compiler metrics such as `"Compiler code analysis"` and `"Compiler translation to IR"`.
+- Incremental compilation times improved, with a decrease from 1520.76ms to 1470.20ms in mean times.
+
+This detailed analysis underscores the performance enhancements in the newer `variantb_9.6.0-rc-1`, particularly in build and configuration times, and compiler efficiency, despite higher peak memory usage.
