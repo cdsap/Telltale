@@ -1,0 +1,87 @@
+---
+layout: post
+title: "JDK 26 with UseCompactObjectHeaders"
+date: 2026-06-01
+report_link: /Telltale/reports/experiment_results_20260601194400.html
+summary: " 
+The performance comparison between `varianta_main` and `variantb_UseCompactObjectHeaders` reveals minor differences in build and configuration times, with `variantb_UseCompactObjectHeaders` showing a slight improvement in build time by approximately 0.28% (around 1.8 seconds faster). The configuration time is nearly identical between the two variants. Notably, the top three most time-consuming tasks across both variants include `:app:app:mergeExtDexDebug`, `:app:app:hiltJavaCompileDebug`, and `:app:app:compileDebugKotlin`, with `:app:app:mergeExtDexDebug` being the longest at over 18 seconds for both variants. CPU and memory usage are almost identical, with maximum values reaching up to 100% CPU and around 13.87 GB of memory for all processes. The total garbage collection counts are slightly lower in `variantb_UseCompactObjectHeaders`, suggesting marginally better memory management."
+tags: ["dependencies cache"]
+experiment_snapshot:
+  metric: "Overall build time"
+  unit: "seconds"
+  variant_a:
+    label: "main"
+    mean: 635.716
+    p50: 637.299
+    p90: 659.892
+  variant_b:
+    label: "UseCompactObjectHeaders"
+    mean: 633.923
+    p50: 632.473
+    p90: 677.351
+  config_metric: "Configuration time"
+  config_unit: "seconds"
+  config_variant_a:
+    mean: 59.524
+    p50: 58.413
+    p90: 68.193
+  config_variant_b:
+    mean: 59.764
+    p50: 58.185
+    p90: 68.326
+---
+[Report 📊](../../reports/experiment_results_20260601194400.html)
+## Summary
+The performance comparison between `varianta_main` and `variantb_UseCompactObjectHeaders` reveals minor differences in build and configuration times, with `variantb_UseCompactObjectHeaders` showing a slight improvement in build time by approximately 0.28% (around 1.8 seconds faster). The configuration time is nearly identical between the two variants. Notably, the top three most time-consuming tasks across both variants include `:app:app:mergeExtDexDebug`, `:app:app:hiltJavaCompileDebug`, and `:app:app:compileDebugKotlin`, with `:app:app:mergeExtDexDebug` being the longest at over 18 seconds for both variants. CPU and memory usage are almost identical, with maximum values reaching up to 100% CPU and around 13.87 GB of memory for all processes. The total garbage collection counts are slightly lower in `variantb_UseCompactObjectHeaders`, suggesting marginally better memory management.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - `varianta_main`: Mean = 635.716s, P50 = 637.299s, P90 = 659.892s
+  - `variantb_UseCompactObjectHeaders`: Mean = 633.923s, P50 = 632.473s, P90 = 677.351s
+  - **Percentage Difference:** Mean = -0.28%, P50 = -0.76%, P90 = +2.64%
+
+- **Configuration Time:**
+  - `varianta_main`: Mean = 59.524s, P50 = 58.413s, P90 = 68.193s
+  - `variantb_UseCompactObjectHeaders`: Mean = 59.764s, P50 = 58.185s, P90 = 68.326s
+  - **Percentage Difference:** Mean = +0.40%, P50 = -0.39%, P90 = +0.19%
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  - `:app:app:mergeExtDexDebug`: Mean = 18.477s vs. 18.769s (variantb is slower by 1.58%)
+  - `:app:app:hiltJavaCompileDebug`: Mean = 6.531s vs. 5.947s (variantb is faster by 8.94%)
+  - `:app:app:compileDebugKotlin`: Mean = 3.073s vs. 3.160s (variantb is slower by 2.83%)
+
+### 3. Statistical Patterns
+- Tasks with notable timing variations include `:app:app:hiltJavaCompileDebug` and `:app:app:mergeExtDexDebug`, indicating differences in compilation and dex merging performance between variants.
+
+### 4. Process State Analysis
+- **Kotlin Process State:**
+  - Garbage collection time is slightly higher in `variantb_UseCompactObjectHeaders` (0.47s vs. 0.46s for `varianta_main`).
+
+- **Gradle Process State:**
+  - Garbage collection times are identical at 0.27s for both variants.
+
+### 5. CPU & Memory Usage Analysis
+- **All Processes:**
+  - CPU: Max = 100% for both variants.
+  - Memory: Max = 13.87 GB for `varianta_main` vs. 13.86 GB for `variantb_UseCompactObjectHeaders`.
+
+- **Build Process:**
+  - CPU: Max = 96% for `varianta_main` vs. 96.225% for `variantb_UseCompactObjectHeaders`.
+  - Memory: Max = 9.69 GB for `varianta_main` vs. 9.62 GB for `variantb_UseCompactObjectHeaders`.
+
+- **Build Child Processes:**
+  - CPU: Max = 95.025% for `varianta_main` vs. 95.05% for `variantb_UseCompactObjectHeaders`.
+  - Memory: Max = 3.81 GB for `varianta_main` vs. 3.79 GB for `variantb_UseCompactObjectHeaders`.
+
+### 6. Garbage Collection Analysis
+- Total GC collections are slightly lower in `variantb_UseCompactObjectHeaders` (117 vs. 119 for `varianta_main`), suggesting better memory management efficiency.
+
+### 7. Kotlin Build Reports Analysis
+- **Compiler Performance Metrics:**
+  - `varianta_main` shows marginally faster IR translation and code generation times compared to `variantb_UseCompactObjectHeaders`.
+  - Incremental compilation times are nearly identical, with `variantb_UseCompactObjectHeaders` being slightly faster.
+
+This detailed analysis provides insights into the subtle performance variations between the two build variants, highlighting areas where `variantb_UseCompactObjectHeaders` offers improvements in build time and memory management, albeit with minor trade-offs in certain task executions.
