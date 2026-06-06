@@ -1,0 +1,3 @@
+ 
+The performance comparison between `varianta_baseline` and `variantb_kotlin-2.4.0` reveals notable differences in build times and task execution. The overall build time for `variantb_kotlin-2.4.0` is slightly longer, with a mean increase of about 8.4 seconds (3.1%). Configuration times also show a slight increase in the Kotlin 2.4.0 variant by approximately 1.3 seconds (3.4%). Among the tasks, `com.android.build.gradle.internal.tasks.DexMergingTask` and `:core:checkout:compileDebugKotlin` are the most time-consuming, with noticeable increases in the Kotlin variant. CPU and memory usage across all processes are relatively stable with minor fluctuations, indicating efficient resource management in both variants.
+

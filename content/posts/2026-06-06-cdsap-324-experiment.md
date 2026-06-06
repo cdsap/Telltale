@@ -1,0 +1,70 @@
+---
+layout: post
+title: "Kotlin 2.4.0 vs 2.3.21"
+date: 2026-06-06
+report_link: /Telltale/reports/experiment_results_20260606160450.html
+summary: " 
+The performance comparison between `varianta_baseline` and `variantb_kotlin-2.4.0` reveals notable differences in build times and task execution. The overall build time for `variantb_kotlin-2.4.0` is slightly longer, with a mean increase of about 8.4 seconds (3.1%). Configuration times also show a slight increase in the Kotlin 2.4.0 variant by approximately 1.3 seconds (3.4%). Among the tasks, `com.android.build.gradle.internal.tasks.DexMergingTask` and `:core:checkout:compileDebugKotlin` are the most time-consuming, with noticeable increases in the Kotlin variant. CPU and memory usage across all processes are relatively stable with minor fluctuations, indicating efficient resource management in both variants."
+tags: ["dependencies cache"]
+experiment_snapshot:
+  metric: "Overall build time"
+  unit: "seconds"
+  variant_a:
+    label: "2.3.21"
+    mean: 267.315
+    p50: 270.723
+    p90: 286.318
+  variant_b:
+    label: "2.4.0"
+    mean: 275.688
+    p50: 274.733
+    p90: 286.973
+  config_metric: "Configuration time"
+  config_unit: "seconds"
+  config_variant_a:
+    mean: 37.910
+    p50: 37.852
+    p90: 42.659
+  config_variant_b:
+    mean: 39.239
+    p50: 38.249
+    p90: 40.710
+---
+[Report 📊](../../reports/experiment_results_20260606160450.html)
+## Summary
+The performance comparison between `varianta_baseline` and `variantb_kotlin-2.4.0` reveals notable differences in build times and task execution. The overall build time for `variantb_kotlin-2.4.0` is slightly longer, with a mean increase of about 8.4 seconds (3.1%). Configuration times also show a slight increase in the Kotlin 2.4.0 variant by approximately 1.3 seconds (3.4%). Among the tasks, `com.android.build.gradle.internal.tasks.DexMergingTask` and `:core:checkout:compileDebugKotlin` are the most time-consuming, with noticeable increases in the Kotlin variant. CPU and memory usage across all processes are relatively stable with minor fluctuations, indicating efficient resource management in both variants.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - Mean: 267.3s for `varianta_baseline` vs. 275.7s for `variantb_kotlin-2.4.0` (increase of 8.4s or 3.1%)
+  - P50: 270.7s for `varianta_baseline` vs. 274.7s for `variantb_kotlin-2.4.0` (increase of 4s)
+  - P90: 286.3s for `varianta_baseline` vs. 287.0s for `variantb_kotlin-2.4.0` (increase of 0.7s)
+
+- **Configuration Time:**
+  - Mean: 37.9s for `varianta_baseline` vs. 39.2s for `variantb_kotlin-2.4.0` (increase of 1.3s or 3.4%)
+  - P50: 37.9s for `varianta_baseline` vs. 38.2s for `variantb_kotlin-2.4.0` (increase of 0.4s)
+  - P90: 42.7s for `varianta_baseline` vs. 40.7s for `variantb_kotlin-2.4.0` (decrease of 2s)
+
+### 2. Task Type Differences
+- **Top Time-Consuming Tasks:**
+  - `"com.android.build.gradle.internal.tasks.DexMergingTask"`: Mean time increased from 4919ms to 5167ms in `variantb_kotlin-2.4.0`.
+  - `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"`: Mean time increased from 3445ms to 3563ms in `variantb_kotlin-2.4.0`.
+  - `"com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask"`: Mean time decreased from 2126ms to 2064ms in `variantb_kotlin-2.4.0`.
+
+### 3. Statistical Patterns
+- Tasks with notable timing variations include `"com.android.build.gradle.internal.tasks.DexMergingTask"` and `"org.jetbrains.kotlin.gradle.tasks.KotlinCompile"`, both showing more than 10% increase in execution time in `variantb_kotlin-2.4.0`.
+
+### 5. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - All processes: Max CPU usage is capped at 100% for both variants.
+  - Build process: Slight decrease in max CPU usage from 95.77% in `varianta_baseline` to 95.57% in `variantb_kotlin-2.4.0`.
+  - Build child processes: Stable at around 93% for both variants.
+
+- **Memory Usage:**
+  - All processes: Max memory usage slightly decreased from 8.94GB in `varianta_baseline` to 8.81GB in `variantb_kotlin-2.4.0`.
+  - Build process: Decrease from 4.17GB to 4.08GB in `variantb_kotlin-2.4.0`.
+  - Build child processes: Decrease from 3.74GB to 3.68GB in `variantb_kotlin-2.4.0`.
+
+This analysis indicates that while the Kotlin 2.4.0 variant introduces slight increases in build and configuration times, it maintains comparable resource efficiency, suggesting a balanced trade-off between performance and new features or improvements in the Kotlin update.
