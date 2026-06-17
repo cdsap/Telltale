@@ -72,7 +72,7 @@ runs:
         candidate: gradleprofiler
         version: 0.23.0
 
-    - uses: cdsap/build-process-watcher@v0.6.1
+    - uses: cdsap/build-process-watcher@v0.6.2
       with:
         remote_monitoring: 'true'          
         export_to_bigquery: 'true'
