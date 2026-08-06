@@ -1,0 +1,72 @@
+---
+layout: post
+title: "Gradle 9.7.0 vs 9.6.1"
+date: 2026-08-06
+report_link: /Telltale/reports/experiment_results_20260806225410.html
+summary: " 
+The performance comparison between `varianta_baseline` and `variantb_gradle-9.7.0` reveals several key insights. The overall build time for `variantb_gradle-9.7.0` is slightly shorter than `varianta_baseline`, with a mean reduction of 5.609 seconds (1.94% faster). However, the configuration time in `variantb_gradle-9.7.0` has increased, particularly at the P90 level, showing a longer duration by 4.21 seconds (6.24% slower). Notably, task execution times such as `:app:app:mergeExtDexDebug` and `:app:app:hiltJavaCompileDebug` have seen improvements in `variantb_gradle-9.7.0`, suggesting more efficient handling of resource-intensive tasks. CPU and memory usage across all processes remain high and closely matched between the variants, indicating consistent resource demands."
+tags: ["dependencies cache"]
+experiment_snapshot:
+  metric: "Overall build time"
+  unit: "seconds"
+  variant_a:
+    label: "9.6.1"
+    mean: 289.794
+    p50: 292.651
+    p90: 304.208
+  variant_b:
+    label: "9.7.0"
+    mean: 284.185
+    p50: 291.630
+    p90: 312.299
+  config_metric: "Configuration time"
+  config_unit: "seconds"
+  config_variant_a:
+    mean: 57.596
+    p50: 60.209
+    p90: 67.478
+  config_variant_b:
+    mean: 57.393
+    p50: 61.654
+    p90: 71.688
+---
+[Report 📊](../../reports/experiment_results_20260806225410.html)
+## Summary
+The performance comparison between `varianta_baseline` and `variantb_gradle-9.7.0` reveals several key insights. The overall build time for `variantb_gradle-9.7.0` is slightly shorter than `varianta_baseline`, with a mean reduction of 5.609 seconds (1.94% faster). However, the configuration time in `variantb_gradle-9.7.0` has increased, particularly at the P90 level, showing a longer duration by 4.21 seconds (6.24% slower). Notably, task execution times such as `:app:app:mergeExtDexDebug` and `:app:app:hiltJavaCompileDebug` have seen improvements in `variantb_gradle-9.7.0`, suggesting more efficient handling of resource-intensive tasks. CPU and memory usage across all processes remain high and closely matched between the variants, indicating consistent resource demands.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - Mean: `varianta_baseline` 289.794s, `variantb_gradle-9.7.0` 284.185s (1.94% faster).
+  - P50: `varianta_baseline` 292.651s, `variantb_gradle-9.7.0` 291.630s (0.35% faster).
+  - P90: `varianta_baseline` 304.208s, `variantb_gradle-9.7.0` 312.299s (2.66% slower).
+
+- **Configuration Time:**
+  - Mean: `varianta_baseline` 57.596s, `variantb_gradle-9.7.0` 57.393s (0.35% faster).
+  - P50: `varianta_baseline` 60.209s, `variantb_gradle-9.7.0` 61.654s (2.40% slower).
+  - P90: `varianta_baseline` 67.478s, `variantb_gradle-9.7.0` 71.688s (6.24% slower).
+
+### 2. Task Type Differences
+- **Top Time-Consuming Tasks:**
+  - `"KotlinCompile"`: Mean time reduced from 3.329s to 3.241s.
+  - `"DexMergingTask"`: Mean time reduced significantly from 6.848s to 6.551s.
+  - `"GlobalSyntheticsGeneratorTask"`: Mean time increased slightly from 3.223s to 3.281s.
+
+### 3. Statistical Patterns
+- Notable timing variations:
+  - `"DexMergingTask"` shows a notable improvement in execution time in `variantb_gradle-9.7.0`.
+  - `"GlobalSyntheticsGeneratorTask"` and `"KotlinCompile"` show minor timing variations, with the former task experiencing a slight increase in execution time.
+
+### 4. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - All processes: Both variants reached 100% CPU usage.
+  - Build process: Slight increase in `variantb_gradle-9.7.0` with a maximum of 95.533% compared to 95.4% in `varianta_baseline`.
+  - Build child processes: Nearly identical CPU usage with a maximum of 93.6% in `varianta_baseline` and 93.567% in `variantb_gradle-9.7.0`.
+
+- **Memory Usage:**
+  - All processes: Maximum memory usage was slightly lower in `variantb_gradle-9.7.0` with 8.54 GB compared to 8.61 GB in `varianta_baseline`.
+  - Build process: Maximum memory usage decreased from 4.12 GB in `varianta_baseline` to 4.06 GB in `variantb_gradle-9.7.0`.
+  - Build child processes: Memory usage remained stable with a maximum of 3.38 GB in `varianta_baseline` and 3.37 GB in `variantb_gradle-9.7.0`.
+
+This analysis underscores the nuanced performance improvements and regressions between the two variants, with `variantb_gradle-9.7.0` showing a general trend of efficiency in task execution despite a slight increase in configuration times.
