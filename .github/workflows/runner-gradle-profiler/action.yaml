@@ -42,6 +42,10 @@ inputs:
   extra-args:
     description: 'Extra arguments to pass to the Gradle command'
     required: true
+  configuration-cache:
+    description: 'Gradle configuration cache behavior: off, on, or warn.'
+    required: false
+    default: 'off'
   cache-url:
     description: 'URL for the cache node, if applicable'
     required: true
@@ -90,6 +94,28 @@ runs:
           EXTRA_ARG="${{ inputs.extra-args }}"
         fi
 
+        case "${{ inputs.configuration-cache }}" in
+          "off"|"")
+            CONFIGURATION_CACHE_ARGS=()
+            ;;
+          "on")
+            CONFIGURATION_CACHE_ARGS=("--configuration-cache")
+            ;;
+          "warn")
+            CONFIGURATION_CACHE_ARGS=("--configuration-cache" "--configuration-cache-problems=warn")
+            ;;
+          *)
+            echo "Unknown configuration cache option: ${{ inputs.configuration-cache }}"
+            exit 1
+            ;;
+        esac
+
+        GRADLE_ARGS="[\"$EXTRA_ARG\""
+        for ARG in "${CONFIGURATION_CACHE_ARGS[@]}"; do
+          GRADLE_ARGS="$GRADLE_ARGS, \"$ARG\""
+        done
+        GRADLE_ARGS="$GRADLE_ARGS, \"-Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]"
+
         # Gradle Profiler: cleanup-tasks run between iterations; [] = incremental re-runs
         if [ "${{ inputs.clean-between-iterations }}" = "true" ]; then
           CLEANUP_TASKS='["clean"]'
@@ -103,7 +129,7 @@ runs:
             title = \"assemble\"
             tasks = [\"${{ inputs.task }}\"]
             cleanup-tasks = $CLEANUP_TASKS
-            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
+            gradle-args = $GRADLE_ARGS
           }" > scenario
         else
           echo "assemble {
@@ -111,7 +137,7 @@ runs:
             tasks = [\"${{ inputs.task }}\"]
             cleanup-tasks = $CLEANUP_TASKS
             apply-abi-change-to = [${{ inputs.class }}]
-            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
+            gradle-args = $GRADLE_ARGS
           }" > scenario
         fi 
 

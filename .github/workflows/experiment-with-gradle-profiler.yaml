@@ -31,6 +31,15 @@ on:
         required: false
         type: boolean
         default: true
+      configuration_cache:
+        description: "Gradle configuration cache behavior"
+        type: choice
+        required: false
+        default: 'off'
+        options:
+          - 'off'
+          - 'on'
+          - 'warn'
       os_args:
         description: "Operating system configurations for variants"
         type: string
@@ -91,6 +100,7 @@ jobs:
           experiment-id: "profiler-${{ github.repository_owner }}-${{ github.run_number }}"
           variant: ${{ matrix.config.variant }}
           class: ${{ github.event.inputs.class }}
+          configuration-cache: "${{ github.event.inputs.configuration_cache }}"
           cache-url: ${{ secrets.CI_URL_CACHE_NODE }}
           warmups: 1
           clean-between-iterations: ${{ github.event.inputs.clean_between_iterations }}

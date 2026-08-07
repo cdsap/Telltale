@@ -31,6 +31,13 @@ inputs:
   mode:
     description: 'Mode of execution relative to caching.'
     required: true
+  configuration-cache:
+    description: 'Gradle configuration cache behavior: off, on, or warn.'
+    required: false
+    default: 'off'
+  configuration-cache-key:
+    description: 'Cache key used to save the project configuration cache.'
+    required: false
   extra-args:
     description: 'Extra arguments to pass to the Gradle command.'
     required: true
@@ -130,10 +137,30 @@ runs:
         remote_monitoring: 'true'          
         export_to_bigquery: 'true'
 
+    - name: Set Configuration Cache Arguments
+      id: configuration-cache-args
+      run: |
+        case "${{ inputs.configuration-cache }}" in
+          "off"|"")
+            echo "args=" >> "$GITHUB_OUTPUT"
+            ;;
+          "on")
+            echo "args=--configuration-cache" >> "$GITHUB_OUTPUT"
+            ;;
+          "warn")
+            echo "args=--configuration-cache --configuration-cache-problems=warn" >> "$GITHUB_OUTPUT"
+            ;;
+          *)
+            echo "Unknown configuration cache option: ${{ inputs.configuration-cache }}"
+            exit 1
+            ;;
+        esac
+      shell: bash
+
     - name: Execute Gradle Build
       id: gradle-build
       run: |
-        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} \
+        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} ${{ steps.configuration-cache-args.outputs.args }} \
           -Dscan.tag.seed_${{ inputs.variant-prefix }}${{ inputs.variant }} \
           -Dscan.tag.seed-"${{ inputs.mode }}" \
           -Dscan.tag.seed \
@@ -142,6 +169,13 @@ runs:
       env:
         DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
+
+    - name: Save Configuration Cache
+      if: inputs.configuration-cache != 'off' && inputs.configuration-cache-key != ''
+      uses: actions/cache/save@v4
+      with:
+        path: .gradle/configuration-cache
+        key: ${{ inputs.configuration-cache-key }}
 
     - name: Finalize Step
       uses: actions/checkout@v4

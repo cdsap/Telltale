@@ -61,7 +61,16 @@ This workflow executes Gradle tasks across two specified variants (branches) wit
       - `remote task cache + dependencies cache`: Combines remote task caching with dependency caching.
       - `remote task cache - transforms cache`: Caches task outputs remotely, excluding transforms cache.
       - `remote task cache + dependencies cache - transforms cache`: Combines remote task, dependency caching, and excludes transforms.
-      
+
+  - `configuration_cache`:
+    - **Description**: Controls Gradle configuration cache usage independently of the selected task/dependency cache mode. In the standard experiment workflow, the seed job saves `.gradle/configuration-cache` with a variant-specific key and execution jobs restore that entry before running. In the Gradle Profiler workflow, the option is added to the generated scenario so profiler warmups and iterations can reuse the configuration cache in the same checkout.
+    - **Type**: `choice`
+    - **Default**: `off`
+    - **Options**:
+      - `off`: Do not pass configuration-cache arguments.
+      - `on`: Pass `--configuration-cache`.
+      - `warn`: Pass `--configuration-cache --configuration-cache-problems=warn`.
+
   - `os_args`:
     - **Description**: Defines the operating system settings for each variant, specifying which OS image to use during workflow execution. This is useful for testing builds across different environments.
     - **Type**: `string`
@@ -127,6 +136,12 @@ Instead of using agents based on experiment iterations, the Gradle Profiler expe
     - **Description**: Number of iterations for the experiment.
     - **Required**: `false`
     - **Default**: `5`
+  - `configuration_cache`:
+    - **Description**: Controls Gradle configuration cache usage for the generated Gradle Profiler scenario. Use `on` for strict configuration-cache execution, or `warn` while evaluating projects with remaining incompatibilities.
+    - **Type**: `choice`
+    - **Required**: `false`
+    - **Default**: `off`
+    - **Options**: `off`, `on`, `warn`
   - `os_args`:
     - **Description**: Operating system configurations for variants.
     - **Type**: `string`

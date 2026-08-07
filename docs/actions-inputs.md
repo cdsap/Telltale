@@ -40,6 +40,15 @@ This section details the inputs for the primary dispatchable workflows: `experim
   - Description: A JSON string to configure report generation. See the "Extra Report Arguments (`extra_report_args`)" section under "JSON Format Examples" for details on the keys.
   - `experiment.yaml`: Required: `true`. Default: `"{deploy_results:'false',experiment_title:'', open_ai_request:'true', report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',gc_report:'false',only_cacheable_outcome:'false',threshold_task_duration:'1000'}"`.
   - `experiment-with-gradle-profiler.yaml`: Required: `false`. Default: `"{deploy_results:'false',experiment_title:'',open_ai_request:'true',report_enabled:'true',tasktype_report:'true',taskpath_report:'true',kotlin_build_report:'false',process_report:'false',resource_usage_report:'true',gc_report:'false',only_cacheable_outcome:'false',threshold_task_duration:'1000'}"`.
+- **`configuration_cache`**:
+  - Description: Controls Gradle configuration cache usage independently of the selected task/dependency cache mode.
+  - `experiment.yaml`: Required: `true`. Default: `'off'`.
+  - `experiment-with-gradle-profiler.yaml`: Required: `false`. Default: `'off'`.
+  - Options:
+    - `'off'`: Do not pass configuration-cache arguments.
+    - `'on'`: Pass `--configuration-cache`.
+    - `'warn'`: Pass `--configuration-cache --configuration-cache-problems=warn`.
+  - Reuse behavior: `experiment.yaml` saves `.gradle/configuration-cache` from each seed job and restores the matching variant entry in execution jobs. `experiment-with-gradle-profiler.yaml` adds the selected arguments to the generated scenario so profiler warmups and iterations can reuse configuration in the same checkout.
 
 **Inputs Specific to `experiment.yaml`:**
 
@@ -64,6 +73,7 @@ This section details the inputs for the primary dispatchable workflows: `experim
     - `'remote task cache + dependencies cache'`
     - `'remote task cache - transforms cache'`
     - `'remote task cache + dependencies cache - transforms cache'`
+    - `'dependencies cache - javaCompile cache'`
 
 **Inputs Specific to `experiment-with-gradle-profiler.yaml`:**
 
@@ -169,6 +179,21 @@ This section describes the inputs for the reusable `report/action.yaml` workflow
   - Required: `true` (conditionally, if deploying).
   - Default: `""`.
 
+## Reusable Workflow: Seed Runner Action (`.github/workflows/runner-seed/action.yaml`)
+
+This section lists the seed-action inputs that differ from or extend the standard runner. Other runner inputs such as `task`, `variant`, `repository`, `jdk_version`, `jdk_vendor`, `mode`, `extra-args`, and `cache-url` follow the same meaning as `runner/action.yaml`.
+
+- **`configuration-cache`**:
+  - Description: Gradle configuration cache behavior for the seed run (`off`, `on`, or `warn`).
+  - Required: `false`.
+  - Default: `off`.
+- **`configuration-cache-key`**:
+  - Description: Variant-specific key used to save `.gradle/configuration-cache` for execution jobs.
+  - Required: `false`.
+- **`cache-exclude-script`**:
+  - Description: Optional script content for excluding specific Gradle User Home cache entries.
+  - Required: `false`.
+
 ## Reusable Workflow: Runner Action (`.github/workflows/runner/action.yaml`)
 
 This section details inputs for the reusable `runner/action.yaml` workflow, which executes a single Gradle build iteration for the standard experiment.
@@ -205,6 +230,13 @@ This section details inputs for the reusable `runner/action.yaml` workflow, whic
 - **`mode`**:
   - Description: Specifies the caching mode for this run (e.g., `no caching`, `local task cache`).
   - Required: `true`.
+- **`configuration-cache`**:
+  - Description: Gradle configuration cache behavior for the run (`off`, `on`, or `warn`).
+  - Required: `false`.
+  - Default: `off`.
+- **`configuration-cache-key`**:
+  - Description: Variant-specific key used to restore the configuration cache saved by the seed job.
+  - Required: `false`.
 - **`extra-args`**:
   - Description: Any additional arguments to pass to the Gradle command.
   - Required: `true`.
@@ -260,6 +292,10 @@ This section describes inputs for the reusable `runner-gradle-profiler/action.ya
 - **`extra-args`**:
   - Description: Any additional arguments to pass to the Gradle command.
   - Required: `true`.
+- **`configuration-cache`**:
+  - Description: Gradle configuration cache behavior for the generated scenario (`off`, `on`, or `warn`).
+  - Required: `false`.
+  - Default: `off`.
 - **`cache-url`**:
   - Description: URL of the remote build cache node, if used.
   - Required: `true`.
