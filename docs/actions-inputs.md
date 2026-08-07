@@ -49,6 +49,10 @@ This section details the inputs for the primary dispatchable workflows: `experim
     - `'on'`: Pass `--configuration-cache`.
     - `'warn'`: Pass `--configuration-cache --configuration-cache-problems=warn`.
   - Reuse behavior: `experiment.yaml` saves `.gradle/configuration-cache` from each seed job and restores the matching variant entry in execution jobs. `experiment-with-gradle-profiler.yaml` adds the selected arguments to the generated scenario so profiler warmups and iterations can reuse configuration in the same checkout.
+- **`configuration_cache_included_builds`**:
+  - Description: Comma-separated included build paths whose build output directories must be saved and restored with the configuration cache.
+  - `experiment.yaml`: Required: `false`. Default: `"buildSrc,build-logic"`.
+  - Reuse behavior: Each listed path contributes its `build` directory, for example `build-logic` adds `build-logic/build`. This preserves included-build classpath outputs referenced by restored configuration-cache entries.
 
 **Inputs Specific to `experiment.yaml`:**
 
@@ -190,6 +194,10 @@ This section lists the seed-action inputs that differ from or extend the standar
 - **`configuration-cache-key`**:
   - Description: Variant-specific key used to save `.gradle/configuration-cache` for execution jobs.
   - Required: `false`.
+- **`configuration-cache-included-builds`**:
+  - Description: Comma-separated included build paths whose `build` directories are saved with the configuration cache.
+  - Required: `false`.
+  - Default: `buildSrc,build-logic`.
 - **`cache-exclude-script`**:
   - Description: Optional script content for excluding specific Gradle User Home cache entries.
   - Required: `false`.
@@ -237,6 +245,10 @@ This section details inputs for the reusable `runner/action.yaml` workflow, whic
 - **`configuration-cache-key`**:
   - Description: Variant-specific key used to restore the configuration cache saved by the seed job.
   - Required: `false`.
+- **`configuration-cache-included-builds`**:
+  - Description: Comma-separated included build paths whose `build` directories are restored with the configuration cache.
+  - Required: `false`.
+  - Default: `buildSrc,build-logic`.
 - **`extra-args`**:
   - Description: Any additional arguments to pass to the Gradle command.
   - Required: `true`.

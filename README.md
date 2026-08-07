@@ -63,13 +63,17 @@ This workflow executes Gradle tasks across two specified variants (branches) wit
       - `remote task cache + dependencies cache - transforms cache`: Combines remote task, dependency caching, and excludes transforms.
 
   - `configuration_cache`:
-    - **Description**: Controls Gradle configuration cache usage independently of the selected task/dependency cache mode. In the standard experiment workflow, the seed job saves `.gradle/configuration-cache` with a variant-specific key and execution jobs restore that entry before running. In the Gradle Profiler workflow, the option is added to the generated scenario so profiler warmups and iterations can reuse the configuration cache in the same checkout.
+    - **Description**: Controls Gradle configuration cache usage independently of the selected task/dependency cache mode. In the standard experiment workflow, the seed job saves `.gradle/configuration-cache` plus configured included-build outputs with a variant-specific key and execution jobs restore that entry before running. In the Gradle Profiler workflow, the option is added to the generated scenario so profiler warmups and iterations can reuse the configuration cache in the same checkout.
     - **Type**: `choice`
     - **Default**: `off`
     - **Options**:
       - `off`: Do not pass configuration-cache arguments.
       - `on`: Pass `--configuration-cache`.
       - `warn`: Pass `--configuration-cache --configuration-cache-problems=warn`.
+
+  - `configuration_cache_included_builds`:
+    - **Description**: Comma-separated included build paths whose `build` directories are saved and restored with the configuration cache. This is needed when a restored configuration-cache entry references compiled included-build outputs, such as `build-logic/build`.
+    - **Default**: `buildSrc,build-logic`
 
   - `os_args`:
     - **Description**: Defines the operating system settings for each variant, specifying which OS image to use during workflow execution. This is useful for testing builds across different environments.

@@ -38,6 +38,10 @@ inputs:
   configuration-cache-key:
     description: 'Cache key used to save the project configuration cache.'
     required: false
+  configuration-cache-included-builds:
+    description: 'Comma-separated included build paths whose build outputs are required by the configuration cache.'
+    required: false
+    default: 'buildSrc,build-logic'
   extra-args:
     description: 'Extra arguments to pass to the Gradle command.'
     required: true
@@ -157,6 +161,26 @@ runs:
         esac
       shell: bash
 
+    - name: Set Configuration Cache Paths
+      id: configuration-cache-paths
+      if: inputs.configuration-cache != 'off' && inputs.configuration-cache-key != ''
+      run: |
+        {
+          echo "paths<<EOF"
+          echo ".gradle/configuration-cache"
+
+          IFS=',' read -ra INCLUDED_BUILDS <<< "${{ inputs.configuration-cache-included-builds }}"
+          for included_build in "${INCLUDED_BUILDS[@]}"; do
+            included_build="$(printf '%s' "$included_build" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+            if [ -n "$included_build" ]; then
+              echo "$included_build/build"
+            fi
+          done
+
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
+      shell: bash
+
     - name: Execute Gradle Build
       id: gradle-build
       run: |
@@ -174,7 +198,7 @@ runs:
       if: inputs.configuration-cache != 'off' && inputs.configuration-cache-key != ''
       uses: actions/cache/save@v4
       with:
-        path: .gradle/configuration-cache
+        path: ${{ steps.configuration-cache-paths.outputs.paths }}
         key: ${{ inputs.configuration-cache-key }}
 
     - name: Finalize Step

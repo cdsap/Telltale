@@ -50,6 +50,10 @@ on:
           - 'off'
           - 'on'
           - 'warn'
+      configuration_cache_included_builds:
+        description: "Comma-separated included build paths whose build outputs should be saved with the configuration cache"
+        required: false
+        default: "buildSrc,build-logic"
       os_args:
         description: "Operating system configurations for variants"
         type: string
@@ -123,6 +127,7 @@ jobs:
           mode: "${{ github.event.inputs.mode }}"
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
           configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
+          configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
           experiment-id: "${{ github.run_number }}"
           variant: ${{ matrix.config.variant }}
           api-key: ${{ secrets.DV_ACCESS_KEY }}
@@ -161,6 +166,7 @@ jobs:
           mode: "${{ github.event.inputs.mode }}"
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
           configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
+          configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
           execution-number: ${{ github.run_number }}
           variant: ${{ matrix.config.variant }}
@@ -198,6 +204,7 @@ jobs:
           mode: "${{ github.event.inputs.mode }}"
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
           configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
+          configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
           execution-number: ${{ github.run_number }}
           variant: ${{ matrix.config.variant }}
