@@ -41,7 +41,7 @@ inputs:
   configuration-cache-included-builds:
     description: 'Comma-separated included build paths whose build outputs are required by the configuration cache.'
     required: false
-    default: 'buildSrc,build-logic'
+    default: 'buildSrc,build-logic,build-logic/*'
   extra-args:
     description: 'Extra arguments to pass to the Gradle command.'
     required: true

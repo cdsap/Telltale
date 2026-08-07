@@ -72,8 +72,8 @@ This workflow executes Gradle tasks across two specified variants (branches) wit
       - `warn`: Pass `--configuration-cache --configuration-cache-problems=warn`.
 
   - `configuration_cache_included_builds`:
-    - **Description**: Comma-separated included build paths whose `build` directories are saved and restored with the configuration cache. This is needed when a restored configuration-cache entry references compiled included-build outputs, such as `build-logic/build`.
-    - **Default**: `buildSrc,build-logic`
+    - **Description**: Comma-separated included build paths whose `build` directories are saved and restored with the configuration cache. This is needed when a restored configuration-cache entry references compiled included-build outputs, such as `build-logic/build` or `build-logic/convention/build`.
+    - **Default**: `buildSrc,build-logic,build-logic/*`
 
   - `os_args`:
     - **Description**: Defines the operating system settings for each variant, specifying which OS image to use during workflow execution. This is useful for testing builds across different environments.

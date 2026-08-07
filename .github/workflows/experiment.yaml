@@ -53,7 +53,7 @@ on:
       configuration_cache_included_builds:
         description: "Comma-separated included build paths whose build outputs should be saved with the configuration cache"
         required: false
-        default: "buildSrc,build-logic"
+        default: "buildSrc,build-logic,build-logic/*"
       os_args:
         description: "Operating system configurations for variants"
         type: string
