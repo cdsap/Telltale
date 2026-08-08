@@ -184,11 +184,25 @@ runs:
     - name: Execute Gradle Build
       id: gradle-build
       run: |
-        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} ${{ steps.configuration-cache-args.outputs.args }} \
+        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} \
           -Dscan.tag.seed_${{ inputs.variant-prefix }}${{ inputs.variant }} \
           -Dscan.tag.seed-"${{ inputs.mode }}" \
           -Dscan.tag.seed \
           -Dscan.tag.seed_${{ inputs.experiment-id }}
+      shell: bash
+      env:
+        DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
+        CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
+
+    - name: Prime Configuration Cache
+      id: prime-configuration-cache
+      if: inputs.configuration-cache != 'off'
+      run: |
+        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} ${{ steps.configuration-cache-args.outputs.args }} \
+          -Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }} \
+          -Dscan.tag."${{ inputs.mode }}" \
+          -Dscan.tag.experiment \
+          -Dscan.tag.${{ inputs.experiment-id }}
       shell: bash
       env:
         DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}

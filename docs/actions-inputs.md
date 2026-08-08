@@ -48,7 +48,7 @@ This section details the inputs for the primary dispatchable workflows: `experim
     - `'off'`: Do not pass configuration-cache arguments.
     - `'on'`: Pass `--configuration-cache`.
     - `'warn'`: Pass `--configuration-cache --configuration-cache-problems=warn`.
-  - Reuse behavior: `experiment.yaml` saves `.gradle/configuration-cache` from each seed job and restores the matching variant entry in execution jobs. `experiment-with-gradle-profiler.yaml` adds the selected arguments to the generated scenario so profiler warmups and iterations can reuse configuration in the same checkout.
+  - Reuse behavior: `experiment.yaml` primes `.gradle/configuration-cache` in each seed job with the same Gradle start parameters used by execution jobs, then restores the matching variant entry in execution jobs. `experiment-with-gradle-profiler.yaml` adds the selected arguments to the generated scenario so profiler warmups and iterations can reuse configuration in the same checkout.
 - **`configuration_cache_included_builds`**:
   - Description: Comma-separated included build paths whose build output directories must be saved and restored with the configuration cache.
   - `experiment.yaml`: Required: `false`. Default: `"buildSrc,build-logic,build-logic/*"`.

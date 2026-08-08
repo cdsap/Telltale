@@ -63,7 +63,7 @@ This workflow executes Gradle tasks across two specified variants (branches) wit
       - `remote task cache + dependencies cache - transforms cache`: Combines remote task, dependency caching, and excludes transforms.
 
   - `configuration_cache`:
-    - **Description**: Controls Gradle configuration cache usage independently of the selected task/dependency cache mode. In the standard experiment workflow, the seed job saves `.gradle/configuration-cache` plus configured included-build outputs with a variant-specific key and execution jobs restore that entry before running. In the Gradle Profiler workflow, the option is added to the generated scenario so profiler warmups and iterations can reuse the configuration cache in the same checkout.
+    - **Description**: Controls Gradle configuration cache usage independently of the selected task/dependency cache mode. In the standard experiment workflow, the seed job primes `.gradle/configuration-cache` with the same Gradle start parameters used by execution jobs, then saves it plus configured included-build outputs with a variant-specific key. Execution jobs restore that entry before running. In the Gradle Profiler workflow, the option is added to the generated scenario so profiler warmups and iterations can reuse the configuration cache in the same checkout.
     - **Type**: `choice`
     - **Default**: `off`
     - **Options**:
