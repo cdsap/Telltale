@@ -192,6 +192,7 @@ runs:
       shell: bash
       env:
         DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
+        GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
 
     - name: Prime Configuration Cache
