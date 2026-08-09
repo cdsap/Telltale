@@ -91,7 +91,20 @@ runs:
           IFS=',' read -ra INCLUDED_BUILDS <<< "${{ inputs.configuration-cache-included-builds }}"
           for included_build in "${INCLUDED_BUILDS[@]}"; do
             included_build="$(printf '%s' "$included_build" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
-            if [ -n "$included_build" ]; then
+            if [ -z "$included_build" ]; then
+              continue
+            fi
+
+            if [[ "$included_build" == */\* ]]; then
+              parent="${included_build%/*}"
+              if [ -d "$parent" ]; then
+                for child in "$parent"/*; do
+                  if [ -d "$child" ]; then
+                    echo "$child/build"
+                  fi
+                done
+              fi
+            else
               echo "$included_build/build"
             fi
           done
