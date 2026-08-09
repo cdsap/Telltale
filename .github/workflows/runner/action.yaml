@@ -80,6 +80,14 @@ runs:
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB_INSTANCE: ${{ inputs.execution-number }}-${{ inputs.variant }}
 
+    - name: Disable Gradle Action Init Scripts for Configuration Cache
+      if: inputs.configuration-cache != 'off'
+      run: |
+        if [ -n "${GRADLE_USER_HOME:-}" ] && [ -d "$GRADLE_USER_HOME/init.d" ]; then
+          find "$GRADLE_USER_HOME/init.d" -maxdepth 1 -type f -name 'gradle-actions*.init.gradle' -delete
+        fi
+      shell: bash
+
     - name: Set Configuration Cache Paths
       id: configuration-cache-paths
       if: inputs.configuration-cache != 'off' && inputs.configuration-cache-key != ''
