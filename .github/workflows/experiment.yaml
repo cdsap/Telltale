@@ -128,6 +128,7 @@ jobs:
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
           configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
           configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
           variant: ${{ matrix.config.variant }}
           api-key: ${{ secrets.DV_ACCESS_KEY }}
@@ -167,6 +168,7 @@ jobs:
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
           configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
           configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
           execution-number: ${{ github.repository_owner }}-${{ github.run_number }}
           variant: ${{ matrix.config.variant }}
@@ -205,6 +207,7 @@ jobs:
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
           configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
           configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
           execution-number: ${{ github.repository_owner }}-${{ github.run_number }}
           variant: ${{ matrix.config.variant }}

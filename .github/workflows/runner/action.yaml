@@ -44,6 +44,9 @@ inputs:
     description: 'Comma-separated included build paths whose build outputs are required by the configuration cache.'
     required: false
     default: 'buildSrc,build-logic,build-logic/*'
+  gradle-encryption-key:
+    description: 'Stable Gradle configuration cache encryption key shared by seed and execution jobs.'
+    required: false
   extra-args:
     description: 'Extra arguments to pass to the Gradle command'
     required: true
@@ -80,13 +83,16 @@ runs:
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB_INSTANCE: ${{ inputs.execution-number }}-${{ inputs.variant }}
 
-    - name: Disable Gradle Action Init Scripts for Configuration Cache
+    - name: Validate Configuration Cache Encryption Key
       if: inputs.configuration-cache != 'off'
       run: |
-        if [ -n "${GRADLE_USER_HOME:-}" ] && [ -d "$GRADLE_USER_HOME/init.d" ]; then
-          find "$GRADLE_USER_HOME/init.d" -maxdepth 1 -type f -name 'gradle-actions*.init.gradle' -delete
+        if [ -z "$CHECK_GRADLE_ENCRYPTION_KEY" ]; then
+          echo "GRADLE_ENCRYPTION_KEY is required when configuration cache is enabled."
+          exit 1
         fi
       shell: bash
+      env:
+        CHECK_GRADLE_ENCRYPTION_KEY: ${{ inputs.gradle-encryption-key }}
 
     - name: Set Configuration Cache Paths
       id: configuration-cache-paths
@@ -95,6 +101,10 @@ runs:
         {
           echo "paths<<EOF"
           echo ".gradle/configuration-cache"
+          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/caches/modules-2"
+          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/caches/[0-9]*"
+          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/caches/jars-*"
+          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/init.d"
 
           IFS=',' read -ra INCLUDED_BUILDS <<< "${{ inputs.configuration-cache-included-builds }}"
           for included_build in "${INCLUDED_BUILDS[@]}"; do
@@ -121,6 +131,11 @@ runs:
         } >> "$GITHUB_OUTPUT"
       shell: bash
 
+    - uses: cdsap/build-process-watcher@v0.6.2
+      with:
+        remote_monitoring: 'true'
+        export_to_bigquery: 'true'
+
     - name: Restore Configuration Cache
       if: inputs.configuration-cache != 'off' && inputs.configuration-cache-key != ''
       uses: actions/cache/restore@v4
@@ -128,11 +143,6 @@ runs:
         path: ${{ steps.configuration-cache-paths.outputs.paths }}
         key: ${{ inputs.configuration-cache-key }}
         fail-on-cache-miss: false
-
-    - uses: cdsap/build-process-watcher@v0.6.2
-      with:
-        remote_monitoring: 'true'          
-        export_to_bigquery: 'true'
 
     - name: Set Configuration Cache Arguments
       id: configuration-cache-args
@@ -166,4 +176,5 @@ runs:
       env:
         DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
+        GRADLE_ENCRYPTION_KEY: ${{ inputs.gradle-encryption-key }}
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
