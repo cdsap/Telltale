@@ -46,6 +46,10 @@ inputs:
     description: 'Gradle configuration cache behavior: off, on, or warn.'
     required: false
     default: 'off'
+  project-isolation:
+    description: 'Gradle Isolated Projects behavior: off, on, or diagnostics.'
+    required: false
+    default: 'off'
   cache-url:
     description: 'URL for the cache node, if applicable'
     required: true
@@ -110,8 +114,27 @@ runs:
             ;;
         esac
 
+        case "${{ inputs.project-isolation }}" in
+          "off"|"")
+            PROJECT_ISOLATION_ARGS=()
+            ;;
+          "on")
+            PROJECT_ISOLATION_ARGS=("-Dorg.gradle.unsafe.isolated-projects=true")
+            ;;
+          "diagnostics")
+            PROJECT_ISOLATION_ARGS=("-Dorg.gradle.unsafe.isolated-projects=true" "-Dorg.gradle.unsafe.isolated-projects.diagnostics=true")
+            ;;
+          *)
+            echo "Unknown project isolation option: ${{ inputs.project-isolation }}"
+            exit 1
+            ;;
+        esac
+
         GRADLE_ARGS="[\"$EXTRA_ARG\""
         for ARG in "${CONFIGURATION_CACHE_ARGS[@]}"; do
+          GRADLE_ARGS="$GRADLE_ARGS, \"$ARG\""
+        done
+        for ARG in "${PROJECT_ISOLATION_ARGS[@]}"; do
           GRADLE_ARGS="$GRADLE_ARGS, \"$ARG\""
         done
         GRADLE_ARGS="$GRADLE_ARGS, \"-Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]"

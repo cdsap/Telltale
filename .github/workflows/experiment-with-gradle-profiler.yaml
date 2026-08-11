@@ -40,6 +40,15 @@ on:
           - 'off'
           - 'on'
           - 'warn'
+      project_isolation:
+        description: "Gradle Isolated Projects behavior"
+        type: choice
+        required: false
+        default: 'off'
+        options:
+          - 'off'
+          - 'on'
+          - 'diagnostics'
       os_args:
         description: "Operating system configurations for variants"
         type: string
@@ -101,6 +110,7 @@ jobs:
           variant: ${{ matrix.config.variant }}
           class: ${{ github.event.inputs.class }}
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
+          project-isolation: "${{ github.event.inputs.project_isolation }}"
           cache-url: ${{ secrets.CI_URL_CACHE_NODE }}
           warmups: 1
           clean-between-iterations: ${{ github.event.inputs.clean_between_iterations }}

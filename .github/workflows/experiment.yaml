@@ -50,6 +50,15 @@ on:
           - 'off'
           - 'on'
           - 'warn'
+      project_isolation:
+        description: "Gradle Isolated Projects behavior"
+        type: choice
+        required: true
+        default: 'off'
+        options:
+          - 'off'
+          - 'on'
+          - 'diagnostics'
       configuration_cache_included_builds:
         description: "Comma-separated included build paths whose build outputs should be saved with the configuration cache"
         required: false
@@ -126,6 +135,7 @@ jobs:
           task: "${{ github.event.inputs.task }}"
           mode: "${{ github.event.inputs.mode }}"
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
+          project-isolation: "${{ github.event.inputs.project_isolation }}"
           configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
           configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
@@ -166,6 +176,7 @@ jobs:
           task: "${{ github.event.inputs.task }}"
           mode: "${{ github.event.inputs.mode }}"
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
+          project-isolation: "${{ github.event.inputs.project_isolation }}"
           configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
           configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
@@ -205,6 +216,7 @@ jobs:
           task: "${{ github.event.inputs.task }}"
           mode: "${{ github.event.inputs.mode }}"
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
+          project-isolation: "${{ github.event.inputs.project_isolation }}"
           configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
           configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}

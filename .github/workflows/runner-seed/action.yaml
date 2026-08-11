@@ -35,6 +35,10 @@ inputs:
     description: 'Gradle configuration cache behavior: off, on, or warn.'
     required: false
     default: 'off'
+  project-isolation:
+    description: 'Gradle Isolated Projects behavior: off, on, or diagnostics.'
+    required: false
+    default: 'off'
   configuration-cache-key:
     description: 'Cache key used to save the project configuration cache.'
     required: false
@@ -140,10 +144,10 @@ runs:
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB_INSTANCE: ${{ inputs.experiment-id }}-${{ inputs.variant }}
 
     - name: Validate Configuration Cache Encryption Key
-      if: inputs.configuration-cache != 'off'
+      if: inputs.configuration-cache != 'off' || inputs.project-isolation != 'off'
       run: |
         if [ -z "$CHECK_GRADLE_ENCRYPTION_KEY" ]; then
-          echo "GRADLE_ENCRYPTION_KEY is required when configuration cache is enabled."
+          echo "GRADLE_ENCRYPTION_KEY is required when configuration cache or project isolation is enabled."
           exit 1
         fi
       shell: bash
@@ -175,9 +179,29 @@ runs:
         esac
       shell: bash
 
+    - name: Set Project Isolation Arguments
+      id: project-isolation-args
+      run: |
+        case "${{ inputs.project-isolation }}" in
+          "off"|"")
+            echo "args=" >> "$GITHUB_OUTPUT"
+            ;;
+          "on")
+            echo "args=-Dorg.gradle.unsafe.isolated-projects=true" >> "$GITHUB_OUTPUT"
+            ;;
+          "diagnostics")
+            echo "args=-Dorg.gradle.unsafe.isolated-projects=true -Dorg.gradle.unsafe.isolated-projects.diagnostics=true" >> "$GITHUB_OUTPUT"
+            ;;
+          *)
+            echo "Unknown project isolation option: ${{ inputs.project-isolation }}"
+            exit 1
+            ;;
+        esac
+      shell: bash
+
     - name: Set Configuration Cache Paths
       id: configuration-cache-paths
-      if: inputs.configuration-cache != 'off' && inputs.configuration-cache-key != ''
+      if: (inputs.configuration-cache != 'off' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
       run: |
         {
           echo "paths<<EOF"
@@ -215,7 +239,7 @@ runs:
     - name: Execute Gradle Build
       id: gradle-build
       run: |
-        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} \
+        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} ${{ steps.project-isolation-args.outputs.args }} \
           -Dscan.tag.seed_${{ inputs.variant-prefix }}${{ inputs.variant }} \
           -Dscan.tag.seed-"${{ inputs.mode }}" \
           -Dscan.tag.seed \
@@ -229,9 +253,9 @@ runs:
 
     - name: Prime Configuration Cache
       id: prime-configuration-cache
-      if: inputs.configuration-cache != 'off'
+      if: inputs.configuration-cache != 'off' || inputs.project-isolation != 'off'
       run: |
-        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} ${{ steps.configuration-cache-args.outputs.args }} \
+        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} ${{ steps.configuration-cache-args.outputs.args }} ${{ steps.project-isolation-args.outputs.args }} \
           -Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }} \
           -Dscan.tag."${{ inputs.mode }}" \
           -Dscan.tag.experiment \
@@ -244,7 +268,7 @@ runs:
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
 
     - name: Save Configuration Cache
-      if: inputs.configuration-cache != 'off' && inputs.configuration-cache-key != ''
+      if: (inputs.configuration-cache != 'off' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
       uses: actions/cache/save@v4
       with:
         path: ${{ steps.configuration-cache-paths.outputs.paths }}
