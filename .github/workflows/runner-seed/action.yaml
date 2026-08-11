@@ -42,6 +42,10 @@ inputs:
   configuration-cache-key:
     description: 'Cache key used to save the project configuration cache.'
     required: false
+  configuration-cache-entry:
+    description: 'Whether to save the seeded configuration cache entry bundle: restore or skip.'
+    required: false
+    default: 'restore'
   configuration-cache-included-builds:
     description: 'Comma-separated included build paths whose build outputs are required by the configuration cache.'
     required: false
@@ -199,9 +203,21 @@ runs:
         esac
       shell: bash
 
+    - name: Validate Configuration Cache Entry Mode
+      run: |
+        case "${{ inputs.configuration-cache-entry }}" in
+          "restore"|"skip"|"")
+            ;;
+          *)
+            echo "Unknown configuration cache entry option: ${{ inputs.configuration-cache-entry }}"
+            exit 1
+            ;;
+        esac
+      shell: bash
+
     - name: Set Configuration Cache Paths
       id: configuration-cache-paths
-      if: (inputs.configuration-cache != 'off' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
+      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache != 'off' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
       run: |
         {
           echo "paths<<EOF"
@@ -253,7 +269,7 @@ runs:
 
     - name: Prime Configuration Cache
       id: prime-configuration-cache
-      if: inputs.configuration-cache != 'off' || inputs.project-isolation != 'off'
+      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache != 'off' || inputs.project-isolation != 'off')
       run: |
         ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} ${{ steps.configuration-cache-args.outputs.args }} ${{ steps.project-isolation-args.outputs.args }} \
           -Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }} \
@@ -268,7 +284,7 @@ runs:
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
 
     - name: Save Configuration Cache
-      if: (inputs.configuration-cache != 'off' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
+      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache != 'off' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
       uses: actions/cache/save@v4
       with:
         path: ${{ steps.configuration-cache-paths.outputs.paths }}
