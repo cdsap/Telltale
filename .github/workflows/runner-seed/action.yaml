@@ -187,10 +187,10 @@ runs:
             echo "args=" >> "$GITHUB_OUTPUT"
             ;;
           "on")
-            echo "args=-Dorg.gradle.unsafe.isolated-projects=true" >> "$GITHUB_OUTPUT"
+            echo "args=--isolated-projects" >> "$GITHUB_OUTPUT"
             ;;
           "diagnostics")
-            echo "args=-Dorg.gradle.unsafe.isolated-projects=true -Dorg.gradle.unsafe.isolated-projects.diagnostics=true" >> "$GITHUB_OUTPUT"
+            echo "args=--isolated-projects -Dorg.gradle.unsafe.isolated-projects.diagnostics=true" >> "$GITHUB_OUTPUT"
             ;;
           *)
             echo "Unknown project isolation option: ${{ inputs.project-isolation }}"

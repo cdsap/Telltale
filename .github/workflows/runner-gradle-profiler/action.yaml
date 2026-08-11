@@ -119,10 +119,10 @@ runs:
             PROJECT_ISOLATION_ARGS=()
             ;;
           "on")
-            PROJECT_ISOLATION_ARGS=("-Dorg.gradle.unsafe.isolated-projects=true")
+            PROJECT_ISOLATION_ARGS=("--isolated-projects")
             ;;
           "diagnostics")
-            PROJECT_ISOLATION_ARGS=("-Dorg.gradle.unsafe.isolated-projects=true" "-Dorg.gradle.unsafe.isolated-projects.diagnostics=true")
+            PROJECT_ISOLATION_ARGS=("--isolated-projects" "-Dorg.gradle.unsafe.isolated-projects.diagnostics=true")
             ;;
           *)
             echo "Unknown project isolation option: ${{ inputs.project-isolation }}"
