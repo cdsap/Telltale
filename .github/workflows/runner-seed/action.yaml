@@ -32,7 +32,7 @@ inputs:
     description: 'Mode of execution relative to caching.'
     required: true
   configuration-cache:
-    description: 'Gradle configuration cache behavior: off, disabled, on, or warn.'
+    description: 'Gradle configuration cache behavior: off, disabled, on, warn, or read-only.'
     required: false
     default: 'off'
   project-isolation:
@@ -148,7 +148,7 @@ runs:
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB_INSTANCE: ${{ inputs.experiment-id }}-${{ inputs.variant }}
 
     - name: Validate Configuration Cache Encryption Key
-      if: inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.project-isolation != 'off'
+      if: inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.configuration-cache == 'read-only' || inputs.project-isolation != 'off'
       run: |
         if [ -z "$CHECK_GRADLE_ENCRYPTION_KEY" ]; then
           echo "GRADLE_ENCRYPTION_KEY is required when configuration cache or project isolation is enabled."
@@ -178,6 +178,9 @@ runs:
             ;;
           "warn")
             echo "args=--configuration-cache --configuration-cache-problems=warn" >> "$GITHUB_OUTPUT"
+            ;;
+          "read-only")
+            echo "args=--configuration-cache -Dorg.gradle.configuration-cache.read-only=true" >> "$GITHUB_OUTPUT"
             ;;
           *)
             echo "Unknown configuration cache option: ${{ inputs.configuration-cache }}"
@@ -220,7 +223,7 @@ runs:
 
     - name: Set Configuration Cache Paths
       id: configuration-cache-paths
-      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
+      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.configuration-cache == 'read-only' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
       run: |
         {
           echo "paths<<EOF"

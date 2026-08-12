@@ -43,7 +43,7 @@ inputs:
     description: 'Extra arguments to pass to the Gradle command'
     required: true
   configuration-cache:
-    description: 'Gradle configuration cache behavior: off, disabled, on, or warn.'
+    description: 'Gradle configuration cache behavior: off, disabled, on, warn, or read-only.'
     required: false
     default: 'off'
   project-isolation:
@@ -110,6 +110,9 @@ runs:
             ;;
           "warn")
             CONFIGURATION_CACHE_ARGS=("--configuration-cache" "--configuration-cache-problems=warn")
+            ;;
+          "read-only")
+            CONFIGURATION_CACHE_ARGS=("--configuration-cache" "-Dorg.gradle.configuration-cache.read-only=true")
             ;;
           *)
             echo "Unknown configuration cache option: ${{ inputs.configuration-cache }}"

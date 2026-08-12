@@ -51,6 +51,7 @@ on:
           - 'disabled'
           - 'on'
           - 'warn'
+          - 'read-only'
       project_isolation:
         description: "Gradle Isolated Projects behavior"
         type: choice
