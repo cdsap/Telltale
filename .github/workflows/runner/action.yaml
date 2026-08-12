@@ -34,7 +34,7 @@ inputs:
     description: 'Mode of execution relative to caching'
     required: true
   configuration-cache:
-    description: 'Gradle configuration cache behavior: off, on, or warn.'
+    description: 'Gradle configuration cache behavior: off, disabled, on, or warn.'
     required: false
     default: 'off'
   project-isolation:
@@ -92,7 +92,7 @@ runs:
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB_INSTANCE: ${{ inputs.execution-number }}-${{ inputs.variant }}
 
     - name: Validate Configuration Cache Encryption Key
-      if: inputs.configuration-cache != 'off' || inputs.project-isolation != 'off'
+      if: inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.project-isolation != 'off'
       run: |
         if [ -z "$CHECK_GRADLE_ENCRYPTION_KEY" ]; then
           echo "GRADLE_ENCRYPTION_KEY is required when configuration cache or project isolation is enabled."
@@ -116,7 +116,7 @@ runs:
 
     - name: Set Configuration Cache Paths
       id: configuration-cache-paths
-      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache != 'off' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
+      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
       run: |
         {
           echo "paths<<EOF"
@@ -157,7 +157,7 @@ runs:
         export_to_bigquery: 'true'
 
     - name: Restore Configuration Cache
-      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache != 'off' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
+      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
       uses: actions/cache/restore@v4
       with:
         path: ${{ steps.configuration-cache-paths.outputs.paths }}
@@ -170,6 +170,9 @@ runs:
         case "${{ inputs.configuration-cache }}" in
           "off"|"")
             echo "args=" >> "$GITHUB_OUTPUT"
+            ;;
+          "disabled")
+            echo "args=--no-configuration-cache" >> "$GITHUB_OUTPUT"
             ;;
           "on")
             echo "args=--configuration-cache" >> "$GITHUB_OUTPUT"

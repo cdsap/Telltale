@@ -32,7 +32,7 @@ inputs:
     description: 'Mode of execution relative to caching.'
     required: true
   configuration-cache:
-    description: 'Gradle configuration cache behavior: off, on, or warn.'
+    description: 'Gradle configuration cache behavior: off, disabled, on, or warn.'
     required: false
     default: 'off'
   project-isolation:
@@ -148,7 +148,7 @@ runs:
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB_INSTANCE: ${{ inputs.experiment-id }}-${{ inputs.variant }}
 
     - name: Validate Configuration Cache Encryption Key
-      if: inputs.configuration-cache != 'off' || inputs.project-isolation != 'off'
+      if: inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.project-isolation != 'off'
       run: |
         if [ -z "$CHECK_GRADLE_ENCRYPTION_KEY" ]; then
           echo "GRADLE_ENCRYPTION_KEY is required when configuration cache or project isolation is enabled."
@@ -169,6 +169,9 @@ runs:
         case "${{ inputs.configuration-cache }}" in
           "off"|"")
             echo "args=" >> "$GITHUB_OUTPUT"
+            ;;
+          "disabled")
+            echo "args=--no-configuration-cache" >> "$GITHUB_OUTPUT"
             ;;
           "on")
             echo "args=--configuration-cache" >> "$GITHUB_OUTPUT"
@@ -217,7 +220,7 @@ runs:
 
     - name: Set Configuration Cache Paths
       id: configuration-cache-paths
-      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache != 'off' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
+      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
       run: |
         {
           echo "paths<<EOF"
@@ -255,7 +258,7 @@ runs:
     - name: Execute Gradle Build
       id: gradle-build
       run: |
-        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} ${{ steps.project-isolation-args.outputs.args }} \
+        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} ${{ steps.configuration-cache-args.outputs.args }} ${{ steps.project-isolation-args.outputs.args }} \
           -Dscan.tag.seed_${{ inputs.variant-prefix }}${{ inputs.variant }} \
           -Dscan.tag.seed-"${{ inputs.mode }}" \
           -Dscan.tag.seed \
@@ -269,7 +272,7 @@ runs:
 
     - name: Prime Configuration Cache
       id: prime-configuration-cache
-      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache != 'off' || inputs.project-isolation != 'off')
+      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.project-isolation != 'off')
       run: |
         ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} ${{ steps.configuration-cache-args.outputs.args }} ${{ steps.project-isolation-args.outputs.args }} \
           -Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }} \
@@ -284,7 +287,7 @@ runs:
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
 
     - name: Save Configuration Cache
-      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache != 'off' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
+      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
       uses: actions/cache/save@v4
       with:
         path: ${{ steps.configuration-cache-paths.outputs.paths }}

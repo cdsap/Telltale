@@ -48,6 +48,7 @@ on:
         default: 'off'
         options:
           - 'off'
+          - 'disabled'
           - 'on'
           - 'warn'
       project_isolation:
