@@ -98,12 +98,18 @@ runs:
           EXTRA_ARG="${{ inputs.extra-args }}"
         fi
 
+        if [ "${{ inputs.configuration-cache }}" = "disabled" ] && [ "${{ inputs.project-isolation }}" != "off" ] && [ -n "${{ inputs.project-isolation }}" ]; then
+          echo "configuration-cache=disabled cannot be combined with project-isolation=${{ inputs.project-isolation }}."
+          echo "Gradle requires configuration cache when Isolated Projects is enabled."
+          exit 1
+        fi
+
         case "${{ inputs.configuration-cache }}" in
           "off"|"")
             CONFIGURATION_CACHE_ARGS=()
             ;;
           "disabled")
-            CONFIGURATION_CACHE_ARGS=("--no-configuration-cache")
+            CONFIGURATION_CACHE_ARGS=("--no-configuration-cache" "-Dorg.gradle.unsafe.isolated-projects=false")
             ;;
           "on")
             CONFIGURATION_CACHE_ARGS=("--configuration-cache")

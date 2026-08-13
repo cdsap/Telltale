@@ -163,6 +163,15 @@ runs:
         remote_monitoring: 'true'
         export_to_bigquery: 'true'
 
+    - name: Validate Gradle Feature Combination
+      run: |
+        if [ "${{ inputs.configuration-cache }}" = "disabled" ] && [ "${{ inputs.project-isolation }}" != "off" ] && [ -n "${{ inputs.project-isolation }}" ]; then
+          echo "configuration-cache=disabled cannot be combined with project-isolation=${{ inputs.project-isolation }}."
+          echo "Gradle requires configuration cache when Isolated Projects is enabled."
+          exit 1
+        fi
+      shell: bash
+
     - name: Set Configuration Cache Arguments
       id: configuration-cache-args
       run: |
@@ -171,7 +180,7 @@ runs:
             echo "args=" >> "$GITHUB_OUTPUT"
             ;;
           "disabled")
-            echo "args=--no-configuration-cache" >> "$GITHUB_OUTPUT"
+            echo "args=--no-configuration-cache -Dorg.gradle.unsafe.isolated-projects=false" >> "$GITHUB_OUTPUT"
             ;;
           "on")
             echo "args=--configuration-cache" >> "$GITHUB_OUTPUT"

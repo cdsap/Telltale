@@ -67,9 +67,11 @@ This workflow executes Gradle tasks across two specified variants (branches) wit
     - **Type**: `choice`
     - **Default**: `off`
     - **Options**:
-      - `off`: Do not pass configuration-cache arguments.
+      - `off`: Do not pass configuration-cache arguments; target repository defaults still apply.
+      - `disabled`: Pass `--no-configuration-cache -Dorg.gradle.unsafe.isolated-projects=false` to force configuration cache off even when the target repository enables Isolated Projects in `gradle.properties`.
       - `on`: Pass `--configuration-cache`.
       - `warn`: Pass `--configuration-cache --configuration-cache-problems=warn`.
+      - `read-only`: Pass `--configuration-cache -Dorg.gradle.configuration-cache.read-only=true`.
 
   - `configuration_cache_included_builds`:
     - **Description**: Comma-separated included build paths whose `build` directories are saved and restored with the configuration cache. This is needed when a restored configuration-cache entry references compiled included-build outputs, such as `build-logic/build` or `build-logic/convention/build`.
@@ -141,11 +143,11 @@ Instead of using agents based on experiment iterations, the Gradle Profiler expe
     - **Required**: `false`
     - **Default**: `5`
   - `configuration_cache`:
-    - **Description**: Controls Gradle configuration cache usage for the generated Gradle Profiler scenario. Use `on` for strict configuration-cache execution, or `warn` while evaluating projects with remaining incompatibilities.
+    - **Description**: Controls Gradle configuration cache usage for the generated Gradle Profiler scenario. Use `on` for strict configuration-cache execution, `warn` while evaluating projects with remaining incompatibilities, `read-only` to reuse an existing entry without writing a new one, or `disabled` to force configuration cache off even when the target repository enables Isolated Projects.
     - **Type**: `choice`
     - **Required**: `false`
     - **Default**: `off`
-    - **Options**: `off`, `on`, `warn`
+    - **Options**: `off`, `disabled`, `on`, `warn`, `read-only`
   - `os_args`:
     - **Description**: Operating system configurations for variants.
     - **Type**: `string`

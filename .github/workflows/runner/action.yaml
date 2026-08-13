@@ -114,6 +114,15 @@ runs:
         esac
       shell: bash
 
+    - name: Validate Gradle Feature Combination
+      run: |
+        if [ "${{ inputs.configuration-cache }}" = "disabled" ] && [ "${{ inputs.project-isolation }}" != "off" ] && [ -n "${{ inputs.project-isolation }}" ]; then
+          echo "configuration-cache=disabled cannot be combined with project-isolation=${{ inputs.project-isolation }}."
+          echo "Gradle requires configuration cache when Isolated Projects is enabled."
+          exit 1
+        fi
+      shell: bash
+
     - name: Set Configuration Cache Paths
       id: configuration-cache-paths
       if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.configuration-cache == 'read-only' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
@@ -172,7 +181,7 @@ runs:
             echo "args=" >> "$GITHUB_OUTPUT"
             ;;
           "disabled")
-            echo "args=--no-configuration-cache" >> "$GITHUB_OUTPUT"
+            echo "args=--no-configuration-cache -Dorg.gradle.unsafe.isolated-projects=false" >> "$GITHUB_OUTPUT"
             ;;
           "on")
             echo "args=--configuration-cache" >> "$GITHUB_OUTPUT"

@@ -45,9 +45,12 @@ This section details the inputs for the primary dispatchable workflows: `experim
   - `experiment.yaml`: Required: `true`. Default: `'off'`.
   - `experiment-with-gradle-profiler.yaml`: Required: `false`. Default: `'off'`.
   - Options:
-    - `'off'`: Do not pass configuration-cache arguments.
+    - `'off'`: Do not pass configuration-cache arguments; target repository defaults still apply.
+    - `'disabled'`: Pass `--no-configuration-cache -Dorg.gradle.unsafe.isolated-projects=false` to force configuration cache off even when the target repository enables Isolated Projects in `gradle.properties`.
     - `'on'`: Pass `--configuration-cache`.
     - `'warn'`: Pass `--configuration-cache --configuration-cache-problems=warn`.
+    - `'read-only'`: Pass `--configuration-cache -Dorg.gradle.configuration-cache.read-only=true`.
+  - Compatibility: `'disabled'` cannot be combined with `project_isolation` values other than `'off'`, because Gradle requires configuration cache when Isolated Projects is enabled.
   - Reuse behavior: `experiment.yaml` primes `.gradle/configuration-cache` in each seed job with the same Gradle start parameters used by execution jobs, then restores the matching variant entry in execution jobs. `experiment-with-gradle-profiler.yaml` adds the selected arguments to the generated scenario so profiler warmups and iterations can reuse configuration in the same checkout.
 - **`configuration_cache_included_builds`**:
   - Description: Comma-separated included build paths whose build output directories must be saved and restored with the configuration cache.
@@ -188,7 +191,7 @@ This section describes the inputs for the reusable `report/action.yaml` workflow
 This section lists the seed-action inputs that differ from or extend the standard runner. Other runner inputs such as `task`, `variant`, `repository`, `jdk_version`, `jdk_vendor`, `mode`, `extra-args`, and `cache-url` follow the same meaning as `runner/action.yaml`.
 
 - **`configuration-cache`**:
-  - Description: Gradle configuration cache behavior for the seed run (`off`, `on`, or `warn`).
+  - Description: Gradle configuration cache behavior for the seed run (`off`, `disabled`, `on`, `warn`, or `read-only`). `disabled` forces configuration cache off and disables repo-level Isolated Projects with `-Dorg.gradle.unsafe.isolated-projects=false`.
   - Required: `false`.
   - Default: `off`.
 - **`configuration-cache-key`**:
@@ -239,7 +242,7 @@ This section details inputs for the reusable `runner/action.yaml` workflow, whic
   - Description: Specifies the caching mode for this run (e.g., `no caching`, `local task cache`).
   - Required: `true`.
 - **`configuration-cache`**:
-  - Description: Gradle configuration cache behavior for the run (`off`, `on`, or `warn`).
+  - Description: Gradle configuration cache behavior for the run (`off`, `disabled`, `on`, `warn`, or `read-only`). `disabled` forces configuration cache off and disables repo-level Isolated Projects with `-Dorg.gradle.unsafe.isolated-projects=false`.
   - Required: `false`.
   - Default: `off`.
 - **`configuration-cache-key`**:
@@ -305,7 +308,7 @@ This section describes inputs for the reusable `runner-gradle-profiler/action.ya
   - Description: Any additional arguments to pass to the Gradle command.
   - Required: `true`.
 - **`configuration-cache`**:
-  - Description: Gradle configuration cache behavior for the generated scenario (`off`, `on`, or `warn`).
+  - Description: Gradle configuration cache behavior for the generated scenario (`off`, `disabled`, `on`, `warn`, or `read-only`). `disabled` forces configuration cache off and disables repo-level Isolated Projects with `-Dorg.gradle.unsafe.isolated-projects=false`.
   - Required: `false`.
   - Default: `off`.
 - **`cache-url`**:
