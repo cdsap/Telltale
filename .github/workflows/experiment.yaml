@@ -50,8 +50,11 @@ on:
           - 'off'
           - 'disabled'
           - 'on'
+          - 'on-no-entry'
           - 'warn'
+          - 'warn-no-entry'
           - 'read-only'
+          - 'read-only-no-entry'
       project_isolation:
         description: "Gradle Isolated Projects behavior"
         type: choice
@@ -60,19 +63,13 @@ on:
         options:
           - 'off'
           - 'on'
+          - 'on-no-entry'
           - 'diagnostics'
+          - 'diagnostics-no-entry'
       configuration_cache_included_builds:
         description: "Comma-separated included build paths whose build outputs should be saved with the configuration cache"
         required: false
         default: "buildSrc,build-logic,build-logic/*"
-      configuration_cache_entry:
-        description: "Whether to save and restore the explicit configuration cache entry bundle"
-        type: choice
-        required: true
-        default: 'restore'
-        options:
-          - 'restore'
-          - 'skip'
       os_args:
         description: "Operating system configurations for variants"
         type: string
@@ -147,7 +144,6 @@ jobs:
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
           project-isolation: "${{ github.event.inputs.project_isolation }}"
           configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
-          configuration-cache-entry: "${{ github.event.inputs.configuration_cache_entry }}"
           configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
@@ -189,7 +185,6 @@ jobs:
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
           project-isolation: "${{ github.event.inputs.project_isolation }}"
           configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
-          configuration-cache-entry: "${{ github.event.inputs.configuration_cache_entry }}"
           configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
@@ -230,7 +225,6 @@ jobs:
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
           project-isolation: "${{ github.event.inputs.project_isolation }}"
           configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
-          configuration-cache-entry: "${{ github.event.inputs.configuration_cache_entry }}"
           configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"

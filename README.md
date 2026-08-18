@@ -69,9 +69,24 @@ This workflow executes Gradle tasks across two specified variants (branches) wit
     - **Options**:
       - `off`: Do not pass configuration-cache arguments; target repository defaults still apply.
       - `disabled`: Pass `--no-configuration-cache -Dorg.gradle.unsafe.isolated-projects=false` to force configuration cache off even when the target repository enables Isolated Projects in `gradle.properties`.
-      - `on`: Pass `--configuration-cache`.
-      - `warn`: Pass `--configuration-cache --configuration-cache-problems=warn`.
-      - `read-only`: Pass `--configuration-cache -Dorg.gradle.configuration-cache.read-only=true`.
+      - `on`: Pass `--configuration-cache` and save/restore the explicit configuration-cache entry bundle in the standard workflow.
+      - `on-no-entry`: Pass `--configuration-cache` without saving or restoring the explicit configuration-cache entry bundle.
+      - `warn`: Pass `--configuration-cache --configuration-cache-problems=warn` and save/restore the explicit configuration-cache entry bundle in the standard workflow.
+      - `warn-no-entry`: Pass `--configuration-cache --configuration-cache-problems=warn` without saving or restoring the explicit configuration-cache entry bundle.
+      - `read-only`: Pass `--configuration-cache -Dorg.gradle.configuration-cache.read-only=true` and restore the explicit configuration-cache entry bundle in the standard workflow.
+      - `read-only-no-entry`: Pass `--configuration-cache -Dorg.gradle.configuration-cache.read-only=true` without restoring the explicit configuration-cache entry bundle.
+    - **Entry behavior**: The explicit configuration-cache entry bundle is shared by configuration cache and Isolated Projects. If either selected feature value ends in `-no-entry`, the standard workflow skips saving and restoring that bundle.
+
+  - `project_isolation`:
+    - **Description**: Controls Gradle Isolated Projects independently of the selected task/dependency cache mode. Values without `-no-entry` save/restore the explicit configuration-cache entry bundle in the standard workflow because Isolated Projects requires configuration cache.
+    - **Type**: `choice`
+    - **Default**: `off`
+    - **Options**:
+      - `off`: Do not pass Isolated Projects arguments; target repository defaults still apply.
+      - `on`: Pass `--isolated-projects` and save/restore the explicit configuration-cache entry bundle in the standard workflow.
+      - `on-no-entry`: Pass `--isolated-projects` without saving or restoring the explicit configuration-cache entry bundle.
+      - `diagnostics`: Pass `--isolated-projects -Dorg.gradle.unsafe.isolated-projects.diagnostics=true` and save/restore the explicit configuration-cache entry bundle in the standard workflow.
+      - `diagnostics-no-entry`: Pass `--isolated-projects -Dorg.gradle.unsafe.isolated-projects.diagnostics=true` without saving or restoring the explicit configuration-cache entry bundle.
 
   - `configuration_cache_included_builds`:
     - **Description**: Comma-separated included build paths whose `build` directories are saved and restored with the configuration cache. This is needed when a restored configuration-cache entry references compiled included-build outputs, such as `build-logic/build` or `build-logic/convention/build`.
@@ -143,11 +158,11 @@ Instead of using agents based on experiment iterations, the Gradle Profiler expe
     - **Required**: `false`
     - **Default**: `5`
   - `configuration_cache`:
-    - **Description**: Controls Gradle configuration cache usage for the generated Gradle Profiler scenario. Use `on` for strict configuration-cache execution, `warn` while evaluating projects with remaining incompatibilities, `read-only` to reuse an existing entry without writing a new one, or `disabled` to force configuration cache off even when the target repository enables Isolated Projects.
+    - **Description**: Controls Gradle configuration cache usage for the generated Gradle Profiler scenario. Use `on` for strict configuration-cache execution, `warn` while evaluating projects with remaining incompatibilities, `read-only` to reuse an existing entry without writing a new one, or `disabled` to force configuration cache off even when the target repository enables Isolated Projects. `*-no-entry` values are accepted for parity with the standard workflow and pass the same Gradle arguments as their base value.
     - **Type**: `choice`
     - **Required**: `false`
     - **Default**: `off`
-    - **Options**: `off`, `disabled`, `on`, `warn`, `read-only`
+    - **Options**: `off`, `disabled`, `on`, `on-no-entry`, `warn`, `warn-no-entry`, `read-only`, `read-only-no-entry`
   - `os_args`:
     - **Description**: Operating system configurations for variants.
     - **Type**: `string`

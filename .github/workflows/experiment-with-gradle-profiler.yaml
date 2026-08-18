@@ -40,8 +40,11 @@ on:
           - 'off'
           - 'disabled'
           - 'on'
+          - 'on-no-entry'
           - 'warn'
+          - 'warn-no-entry'
           - 'read-only'
+          - 'read-only-no-entry'
       project_isolation:
         description: "Gradle Isolated Projects behavior"
         type: choice
@@ -50,7 +53,9 @@ on:
         options:
           - 'off'
           - 'on'
+          - 'on-no-entry'
           - 'diagnostics'
+          - 'diagnostics-no-entry'
       os_args:
         description: "Operating system configurations for variants"
         type: string

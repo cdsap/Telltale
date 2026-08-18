@@ -43,11 +43,11 @@ inputs:
     description: 'Extra arguments to pass to the Gradle command'
     required: true
   configuration-cache:
-    description: 'Gradle configuration cache behavior: off, disabled, on, warn, or read-only.'
+    description: 'Gradle configuration cache behavior: off, disabled, on, on-no-entry, warn, warn-no-entry, read-only, or read-only-no-entry.'
     required: false
     default: 'off'
   project-isolation:
-    description: 'Gradle Isolated Projects behavior: off, on, or diagnostics.'
+    description: 'Gradle Isolated Projects behavior: off, on, on-no-entry, diagnostics, or diagnostics-no-entry.'
     required: false
     default: 'off'
   cache-url:
@@ -111,13 +111,13 @@ runs:
           "disabled")
             CONFIGURATION_CACHE_ARGS=("--no-configuration-cache" "-Dorg.gradle.unsafe.isolated-projects=false")
             ;;
-          "on")
+          "on"|"on-no-entry")
             CONFIGURATION_CACHE_ARGS=("--configuration-cache")
             ;;
-          "warn")
+          "warn"|"warn-no-entry")
             CONFIGURATION_CACHE_ARGS=("--configuration-cache" "--configuration-cache-problems=warn")
             ;;
-          "read-only")
+          "read-only"|"read-only-no-entry")
             CONFIGURATION_CACHE_ARGS=("--configuration-cache" "-Dorg.gradle.configuration-cache.read-only=true")
             ;;
           *)
@@ -130,10 +130,10 @@ runs:
           "off"|"")
             PROJECT_ISOLATION_ARGS=()
             ;;
-          "on")
+          "on"|"on-no-entry")
             PROJECT_ISOLATION_ARGS=("--isolated-projects")
             ;;
-          "diagnostics")
+          "diagnostics"|"diagnostics-no-entry")
             PROJECT_ISOLATION_ARGS=("--isolated-projects" "-Dorg.gradle.unsafe.isolated-projects.diagnostics=true")
             ;;
           *)

@@ -34,20 +34,16 @@ inputs:
     description: 'Mode of execution relative to caching'
     required: true
   configuration-cache:
-    description: 'Gradle configuration cache behavior: off, disabled, on, warn, or read-only.'
+    description: 'Gradle configuration cache behavior: off, disabled, on, on-no-entry, warn, warn-no-entry, read-only, or read-only-no-entry.'
     required: false
     default: 'off'
   project-isolation:
-    description: 'Gradle Isolated Projects behavior: off, on, or diagnostics.'
+    description: 'Gradle Isolated Projects behavior: off, on, on-no-entry, diagnostics, or diagnostics-no-entry.'
     required: false
     default: 'off'
   configuration-cache-key:
     description: 'Cache key used to restore the seeded project configuration cache.'
     required: false
-  configuration-cache-entry:
-    description: 'Whether to restore the seeded configuration cache entry bundle: restore or skip.'
-    required: false
-    default: 'restore'
   configuration-cache-included-builds:
     description: 'Comma-separated included build paths whose build outputs are required by the configuration cache.'
     required: false
@@ -91,8 +87,57 @@ runs:
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB_INSTANCE: ${{ inputs.execution-number }}-${{ inputs.variant }}
 
+    - name: Set Gradle Feature State
+      id: gradle-feature-state
+      run: |
+        feature_enabled=false
+        entry_mode=skip
+        no_entry=false
+
+        case "${{ inputs.configuration-cache }}" in
+          "off"|"disabled"|"")
+            ;;
+          "on"|"warn"|"read-only")
+            feature_enabled=true
+            entry_mode=restore
+            ;;
+          "on-no-entry"|"warn-no-entry"|"read-only-no-entry")
+            feature_enabled=true
+            no_entry=true
+            ;;
+          *)
+            echo "Unknown configuration cache option: ${{ inputs.configuration-cache }}"
+            exit 1
+            ;;
+        esac
+
+        case "${{ inputs.project-isolation }}" in
+          "off"|"")
+            ;;
+          "on"|"diagnostics")
+            feature_enabled=true
+            entry_mode=restore
+            ;;
+          "on-no-entry"|"diagnostics-no-entry")
+            feature_enabled=true
+            no_entry=true
+            ;;
+          *)
+            echo "Unknown project isolation option: ${{ inputs.project-isolation }}"
+            exit 1
+            ;;
+        esac
+
+        if [ "$no_entry" = true ]; then
+          entry_mode=skip
+        fi
+
+        echo "feature_enabled=$feature_enabled" >> "$GITHUB_OUTPUT"
+        echo "entry_mode=$entry_mode" >> "$GITHUB_OUTPUT"
+      shell: bash
+
     - name: Validate Configuration Cache Encryption Key
-      if: inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.configuration-cache == 'read-only' || inputs.project-isolation != 'off'
+      if: steps.gradle-feature-state.outputs.feature_enabled == 'true'
       run: |
         if [ -z "$CHECK_GRADLE_ENCRYPTION_KEY" ]; then
           echo "GRADLE_ENCRYPTION_KEY is required when configuration cache or project isolation is enabled."
@@ -101,18 +146,6 @@ runs:
       shell: bash
       env:
         CHECK_GRADLE_ENCRYPTION_KEY: ${{ inputs.gradle-encryption-key }}
-
-    - name: Validate Configuration Cache Entry Mode
-      run: |
-        case "${{ inputs.configuration-cache-entry }}" in
-          "restore"|"skip"|"")
-            ;;
-          *)
-            echo "Unknown configuration cache entry option: ${{ inputs.configuration-cache-entry }}"
-            exit 1
-            ;;
-        esac
-      shell: bash
 
     - name: Validate Gradle Feature Combination
       run: |
@@ -125,7 +158,7 @@ runs:
 
     - name: Set Configuration Cache Paths
       id: configuration-cache-paths
-      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.configuration-cache == 'read-only' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
+      if: steps.gradle-feature-state.outputs.entry_mode == 'restore' && steps.gradle-feature-state.outputs.feature_enabled == 'true' && inputs.configuration-cache-key != ''
       run: |
         {
           echo "paths<<EOF"
@@ -166,7 +199,7 @@ runs:
         export_to_bigquery: 'true'
 
     - name: Restore Configuration Cache
-      if: inputs.configuration-cache-entry == 'restore' && (inputs.configuration-cache == 'on' || inputs.configuration-cache == 'warn' || inputs.configuration-cache == 'read-only' || inputs.project-isolation != 'off') && inputs.configuration-cache-key != ''
+      if: steps.gradle-feature-state.outputs.entry_mode == 'restore' && steps.gradle-feature-state.outputs.feature_enabled == 'true' && inputs.configuration-cache-key != ''
       uses: actions/cache/restore@v4
       with:
         path: ${{ steps.configuration-cache-paths.outputs.paths }}
@@ -183,13 +216,13 @@ runs:
           "disabled")
             echo "args=--no-configuration-cache -Dorg.gradle.unsafe.isolated-projects=false" >> "$GITHUB_OUTPUT"
             ;;
-          "on")
+          "on"|"on-no-entry")
             echo "args=--configuration-cache" >> "$GITHUB_OUTPUT"
             ;;
-          "warn")
+          "warn"|"warn-no-entry")
             echo "args=--configuration-cache --configuration-cache-problems=warn" >> "$GITHUB_OUTPUT"
             ;;
-          "read-only")
+          "read-only"|"read-only-no-entry")
             echo "args=--configuration-cache -Dorg.gradle.configuration-cache.read-only=true" >> "$GITHUB_OUTPUT"
             ;;
           *)
@@ -206,10 +239,10 @@ runs:
           "off"|"")
             echo "args=" >> "$GITHUB_OUTPUT"
             ;;
-          "on")
+          "on"|"on-no-entry")
             echo "args=--isolated-projects" >> "$GITHUB_OUTPUT"
             ;;
-          "diagnostics")
+          "diagnostics"|"diagnostics-no-entry")
             echo "args=--isolated-projects -Dorg.gradle.unsafe.isolated-projects.diagnostics=true" >> "$GITHUB_OUTPUT"
             ;;
           *)
