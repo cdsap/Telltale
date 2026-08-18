@@ -41,6 +41,35 @@ on:
           - 'remote task cache - transforms cache'
           - 'remote task cache + dependencies cache - transforms cache'
           - 'dependencies cache - javaCompile cache'
+      configuration_cache:
+        description: "Gradle configuration cache behavior"
+        type: choice
+        required: true
+        default: 'off'
+        options:
+          - 'off'
+          - 'disabled'
+          - 'on'
+          - 'on-no-entry'
+          - 'warn'
+          - 'warn-no-entry'
+          - 'read-only'
+          - 'read-only-no-entry'
+      project_isolation:
+        description: "Gradle Isolated Projects behavior"
+        type: choice
+        required: true
+        default: 'off'
+        options:
+          - 'off'
+          - 'on'
+          - 'on-no-entry'
+          - 'diagnostics'
+          - 'diagnostics-no-entry'
+      configuration_cache_included_builds:
+        description: "Comma-separated included build paths whose build outputs should be saved with the configuration cache"
+        required: false
+        default: "buildSrc,build-logic,build-logic/*"
       os_args:
         description: "Operating system configurations for variants"
         type: string
@@ -112,7 +141,12 @@ jobs:
           cache-exclude-script: "${{ env.cache_exclude_content }}"
           task: "${{ github.event.inputs.task }}"
           mode: "${{ github.event.inputs.mode }}"
-          experiment-id: "${{ github.run_number }}"
+          configuration-cache: "${{ github.event.inputs.configuration_cache }}"
+          project-isolation: "${{ github.event.inputs.project_isolation }}"
+          configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
+          configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
           variant: ${{ matrix.config.variant }}
           api-key: ${{ secrets.DV_ACCESS_KEY }}
           repository: ${{ github.event.inputs.repository }}
@@ -148,8 +182,13 @@ jobs:
         with:
           task: "${{ github.event.inputs.task }}"
           mode: "${{ github.event.inputs.mode }}"
+          configuration-cache: "${{ github.event.inputs.configuration_cache }}"
+          project-isolation: "${{ github.event.inputs.project_isolation }}"
+          configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
+          configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
-          execution-number: ${{ github.run_number }}
+          execution-number: ${{ github.repository_owner }}-${{ github.run_number }}
           variant: ${{ matrix.config.variant }}
           api-key: ${{ secrets.DV_ACCESS_KEY }}
           cache-excludes: ${{ steps.seed.outputs.cache-excludes }}
@@ -183,8 +222,13 @@ jobs:
         with:
           task: "${{ github.event.inputs.task }}"
           mode: "${{ github.event.inputs.mode }}"
+          configuration-cache: "${{ github.event.inputs.configuration_cache }}"
+          project-isolation: "${{ github.event.inputs.project_isolation }}"
+          configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
+          configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
+          gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"
-          execution-number: ${{ github.run_number }}
+          execution-number: ${{ github.repository_owner }}-${{ github.run_number }}
           variant: ${{ matrix.config.variant }}
           api-key: ${{ secrets.DV_ACCESS_KEY }}
           repository: ${{ github.event.inputs.repository }}
