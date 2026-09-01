@@ -1,0 +1,79 @@
+---
+layout: post
+title: "AGP 9.4.0 vs 9.3.2"
+date: 2026-09-01
+report_link: /Telltale/reports/experiment_results_20260901164835.html
+summary: " 
+The performance comparison between `varianta_baseline` and `variantb_agp-9.4.0` reveals marginal differences in build times and task execution times. The overall build time for `variantb_agp-9.4.0` is slightly higher by approximately 0.3 seconds (0.3% increase) compared to `varianta_baseline`. Configuration times are nearly identical, with `variantb_agp-9.4.0` being marginally faster by about 0.45 seconds (1% decrease). Notable task differences include the `GlobalSyntheticsGeneratorTask`, which shows a significant increase in execution time in `variantb_agp-9.4.0` by about 0.2 seconds (3.5% increase). CPU and memory usage across all processes and specifically for the build processes are closely matched between the two variants, with no significant deviations observed."
+tags: ["dependencies cache"]
+experiment_snapshot:
+  metric: "Overall build time"
+  unit: "seconds"
+  variant_a:
+    label: "9.3.2"
+    mean: 262.897
+    p50: 267.392
+    p90: 287.645
+  variant_b:
+    label: "9.4.0"
+    mean: 263.692
+    p50: 267.417
+    p90: 287.170
+  config_metric: "Configuration time"
+  config_unit: "seconds"
+  config_variant_a:
+    mean: 45.175
+    p50: 46.000
+    p90: 50.628
+  config_variant_b:
+    mean: 44.723
+    p50: 44.429
+    p90: 50.601
+---
+[Report 📊](../../reports/experiment_results_20260901164835.html)
+## Summary
+The performance comparison between `varianta_baseline` and `variantb_agp-9.4.0` reveals marginal differences in build times and task execution times. The overall build time for `variantb_agp-9.4.0` is slightly higher by approximately 0.3 seconds (0.3% increase) compared to `varianta_baseline`. Configuration times are nearly identical, with `variantb_agp-9.4.0` being marginally faster by about 0.45 seconds (1% decrease). Notable task differences include the `GlobalSyntheticsGeneratorTask`, which shows a significant increase in execution time in `variantb_agp-9.4.0` by about 0.2 seconds (3.5% increase). CPU and memory usage across all processes and specifically for the build processes are closely matched between the two variants, with no significant deviations observed.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - Mean: `varianta_baseline` 262.897s vs `variantb_agp-9.4.0` 263.692s (0.3% increase)
+  - P50: `varianta_baseline` 267.392s vs `variantb_agp-9.4.0` 267.417s
+  - P90: `varianta_baseline` 287.645s vs `variantb_agp-9.4.0` 287.170s
+
+- **Configuration Time:**
+  - Mean: `varianta_baseline` 45.175s vs `variantb_agp-9.4.0` 44.723s (1% decrease)
+  - P50: `varianta_baseline` 46.000s vs `variantb_agp-9.4.0` 44.429s
+  - P90: `varianta_baseline` 50.628s vs `variantb_agp-9.4.0` 50.601s
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  - `"GlobalSyntheticsGeneratorTask"`: 
+    - Mean: `varianta_baseline` 5.837s vs `variantb_agp-9.4.0` 6.043s (3.5% increase)
+    - P50: `varianta_baseline` 5.805s vs `variantb_agp-9.4.0` 6.186s
+    - P90: `varianta_baseline` 7.031s vs `variantb_agp-9.4.0` 6.673s
+  - `"DexMergingTask"`: 
+    - Mean: `varianta_baseline` 7.276s vs `variantb_agp-9.4.0` 7.316s
+    - P50: `varianta_baseline` 1.431s vs `variantb_agp-9.4.0` 1.304s
+    - P90: `varianta_baseline` 21.139s vs `variantb_agp-9.4.0` 21.178s
+  - `"KotlinCompile"`: 
+    - Mean: `varianta_baseline` 3.479s vs `variantb_agp-9.4.0` 3.510s
+    - P50: `varianta_baseline` 3.045s vs `variantb_agp-9.4.0` 3.100s
+    - P90: `varianta_baseline` 5.110s vs `variantb_agp-9.4.0` 5.171s
+
+### 3. Statistical Patterns
+- Tasks with notable timing variations include `"GlobalSyntheticsGeneratorTask"` with a 3.5% increase in mean execution time in `variantb_agp-9.4.0`.
+
+### 5. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - All processes: Both variants reached a maximum of 100% CPU usage.
+  - Build process: `varianta_baseline` 95.6% vs `variantb_agp-9.4.0` 95.4%.
+  - Build child processes: `varianta_baseline` 93.57% vs `variantb_agp-9.4.0` 94.0%.
+
+- **Memory Usage:**
+  - All processes: `varianta_baseline` peaked at 9.08 GB vs `variantb_agp-9.4.0` at 9.0 GB.
+  - Build process: `varianta_baseline` 4.54 GB vs `variantb_agp-9.4.0` 4.41 GB.
+  - Build child processes: `varianta_baseline` 3.44 GB vs `variantb_agp-9.4.0` 3.49 GB.
+
+In summary, the performance differences between the two variants are minimal, with slight variations in task execution times and negligible differences in resource usage.
