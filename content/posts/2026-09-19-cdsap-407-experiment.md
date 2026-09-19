@@ -1,0 +1,75 @@
+---
+layout: post
+title: "AGP 9.4.1 vs 9.4.0"
+date: 2026-09-19
+report_link: /Telltale/reports/experiment_results_20260919172645.html
+summary: " 
+The analysis of the Gradle build performance data reveals a slight increase in build times when comparing variant B (AGP-9.4.1) to variant A (baseline). Specifically, the overall build time increased by approximately 3.3% from 252 seconds in variant A to 260 seconds in variant B. The configuration time also saw a minor increase of about 0.8%. Among the most time-consuming tasks, "com.android.build.gradle.internal.tasks.DexMergingTask" and "com.android.build.gradle.internal.tasks.GlobalSyntheticsGeneratorTask" showed notable increases in execution times. Memory and CPU usage for both the main build process and child processes remained relatively stable, with only minor fluctuations observed between the two variants."
+tags: ["dependencies cache"]
+experiment_snapshot:
+  metric: "Overall build time"
+  unit: "seconds"
+  variant_a:
+    label: "9.4.0"
+    mean: 251.954
+    p50: 258.185
+    p90: 278.840
+  variant_b:
+    label: "9.4.1"
+    mean: 260.348
+    p50: 270.842
+    p90: 280.216
+  config_metric: "Configuration time"
+  config_unit: "seconds"
+  config_variant_a:
+    mean: 44.245
+    p50: 45.885
+    p90: 50.404
+  config_variant_b:
+    mean: 44.621
+    p50: 46.561
+    p90: 50.315
+---
+[Report 📊](../../reports/experiment_results_20260919172645.html)
+## Summary
+The analysis of the Gradle build performance data reveals a slight increase in build times when comparing variant B (AGP-9.4.1) to variant A (baseline). Specifically, the overall build time increased by approximately 3.3% from 252 seconds in variant A to 260 seconds in variant B. The configuration time also saw a minor increase of about 0.8%. Among the most time-consuming tasks, "com.android.build.gradle.internal.tasks.DexMergingTask" and "com.android.build.gradle.internal.tasks.GlobalSyntheticsGeneratorTask" showed notable increases in execution times. Memory and CPU usage for both the main build process and child processes remained relatively stable, with only minor fluctuations observed between the two variants.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - Variant A (baseline): Mean: 252 seconds, P50: 258 seconds, P90: 279 seconds
+  - Variant B (AGP-9.4.1): Mean: 260 seconds, P50: 271 seconds, P90: 280 seconds
+  - **Percentage Increase:** Mean: 3.3%, P50: 5%, P90: 0.5%
+
+- **Configuration Time:**
+  - Variant A (baseline): Mean: 44.245 seconds, P50: 45.885 seconds, P90: 50.404 seconds
+  - Variant B (AGP-9.4.1): Mean: 44.621 seconds, P50: 46.561 seconds, P90: 50.315 seconds
+  - **Percentage Increase:** Mean: 0.8%, P50: 1.5%, P90: -0.2%
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  - "com.android.build.gradle.internal.tasks.DexMergingTask":
+    - Variant A: Mean: 6970 ms, P50: 1199 ms, P90: 20442 ms
+    - Variant B: Mean: 7053 ms, P50: 1298 ms, P90: 20652 ms
+  - "com.android.build.gradle.internal.tasks.GlobalSyntheticsGeneratorTask":
+    - Variant A: Mean: 5715 ms, P50: 5708 ms, P90: 6882 ms
+    - Variant B: Mean: 5996 ms, P50: 6343 ms, P90: 7036 ms
+  - "org.jetbrains.kotlin.gradle.tasks.KotlinCompile":
+    - Variant A: Mean: 3316 ms, P50: 2913 ms, P90: 4895 ms
+    - Variant B: Mean: 3485 ms, P50: 3041 ms, P90: 5218 ms
+
+### 3. Statistical Patterns
+- Notable timing variations are observed in "com.android.build.gradle.internal.tasks.DexMergingTask" and "com.android.build.gradle.internal.tasks.GlobalSyntheticsGeneratorTask", with increases in both mean and percentile values in variant B.
+
+### 5. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - All processes: Max 100% for both variants.
+  - Build process: Max 95.87% for variant A and 95.57% for variant B.
+  - Build child processes: Max 94.13% for variant A and 94% for variant B.
+- **Memory Usage:**
+  - All processes: Max 9.05 GB for variant A and 9.12 GB for variant B.
+  - Build process: Max 4.45 GB for both variants.
+  - Build child processes: Max 3.48 GB for variant A and 3.55 GB for variant B.
+
+Overall, while there are slight increases in build and configuration times in variant B, the changes are relatively minor. The CPU and memory usage also show minimal differences, indicating that the newer AGP version maintains similar resource efficiency levels.
