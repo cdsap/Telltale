@@ -3,8 +3,17 @@ layout: post
 title: "AGP 9.4.1 vs 9.4.0"
 date: 2026-09-19
 report_link: /Telltale/reports/experiment_results_20260919172645.html
-summary: " 
-The analysis of the Gradle build performance data reveals a slight increase in build times when comparing variant B (AGP-9.4.1) to variant A (baseline). Specifically, the overall build time increased by approximately 3.3% from 252 seconds in variant A to 260 seconds in variant B. The configuration time also saw a minor increase of about 0.8%. Among the most time-consuming tasks, "com.android.build.gradle.internal.tasks.DexMergingTask" and "com.android.build.gradle.internal.tasks.GlobalSyntheticsGeneratorTask" showed notable increases in execution times. Memory and CPU usage for both the main build process and child processes remained relatively stable, with only minor fluctuations observed between the two variants."
+summary: >-
+  The analysis of the Gradle build performance data reveals a slight increase in
+  build times when comparing variant B (AGP-9.4.1) to variant A (baseline).
+  Specifically, the overall build time increased by approximately 3.3% from
+  252 seconds in variant A to 260 seconds in variant B. The configuration time
+  also saw a minor increase of about 0.8%. Among the most time-consuming tasks,
+  "com.android.build.gradle.internal.tasks.DexMergingTask" and
+  "com.android.build.gradle.internal.tasks.GlobalSyntheticsGeneratorTask"
+  showed notable increases in execution times. Memory and CPU usage for both
+  the main build process and child processes remained relatively stable, with
+  only minor fluctuations observed between the two variants.
 tags: ["dependencies cache"]
 experiment_snapshot:
   metric: "Overall build time"
