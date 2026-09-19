@@ -31,6 +31,31 @@ on:
         required: false
         type: boolean
         default: true
+      configuration_cache:
+        description: "Gradle configuration cache behavior"
+        type: choice
+        required: false
+        default: 'off'
+        options:
+          - 'off'
+          - 'disabled'
+          - 'on'
+          - 'on-no-entry'
+          - 'warn'
+          - 'warn-no-entry'
+          - 'read-only'
+          - 'read-only-no-entry'
+      project_isolation:
+        description: "Gradle Isolated Projects behavior"
+        type: choice
+        required: false
+        default: 'off'
+        options:
+          - 'off'
+          - 'on'
+          - 'on-no-entry'
+          - 'diagnostics'
+          - 'diagnostics-no-entry'
       os_args:
         description: "Operating system configurations for variants"
         type: string
@@ -91,6 +116,8 @@ jobs:
           experiment-id: "profiler-${{ github.repository_owner }}-${{ github.run_number }}"
           variant: ${{ matrix.config.variant }}
           class: ${{ github.event.inputs.class }}
+          configuration-cache: "${{ github.event.inputs.configuration_cache }}"
+          project-isolation: "${{ github.event.inputs.project_isolation }}"
           cache-url: ${{ secrets.CI_URL_CACHE_NODE }}
           warmups: 1
           clean-between-iterations: ${{ github.event.inputs.clean_between_iterations }}

@@ -290,9 +290,9 @@ runs:
         VARIANTS="${{ inputs.tags }}"
         EXPERIMENT_ID="${{ inputs.experiment-id }}"
         if [[ -n "$title_content" ]]; then
-           DESCRIPTION="\"$title_content\""
+           DESCRIPTION=$(printf '%s' "$title_content" | python3 -c 'import json, sys; print(json.dumps(sys.stdin.read()))')
         else
-           DESCRIPTION= "\"variants: ${VARIANTS//${EXPERIMENT_ID}_/}\""
+           DESCRIPTION=$(printf '%s' "variants: ${VARIANTS//${EXPERIMENT_ID}_/}" | python3 -c 'import json, sys; print(json.dumps(sys.stdin.read()))')
         fi
 
         SNAP_FILE="temp-results/experiment_snapshot.yaml"

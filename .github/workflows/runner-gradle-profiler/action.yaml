@@ -42,6 +42,14 @@ inputs:
   extra-args:
     description: 'Extra arguments to pass to the Gradle command'
     required: true
+  configuration-cache:
+    description: 'Gradle configuration cache behavior: off, disabled, on, on-no-entry, warn, warn-no-entry, read-only, or read-only-no-entry.'
+    required: false
+    default: 'off'
+  project-isolation:
+    description: 'Gradle Isolated Projects behavior: off, on, on-no-entry, diagnostics, or diagnostics-no-entry.'
+    required: false
+    default: 'off'
   cache-url:
     description: 'URL for the cache node, if applicable'
     required: true
@@ -90,6 +98,59 @@ runs:
           EXTRA_ARG="${{ inputs.extra-args }}"
         fi
 
+        if [ "${{ inputs.configuration-cache }}" = "disabled" ] && [ "${{ inputs.project-isolation }}" != "off" ] && [ -n "${{ inputs.project-isolation }}" ]; then
+          echo "configuration-cache=disabled cannot be combined with project-isolation=${{ inputs.project-isolation }}."
+          echo "Gradle requires configuration cache when Isolated Projects is enabled."
+          exit 1
+        fi
+
+        case "${{ inputs.configuration-cache }}" in
+          "off"|"")
+            CONFIGURATION_CACHE_ARGS=()
+            ;;
+          "disabled")
+            CONFIGURATION_CACHE_ARGS=("--no-configuration-cache" "-Dorg.gradle.unsafe.isolated-projects=false")
+            ;;
+          "on"|"on-no-entry")
+            CONFIGURATION_CACHE_ARGS=("--configuration-cache")
+            ;;
+          "warn"|"warn-no-entry")
+            CONFIGURATION_CACHE_ARGS=("--configuration-cache" "--configuration-cache-problems=warn")
+            ;;
+          "read-only"|"read-only-no-entry")
+            CONFIGURATION_CACHE_ARGS=("--configuration-cache" "-Dorg.gradle.configuration-cache.read-only=true")
+            ;;
+          *)
+            echo "Unknown configuration cache option: ${{ inputs.configuration-cache }}"
+            exit 1
+            ;;
+        esac
+
+        case "${{ inputs.project-isolation }}" in
+          "off"|"")
+            PROJECT_ISOLATION_ARGS=()
+            ;;
+          "on"|"on-no-entry")
+            PROJECT_ISOLATION_ARGS=("--isolated-projects")
+            ;;
+          "diagnostics"|"diagnostics-no-entry")
+            PROJECT_ISOLATION_ARGS=("--isolated-projects" "-Dorg.gradle.unsafe.isolated-projects.diagnostics=true")
+            ;;
+          *)
+            echo "Unknown project isolation option: ${{ inputs.project-isolation }}"
+            exit 1
+            ;;
+        esac
+
+        GRADLE_ARGS="[\"$EXTRA_ARG\""
+        for ARG in "${CONFIGURATION_CACHE_ARGS[@]}"; do
+          GRADLE_ARGS="$GRADLE_ARGS, \"$ARG\""
+        done
+        for ARG in "${PROJECT_ISOLATION_ARGS[@]}"; do
+          GRADLE_ARGS="$GRADLE_ARGS, \"$ARG\""
+        done
+        GRADLE_ARGS="$GRADLE_ARGS, \"-Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]"
+
         # Gradle Profiler: cleanup-tasks run between iterations; [] = incremental re-runs
         if [ "${{ inputs.clean-between-iterations }}" = "true" ]; then
           CLEANUP_TASKS='["clean"]'
@@ -103,7 +164,7 @@ runs:
             title = \"assemble\"
             tasks = [\"${{ inputs.task }}\"]
             cleanup-tasks = $CLEANUP_TASKS
-            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
+            gradle-args = $GRADLE_ARGS
           }" > scenario
         else
           echo "assemble {
@@ -111,7 +172,7 @@ runs:
             tasks = [\"${{ inputs.task }}\"]
             cleanup-tasks = $CLEANUP_TASKS
             apply-abi-change-to = [${{ inputs.class }}]
-            gradle-args = [\"$EXTRA_ARG\", \"-Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }}\", \"-Dscan.tag.experiment\", \"-Dscan.tag.${{ inputs.experiment-id }}\"]
+            gradle-args = $GRADLE_ARGS
           }" > scenario
         fi 
 

@@ -33,6 +33,24 @@ inputs:
   mode:
     description: 'Mode of execution relative to caching'
     required: true
+  configuration-cache:
+    description: 'Gradle configuration cache behavior: off, disabled, on, on-no-entry, warn, warn-no-entry, read-only, or read-only-no-entry.'
+    required: false
+    default: 'off'
+  project-isolation:
+    description: 'Gradle Isolated Projects behavior: off, on, on-no-entry, diagnostics, or diagnostics-no-entry.'
+    required: false
+    default: 'off'
+  configuration-cache-key:
+    description: 'Cache key used to restore the seeded project configuration cache.'
+    required: false
+  configuration-cache-included-builds:
+    description: 'Comma-separated included build paths whose build outputs are required by the configuration cache.'
+    required: false
+    default: 'buildSrc,build-logic,build-logic/*'
+  gradle-encryption-key:
+    description: 'Stable Gradle configuration cache encryption key shared by seed and execution jobs.'
+    required: false
   extra-args:
     description: 'Extra arguments to pass to the Gradle command'
     required: true
@@ -69,14 +87,175 @@ runs:
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB_INSTANCE: ${{ inputs.execution-number }}-${{ inputs.variant }}
 
+    - name: Set Gradle Feature State
+      id: gradle-feature-state
+      run: |
+        feature_enabled=false
+        entry_mode=skip
+        no_entry=false
+
+        case "${{ inputs.configuration-cache }}" in
+          "off"|"disabled"|"")
+            ;;
+          "on"|"warn"|"read-only")
+            feature_enabled=true
+            entry_mode=restore
+            ;;
+          "on-no-entry"|"warn-no-entry"|"read-only-no-entry")
+            feature_enabled=true
+            no_entry=true
+            ;;
+          *)
+            echo "Unknown configuration cache option: ${{ inputs.configuration-cache }}"
+            exit 1
+            ;;
+        esac
+
+        case "${{ inputs.project-isolation }}" in
+          "off"|"")
+            ;;
+          "on"|"diagnostics")
+            feature_enabled=true
+            entry_mode=restore
+            ;;
+          "on-no-entry"|"diagnostics-no-entry")
+            feature_enabled=true
+            no_entry=true
+            ;;
+          *)
+            echo "Unknown project isolation option: ${{ inputs.project-isolation }}"
+            exit 1
+            ;;
+        esac
+
+        if [ "$no_entry" = true ]; then
+          entry_mode=skip
+        fi
+
+        echo "feature_enabled=$feature_enabled" >> "$GITHUB_OUTPUT"
+        echo "entry_mode=$entry_mode" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Validate Configuration Cache Encryption Key
+      if: steps.gradle-feature-state.outputs.feature_enabled == 'true'
+      run: |
+        if [ -z "$CHECK_GRADLE_ENCRYPTION_KEY" ]; then
+          echo "GRADLE_ENCRYPTION_KEY is required when configuration cache or project isolation is enabled."
+          exit 1
+        fi
+      shell: bash
+      env:
+        CHECK_GRADLE_ENCRYPTION_KEY: ${{ inputs.gradle-encryption-key }}
+
+    - name: Validate Gradle Feature Combination
+      run: |
+        if [ "${{ inputs.configuration-cache }}" = "disabled" ] && [ "${{ inputs.project-isolation }}" != "off" ] && [ -n "${{ inputs.project-isolation }}" ]; then
+          echo "configuration-cache=disabled cannot be combined with project-isolation=${{ inputs.project-isolation }}."
+          echo "Gradle requires configuration cache when Isolated Projects is enabled."
+          exit 1
+        fi
+      shell: bash
+
+    - name: Set Configuration Cache Paths
+      id: configuration-cache-paths
+      if: steps.gradle-feature-state.outputs.entry_mode == 'restore' && steps.gradle-feature-state.outputs.feature_enabled == 'true' && inputs.configuration-cache-key != ''
+      run: |
+        {
+          echo "paths<<EOF"
+          echo ".gradle/configuration-cache"
+          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/caches/modules-2"
+          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/caches/[0-9]*"
+          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/caches/jars-*"
+          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/init.d"
+
+          IFS=',' read -ra INCLUDED_BUILDS <<< "${{ inputs.configuration-cache-included-builds }}"
+          for included_build in "${INCLUDED_BUILDS[@]}"; do
+            included_build="$(printf '%s' "$included_build" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+            if [ -z "$included_build" ]; then
+              continue
+            fi
+
+            if [[ "$included_build" == */\* ]]; then
+              parent="${included_build%/*}"
+              if [ -d "$parent" ]; then
+                for child in "$parent"/*; do
+                  if [ -d "$child" ]; then
+                    echo "$child/build"
+                  fi
+                done
+              fi
+            else
+              echo "$included_build/build"
+            fi
+          done
+
+          echo "EOF"
+        } >> "$GITHUB_OUTPUT"
+      shell: bash
+
     - uses: cdsap/build-process-watcher@v0.6.2
       with:
-        remote_monitoring: 'true'          
+        remote_monitoring: 'true'
         export_to_bigquery: 'true'
+
+    - name: Restore Configuration Cache
+      if: steps.gradle-feature-state.outputs.entry_mode == 'restore' && steps.gradle-feature-state.outputs.feature_enabled == 'true' && inputs.configuration-cache-key != ''
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ steps.configuration-cache-paths.outputs.paths }}
+        key: ${{ inputs.configuration-cache-key }}
+        fail-on-cache-miss: false
+
+    - name: Set Configuration Cache Arguments
+      id: configuration-cache-args
+      run: |
+        case "${{ inputs.configuration-cache }}" in
+          "off"|"")
+            echo "args=" >> "$GITHUB_OUTPUT"
+            ;;
+          "disabled")
+            echo "args=--no-configuration-cache -Dorg.gradle.unsafe.isolated-projects=false" >> "$GITHUB_OUTPUT"
+            ;;
+          "on"|"on-no-entry")
+            echo "args=--configuration-cache" >> "$GITHUB_OUTPUT"
+            ;;
+          "warn"|"warn-no-entry")
+            echo "args=--configuration-cache --configuration-cache-problems=warn" >> "$GITHUB_OUTPUT"
+            ;;
+          "read-only"|"read-only-no-entry")
+            echo "args=--configuration-cache -Dorg.gradle.configuration-cache.read-only=true" >> "$GITHUB_OUTPUT"
+            ;;
+          *)
+            echo "Unknown configuration cache option: ${{ inputs.configuration-cache }}"
+            exit 1
+            ;;
+        esac
+      shell: bash
+
+    - name: Set Project Isolation Arguments
+      id: project-isolation-args
+      run: |
+        case "${{ inputs.project-isolation }}" in
+          "off"|"")
+            echo "args=" >> "$GITHUB_OUTPUT"
+            ;;
+          "on"|"on-no-entry")
+            echo "args=--isolated-projects" >> "$GITHUB_OUTPUT"
+            ;;
+          "diagnostics"|"diagnostics-no-entry")
+            echo "args=--isolated-projects -Dorg.gradle.unsafe.isolated-projects.diagnostics=true" >> "$GITHUB_OUTPUT"
+            ;;
+          *)
+            echo "Unknown project isolation option: ${{ inputs.project-isolation }}"
+            exit 1
+            ;;
+        esac
+      shell: bash
+
     - name: Execute Gradle Build
       id: gradle-build
       run: |
-        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} \
+        ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} ${{ steps.configuration-cache-args.outputs.args }} ${{ steps.project-isolation-args.outputs.args }} \
           -Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }} \
           -Dscan.tag."${{ inputs.mode }}" \
           -Dscan.tag.experiment \
@@ -85,4 +264,5 @@ runs:
       env:
         DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
+        GRADLE_ENCRYPTION_KEY: ${{ inputs.gradle-encryption-key }}
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
