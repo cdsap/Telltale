@@ -1,0 +1,68 @@
+---
+layout: post
+title: "Gradle 9.8.0 vs 9.7.1"
+date: 2026-09-24
+report_link: /Telltale/reports/experiment_results_20260924183500.html
+summary: " 
+The performance analysis between two Gradle build variants, `varianta_baseline` and `variantb_gradle-9.8.0`, reveals several key insights. Overall, `variantb_gradle-9.8.0` shows a slight improvement in build time, reducing from an average of 263 seconds in `varianta_baseline` to 258 seconds, a decrease of approximately 1.75%. Configuration times, however, increased slightly in `variantb_gradle-9.8.0` by about 1.68%. Notably, the `com.android.build.gradle.internal.tasks.DexMergingTask` and `:app:app:mergeExtDexDebug` tasks showed significant execution time increases in `variantb_gradle-9.8.0`. CPU and memory usage metrics for both variants are quite similar, with a slight reduction in memory usage observed in the newer variant."
+tags: ["dependencies cache"]
+experiment_snapshot:
+  metric: "Overall build time"
+  unit: "seconds"
+  variant_a:
+    label: "9.7.1"
+    mean: 262.968
+    p50: 271.413
+    p90: 289.428
+  variant_b:
+    label: "9.8.0"
+    mean: 258.364
+    p50: 267.704
+    p90: 283.448
+  config_metric: "Configuration time"
+  config_unit: "seconds"
+  config_variant_a:
+    mean: 47.150
+    p50: 47.886
+    p90: 53.547
+  config_variant_b:
+    mean: 46.266
+    p50: 48.369
+    p90: 54.337
+---
+[Report 📊](../../reports/experiment_results_20260924183500.html)
+## Summary
+The performance analysis between two Gradle build variants, `varianta_baseline` and `variantb_gradle-9.8.0`, reveals several key insights. Overall, `variantb_gradle-9.8.0` shows a slight improvement in build time, reducing from an average of 263 seconds in `varianta_baseline` to 258 seconds, a decrease of approximately 1.75%. Configuration times, however, increased slightly in `variantb_gradle-9.8.0` by about 1.68%. Notably, the `com.android.build.gradle.internal.tasks.DexMergingTask` and `:app:app:mergeExtDexDebug` tasks showed significant execution time increases in `variantb_gradle-9.8.0`. CPU and memory usage metrics for both variants are quite similar, with a slight reduction in memory usage observed in the newer variant.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - Mean: `varianta_baseline` 263s vs `variantb_gradle-9.8.0` 258s (1.75% decrease)
+  - P50: `varianta_baseline` 271s vs `variantb_gradle-9.8.0` 268s (1.11% decrease)
+  - P90: `varianta_baseline` 289s vs `variantb_gradle-9.8.0` 283s (2.08% decrease)
+- **Configuration Time:**
+  - Mean: `varianta_baseline` 47.15s vs `variantb_gradle-9.8.0` 46.27s (1.87% increase)
+  - P50: `varianta_baseline` 47.89s vs `variantb_gradle-9.8.0` 48.37s (1.00% increase)
+  - P90: `varianta_baseline` 53.55s vs `variantb_gradle-9.8.0` 54.34s (1.48% increase)
+
+### 2. Task Type Differences
+- **Top 3 Time-Consuming Tasks:**
+  - `"com.android.build.gradle.internal.tasks.DexMergingTask"`: Mean increased from 6982ms to 7036ms.
+  - `"com.android.build.gradle.internal.tasks.GlobalSyntheticsGeneratorTask"`: Mean slightly decreased from 6100ms to 6041ms.
+  - `"com.android.build.gradle.internal.tasks.ValidateSigningTask"`: Mean decreased from 2155ms to 1927ms.
+
+### 3. Statistical Patterns
+- Notable timing variations:
+  - `"com.android.build.gradle.internal.tasks.DexMergingTask"` shows a slight increase in execution time across all percentiles in `variantb_gradle-9.8.0`.
+  - `"com.android.build.gradle.internal.tasks.GlobalSyntheticsGeneratorTask"` and `"com.android.build.gradle.internal.tasks.ValidateSigningTask"` show a decrease in execution times, indicating performance improvements in these areas.
+
+### 5. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - All processes: Both variants reached a maximum of 100% CPU usage.
+  - Build process: `varianta_baseline` had a slightly higher maximum CPU usage (95.47%) compared to `variantb_gradle-9.8.0` (95.27%).
+- **Memory Usage:**
+  - All processes: Maximum memory usage decreased from 8.81GB in `varianta_baseline` to 8.69GB in `variantb_gradle-9.8.0`.
+  - Build process: Maximum memory usage decreased from 4.5GB in `varianta_baseline` to 4.4GB in `variantb_gradle-9.8.0`.
+
+Overall, `variantb_gradle-9.8.0` exhibits slight improvements in build time and memory usage, with mixed results in task execution times.
