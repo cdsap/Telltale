@@ -1,0 +1,71 @@
+---
+layout: post
+title: "Kotlin 2.4.21 vs 2.4.20"
+date: 2026-10-08
+report_link: /Telltale/reports/experiment_results_20261008200341.html
+summary: " 
+The analysis of the Gradle build performance for the baseline variant (`varianta_baseline`) and the Kotlin 2.4.21 variant (`variantb_kotlin-2.4.21`) reveals several key findings. The overall build time for `variantb_kotlin-2.4.21` is longer by approximately 19.6 seconds (8.2% increase) compared to `varianta_baseline`. Specifically, the P50 and P90 build times show increases of 20.2 seconds (7.8%) and 20.6 seconds (7.5%), respectively. Configuration times also increased slightly in the Kotlin 2.4.21 variant by about 1.3 seconds (3.1%). Task execution times for several key tasks, such as `KotlinCompile` and `DexMergingTask`, have increased in the Kotlin 2.4.21 variant, contributing to the longer build times. Memory usage saw a slight increase in the Kotlin 2.4.21 variant, with a peak usage of 9.65 GB compared to 9.34 GB in the baseline."
+tags: ["dependencies cache"]
+experiment_snapshot:
+  metric: "Overall build time"
+  unit: "seconds"
+  variant_a:
+    label: "2.4.20"
+    mean: 238.792
+    p50: 257.465
+    p90: 275.380
+  variant_b:
+    label: "2.4.21"
+    mean: 258.398
+    p50: 277.658
+    p90: 295.978
+  config_metric: "Configuration time"
+  config_unit: "seconds"
+  config_variant_a:
+    mean: 41.697
+    p50: 43.491
+    p90: 52.986
+  config_variant_b:
+    mean: 42.992
+    p50: 44.926
+    p90: 50.580
+---
+[Report 📊](../../reports/experiment_results_20261008200341.html)
+## Summary
+The analysis of the Gradle build performance for the baseline variant (`varianta_baseline`) and the Kotlin 2.4.21 variant (`variantb_kotlin-2.4.21`) reveals several key findings. The overall build time for `variantb_kotlin-2.4.21` is longer by approximately 19.6 seconds (8.2% increase) compared to `varianta_baseline`. Specifically, the P50 and P90 build times show increases of 20.2 seconds (7.8%) and 20.6 seconds (7.5%), respectively. Configuration times also increased slightly in the Kotlin 2.4.21 variant by about 1.3 seconds (3.1%). Task execution times for several key tasks, such as `KotlinCompile` and `DexMergingTask`, have increased in the Kotlin 2.4.21 variant, contributing to the longer build times. Memory usage saw a slight increase in the Kotlin 2.4.21 variant, with a peak usage of 9.65 GB compared to 9.34 GB in the baseline.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - **Mean:** Baseline: 238.792s, Kotlin 2.4.21: 258.398s (Increase of 19.606s or 8.2%)
+  - **P50:** Baseline: 257.465s, Kotlin 2.4.21: 277.658s (Increase of 20.193s or 7.8%)
+  - **P90:** Baseline: 275.380s, Kotlin 2.4.21: 295.978s (Increase of 20.598s or 7.5%)
+
+- **Configuration Time:**
+  - **Mean:** Baseline: 41.697s, Kotlin 2.4.21: 42.992s (Increase of 1.295s or 3.1%)
+  - **P50:** Baseline: 43.491s, Kotlin 2.4.21: 44.926s (Increase of 1.435s or 3.3%)
+  - **P90:** Baseline: 52.986s, Kotlin 2.4.21: 50.580s (Decrease of 2.406s or -4.5%)
+
+### 2. Task Type Differences
+- **Top Time-Consuming Tasks:**
+  - `"KotlinCompile"`: Mean time increased from 3.131s to 3.563s (13.8% increase).
+  - `"DexMergingTask"`: Mean time increased from 6.484s to 6.837s (5.4% increase).
+  - `"GlobalSyntheticsGeneratorTask"`: Mean time increased from 5.478s to 5.790s (5.7% increase).
+
+### 3. Statistical Patterns
+- Tasks with notable timing variations include `"KotlinCompile"`, `"DexMergingTask"`, and `"GlobalSyntheticsGeneratorTask"`, all showing more than 5% increase in execution times in the Kotlin 2.4.21 variant.
+
+### 4. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - **All processes:** Max CPU usage was 100% for both variants.
+  - **Build process:** Max CPU usage slightly decreased from 95.9% to 95.533%.
+  - **Build child processes:** Max CPU usage decreased from 94.4% to 93.767%.
+
+- **Memory Usage:**
+  - **All processes:** Max memory usage increased from 8.8 GB to 9.17 GB.
+  - **Build processes:** Max memory usage slightly decreased from 4.48 GB to 4.45 GB.
+  - **Build child processes:** Max memory usage increased from 3.2 GB to 3.62 GB.
+
+### 5. Summary
+The transition to Kotlin 2.4.21 in `variantb_kotlin-2.4.21` has led to an increase in build and configuration times, with significant increases in execution times for several key tasks. Memory usage has also slightly increased, indicating a higher resource demand in the newer Kotlin version. These changes suggest a trade-off between adopting new Kotlin features and the impact on build performance and resource utilization.
