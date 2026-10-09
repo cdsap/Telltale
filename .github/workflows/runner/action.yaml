@@ -73,6 +73,42 @@ runs:
       with:
         remote_monitoring: 'true'          
         export_to_bigquery: 'true'
+
+    - name: Start CPU diagnostics
+      shell: bash
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq sysstat
+
+        mkdir -p diagnostics
+
+        nohup bash -c '
+          while true; do
+            echo "=== $(date --iso-8601=seconds) ==="
+            for f in \
+              /proc/pressure/cpu \
+              /proc/pressure/memory \
+              /sys/fs/cgroup/cpu.stat \
+              /sys/fs/cgroup/memory.events
+            do
+              if [ -r "$f" ]; then
+                echo "--- $f"
+                cat "$f"
+              fi
+            done
+            sleep 1
+          done
+        ' > diagnostics/pressure.log 2>&1 < /dev/null &
+        echo $! > diagnostics/pressure.pid
+
+        nohup pidstat -u -r -h -p ALL 1 \
+          > diagnostics/processes.log 2>&1 < /dev/null &
+        echo $! > diagnostics/pidstat.pid
+
+        nohup vmstat 1 \
+          > diagnostics/system.log 2>&1 < /dev/null &
+        echo $! > diagnostics/vmstat.pid
+
     - name: Execute Gradle Build
       id: gradle-build
       run: |
@@ -86,3 +122,21 @@ runs:
         DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
+
+    - name: Stop diagnostics
+      if: always()
+      shell: bash
+      run: |
+        for file in diagnostics/*.pid; do
+          [ -f "$file" ] || continue
+          kill "$(cat "$file")" 2>/dev/null || true
+        done
+
+    - name: Upload diagnostics
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: cpu-${{ inputs.variant }}-${{ github.job }}-${{ strategy.job-index }}
+        path: diagnostics/
+        retention-days: 7
+        if-no-files-found: warn
