@@ -109,6 +109,50 @@ runs:
           > diagnostics/system.log 2>&1 < /dev/null &
         echo $! > diagnostics/vmstat.pid
 
+    - name: Start Gradle JFR
+      shell: bash
+      run: |
+        mkdir -p "$RUNNER_TEMP/jfr"
+        echo "TELLTALE_JFR_DIR=$RUNNER_TEMP/jfr" >> "$GITHUB_ENV"
+
+        cat > "$RUNNER_TEMP/jfr-controller.sh" <<'EOF'
+        #!/usr/bin/env bash
+        set -u
+
+        DIR="$RUNNER_TEMP/jfr"
+
+        # Wait for the Gradle daemon, not a Kotlin daemon.
+        for i in $(seq 1 180); do
+          PID=$(jcmd -l 2>/dev/null |
+            awk '/org.gradle.launcher.daemon.bootstrap.GradleDaemon/ {print $1; exit}')
+
+          if [[ -n "$PID" ]]; then
+            echo "$PID" > "$DIR/gradle.pid"
+            echo "Gradle PID: $PID"
+
+            if jcmd "$PID" JFR.start \
+              name=telltale \
+              settings=profile \
+              disk=true \
+              maxsize=512m \
+              > "$DIR/start.log" 2>&1; then
+              echo "JFR started successfully"
+              exit 0
+            fi
+          fi
+
+          sleep 1
+        done
+
+        echo "Could not start Gradle JFR" > "$DIR/error.log"
+        EOF
+
+        chmod +x "$RUNNER_TEMP/jfr-controller.sh"
+
+        nohup "$RUNNER_TEMP/jfr-controller.sh" \
+          > "$RUNNER_TEMP/jfr/controller.log" 2>&1 \
+          < /dev/null &
+
     - name: Execute Gradle Build
       id: gradle-build
       run: |
@@ -122,6 +166,38 @@ runs:
         DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
+
+    - name: Save Gradle JFR
+      if: always()
+      shell: bash
+      run: |
+        DIR="$RUNNER_TEMP/jfr"
+
+        if [[ -f "$DIR/gradle.pid" ]]; then
+          PID=$(cat "$DIR/gradle.pid")
+
+          echo "Dumping Gradle JFR for PID $PID"
+
+          jcmd "$PID" JFR.dump \
+            name=telltale \
+            filename="$DIR/gradle.jfr" || true
+
+          jcmd "$PID" JFR.stop \
+            name=telltale || true
+        else
+          echo "No Gradle daemon PID captured"
+        fi
+
+        ls -lah "$DIR"
+
+    - name: Upload Gradle JFR
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: jfr-${{ inputs.variant }}-${{ github.job }}-${{ strategy.job-index }}
+        path: ${{ runner.temp }}/jfr/
+        retention-days: 7
+        if-no-files-found: warn
 
     - name: Stop diagnostics
       if: always()
