@@ -109,49 +109,64 @@ runs:
           > diagnostics/system.log 2>&1 < /dev/null &
         echo $! > diagnostics/vmstat.pid
 
-    - name: Start Gradle JFR
+    - name: Start JVM JFR monitoring
       shell: bash
       run: |
-        mkdir -p "$RUNNER_TEMP/jfr"
-        echo "TELLTALE_JFR_DIR=$RUNNER_TEMP/jfr" >> "$GITHUB_ENV"
+        DIR="$RUNNER_TEMP/jfr"
+        mkdir -p "$DIR"
+        echo "TELLTALE_JFR_DIR=$DIR" >> "$GITHUB_ENV"
 
         cat > "$RUNNER_TEMP/jfr-controller.sh" <<'EOF'
         #!/usr/bin/env bash
         set -u
 
         DIR="$RUNNER_TEMP/jfr"
+        mkdir -p "$DIR"
 
-        # Wait for the Gradle daemon, not a Kotlin daemon.
-        for i in $(seq 1 180); do
-          PID=$(jcmd -l 2>/dev/null |
-            awk '/org.gradle.launcher.daemon.bootstrap.GradleDaemon/ {print $1; exit}')
+        while [[ ! -f "$DIR/stop" ]]; do
+          while read -r PID MAIN REST; do
+            [[ "$PID" =~ ^[0-9]+$ ]] || continue
 
-          if [[ -n "$PID" ]]; then
-            echo "$PID" > "$DIR/gradle.pid"
-            echo "Gradle PID: $PID"
+            TYPE=""
+            case "$MAIN" in
+              org.gradle.launcher.daemon.bootstrap.GradleDaemon)
+                TYPE="gradle"
+                ;;
+              org.jetbrains.kotlin.daemon.KotlinCompileDaemon)
+                TYPE="kotlin"
+                ;;
+              *)
+                continue
+                ;;
+            esac
+
+            MARKER="$DIR/$TYPE-$PID.started"
+            [[ -e "$MARKER" ]] && continue
+
+            echo "$(date --iso-8601=seconds) Starting JFR for $TYPE PID=$PID" \
+              >> "$DIR/processes.log"
 
             if jcmd "$PID" JFR.start \
-              name=telltale \
-              settings=profile \
-              disk=true \
-              maxsize=512m \
-              > "$DIR/start.log" 2>&1; then
-              echo "JFR started successfully"
-              exit 0
+                name=telltale \
+                settings=profile \
+                disk=true \
+                maxsize=512m \
+                filename="$DIR/$TYPE-$PID.jfr" \
+                dumponexit=true \
+                > "$DIR/$TYPE-$PID.log" 2>&1; then
+              touch "$MARKER"
             fi
-          fi
+          done < <(jcmd -l 2>/dev/null)
 
           sleep 1
         done
-
-        echo "Could not start Gradle JFR" > "$DIR/error.log"
         EOF
 
         chmod +x "$RUNNER_TEMP/jfr-controller.sh"
 
         nohup "$RUNNER_TEMP/jfr-controller.sh" \
-          > "$RUNNER_TEMP/jfr/controller.log" 2>&1 \
-          < /dev/null &
+          > "$DIR/controller.log" 2>&1 < /dev/null &
+        echo $! > "$DIR/controller.pid"
 
     - name: Execute Gradle Build
       id: gradle-build
@@ -167,30 +182,42 @@ runs:
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
 
-    - name: Save Gradle JFR
+    - name: Save JVM JFR recordings
       if: always()
       shell: bash
       run: |
         DIR="$RUNNER_TEMP/jfr"
 
-        if [[ -f "$DIR/gradle.pid" ]]; then
-          PID=$(cat "$DIR/gradle.pid")
+        touch "$DIR/stop"
 
-          echo "Dumping Gradle JFR for PID $PID"
-
-          jcmd "$PID" JFR.dump \
-            name=telltale \
-            filename="$DIR/gradle.jfr" || true
-
-          jcmd "$PID" JFR.stop \
-            name=telltale || true
-        else
-          echo "No Gradle daemon PID captured"
+        if [[ -f "$DIR/controller.pid" ]]; then
+          kill "$(cat "$DIR/controller.pid")" 2>/dev/null || true
         fi
 
-        ls -lah "$DIR"
+        for MARKER in "$DIR"/*.started; do
+          [[ -e "$MARKER" ]] || continue
 
-    - name: Upload Gradle JFR
+          NAME=$(basename "$MARKER" .started)
+          PID="${NAME##*-}"
+
+          echo "Saving JFR: $NAME, PID=$PID"
+
+          if kill -0 "$PID" 2>/dev/null; then
+            jcmd "$PID" JFR.dump \
+              name=telltale \
+              filename="$DIR/$NAME.jfr" || true
+
+            jcmd "$PID" JFR.stop \
+              name=telltale || true
+          fi
+        done
+
+        echo "Recorded JVMs:"
+        cat "$DIR/processes.log" 2>/dev/null || true
+
+        ls -lh "$DIR"/*.jfr 2>/dev/null || true
+
+    - name: Upload JVM JFR recordings
       if: always()
       uses: actions/upload-artifact@v4
       with:
