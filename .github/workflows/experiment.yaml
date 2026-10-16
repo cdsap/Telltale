@@ -19,6 +19,16 @@ on:
         description: "Gradle task to be executed"
         required: true
         default: ":core:model:compileKotlin"
+      enable_cpu_diagnostics:
+        description: "Collect CPU and system diagnostics"
+        type: boolean
+        required: true
+        default: false
+      enable_jfr:
+        description: "Collect JVM Flight Recorder recordings"
+        type: boolean
+        required: true
+        default: false
       iterations:
         description: "Number of iterations for the experiment"
         required: true
@@ -193,6 +203,8 @@ jobs:
           api-key: ${{ secrets.DV_ACCESS_KEY }}
           cache-excludes: ${{ steps.seed.outputs.cache-excludes }}
           cache-url: ${{ secrets.CI_URL_CACHE_NODE }}
+          enable_cpu_diagnostics: ${{ github.event.inputs.enable_cpu_diagnostics }}
+          enable_jfr: ${{ github.event.inputs.enable_jfr }}
           repository: ${{ github.event.inputs.repository }}
           variant-prefix: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && 'varianta_' || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && 'variantb_' }}
           extra-args: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantB }}
@@ -231,6 +243,8 @@ jobs:
           execution-number: ${{ github.repository_owner }}-${{ github.run_number }}
           variant: ${{ matrix.config.variant }}
           api-key: ${{ secrets.DV_ACCESS_KEY }}
+          enable_cpu_diagnostics: ${{ github.event.inputs.enable_cpu_diagnostics }}
+          enable_jfr: ${{ github.event.inputs.enable_jfr }}
           repository: ${{ github.event.inputs.repository }}
           variant-prefix: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && 'varianta_' || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && 'variantb_' }}
           extra-args: ${{ (matrix.config.variant == github.event.inputs.variantA) && matrix.config.index == 0 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantA || (matrix.config.variant == github.event.inputs.variantB) && matrix.config.index == 1 && fromJson(github.event.inputs.extra_build_args).extraArgsVariantB }}
