@@ -42,6 +42,14 @@ inputs:
   cache-excludes:
     description: 'Patterns to exclude from cache'
     required: true
+  enable_cpu_diagnostics:
+    description: 'Collect CPU and system diagnostics'
+    required: false
+    default: 'false'
+  enable_jfr:
+    description: 'Collect JVM Flight Recorder recordings'
+    required: false
+    default: 'false'
 
 runs:
   using: 'composite'
@@ -75,6 +83,7 @@ runs:
         export_to_bigquery: 'true'
 
     - name: Start CPU diagnostics
+      if: ${{ inputs.enable_cpu_diagnostics == 'true' }}
       shell: bash
       run: |
         sudo apt-get update -qq
@@ -110,6 +119,7 @@ runs:
         echo $! > diagnostics/vmstat.pid
 
     - name: Start JVM JFR monitoring
+      if: ${{ inputs.enable_jfr == 'true' }}
       shell: bash
       run: |
         DIR="$RUNNER_TEMP/jfr"
@@ -183,7 +193,7 @@ runs:
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
 
     - name: Save JVM JFR recordings
-      if: always()
+      if: ${{ always() && inputs.enable_jfr == 'true' }}
       shell: bash
       run: |
         DIR="$RUNNER_TEMP/jfr"
@@ -218,7 +228,7 @@ runs:
         ls -lh "$DIR"/*.jfr 2>/dev/null || true
 
     - name: Upload JVM JFR recordings
-      if: always()
+      if: ${{ always() && inputs.enable_jfr == 'true' }}
       uses: actions/upload-artifact@v4
       with:
         name: jfr-${{ inputs.variant }}-${{ github.job }}-${{ strategy.job-index }}
@@ -227,7 +237,7 @@ runs:
         if-no-files-found: warn
 
     - name: Stop diagnostics
-      if: always()
+      if: ${{ always() && inputs.enable_cpu_diagnostics == 'true' }}
       shell: bash
       run: |
         for file in diagnostics/*.pid; do
@@ -236,7 +246,7 @@ runs:
         done
 
     - name: Upload diagnostics
-      if: always()
+      if: ${{ always() && inputs.enable_cpu_diagnostics == 'true' }}
       uses: actions/upload-artifact@v4
       with:
         name: cpu-${{ inputs.variant }}-${{ github.job }}-${{ strategy.job-index }}
