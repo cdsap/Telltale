@@ -42,6 +42,14 @@ inputs:
   cache-excludes:
     description: 'Patterns to exclude from cache'
     required: true
+  enable_cpu_diagnostics:
+    description: 'Collect CPU and system diagnostics'
+    required: false
+    default: 'false'
+  enable_jfr:
+    description: 'Collect JVM Flight Recorder recordings'
+    required: false
+    default: 'false'
 
 runs:
   using: 'composite'
@@ -73,6 +81,103 @@ runs:
       with:
         remote_monitoring: 'true'          
         export_to_bigquery: 'true'
+
+    - name: Start CPU diagnostics
+      if: ${{ inputs.enable_cpu_diagnostics == 'true' }}
+      shell: bash
+      run: |
+        sudo apt-get update -qq
+        sudo apt-get install -y -qq sysstat
+
+        mkdir -p diagnostics
+
+        nohup bash -c '
+          while true; do
+            echo "=== $(date --iso-8601=seconds) ==="
+            for f in \
+              /proc/pressure/cpu \
+              /proc/pressure/memory \
+              /sys/fs/cgroup/cpu.stat \
+              /sys/fs/cgroup/memory.events
+            do
+              if [ -r "$f" ]; then
+                echo "--- $f"
+                cat "$f"
+              fi
+            done
+            sleep 1
+          done
+        ' > diagnostics/pressure.log 2>&1 < /dev/null &
+        echo $! > diagnostics/pressure.pid
+
+        nohup pidstat -u -r -h -p ALL 1 \
+          > diagnostics/processes.log 2>&1 < /dev/null &
+        echo $! > diagnostics/pidstat.pid
+
+        nohup vmstat 1 \
+          > diagnostics/system.log 2>&1 < /dev/null &
+        echo $! > diagnostics/vmstat.pid
+
+    - name: Start JVM JFR monitoring
+      if: ${{ inputs.enable_jfr == 'true' }}
+      shell: bash
+      run: |
+        DIR="$RUNNER_TEMP/jfr"
+        mkdir -p "$DIR"
+        echo "TELLTALE_JFR_DIR=$DIR" >> "$GITHUB_ENV"
+
+        cat > "$RUNNER_TEMP/jfr-controller.sh" <<'EOF'
+        #!/usr/bin/env bash
+        set -u
+
+        DIR="$RUNNER_TEMP/jfr"
+        mkdir -p "$DIR"
+
+        while [[ ! -f "$DIR/stop" ]]; do
+          while read -r PID MAIN REST; do
+            [[ "$PID" =~ ^[0-9]+$ ]] || continue
+
+            TYPE=""
+            case "$MAIN" in
+              org.gradle.launcher.daemon.bootstrap.GradleDaemon)
+                TYPE="gradle"
+                ;;
+              org.jetbrains.kotlin.daemon.KotlinCompileDaemon)
+                TYPE="kotlin"
+                ;;
+              *)
+                continue
+                ;;
+            esac
+
+            MARKER="$DIR/$TYPE-$PID.started"
+            [[ -e "$MARKER" ]] && continue
+
+            echo "$(date --iso-8601=seconds) Starting JFR for $TYPE PID=$PID" \
+              >> "$DIR/processes.log"
+
+            if jcmd "$PID" JFR.start \
+                name=telltale \
+                settings=profile \
+                disk=true \
+                maxsize=512m \
+                filename="$DIR/$TYPE-$PID.jfr" \
+                dumponexit=true \
+                > "$DIR/$TYPE-$PID.log" 2>&1; then
+              touch "$MARKER"
+            fi
+          done < <(jcmd -l 2>/dev/null)
+
+          sleep 1
+        done
+        EOF
+
+        chmod +x "$RUNNER_TEMP/jfr-controller.sh"
+
+        nohup "$RUNNER_TEMP/jfr-controller.sh" \
+          > "$DIR/controller.log" 2>&1 < /dev/null &
+        echo $! > "$DIR/controller.pid"
+
     - name: Execute Gradle Build
       id: gradle-build
       run: |
@@ -86,3 +191,65 @@ runs:
         DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
+
+    - name: Save JVM JFR recordings
+      if: ${{ always() && inputs.enable_jfr == 'true' }}
+      shell: bash
+      run: |
+        DIR="$RUNNER_TEMP/jfr"
+
+        touch "$DIR/stop"
+
+        if [[ -f "$DIR/controller.pid" ]]; then
+          kill "$(cat "$DIR/controller.pid")" 2>/dev/null || true
+        fi
+
+        for MARKER in "$DIR"/*.started; do
+          [[ -e "$MARKER" ]] || continue
+
+          NAME=$(basename "$MARKER" .started)
+          PID="${NAME##*-}"
+
+          echo "Saving JFR: $NAME, PID=$PID"
+
+          if kill -0 "$PID" 2>/dev/null; then
+            jcmd "$PID" JFR.dump \
+              name=telltale \
+              filename="$DIR/$NAME.jfr" || true
+
+            jcmd "$PID" JFR.stop \
+              name=telltale || true
+          fi
+        done
+
+        echo "Recorded JVMs:"
+        cat "$DIR/processes.log" 2>/dev/null || true
+
+        ls -lh "$DIR"/*.jfr 2>/dev/null || true
+
+    - name: Upload JVM JFR recordings
+      if: ${{ always() && inputs.enable_jfr == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: jfr-${{ inputs.variant }}-${{ github.job }}-${{ strategy.job-index }}
+        path: ${{ runner.temp }}/jfr/
+        retention-days: 7
+        if-no-files-found: warn
+
+    - name: Stop diagnostics
+      if: ${{ always() && inputs.enable_cpu_diagnostics == 'true' }}
+      shell: bash
+      run: |
+        for file in diagnostics/*.pid; do
+          [ -f "$file" ] || continue
+          kill "$(cat "$file")" 2>/dev/null || true
+        done
+
+    - name: Upload diagnostics
+      if: ${{ always() && inputs.enable_cpu_diagnostics == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: cpu-${{ inputs.variant }}-${{ github.job }}-${{ strategy.job-index }}
+        path: diagnostics/
+        retention-days: 7
+        if-no-files-found: warn
