@@ -12,19 +12,6 @@
   {{- if gt (len $snapPosts) 0 }}
     {{- $latestSnap = index (sort $snapPosts "Date" "desc") 0 }}
   {{- end }}
-{{- if site.Params.homeInfoParams }}
-<header class="page-header home-hero">
-  <p class="home-hero-eyebrow">Gradle build experiments</p>
-  <h1>{{ replace (replace site.Params.homeInfoParams.Title "🔍" "") "🔎" "" }}</h1>
-  <div class="home-hero-desc">{{ site.Params.homeInfoParams.Content | markdownify }}</div>
-  <div class="home-hero-actions">
-    <a class="home-hero-cta" href="#recent-experiments-heading">Explore experiments <span aria-hidden="true">→</span></a>
-    <a class="home-hero-cta home-hero-cta--secondary" href="{{ "info/" | relURL }}">How it works <span aria-hidden="true">↗</span></a>
-  </div>
-  <p class="home-hero-footnote"><strong>{{ len $pages }}</strong> published experiments · Metrics, reports and raw data</p>
-</header>
-{{- end }}
-
 <div class="home-layout home-layout--three">
   <div class="home-layout__snapshot">
     {{- with $latestSnap }}
