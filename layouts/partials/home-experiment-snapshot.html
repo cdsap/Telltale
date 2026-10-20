@@ -14,6 +14,13 @@
   <p class="experiment-snapshot-compare">
     <a href="{{ .Permalink }}">{{ $a.label }} vs {{ $b.label }}</a>
   </p>
+  <div class="experiment-snapshot-kpi" aria-label="Mean change from the baseline">
+    <div>
+      <span class="experiment-snapshot-kpi-label">Mean change</span>
+      <strong class="experiment-snapshot-kpi-value{{ if lt (index $pct "mean") 0.0 }} is-improvement{{ else if gt (index $pct "mean") 0.0 }} is-regression{{ end }}">{{ printf "%+.2f" (index $pct "mean") }}%</strong>
+    </div>
+    <span class="experiment-snapshot-kpi-context">{{ $b.label }} relative to {{ $a.label }}</span>
+  </div>
   <p class="experiment-snapshot-metric">{{ $s.metric }}{{ with $s.unit }} ({{ . }}){{ end }}</p>
   <div class="experiment-snapshot-chart-wrap">
     <canvas id="experiment-snapshot-chart" width="400" height="260" role="img" aria-label="Bar chart comparing build duration percentiles for both Gradle versions"></canvas>
