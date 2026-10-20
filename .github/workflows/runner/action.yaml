@@ -209,16 +209,44 @@ runs:
 
           NAME=$(basename "$MARKER" .started)
           PID="${NAME##*-}"
+          RECORDING="$DIR/$NAME.jfr"
 
           echo "Saving JFR: $NAME, PID=$PID"
 
           if kill -0 "$PID" 2>/dev/null; then
             jcmd "$PID" JFR.dump \
               name=telltale \
-              filename="$DIR/$NAME.jfr" || true
+              filename="$RECORDING" || true
 
             jcmd "$PID" JFR.stop \
               name=telltale || true
+          fi
+
+          if [[ -f "$RECORDING" ]]; then
+            DURATION_FILE="$DIR/$NAME.duration"
+            DURATION_TMP="$DURATION_FILE.tmp"
+
+            if jfr summary "$RECORDING" 2> "$DURATION_TMP.error" \
+                | awk '$1 == "Duration:" {
+                    value = $2
+                    gsub(",", "", value)
+                    if (value ~ /^[0-9]+([.][0-9]+)?$/) {
+                      print value
+                      found = 1
+                      exit
+                    }
+                  }
+                  END { if (!found) exit 1 }' > "$DURATION_TMP" \
+                && [[ -s "$DURATION_TMP" ]]; then
+              mv "$DURATION_TMP" "$DURATION_FILE"
+              rm -f "$DURATION_TMP.error"
+              echo "Recorded JFR duration: $(cat "$DURATION_FILE") seconds"
+            else
+              rm -f "$DURATION_TMP"
+              echo "Could not record JFR duration for $RECORDING" >&2
+              cat "$DURATION_TMP.error" >&2 || true
+              rm -f "$DURATION_TMP.error"
+            fi
           fi
         done
 
