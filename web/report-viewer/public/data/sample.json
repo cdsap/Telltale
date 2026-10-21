@@ -1,0 +1,768 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-10-21T14:26:25Z",
+  "producer": {
+    "name": "BuildExperimentResults",
+    "version": "1.0-SNAPSHOT",
+    "revision": "9cda41e014de74896d3cede016f67b0380a724e1"
+  },
+  "report": {
+    "id": "run-39611234158-caching-attempt-1",
+    "kind": "caching",
+    "title": "ber-v1.2.0-json-test",
+    "status": "complete"
+  },
+  "experiment": {
+    "id": "cdsap-431",
+    "repository": "cdsap/experiment-kotlin-2.4.21-performance",
+    "requestedTasks": [
+      "assembleDebug"
+    ],
+    "mode": "caching",
+    "isProfiler": false
+  },
+  "execution": {
+    "source": "github-actions",
+    "runId": "39611234158",
+    "runAttempt": 1,
+    "workflowName": null,
+    "startedAt": null,
+    "links": {
+      "workflow": "https://github.com/cdsap/experiment-kotlin-2.4.21-performance/actions/runs/39611234158"
+    }
+  },
+  "variants": [
+    {
+      "id": "cpu_test",
+      "label": "varianta_cpu_test",
+      "sourceTag": "cdsap-431_varianta_cpu_test",
+      "role": "baseline",
+      "buildCount": 2
+    },
+    {
+      "id": "cpu2",
+      "label": "variantb_cpu2",
+      "sourceTag": "cdsap-431_variantb_cpu2",
+      "role": "candidate",
+      "buildCount": 2
+    }
+  ],
+  "metrics": [
+    {
+      "id": "build.duration",
+      "family": "build",
+      "category": "Build",
+      "name": "Build time",
+      "unit": "ms",
+      "valueType": "duration",
+      "direction": "lower-is-better",
+      "scope": {
+        "qualifier": "ms"
+      },
+      "aggregation": {
+        "sampleUnit": "build",
+        "method": "existing-ber-method"
+      },
+      "values": {
+        "cpu_test": {
+          "mean": 810730.0,
+          "p50": 810730.0,
+          "p90": 909430.0,
+          "count": 2
+        },
+        "cpu2": {
+          "mean": 914975.0,
+          "p50": 914975.0,
+          "p90": 930466.0,
+          "count": 2
+        }
+      }
+    },
+    {
+      "id": "build.configuration",
+      "family": "build",
+      "category": "Build",
+      "name": "Configuration time",
+      "unit": "ms",
+      "valueType": "duration",
+      "direction": "lower-is-better",
+      "scope": {
+        "qualifier": "ms"
+      },
+      "aggregation": {
+        "sampleUnit": "build",
+        "method": "existing-ber-method"
+      },
+      "values": {
+        "cpu_test": {
+          "mean": 67009.0,
+          "p50": 67010.0,
+          "p90": 72880.0,
+          "count": 2
+        },
+        "cpu2": {
+          "mean": 84529.0,
+          "p50": 84530.0,
+          "p90": 84859.0,
+          "count": 2
+        }
+      }
+    },
+    {
+      "id": "resource.all-processes-cpu.max",
+      "family": "resource",
+      "category": "All processes cpu",
+      "name": "Max",
+      "unit": "%",
+      "valueType": "percent",
+      "direction": null,
+      "scope": {
+        "qualifier": "%"
+      },
+      "aggregation": {
+        "sampleUnit": "build",
+        "method": "existing-ber-method"
+      },
+      "values": {
+        "cpu_test": {
+          "mean": 100.0,
+          "p50": 100.0,
+          "p90": 100.0,
+          "count": 2
+        },
+        "cpu2": {
+          "mean": 100.0,
+          "p50": 100.0,
+          "p90": 100.0,
+          "count": 2
+        }
+      }
+    },
+    {
+      "id": "resource.all-processes-memory.max.gb",
+      "family": "resource",
+      "category": "All processes memory",
+      "name": "Max",
+      "unit": "Gb",
+      "valueType": "memory",
+      "direction": null,
+      "scope": {
+        "qualifier": "Gb"
+      },
+      "aggregation": {
+        "sampleUnit": "build",
+        "method": "existing-ber-method"
+      },
+      "values": {
+        "cpu_test": {
+          "mean": 13.51,
+          "p50": 13.51,
+          "p90": 13.55,
+          "count": 2
+        },
+        "cpu2": {
+          "mean": 13.56,
+          "p50": 13.56,
+          "p90": 13.57,
+          "count": 2
+        }
+      }
+    },
+    {
+      "id": "resource.build-child-processes-cpu.max",
+      "family": "resource",
+      "category": "Build child processes cpu",
+      "name": "Max",
+      "unit": "%",
+      "valueType": "percent",
+      "direction": null,
+      "scope": {
+        "qualifier": "%"
+      },
+      "aggregation": {
+        "sampleUnit": "build",
+        "method": "existing-ber-method"
+      },
+      "values": {
+        "cpu_test": {
+          "mean": 88.5,
+          "p50": 88.5,
+          "p90": 89.0,
+          "count": 2
+        },
+        "cpu2": {
+          "mean": 90.5,
+          "p50": 90.5,
+          "p90": 91.0,
+          "count": 2
+        }
+      }
+    },
+    {
+      "id": "resource.build-child-processes-memory.max.gb",
+      "family": "resource",
+      "category": "Build child processes memory",
+      "name": "Max",
+      "unit": "Gb",
+      "valueType": "memory",
+      "direction": null,
+      "scope": {
+        "qualifier": "Gb"
+      },
+      "aggregation": {
+        "sampleUnit": "build",
+        "method": "existing-ber-method"
+      },
+      "values": {
+        "cpu_test": {
+          "mean": 4.18,
+          "p50": 4.18,
+          "p90": 4.2,
+          "count": 2
+        },
+        "cpu2": {
+          "mean": 3.91,
+          "p50": 3.91,
+          "p90": 4.04,
+          "count": 2
+        }
+      }
+    },
+    {
+      "id": "resource.build-process-cpu.max",
+      "family": "resource",
+      "category": "Build process cpu",
+      "name": "Max",
+      "unit": "%",
+      "valueType": "percent",
+      "direction": null,
+      "scope": {
+        "qualifier": "%"
+      },
+      "aggregation": {
+        "sampleUnit": "build",
+        "method": "existing-ber-method"
+      },
+      "values": {
+        "cpu_test": {
+          "mean": 92.0,
+          "p50": 92.0,
+          "p90": 93.0,
+          "count": 2
+        },
+        "cpu2": {
+          "mean": 92.5,
+          "p50": 92.5,
+          "p90": 94.0,
+          "count": 2
+        }
+      }
+    },
+    {
+      "id": "resource.build-processes-memory.max.gb",
+      "family": "resource",
+      "category": "Build processes memory",
+      "name": "Max",
+      "unit": "Gb",
+      "valueType": "memory",
+      "direction": null,
+      "scope": {
+        "qualifier": "Gb"
+      },
+      "aggregation": {
+        "sampleUnit": "build",
+        "method": "existing-ber-method"
+      },
+      "values": {
+        "cpu_test": {
+          "mean": 8.39,
+          "p50": 8.39,
+          "p90": 8.49,
+          "count": 2
+        },
+        "cpu2": {
+          "mean": 8.65,
+          "p50": 8.65,
+          "p90": 8.69,
+          "count": 2
+        }
+      }
+    },
+    {
+      "id": "task.task-path.app-app-compiledebugkotlin.ms",
+      "family": "task",
+      "category": "Task Path",
+      "name": ":app:app:compileDebugKotlin",
+      "unit": "ms",
+      "valueType": "duration",
+      "direction": "lower-is-better",
+      "scope": {
+        "taskPath": ":app:app:compileDebugKotlin"
+      },
+      "aggregation": {
+        "sampleUnit": "task-invocation",
+        "method": "existing-ber-method"
+      },
+      "values": {
+        "cpu_test": {
+          "mean": 3939.0,
+          "p50": 3939.0,
+          "p90": 4732.0,
+          "count": 2
+        },
+        "cpu2": {
+          "mean": 4315.0,
+          "p50": 4315.0,
+          "p90": 4382.0,
+          "count": 2
+        }
+      }
+    },
+    {
+      "id": "task.task-path.app-app-dexbuilderdebug.ms",
+      "family": "task",
+      "category": "Task Path",
+      "name": ":app:app:dexBuilderDebug",
+      "unit": "ms",
+      "valueType": "duration",
+      "direction": "lower-is-better",
+      "scope": {
+        "taskPath": ":app:app:dexBuilderDebug"
+      },
+      "aggregation": {
+        "sampleUnit": "task-invocation",
+        "method": "existing-ber-method"
+      },
+      "values": {
+        "cpu_test": {
+          "mean": 1063.0,
+          "p50": 1064.0,
+          "p90": 1273.0,
+          "count": 2
+        },
+        "cpu2": {
+          "mean": 1416.0,
+          "p50": 1416.0,
+          "p90": 1576.0,
+          "count": 2
+        }
+      }
+    },
+    {
+      "id": "task.task-path.app-app-generatedebugglobalsynthetics.ms",
+      "family": "task",
+      "category": "Task Path",
+      "name": ":app:app:generateDebugGlobalSynthetics",
+      "unit": "ms",
+      "valueType": "duration",
+      "direction": "lower-is-better",
+      "scope": {
+        "taskPath": ":app:app:generateDebugGlobalSynthetics"
+      },
+      "aggregation": {
+        "sampleUnit": "task-invocation",
+        "method": "existing-ber-method"
+      },
+      "values": {
+        "cpu_test": {
+          "mean": 3814.0,
+          "p50": 3814.0,
+          "p90": 5563.0,
+          "count": 2
+        },
+        "cpu2": {
+          "mean": 4455.0,
+          "p50": 4455.0,
+          "p90": 5581.0,
+          "count": 2
+        }
+      }
+    },
+    {
+      "id": "cpu-diagnostics.cpu.pidstat.percent_cpu.all-processes",
+      "family": "cpu-diagnostics",
+      "category": "cpu",
+      "name": "pidstat.percent_cpu",
+      "unit": "all-processes",
+      "valueType": "quantity",
+      "direction": null,
+      "scope": {
+        "qualifier": "all-processes"
+      },
+      "aggregation": {
+        "sampleUnit": "diagnostic-sample",
+        "method": "existing-ber-method"
+      },
+      "values": {
+        "cpu_test": {
+          "mean": 1.8,
+          "p50": 0.0,
+          "p90": 4.2,
+          "count": null
+        },
+        "cpu2": {
+          "mean": 2.1,
+          "p50": 0.0,
+          "p90": 4.8,
+          "count": null
+        }
+      }
+    },
+    {
+      "id": "jfr.jfr.recording.size_bytes.gradle",
+      "family": "jfr",
+      "category": "jfr",
+      "name": "recording.size_bytes",
+      "unit": "gradle",
+      "valueType": "quantity",
+      "direction": null,
+      "scope": {
+        "qualifier": "gradle"
+      },
+      "aggregation": {
+        "sampleUnit": "diagnostic-sample",
+        "method": "existing-ber-method"
+      },
+      "values": {
+        "cpu_test": {
+          "mean": 90000000.0,
+          "p50": 88000000.0,
+          "p90": 95000000.0,
+          "count": null
+        },
+        "cpu2": {
+          "mean": 91000000.0,
+          "p50": 90000000.0,
+          "p90": 96000000.0,
+          "count": null
+        }
+      }
+    }
+  ],
+  "datasets": {
+    "builds": {
+      "cpu_test": [
+        {
+          "observationId": "3m2exq6lmxgpo",
+          "sequence": 1,
+          "durationMs": 909430.0,
+          "configurationMs": 72880.0,
+          "startedAt": "2026-10-21T14:08:38.755Z",
+          "scanUrl": "https://ge.solutions-team.gradle.com/s/3m2exq6lmxgpo"
+        },
+        {
+          "observationId": "m7sigiyaaosqi",
+          "sequence": 2,
+          "durationMs": 712030.0,
+          "configurationMs": 61139.0,
+          "startedAt": "2026-10-21T14:08:40.096Z",
+          "scanUrl": "https://ge.solutions-team.gradle.com/s/m7sigiyaaosqi"
+        }
+      ],
+      "cpu2": [
+        {
+          "observationId": "fc67kcljkgld6",
+          "sequence": 1,
+          "durationMs": 930466.0,
+          "configurationMs": 84859.0,
+          "startedAt": "2026-10-21T14:08:42.764Z",
+          "scanUrl": "https://ge.solutions-team.gradle.com/s/fc67kcljkgld6"
+        },
+        {
+          "observationId": "r2jdt33bktxuq",
+          "sequence": 2,
+          "durationMs": 899484.0,
+          "configurationMs": 84200.0,
+          "startedAt": "2026-10-21T14:08:38.125Z",
+          "scanUrl": "https://ge.solutions-team.gradle.com/s/r2jdt33bktxuq"
+        }
+      ]
+    },
+    "taskSeries": {
+      "task.path.app-app-compiledebugkotlin": {
+        "path": ":app:app:compileDebugKotlin",
+        "taskType": "org.jetbrains.kotlin.gradle.tasks.KotlinCompile",
+        "observations": {
+          "cpu_test": [
+            {
+              "observationId": "3m2exq6lmxgpo",
+              "sequence": 1,
+              "durationMs": 4732.0,
+              "outcome": "executed_not_cacheable"
+            },
+            {
+              "observationId": "m7sigiyaaosqi",
+              "sequence": 2,
+              "durationMs": 3146.0,
+              "outcome": "executed_not_cacheable"
+            }
+          ],
+          "cpu2": [
+            {
+              "observationId": "fc67kcljkgld6",
+              "sequence": 1,
+              "durationMs": 4382.0,
+              "outcome": "executed_not_cacheable"
+            },
+            {
+              "observationId": "r2jdt33bktxuq",
+              "sequence": 2,
+              "durationMs": 4248.0,
+              "outcome": "executed_not_cacheable"
+            }
+          ]
+        }
+      },
+      "task.path.app-app-assembledebug": {
+        "path": ":app:app:assembleDebug",
+        "taskType": "org.gradle.api.Task",
+        "observations": {
+          "cpu_test": [
+            {
+              "observationId": "3m2exq6lmxgpo",
+              "sequence": 1,
+              "durationMs": 0.0,
+              "outcome": "lifecycle"
+            },
+            {
+              "observationId": "m7sigiyaaosqi",
+              "sequence": 2,
+              "durationMs": 1.0,
+              "outcome": "lifecycle"
+            }
+          ],
+          "cpu2": [
+            {
+              "observationId": "fc67kcljkgld6",
+              "sequence": 1,
+              "durationMs": 0.0,
+              "outcome": "lifecycle"
+            },
+            {
+              "observationId": "r2jdt33bktxuq",
+              "sequence": 2,
+              "durationMs": 0.0,
+              "outcome": "lifecycle"
+            }
+          ]
+        }
+      },
+      "task.path.app-app-checkdebugaarmetadata": {
+        "path": ":app:app:checkDebugAarMetadata",
+        "taskType": "com.android.build.gradle.internal.tasks.CheckAarMetadataTask",
+        "observations": {
+          "cpu_test": [
+            {
+              "observationId": "3m2exq6lmxgpo",
+              "sequence": 1,
+              "durationMs": 110.0,
+              "outcome": "executed_not_cacheable"
+            },
+            {
+              "observationId": "m7sigiyaaosqi",
+              "sequence": 2,
+              "durationMs": 148.0,
+              "outcome": "executed_not_cacheable"
+            }
+          ],
+          "cpu2": [
+            {
+              "observationId": "fc67kcljkgld6",
+              "sequence": 1,
+              "durationMs": 127.0,
+              "outcome": "executed_not_cacheable"
+            },
+            {
+              "observationId": "r2jdt33bktxuq",
+              "sequence": 2,
+              "durationMs": 194.0,
+              "outcome": "executed_not_cacheable"
+            }
+          ]
+        }
+      },
+      "task.path.app-app-checkdebugduplicateclasses": {
+        "path": ":app:app:checkDebugDuplicateClasses",
+        "taskType": "com.android.build.gradle.internal.tasks.CheckDuplicateClassesTask",
+        "observations": {
+          "cpu_test": [
+            {
+              "observationId": "3m2exq6lmxgpo",
+              "sequence": 1,
+              "durationMs": 150.0,
+              "outcome": "executed_not_cacheable"
+            },
+            {
+              "observationId": "m7sigiyaaosqi",
+              "sequence": 2,
+              "durationMs": 158.0,
+              "outcome": "executed_not_cacheable"
+            }
+          ],
+          "cpu2": [
+            {
+              "observationId": "fc67kcljkgld6",
+              "sequence": 1,
+              "durationMs": 250.0,
+              "outcome": "executed_not_cacheable"
+            },
+            {
+              "observationId": "r2jdt33bktxuq",
+              "sequence": 2,
+              "durationMs": 192.0,
+              "outcome": "executed_not_cacheable"
+            }
+          ]
+        }
+      }
+    },
+    "resourceSeries": {
+      "resource.build-process-memory-max": {
+        "name": "Build process memory max",
+        "unit": "bytes",
+        "observations": {
+          "cpu_test": [
+            {
+              "observationId": "3m2exq6lmxgpo",
+              "sequence": 1,
+              "value": 9115148288.0
+            },
+            {
+              "observationId": "m7sigiyaaosqi",
+              "sequence": 2,
+              "value": 8910082048.0
+            }
+          ],
+          "cpu2": [
+            {
+              "observationId": "fc67kcljkgld6",
+              "sequence": 1,
+              "value": 9247223808.0
+            },
+            {
+              "observationId": "r2jdt33bktxuq",
+              "sequence": 2,
+              "value": 9327833088.0
+            }
+          ]
+        }
+      },
+      "resource.build-child-process-memory-max": {
+        "name": "Build child processes memory max",
+        "unit": "bytes",
+        "observations": {
+          "cpu_test": [
+            {
+              "observationId": "3m2exq6lmxgpo",
+              "sequence": 1,
+              "value": 4479795200.0
+            },
+            {
+              "observationId": "m7sigiyaaosqi",
+              "sequence": 2,
+              "value": 4504657920.0
+            }
+          ],
+          "cpu2": [
+            {
+              "observationId": "fc67kcljkgld6",
+              "sequence": 1,
+              "value": 4334108672.0
+            },
+            {
+              "observationId": "r2jdt33bktxuq",
+              "sequence": 2,
+              "value": 4064047104.0
+            }
+          ]
+        }
+      }
+    },
+    "processSeries": {},
+    "gcSeries": {},
+    "kotlinBuildReportSeries": {}
+  },
+  "diagnostics": {
+    "status": "present",
+    "source": {
+      "tool": "ExperimentDiagnosticsReport",
+      "schemaVersion": "1.0",
+      "experimentRunId": "39611234158",
+      "sourceRepo": "cdsap/Telltale"
+    },
+    "groups": [
+      {
+        "id": "cpu",
+        "family": "cpu-diagnostics",
+        "sampleUnit": "diagnostic-sample",
+        "metricIds": [
+          "cpu-diagnostics.cpu.pidstat.percent_cpu.all-processes",
+          "cpu-diagnostics.cpu.psi.cpu.some.avg60.system",
+          "cpu-diagnostics.cpu.vmstat.id.system",
+          "cpu-diagnostics.cpu.vmstat.sy.system",
+          "cpu-diagnostics.cpu.vmstat.us.system",
+          "cpu-diagnostics.cpu.vmstat.wa.system"
+        ],
+        "jobKeysByVariant": {
+          "cpu2": [
+            "execution-caching-1",
+            "execution-caching-3"
+          ],
+          "cpu_test": [
+            "execution-caching-0",
+            "execution-caching-2"
+          ]
+        }
+      },
+      {
+        "id": "jfr",
+        "family": "jfr",
+        "sampleUnit": "diagnostic-sample",
+        "metricIds": [
+          "jfr.jfr.recording.size_bytes.gradle",
+          "jfr.jfr.recording.size_bytes.kotlin"
+        ],
+        "jobKeysByVariant": {
+          "cpu2": [
+            "execution-caching-1",
+            "execution-caching-3"
+          ],
+          "cpu_test": [
+            "execution-caching-0",
+            "execution-caching-2"
+          ]
+        }
+      }
+    ]
+  },
+  "warnings": [
+    {
+      "code": "DIAGNOSTICS_SOURCE",
+      "severity": "warning",
+      "source": "diagnostics",
+      "message": "Could not read JFR duration for kotlin-4363.jfr",
+      "variantId": null,
+      "metricId": null
+    },
+    {
+      "code": "DIAGNOSTICS_SOURCE",
+      "severity": "warning",
+      "source": "diagnostics",
+      "message": "Could not read JFR duration for gradle-3406.jfr",
+      "variantId": null,
+      "metricId": null
+    }
+  ],
+  "completeness": {
+    "requestedVariantIds": [
+      "cpu_test",
+      "cpu2"
+    ],
+    "observedVariantIds": [
+      "cpu_test",
+      "cpu2"
+    ],
+    "missingMetricIds": [],
+    "diagnostics": "present"
+  }
+}
