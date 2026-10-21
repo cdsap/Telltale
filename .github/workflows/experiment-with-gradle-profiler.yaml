@@ -103,6 +103,9 @@ jobs:
       actions: write
     name: Generate Report
     runs-on: ubuntu-latest
+    concurrency:
+      group: telltale-gh-pages-publish
+      cancel-in-progress: false
     needs: [runners]
     steps:
       - name: Checkout Repository

@@ -31,6 +31,8 @@ describe("ReportApp", () => {
     );
     const root = document.createElement("div");
     root.dataset.reportUrl = "./data/sample.json";
+    root.dataset.htmlUrl = "/Telltale/reports/legacy.html";
+    root.dataset.csvUrl = "/Telltale/reports/legacy.csv";
     render(<ReportApp root={root} />);
     expect(await screen.findByRole("heading", { name: "cpu_test vs cpu2" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Overall build time" })).toBeInTheDocument();
@@ -39,7 +41,14 @@ describe("ReportApp", () => {
     expect(screen.getByRole("heading", { name: "Tasks" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Resources" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "CPU / JFR" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Download CSV" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Download CSV" })).toHaveAttribute(
+      "href",
+      "/Telltale/reports/legacy.csv",
+    );
+    expect(screen.getByRole("link", { name: "Legacy HTML" })).toHaveAttribute(
+      "href",
+      "/Telltale/reports/legacy.html",
+    );
     expect(screen.getByRole("heading", { name: "All metrics" })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Processes" })).not.toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Kotlin" })).not.toBeInTheDocument();

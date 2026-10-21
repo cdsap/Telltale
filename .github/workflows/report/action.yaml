@@ -274,11 +274,33 @@ runs:
           *.csv
         if-no-files-found: error
 
+    - name: Setup Node
+      if: ${{ inputs.deploy_results == 'true' }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: npm
+        cache-dependency-path: web/report-viewer/package-lock.json
+
+    - name: Build report viewer
+      if: ${{ inputs.deploy_results == 'true' }}
+      shell: bash
+      working-directory: web/report-viewer
+      run: |
+        set -euo pipefail
+        npm ci
+        npm run build
+        mkdir -p "$RUNNER_TEMP/telltale-publish"
+        cp -a dist "$RUNNER_TEMP/telltale-publish/viewer-dist"
+        cp -a "${{ github.workspace }}/web/hugo/layouts" "$RUNNER_TEMP/telltale-publish/hugo-layouts"
+        cp "${{ github.workspace }}/scripts/stage_published_report.py" "$RUNNER_TEMP/telltale-publish/"
+
     - name: Checkout gh-pages branch
       uses: actions/checkout@v4
       with:
         ref: gh-pages
         path: .
+        fetch-depth: 0
 
     - name: Download experiment results
       uses: actions/download-artifact@v4
@@ -290,88 +312,66 @@ runs:
       if: ${{ inputs.deploy_results == 'true' }}
       shell: bash
       run: |
-        TIMESTAMP=$(date +%Y-%m-%d)
-        EXPERIMENT_FILE="content/posts/${TIMESTAMP}-${{ inputs.experiment-id }}-experiment.md"
-        html_file=$(ls temp-results/*.html | head -n 1)
-        html_filename=$(basename "$html_file")   
-
-        analysis_file=$(ls temp-results/experiment_results_openai_analysis_* 2>/dev/null | head -n 1)
-        title_file=$(ls temp-results/experiment_results_openai_title_* 2>/dev/null | head -n 1)
-
-        # Initialize empty variables
-        analysis_content=""
-        title_content=""
-
-        # Check if the analysis file exists before reading it
-        if [[ -f "$analysis_file" ]]; then
-            analysis_content=$(cat "$analysis_file")
-        else
-            echo "Analysis file not found."
-        fi
-
-        # Check if the title file exists before reading it
-        if [[ -f "$title_file" ]]; then
-            title_content=$(cat "$title_file")
-        else
-            echo "Title file not found."
-        fi
-        
-        cp temp-results/experiment_results* "static/reports/"
-        if [[ -f temp-results/experiment-result.json ]]; then
-          cp temp-results/experiment-result.json "static/reports/experiment-result-${{ inputs.experiment-id }}-${{ inputs.report-kind }}.json"
-        fi
-        if [[ -f temp-results/diagnostics-package.json ]]; then
-          cp temp-results/diagnostics-package.json "static/reports/diagnostics-package-${{ inputs.experiment-id }}-${{ inputs.report-kind }}.json"
-        fi
-        if [ "${{ inputs.profile }}" == "true" ]; then
-          tagsreport="gradle-profiler"
-        else
-          tagsreport="${{ inputs.mode }}"
-        fi
+        set -euo pipefail
+        TIMESTAMP=$(date -u +%Y-%m-%d)
         if [ "${{ inputs.experiment_title }}" != "" ]; then
           EXPERIMENT_TITLE="${{ inputs.experiment_title }}"
         else
           EXPERIMENT_TITLE="${{ inputs.repository }}-${{ inputs.task }}"
         fi
-
         VARIANTS="${{ inputs.tags }}"
         EXPERIMENT_ID="${{ inputs.experiment-id }}"
-        if [[ -n "$title_content" ]]; then
-           DESCRIPTION="\"$title_content\""
-        else
-           DESCRIPTION= "\"variants: ${VARIANTS//${EXPERIMENT_ID}_/}\""
+        SUMMARY="\"variants: ${VARIANTS//${EXPERIMENT_ID}_/}\""
+        PROFILE_FLAG=()
+        if [ "${{ inputs.profile }}" == "true" ]; then
+          PROFILE_FLAG=(--profile)
         fi
-
-        SNAP_FILE="temp-results/experiment_snapshot.yaml"
-
-        if [ ! -f "$EXPERIMENT_FILE" ]; then
-          echo "---" > "$EXPERIMENT_FILE"
-          echo "layout: post" >> "$EXPERIMENT_FILE"
-          echo "title: \"$EXPERIMENT_TITLE\"" >> "$EXPERIMENT_FILE"
-          echo "date: $TIMESTAMP" >> "$EXPERIMENT_FILE"
-          echo "report_link: /Telltale/reports/$html_filename" >> "$EXPERIMENT_FILE"
-          echo "summary: $DESCRIPTION" >> "$EXPERIMENT_FILE"
-          echo "tags: [\"$tagsreport\"]" >> "$EXPERIMENT_FILE"
-          if [[ -f "$SNAP_FILE" ]]; then
-            cat "$SNAP_FILE" >> "$EXPERIMENT_FILE"
-          else
-            echo "::warning::No experiment_snapshot.yaml in artifact — home page snapshot chart will stay on the previous experiment until you add snapshot YAML."
-          fi
-          echo "---" >> "$EXPERIMENT_FILE"
-          echo "[Report 📊](../../reports/$html_filename)" >> "$EXPERIMENT_FILE"
-          echo "$analysis_content" >> "$EXPERIMENT_FILE"
-        fi
+        python3 "$RUNNER_TEMP/telltale-publish/stage_published_report.py" \
+          --results temp-results \
+          --site . \
+          --viewer-dist "$RUNNER_TEMP/telltale-publish/viewer-dist" \
+          --layouts-src "$RUNNER_TEMP/telltale-publish/hugo-layouts" \
+          --site-base /Telltale \
+          --experiment-id "${{ inputs.experiment-id }}" \
+          --report-kind "${{ inputs.report-kind }}" \
+          --date "$TIMESTAMP" \
+          --title "$EXPERIMENT_TITLE" \
+          --summary "$SUMMARY" \
+          --mode "${{ inputs.mode }}" \
+          "${PROFILE_FLAG[@]}" | tee "$RUNNER_TEMP/telltale-publish/staged.json"
+        echo "## Published report" >> "$GITHUB_STEP_SUMMARY"
+        python3 -c 'import json,os,pathlib; staged=json.loads(pathlib.Path(os.environ["RUNNER_TEMP"],"telltale-publish","staged.json").read_text());
+[print(f"- {k}: https://cdsap.github.io{v}", file=open(os.environ["GITHUB_STEP_SUMMARY"],"a")) for k,v in staged.items() if k in ("viewer_url","data_url","legacy_html","legacy_csv") and v]'
 
     - name: Push Experiment Results
       if: ${{ inputs.deploy_results == 'true' }}
-      shell: bash    
+      shell: bash
       run: |
+        set -euo pipefail
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git config user.name "github-actions[bot]"
-        git add content
-        git add static/reports
-        git commit -m "Add experiment results for ${{ inputs.experiment-id }}"
-        git push https://x-access-token:${{ inputs.gh_token }}@github.com/cdsap/Telltale.git gh-pages
+        git add content static/reports
+        [[ -d static/data ]] && git add static/data
+        [[ -d static/experiments ]] && git add static/experiments
+        [[ -d static/assets/report-viewer ]] && git add static/assets/report-viewer
+        [[ -f layouts/partials/report-link.html ]] && git add layouts/partials/report-link.html
+        [[ -f layouts/index.experimentsjson.json ]] && git add layouts/index.experimentsjson.json
+        if git diff --cached --quiet; then
+          echo "No publication changes to commit"
+          exit 0
+        fi
+        git commit -m "Add experiment results for ${{ inputs.experiment-id }} (${{ inputs.report-kind }})"
+        REMOTE="https://x-access-token:${{ inputs.gh_token }}@github.com/cdsap/Telltale.git"
+        for i in 1 2 3 4 5 6; do
+          git pull --rebase "$REMOTE" gh-pages
+          if git push "$REMOTE" gh-pages; then
+            exit 0
+          fi
+          echo "gh-pages push failed (attempt $i); retrying"
+          sleep $((i * 5))
+        done
+        echo "::error::Failed to push gh-pages after retries; leaving the branch unchanged by not force-pushing"
+        exit 1
 
     - name: Trigger gh-pages workflow
       if: ${{ inputs.deploy_results == 'true' }}

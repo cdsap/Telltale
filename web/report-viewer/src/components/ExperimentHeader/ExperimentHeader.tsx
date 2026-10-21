@@ -19,13 +19,16 @@ export function ExperimentHeader({
   baseline,
   candidate,
   jsonUrl,
+  legacyCsvUrl,
+  legacyHtmlUrl,
 }: ExperimentHeaderProps) {
   const workflow = workflowUrl(report);
-  const csvUrl = useMemo(() => {
+  const generatedCsvUrl = useMemo(() => {
     const blob = new Blob([metricsCsv(report)], { type: "text/csv" });
     return URL.createObjectURL(blob);
   }, [report]);
-  useEffect(() => () => URL.revokeObjectURL(csvUrl), [csvUrl]);
+  useEffect(() => () => URL.revokeObjectURL(generatedCsvUrl), [generatedCsvUrl]);
+  const csvUrl = legacyCsvUrl || generatedCsvUrl;
   const baselineScans = variantScanSearchUrl(report, baseline);
   const candidateScans = variantScanSearchUrl(report, candidate);
 
@@ -47,6 +50,11 @@ export function ExperimentHeader({
         <a className="home-hero-cta home-hero-cta--secondary" href={csvUrl} download={csvFilename(report)}>
           Download CSV
         </a>
+        {legacyHtmlUrl ? (
+          <a className="home-hero-cta home-hero-cta--secondary" href={legacyHtmlUrl}>
+            Legacy HTML
+          </a>
+        ) : null}
         {workflow ? (
           <a className="home-hero-cta home-hero-cta--secondary" href={workflow} rel="noreferrer">
             Workflow
