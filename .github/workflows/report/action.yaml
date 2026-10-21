@@ -59,6 +59,18 @@ inputs:
   run_id:
     description: 'Run ID'
     required: false
+  report-kind:
+    description: 'Report kind slug used in experiment-result.json identity (caching, no-caching, profiler)'
+    required: false
+    default: 'report'
+  ber-release:
+    description: 'BuildExperimentResults release tag providing --output-json'
+    required: false
+    default: 'v1.2.0'
+  edr-release:
+    description: 'ExperimentDiagnosticsReport release tag'
+    required: false
+    default: 'v0.1.0'
   mode:
     description: 'Mode of the experiment'
     required: false
@@ -100,14 +112,31 @@ runs:
       uses: actions/setup-java@v4
       with:
         distribution: zulu
-        java-version: 17
+        java-version: 21
 
     - name: Execute CompareGEBuilds
       id: compareBuilds
       run: |
-        # Download and set permissions for the CompareGEBuilds binary
-        curl -L https://github.com/cdsap/CompareGEBuilds/releases/download/v1.0.5/build-experiment-results --output build-experiment-results
+        curl -L "https://github.com/cdsap/ExperimentDiagnosticsReport/releases/download/${{ inputs.edr-release }}/experiment-diagnostics-report" --output experiment-diagnostics-report
+        chmod 0757 experiment-diagnostics-report
+        curl -L "https://github.com/cdsap/BuildExperimentResults/releases/download/${{ inputs.ber-release }}/build-experiment-results" --output build-experiment-results
         chmod 0757 build-experiment-results
+
+        DIAG_FLAGS=""
+        if [ -n "${{ inputs.run_id }}" ]; then
+          OWNER="${GITHUB_REPOSITORY%%/*}"
+          REPO="${GITHUB_REPOSITORY#*/}"
+          if GITHUB_TOKEN="${{ inputs.gh_token }}" ./experiment-diagnostics-report report \
+            --owner "$OWNER" \
+            --repo "$REPO" \
+            --run-id "${{ inputs.run_id }}" \
+            --output diagnostics-package.json \
+            --force; then
+            DIAG_FLAGS="--diagnostics-package diagnostics-package.json"
+          else
+            echo "::warning::ExperimentDiagnosticsReport produced no package; continuing without diagnostics"
+          fi
+        fi
 
         # Parse and format tags input into the required format
         tags="${{ inputs.tags }}"
@@ -182,6 +211,11 @@ runs:
         RUN_ID="${{ inputs.run_id }}"
         API_KEY="${{ inputs.api-key }}"
      
+        TITLE_FLAGS=""
+        if [ -n "${{ inputs.experiment_title }}" ]; then
+          TITLE_FLAGS="--report-title ${{ inputs.experiment_title }}"
+        fi
+
         ./build-experiment-results --url="$URL" \
           $tasktypereport $resourceusagereport $onlycacheableoutcome $taskpathreport $processreport \
           $kotlinreport $thresholdtaskduration $profile $openai_request $openai_api_key \
@@ -189,6 +223,11 @@ runs:
           --repository="$REPOSITORY" \
           --experiment-id="$EXPERIMENT_ID" \
           --experiment-run-id="$RUN_ID" \
+          --run-attempt="${{ github.run_attempt }}" \
+          --report-kind="${{ inputs.report-kind }}" \
+          --output-json=experiment-result.json \
+          $DIAG_FLAGS \
+          $TITLE_FLAGS \
           --api-key="$API_KEY"
 
         # Output the results to the GitHub step summary
@@ -226,9 +265,11 @@ runs:
     - name: Archive Comparison Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: build-comparison-reports
+        name: build-comparison-reports-${{ inputs.report-kind }}
         path: |
           experiment_results*
+          experiment-result.json
+          diagnostics-package.json
           experiment_snapshot.yaml
           *.csv
         if-no-files-found: error
@@ -242,7 +283,7 @@ runs:
     - name: Download experiment results
       uses: actions/download-artifact@v4
       with:
-        name: build-comparison-reports
+        name: build-comparison-reports-${{ inputs.report-kind }}
         path: temp-results
 
     - name: Update gh-pages content
@@ -276,6 +317,12 @@ runs:
         fi
         
         cp temp-results/experiment_results* "static/reports/"
+        if [[ -f temp-results/experiment-result.json ]]; then
+          cp temp-results/experiment-result.json "static/reports/experiment-result-${{ inputs.experiment-id }}-${{ inputs.report-kind }}.json"
+        fi
+        if [[ -f temp-results/diagnostics-package.json ]]; then
+          cp temp-results/diagnostics-package.json "static/reports/diagnostics-package-${{ inputs.experiment-id }}-${{ inputs.report-kind }}.json"
+        fi
         if [ "${{ inputs.profile }}" == "true" ]; then
           tagsreport="gradle-profiler"
         else
