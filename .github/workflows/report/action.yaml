@@ -211,9 +211,9 @@ runs:
         RUN_ID="${{ inputs.run_id }}"
         API_KEY="${{ inputs.api-key }}"
      
-        TITLE_FLAGS=""
+        TITLE_ARGS=()
         if [ -n "${{ inputs.experiment_title }}" ]; then
-          TITLE_FLAGS="--report-title ${{ inputs.experiment_title }}"
+          TITLE_ARGS+=(--report-title "${{ inputs.experiment_title }}")
         fi
 
         ./build-experiment-results --url="$URL" \
@@ -227,7 +227,7 @@ runs:
           --report-kind="${{ inputs.report-kind }}" \
           --output-json=experiment-result.json \
           $DIAG_FLAGS \
-          $TITLE_FLAGS \
+          "${TITLE_ARGS[@]}" \
           --api-key="$API_KEY"
 
         # Output the results to the GitHub step summary
