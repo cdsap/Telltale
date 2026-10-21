@@ -245,6 +245,7 @@ jobs:
           deployment-key: ${{ secrets.GH_BUILD_DEPLOYMENT }}
           snapshot-label-a: ${{ github.event.inputs.snapshot_label_a }}
           snapshot-label-b: ${{ github.event.inputs.snapshot_label_b }}
+          report-kind: no-caching
 
   report:
     permissions:
@@ -283,3 +284,4 @@ jobs:
           deployment-key: ${{ secrets.GH_BUILD_DEPLOYMENT }}
           snapshot-label-a: ${{ github.event.inputs.snapshot_label_a }}
           snapshot-label-b: ${{ github.event.inputs.snapshot_label_b }}
+          report-kind: caching
