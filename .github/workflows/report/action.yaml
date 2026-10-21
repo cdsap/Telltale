@@ -339,9 +339,13 @@ runs:
           --summary "$SUMMARY" \
           --mode "${{ inputs.mode }}" \
           "${PROFILE_FLAG[@]}" | tee "$RUNNER_TEMP/telltale-publish/staged.json"
-        echo "## Published report" >> "$GITHUB_STEP_SUMMARY"
-        python3 -c 'import json,os,pathlib; staged=json.loads(pathlib.Path(os.environ["RUNNER_TEMP"],"telltale-publish","staged.json").read_text());
-[print(f"- {k}: https://cdsap.github.io{v}", file=open(os.environ["GITHUB_STEP_SUMMARY"],"a")) for k,v in staged.items() if k in ("viewer_url","data_url","legacy_html","legacy_csv") and v]'
+        {
+          echo "## Published report"
+          echo
+          echo '```json'
+          cat "$RUNNER_TEMP/telltale-publish/staged.json"
+          echo '```'
+        } >> "$GITHUB_STEP_SUMMARY"
 
     - name: Push Experiment Results
       if: ${{ inputs.deploy_results == 'true' }}
