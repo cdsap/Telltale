@@ -1,0 +1,91 @@
+---
+layout: post
+title: "Gradle 9.8.2 vs 9.8.1"
+date: 2026-10-21
+report_link: /Telltale/reports/experiment_results_20261021030416.html
+summary: " 
+The performance analysis of the Gradle build variants reveals minor differences in build times and resource usage. The overall build time for `varianta_baseline` averaged 252.3 seconds, slightly longer than `variantb_gradle-9.8.2` at 251.1 seconds. The configuration times are nearly identical, with `varianta_baseline` at 41.2 seconds and `variantb_gradle-9.8.2` at 41.0 seconds. Notably, the P90 build times show a more significant difference, with `variantb_gradle-9.8.2` taking about 10 seconds longer than `varianta_baseline`.
+
+In task execution, the `DexMergingTask` and `KotlinCompile` tasks are among the most time-consuming, with minor variations between variants. Memory usage is slightly lower in `variantb_gradle-9.8.2` across all processes, and CPU usage remains high for both variants, nearing the maximum capacity.
+
+The Kotlin Build Reports indicate a slight improvement in compiler performance metrics such as translation to IR and code generation in `variantb_gradle-9.8.2`. Garbage collection activities are slightly reduced in the newer variant, suggesting modest enhancements in memory management."
+tags: ["dependencies cache"]
+experiment_snapshot:
+  metric: "Overall build time"
+  unit: "seconds"
+  variant_a:
+    label: "9.8.1"
+    mean: 252.297
+    p50: 270.300
+    p90: 290.586
+  variant_b:
+    label: "9.8.2"
+    mean: 251.097
+    p50: 272.264
+    p90: 300.622
+  config_metric: "Configuration time"
+  config_unit: "seconds"
+  config_variant_a:
+    mean: 41.187
+    p50: 43.322
+    p90: 48.090
+  config_variant_b:
+    mean: 41.038
+    p50: 41.233
+    p90: 50.570
+---
+[Report 📊](../../reports/experiment_results_20261021030416.html)
+## Summary
+The performance analysis of the Gradle build variants reveals minor differences in build times and resource usage. The overall build time for `varianta_baseline` averaged 252.3 seconds, slightly longer than `variantb_gradle-9.8.2` at 251.1 seconds. The configuration times are nearly identical, with `varianta_baseline` at 41.2 seconds and `variantb_gradle-9.8.2` at 41.0 seconds. Notably, the P90 build times show a more significant difference, with `variantb_gradle-9.8.2` taking about 10 seconds longer than `varianta_baseline`.
+
+In task execution, the `DexMergingTask` and `KotlinCompile` tasks are among the most time-consuming, with minor variations between variants. Memory usage is slightly lower in `variantb_gradle-9.8.2` across all processes, and CPU usage remains high for both variants, nearing the maximum capacity.
+
+The Kotlin Build Reports indicate a slight improvement in compiler performance metrics such as translation to IR and code generation in `variantb_gradle-9.8.2`. Garbage collection activities are slightly reduced in the newer variant, suggesting modest enhancements in memory management.
+
+## Detailed Report
+
+### 1. Build Time Comparison
+- **Overall Build Time:**
+  - `varianta_baseline`: Mean = 252.3s, P50 = 270.3s, P90 = 290.6s
+  - `variantb_gradle-9.8.2`: Mean = 251.1s, P50 = 272.3s, P90 = 300.6s
+  - Percentage Difference (Mean): ~0.48% faster in `variantb_gradle-9.8.2`
+
+- **Configuration Time:**
+  - `varianta_baseline`: Mean = 41.2s, P50 = 43.3s, P90 = 48.1s
+  - `variantb_gradle-9.8.2`: Mean = 41.0s, P50 = 41.2s, P90 = 50.6s
+  - Percentage Difference (Mean): ~0.46% faster in `variantb_gradle-9.8.2`
+
+### 2. Task Type Differences
+- **Top Time-Consuming Tasks:**
+  - `"DexMergingTask"`: 
+    - `varianta_baseline`: Mean = 5976ms
+    - `variantb_gradle-9.8.2`: Mean = 5902ms
+  - `"KotlinCompile"`:
+    - `varianta_baseline`: Mean = 3040ms
+    - `variantb_gradle-9.8.2`: Mean = 3008ms
+  - `"GlobalSyntheticsGeneratorTask"`:
+    - `varianta_baseline`: Mean = 2948ms
+    - `variantb_gradle-9.8.2`: Mean = 2879ms
+
+### 5. CPU & Memory Usage Analysis
+- **CPU Usage:**
+  - All processes: Max = 100% for both variants
+  - Build process: Max = 95.5% (`varianta_baseline`), 95.74% (`variantb_gradle-9.8.2`)
+  - Build child processes: Max = 93.48% (`varianta_baseline`), 93.8% (`variantb_gradle-9.8.2`)
+
+- **Memory Usage:**
+  - All processes: Max = 8.69GB (`varianta_baseline`), 8.66GB (`variantb_gradle-9.8.2`)
+  - Build process: Max = 4.43GB (`varianta_baseline`), 4.4GB (`variantb_gradle-9.8.2`)
+  - Build child processes: Max = 3.17GB (`varianta_baseline`), 3.14GB (`variantb_gradle-9.8.2`)
+
+### 6. Garbage Collection Analysis
+- **Total GC Collections:**
+  - Gradle process: 116 (`varianta_baseline`), 115 (`variantb_gradle-9.8.2`)
+  - Kotlin process: 48 (`varianta_baseline`), 47 (`variantb_gradle-9.8.2`)
+
+### 7. Kotlin Build Reports Analysis
+- **Compiler Performance Metrics:**
+  - Translation to IR: 843.8ms (`varianta_baseline`), 837.82ms (`variantb_gradle-9.8.2`)
+  - Code Generation: 547.63ms (`varianta_baseline`), 540.85ms (`variantb_gradle-9.8.2`)
+
+Overall, the newer Gradle variant (`variantb_gradle-9.8.2`) shows a slight improvement in build performance, particularly in compiler efficiency and memory management, although the differences are minimal.
