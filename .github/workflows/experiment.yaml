@@ -215,6 +215,9 @@ jobs:
     name: Report for No Caching
     if: fromJson(github.event.inputs.extra_report_args).report_enabled == 'true'
     runs-on: ubuntu-latest
+    concurrency:
+      group: telltale-gh-pages-publish
+      cancel-in-progress: false
     needs: [execution-no-caching]
     steps:
       - uses: actions/checkout@v4
@@ -254,6 +257,9 @@ jobs:
     name: Report with Caching
     if: fromJson(github.event.inputs.extra_report_args).report_enabled == 'true'
     runs-on: ubuntu-latest
+    concurrency:
+      group: telltale-gh-pages-publish
+      cancel-in-progress: false
     needs: [execution-caching]
     steps:
       - uses: actions/checkout@v4

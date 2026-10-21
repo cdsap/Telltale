@@ -21,9 +21,15 @@ The workflow experiment execution consists of different phases:
 
 ## Website
 
-If deployment is configured (by setting `extra_report_args.deploy_results: 'true'`), the results of your experiments will be automatically published to [https://cdsap.github.io/Telltale/](https://cdsap.github.io/Telltale/). Published pages still use the existing HTML reports.
+If deployment is configured (by setting `extra_report_args.deploy_results: 'true'`), the results of your experiments will be automatically published to [https://cdsap.github.io/Telltale/](https://cdsap.github.io/Telltale/).
 
-An experimental JSON report viewer lives in [`web/report-viewer`](web/report-viewer). It reads `experiment-result.json` locally and is not wired into GitHub Pages yet.
+New reports publish three things together:
+
+- Interactive viewer at `/Telltale/experiments/<report-id>/`
+- Canonical JSON at `/Telltale/data/experiments/<report-id>.json`
+- Legacy HTML/CSV at `/Telltale/reports/` (unchanged URLs)
+
+Historical posts that only have `report_link` keep their original HTML. Publication jobs share the `telltale-gh-pages-publish` concurrency group and retry `git pull --rebase` / `git push`; they never force-push. If a publish fails, revert the latest `gh-pages` commit for that experiment (or delete only that report's `static/experiments/<id>/` and `static/data/experiments/<id>.*` files) and re-run the Hugo deploy workflow.
 
 ## Workflows
 

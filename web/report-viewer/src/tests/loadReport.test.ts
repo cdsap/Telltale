@@ -10,6 +10,12 @@ describe("resolveReportUrl", () => {
     expect(resolveReportUrl("./data/sample.json")).toBe("./data/sample.json");
   });
 
+  it("accepts a site-root JSON path used on GitHub Pages", () => {
+    expect(resolveReportUrl("/Telltale/data/experiments/run-1-caching-attempt-1.json")).toBe(
+      "/Telltale/data/experiments/run-1-caching-attempt-1.json",
+    );
+  });
+
   it("rejects parent-directory traversal", () => {
     expect(() => resolveReportUrl("../secret.json")).toThrow(ReportLoadError);
   });

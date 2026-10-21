@@ -1,0 +1,47 @@
+{{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections -}}
+{{- $pages = $pages.ByDate.Reverse -}}
+{
+  "generated": "{{ now.Format "2006-01-02T15:04:05Z07:00" }}",
+  "site": "{{ site.Title }}",
+  "description": "{{ site.Params.description }}",
+  "base_url": "{{ site.BaseURL }}",
+  "total_experiments": {{ len $pages }},
+  "feeds": {
+    "rss": "{{ "index.xml" | absURL }}",
+    "json": "{{ "experiments.json" | absURL }}",
+    "sitemap": "{{ "sitemap.xml" | absURL }}",
+    "llms_txt": "{{ "llms.txt" | absURL }}"
+  },
+  "experiments": [
+    {{- range $index, $page := $pages }}
+    {{- if $index }},{{ end }}
+    {
+      "title": {{ $page.Title | jsonify }},
+      "date": "{{ $page.Date.Format "2006-01-02" }}",
+      "url": "{{ $page.Permalink }}",
+      "summary": {{ ($page.Params.summary | default "") | jsonify }},
+      "tags": {{ $page.Params.tags | default slice | jsonify }},
+      "report_id": {{ ($page.Params.report_id | default "") | jsonify }},
+      "schema_version": {{ ($page.Params.report_schema_version | default "") | jsonify }},
+      {{- with $page.Params.report_link }}
+      {{- $reportAbs := . | absURL }}
+      "report_url": "{{ $reportAbs }}",
+      "csv_url": "{{ printf "%s.csv" (strings.TrimSuffix ".html" $reportAbs) }}"
+      {{- else }}
+      "report_url": null,
+      "csv_url": null
+      {{- end }},
+      {{- with $page.Params.viewer_link }}
+      "viewer_url": "{{ . | absURL }}"
+      {{- else }}
+      "viewer_url": null
+      {{- end }},
+      {{- with $page.Params.json_link }}
+      "data_url": "{{ . | absURL }}"
+      {{- else }}
+      "data_url": null
+      {{- end }}
+    }
+    {{- end }}
+  ]
+}

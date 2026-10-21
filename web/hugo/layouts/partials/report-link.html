@@ -1,0 +1,15 @@
+{{ if or .Params.viewer_link .Params.report_link }}
+<div class="report-links">
+  {{ with .Params.viewer_link }}
+  <a href="{{ . }}" class="report-link">Interactive report</a>
+  {{ end }}
+  {{ with .Params.report_link }}
+  <a href="{{ . }}" class="{{ if $.Params.viewer_link }}log-link{{ else }}report-link{{ end }}">
+    {{- if $.Params.viewer_link -}}Legacy HTML{{- else -}}📊 View Full Report{{- end -}}
+  </a>
+  {{ end }}
+  {{ with .Params.log_link }}
+  <a href="{{ . }}" class="log-link">📝 View Log</a>
+  {{ end }}
+</div>
+{{ end }}

@@ -22,4 +22,4 @@ npm run preview
 
 Included now: schema 1.x validation; overview KPIs; per-build duration/configuration series; searchable task paths with a selected-task series; resource/process/Kotlin/GC sections when those families exist; CPU/JFR diagnostic cards and coverage (aggregates only, no invented timelines); Mean/P50/P90 switching; filterable all-metrics table.
 
-Not in this slice: Hugo/GitHub Pages publication, or replacing the existing HTML reports.
+Published experiments load this viewer from `/Telltale/experiments/<report-id>/` with `data-report-url` pointing at `/Telltale/data/experiments/<report-id>.json`. Local `npm run dev` is unchanged. Historical HTML reports stay at `/Telltale/reports/`.
