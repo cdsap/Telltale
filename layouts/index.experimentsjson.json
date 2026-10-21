@@ -21,6 +21,8 @@
       "url": "{{ $page.Permalink }}",
       "summary": {{ ($page.Params.summary | default "") | jsonify }},
       "tags": {{ $page.Params.tags | default slice | jsonify }},
+      "report_id": {{ ($page.Params.report_id | default "") | jsonify }},
+      "schema_version": {{ ($page.Params.report_schema_version | default "") | jsonify }},
       {{- with $page.Params.report_link }}
       {{- $reportAbs := . | absURL }}
       "report_url": "{{ $reportAbs }}",
@@ -28,6 +30,16 @@
       {{- else }}
       "report_url": null,
       "csv_url": null
+      {{- end }},
+      {{- with $page.Params.viewer_link }}
+      "viewer_url": "{{ . | absURL }}"
+      {{- else }}
+      "viewer_url": null
+      {{- end }},
+      {{- with $page.Params.json_link }}
+      "data_url": "{{ . | absURL }}"
+      {{- else }}
+      "data_url": null
       {{- end }}
     }
     {{- end }}
