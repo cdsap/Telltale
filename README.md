@@ -21,7 +21,9 @@ The workflow experiment execution consists of different phases:
 
 ## Website
 
-If deployment is configured (by setting `extra_report_args.deploy_results: 'true'`), the results of your experiments will be automatically published to [https://cdsap.github.io/Telltale/](https://cdsap.github.io/Telltale/).
+If deployment is configured (by setting `extra_report_args.deploy_results: 'true'`), the results of your experiments will be automatically published to [https://cdsap.github.io/Telltale/](https://cdsap.github.io/Telltale/). Published pages still use the existing HTML reports.
+
+An experimental JSON report viewer lives in [`web/report-viewer`](web/report-viewer). It reads `experiment-result.json` locally and is not wired into GitHub Pages yet.
 
 ## Workflows
 

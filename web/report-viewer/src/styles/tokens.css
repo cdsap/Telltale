@@ -1,0 +1,36 @@
+:root {
+  --gap: 24px;
+  --content-gap: 20px;
+  --nav-width: 1024px;
+  --header-height: 60px;
+  --theme: rgb(255, 255, 255);
+  --entry: rgb(255, 255, 255);
+  --primary: rgb(30, 30, 30);
+  --secondary: rgb(108, 108, 108);
+  --tertiary: rgb(214, 214, 214);
+  --content: rgb(31, 31, 31);
+  --border: rgb(238, 238, 238);
+  --tt-accent: #2563eb;
+  --tt-accent-soft: rgba(37, 99, 235, 0.075);
+  --tt-accent-line: rgba(37, 99, 235, 0.22);
+  --tt-good: #16805d;
+  --tt-bad: #b45309;
+  --tt-card-shadow: 0 6px 30px rgba(25, 35, 65, 0.045);
+  --color-variant-a: rgba(0, 123, 255, 0.85);
+  --color-variant-b: rgba(108, 117, 125, 0.85);
+  --font-sans: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+html.dark,
+body.dark {
+  --theme: rgb(29, 30, 32);
+  --entry: rgb(46, 46, 51);
+  --primary: rgb(218, 218, 219);
+  --secondary: rgb(155, 156, 157);
+  --tertiary: rgb(65, 66, 68);
+  --content: rgb(196, 196, 197);
+  --border: rgb(51, 51, 51);
+  --tt-card-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+  --color-variant-a: rgba(218, 218, 219, 0.85);
+  --color-variant-b: rgba(155, 156, 157, 0.85);
+}
