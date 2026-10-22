@@ -15,10 +15,18 @@
   --tt-accent-line: rgba(37, 99, 235, 0.22);
   --tt-good: #16805d;
   --tt-bad: #b45309;
+  --tt-warn: #b45309;
   --tt-card-shadow: 0 6px 30px rgba(25, 35, 65, 0.045);
-  --color-variant-a: rgba(0, 123, 255, 0.85);
-  --color-variant-b: rgba(108, 117, 125, 0.85);
-  --font-sans: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --color-variant-a: #2563eb;
+  --color-variant-b: #c2410c;
+  --color-variant-a-soft: rgba(37, 99, 235, 0.12);
+  --color-variant-b-soft: rgba(194, 65, 12, 0.12);
+  --font-sans: Roboto, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --wb-sidebar: 220px;
+  --wb-max: 1560px;
+  --wb-radius: 12px;
+  --focus: var(--tt-accent);
 }
 
 html.dark,
@@ -31,6 +39,8 @@ body.dark {
   --content: rgb(196, 196, 197);
   --border: rgb(51, 51, 51);
   --tt-card-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
-  --color-variant-a: rgba(218, 218, 219, 0.85);
-  --color-variant-b: rgba(155, 156, 157, 0.85);
+  --color-variant-a: #60a5fa;
+  --color-variant-b: #fb923c;
+  --color-variant-a-soft: rgba(96, 165, 250, 0.16);
+  --color-variant-b-soft: rgba(251, 146, 60, 0.16);
 }

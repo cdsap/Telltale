@@ -4,6 +4,7 @@ import { ReportApp } from "./app/ReportApp";
 import { ReportErrorBoundary } from "./app/ReportErrorBoundary";
 import { ErrorState } from "./components/EmptyState/EmptyState";
 import "./styles/base.css";
+import "./styles/workbench.css";
 
 const root = document.getElementById("telltale-report");
 if (!root) {

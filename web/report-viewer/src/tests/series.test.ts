@@ -43,8 +43,7 @@ describe("series and coverage", () => {
     expect(byId.tasks.available).toBe(true);
     expect(byId.resources.available).toBe(true);
     expect(byId.diagnostics.available).toBe(true);
-    expect(byId.processes.available).toBe(false);
-    expect(byId.kotlin.available).toBe(false);
-    expect(byId.gc.available).toBe(false);
+    expect(byId.runtime.available).toBe(false);
+    expect(byId.details.available).toBe(true);
   });
 });

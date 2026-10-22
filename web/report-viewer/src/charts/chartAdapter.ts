@@ -8,12 +8,13 @@ import {
   PointElement,
   Tooltip,
 } from "chart.js";
+import type { HistogramBins } from "../domain/distribution";
 import type { Metric, SeriesObservation, StatisticName, Variant } from "../domain/types";
 import { statisticValue } from "../domain/comparisons";
 import { displayLabel } from "../domain/metrics";
 import { sequenceValues, type SequencePoint } from "../domain/series";
 import { toChartNumber } from "../domain/units";
-import { variantColors } from "./chartTheme";
+import { variantColors, variantDash, variantPointStyle } from "./chartTheme";
 
 ChartJS.register(
   CategoryScale,
@@ -27,6 +28,19 @@ ChartJS.register(
 
 const STAT_ORDER: StatisticName[] = ["p50", "p90", "mean"];
 const STAT_LABELS = ["P50", "P90", "Mean"];
+
+export function histogramBarData(bins: HistogramBins, variants: Variant[]) {
+  const colors = variantColors();
+  return {
+    labels: bins.labels,
+    datasets: variants.map((variant, index) => ({
+      label: displayLabel(variant),
+      data: bins.counts[variant.id] ?? [],
+      backgroundColor: colors[index] ?? colors[0],
+      borderWidth: 0,
+    })),
+  };
+}
 
 export function percentileBarData(metric: Metric, variants: Variant[]) {
   const colors = variantColors();
@@ -74,6 +88,8 @@ export function sequenceLineData(
         }),
         borderColor: colors[index] ?? colors[0],
         backgroundColor: colors[index] ?? colors[0],
+        borderDash: variantDash(index),
+        pointStyle: variantPointStyle(index),
         spanGaps: false,
         tension: 0,
       };

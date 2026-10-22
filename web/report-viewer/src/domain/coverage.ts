@@ -22,21 +22,8 @@ export function diagnosticsStatusLabel(status: string): string {
   }
 }
 
-export function reportSections(report: ExperimentResult): ReportSection[] {
-  const hasBuilds = Object.values(report.datasets.builds).some((items) => items.length > 0);
-  const hasTasks =
-    taskPathMetrics(report).length > 0 || Object.keys(report.datasets.taskSeries).length > 0;
+export function runtimeSubsections(report: ExperimentResult): ReportSection[] {
   return [
-    { id: "overview", title: "Overview", available: true },
-    { id: "builds", title: "Builds", available: hasBuilds },
-    { id: "tasks", title: "Tasks", available: hasTasks },
-    {
-      id: "resources",
-      title: "Resources",
-      available:
-        metricsInFamily(report, "resource").length > 0 ||
-        Object.keys(report.datasets.resourceSeries).length > 0,
-    },
     {
       id: "processes",
       title: "Processes",
@@ -57,7 +44,32 @@ export function reportSections(report: ExperimentResult): ReportSection[] {
       available:
         metricsInFamily(report, "gc").length > 0 || Object.keys(report.datasets.gcSeries).length > 0,
     },
-    { id: "diagnostics", title: "CPU / JFR", available: true },
-    { id: "metrics", title: "All metrics", available: report.metrics.length > 0 },
+  ];
+}
+
+export function reportSections(report: ExperimentResult): ReportSection[] {
+  const hasBuilds = Object.values(report.datasets.builds).some((items) => items.length > 0);
+  const hasTasks =
+    taskPathMetrics(report).length > 0 || Object.keys(report.datasets.taskSeries).length > 0;
+  const runtime = runtimeSubsections(report);
+  return [
+    { id: "overview", title: "Overview", available: true },
+    { id: "builds", title: "Builds", available: hasBuilds },
+    { id: "tasks", title: "Tasks", available: hasTasks },
+    {
+      id: "resources",
+      title: "Resources",
+      available:
+        metricsInFamily(report, "resource").length > 0 ||
+        Object.keys(report.datasets.resourceSeries).length > 0,
+    },
+    {
+      id: "runtime",
+      title: "Runtime",
+      available: runtime.some((section) => section.available),
+    },
+    { id: "diagnostics", title: "Diagnostics", available: true },
+    { id: "metrics", title: "Metrics", available: report.metrics.length > 0 },
+    { id: "details", title: "Details", available: true },
   ];
 }

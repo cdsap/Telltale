@@ -33,6 +33,22 @@ export function formatDurationMs(
   return { text: `${formatCanonicalNumber(milliseconds, locale)} ms`, title };
 }
 
+export function formatSignedMetricValue(
+  value: number | null,
+  unit: string,
+  valueType: string | null,
+  locale?: string,
+): DisplayValue {
+  if (value === null) {
+    return { text: "N/A", title: "No value" };
+  }
+  const formatted = formatMetricValue(value, unit, valueType, locale);
+  if (value > 0 && !formatted.text.startsWith("+") && !formatted.text.startsWith("-")) {
+    return { text: `+${formatted.text}`, title: `+${formatted.title}` };
+  }
+  return formatted;
+}
+
 export function formatMetricValue(
   value: number | null,
   unit: string,

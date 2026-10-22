@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-
-const SITE = "https://cdsap.github.io/Telltale";
+import { SITE } from "./site";
 
 function currentTheme(): "light" | "dark" {
   if (typeof document === "undefined") {

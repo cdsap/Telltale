@@ -27,8 +27,12 @@ export function Diagnostics({
         <h2 className="experiment-snapshot-title">CPU / JFR</h2>
         <p className="series-note">{diagnosticsStatusLabel(report.diagnostics.status)}</p>
         <p className="series-note">
-          CPU and JFR values are pooled diagnostic samples. They are not paired with build 1, 2,
-          or 3, and this page will not draw a timeline for them.
+          These are pooled diagnostic samples; they are not aligned to Build 1 / Build 2 / Build 3.
+          This page will not draw a timeline for them.
+        </p>
+        <p className="series-note">
+          CPU/JFR aggregated metrics are available when exported, but individual recording files were
+          not published in the report.
         </p>
         {groups.length > 0 ? (
           <ul className="coverage-list">

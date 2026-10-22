@@ -61,6 +61,14 @@ export function lineOptions(yLabel: string): ChartOptions<"line"> {
   };
 }
 
+export function variantPointStyle(index: number): "circle" | "triangle" {
+  return index === 0 ? "circle" : "triangle";
+}
+
+export function variantDash(index: number): number[] {
+  return index === 0 ? [] : [6, 3];
+}
+
 export function barOptions(yLabel: string): ChartOptions<"bar"> {
   return cartesianOptions(yLabel);
 }
