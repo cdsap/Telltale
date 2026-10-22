@@ -7,6 +7,10 @@ export function formatPercent(
   if (value === null || !Number.isFinite(value)) {
     return "N/A";
   }
+  const rounded = Number(value.toFixed(2));
+  if (value !== 0 && rounded === 0) {
+    return `${value < 0 ? "−" : "+"}<0.01%`;
+  }
   const formatted = new Intl.NumberFormat(locale, {
     signDisplay: "exceptZero",
     maximumFractionDigits: 2,
@@ -18,10 +22,23 @@ export function formatDelta(
   comparison: Comparison,
   locale?: string,
 ): string {
-  if (comparison.unavailableReason && comparison.deltaPercent === null) {
+  if (comparison.deltaPercent === null && comparison.deltaAbsolute === null) {
+    return "N/A";
+  }
+  if (comparison.deltaPercent === null) {
     return "N/A";
   }
   return formatPercent(comparison.deltaPercent, locale);
+}
+
+export function formatSignedNumber(
+  value: number,
+  locale?: string,
+): string {
+  return new Intl.NumberFormat(locale, {
+    signDisplay: "exceptZero",
+    maximumFractionDigits: 3,
+  }).format(value);
 }
 
 export function toneLabel(tone: ComparisonTone): string {

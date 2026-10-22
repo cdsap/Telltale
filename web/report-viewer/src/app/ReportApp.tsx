@@ -1,32 +1,27 @@
-import { useEffect, useMemo, useState } from "react";
-import { loadReport, reportUrlFromMount } from "../api/loadReport";
+import { useEffect, useState } from "react";
+import { loadReport, ReportLoadError, reportUrlFromMount } from "../api/loadReport";
 import { ReportValidationError } from "../api/validateReport";
-import { ReportLoadError } from "../api/loadReport";
-import type { ExperimentResult, StatisticName } from "../domain/types";
-import { variantByRole } from "../domain/metrics";
-import { reportSections } from "../domain/coverage";
+import type { ExperimentResult } from "../domain/types";
 import { ErrorState } from "../components/EmptyState/EmptyState";
 import { SiteHeader } from "../components/Shell/SiteHeader";
-import { SectionNav } from "../components/SectionNav/SectionNav";
-import { Overview } from "../features/overview/Overview";
-import { Builds } from "../features/builds/Builds";
-import { Tasks } from "../features/tasks/Tasks";
 import { FamilySection } from "../features/family/FamilySection";
 import { Diagnostics } from "../features/diagnostics/Diagnostics";
 import { MetricTable } from "../components/MetricTable/MetricTable";
+import { OverviewDashboard } from "../features/overview/OverviewDashboard";
+import { BuildsWorkbench } from "../features/builds/BuildsWorkbench";
+import { TaskExplorer } from "../features/tasks/TaskExplorer";
+import { RuntimeWorkbench } from "../features/runtime/RuntimeWorkbench";
+import { ExperimentDetails } from "../features/details/ExperimentDetails";
+import { DashboardProvider, useDashboard } from "./DashboardState";
+import { WorkbenchLayout } from "./WorkbenchLayout";
 
 interface ReportAppProps {
   root: HTMLElement;
 }
 
-const STATISTICS: StatisticName[] = ["mean", "p50", "p90"];
-
 export function ReportApp({ root }: ReportAppProps) {
   const [report, setReport] = useState<ExperimentResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [statistic, setStatistic] = useState<StatisticName>("mean");
-  const [baselineId, setBaselineId] = useState<string | null>(null);
-  const [candidateId, setCandidateId] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -34,17 +29,9 @@ export function ReportApp({ root }: ReportAppProps) {
       const url = reportUrlFromMount(root);
       loadReport(url)
         .then((loaded) => {
-          if (cancelled) {
-            return;
+          if (!cancelled) {
+            setReport(loaded);
           }
-          setReport(loaded);
-          setBaselineId(variantByRole(loaded.variants, "baseline")?.id ?? loaded.variants[0]?.id ?? null);
-          setCandidateId(
-            variantByRole(loaded.variants, "candidate")?.id ??
-              loaded.variants[1]?.id ??
-              loaded.variants[0]?.id ??
-              null,
-          );
         })
         .catch((caught: unknown) => {
           if (cancelled) {
@@ -65,16 +52,6 @@ export function ReportApp({ root }: ReportAppProps) {
     };
   }, [root]);
 
-  const baseline = useMemo(
-    () => report?.variants.find((variant) => variant.id === baselineId),
-    [baselineId, report],
-  );
-  const candidate = useMemo(
-    () => report?.variants.find((variant) => variant.id === candidateId),
-    [candidateId, report],
-  );
-  const sections = report ? reportSections(report) : [];
-
   if (error) {
     return (
       <>
@@ -83,7 +60,7 @@ export function ReportApp({ root }: ReportAppProps) {
       </>
     );
   }
-  if (!report || !baseline || !candidate) {
+  if (!report) {
     return (
       <>
         <SiteHeader />
@@ -95,42 +72,29 @@ export function ReportApp({ root }: ReportAppProps) {
   return (
     <>
       <SiteHeader />
-      <main className="main">
-        <Overview
-          report={report}
-          baseline={baseline}
-          candidate={candidate}
-          statistic={statistic}
-          jsonUrl={root.dataset.reportUrl ?? null}
-          legacyCsvUrl={root.dataset.csvUrl}
-          legacyHtmlUrl={root.dataset.htmlUrl}
-        />
-        <SectionNav sections={sections} />
-        <section className="experiment-snapshot statistic-bar" aria-label="Statistic">
-          <h2 className="experiment-snapshot-title">Statistic</h2>
-          <fieldset className="controls" style={{ border: 0, padding: 0, margin: 0 }}>
-            <legend className="visually-hidden">Statistic</legend>
-            {STATISTICS.map((name) => (
-              <label key={name}>
-                <input
-                  type="radio"
-                  name="statistic"
-                  value={name}
-                  checked={statistic === name}
-                  onChange={() => setStatistic(name)}
-                />{" "}
-                {name.toUpperCase()}
-              </label>
-            ))}
-          </fieldset>
-        </section>
-        <Builds report={report} variants={[baseline, candidate]} />
-        <Tasks
-          report={report}
-          baseline={baseline}
-          candidate={candidate}
-          statistic={statistic}
-        />
+      <DashboardProvider
+        report={report}
+        jsonUrl={root.dataset.reportUrl ?? null}
+        legacyCsvUrl={root.dataset.csvUrl}
+        legacyHtmlUrl={root.dataset.htmlUrl}
+      >
+        <WorkbenchLayout>
+          <ActiveSection />
+        </WorkbenchLayout>
+      </DashboardProvider>
+    </>
+  );
+}
+
+function ActiveSection() {
+  const { report, baseline, candidate, selection } = useDashboard();
+  switch (selection.section) {
+    case "builds":
+      return <BuildsWorkbench />;
+    case "tasks":
+      return <TaskExplorer />;
+    case "resources":
+      return (
         <FamilySection
           id="resources"
           title="Resources"
@@ -138,52 +102,34 @@ export function ReportApp({ root }: ReportAppProps) {
           report={report}
           baseline={baseline}
           candidate={candidate}
-          statistic={statistic}
+          statistic={selection.statistic}
           series={report.datasets.resourceSeries}
+          note="Resource units come from the JSON. Lower memory is not marked better unless the metric direction says so."
         />
-        <FamilySection
-          id="processes"
-          title="Processes"
-          family="process"
-          report={report}
-          baseline={baseline}
-          candidate={candidate}
-          statistic={statistic}
-          series={report.datasets.processSeries}
-        />
-        <FamilySection
-          id="kotlin"
-          title="Kotlin"
-          family="kotlin"
-          report={report}
-          baseline={baseline}
-          candidate={candidate}
-          statistic={statistic}
-          series={report.datasets.kotlinBuildReportSeries}
-        />
-        <FamilySection
-          id="gc"
-          title="GC"
-          family="gc"
-          report={report}
-          baseline={baseline}
-          candidate={candidate}
-          statistic={statistic}
-          series={report.datasets.gcSeries}
-        />
+      );
+    case "runtime":
+      return <RuntimeWorkbench />;
+    case "diagnostics":
+      return (
         <Diagnostics
           report={report}
           baseline={baseline}
           candidate={candidate}
-          statistic={statistic}
+          statistic={selection.statistic}
         />
+      );
+    case "metrics":
+      return (
         <MetricTable
           report={report}
           baseline={baseline}
           candidate={candidate}
-          statistic={statistic}
+          statistic={selection.statistic}
         />
-      </main>
-    </>
-  );
+      );
+    case "details":
+      return <ExperimentDetails />;
+    default:
+      return <OverviewDashboard />;
+  }
 }
