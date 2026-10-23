@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
-import { loadReport, ReportLoadError, reportUrlFromMount } from "../api/loadReport";
+import {
+  loadReport,
+  ReportLoadError,
+  reportUrlFromMount,
+  type ReportLoadProgress,
+} from "../api/loadReport";
 import { ReportValidationError } from "../api/validateReport";
 import type { ExperimentResult } from "../domain/types";
 import { ErrorState } from "../components/EmptyState/EmptyState";
 import { SiteHeader } from "../components/Shell/SiteHeader";
+import { ReportLoadDialog } from "../components/workbench/ReportLoadDialog";
 import { FamilySection } from "../features/family/FamilySection";
 import { Diagnostics } from "../features/diagnostics/Diagnostics";
 import { MetricTable } from "../components/MetricTable/MetricTable";
@@ -19,15 +25,38 @@ interface ReportAppProps {
   root: HTMLElement;
 }
 
+const INITIAL_PROGRESS: ReportLoadProgress = {
+  phase: "download",
+  loadedBytes: 0,
+  totalBytes: null,
+};
+
 export function ReportApp({ root }: ReportAppProps) {
   const [report, setReport] = useState<ExperimentResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState<ReportLoadProgress>(INITIAL_PROGRESS);
 
   useEffect(() => {
     let cancelled = false;
+    let lastPaint = 0;
+    const publishProgress = (next: ReportLoadProgress) => {
+      if (cancelled) {
+        return;
+      }
+      const now = typeof performance !== "undefined" ? performance.now() : Date.now();
+      if (
+        next.phase !== "download" ||
+        now - lastPaint > 80 ||
+        next.loadedBytes === 0 ||
+        (next.totalBytes != null && next.loadedBytes >= next.totalBytes)
+      ) {
+        lastPaint = now;
+        setProgress(next);
+      }
+    };
     try {
       const url = reportUrlFromMount(root);
-      loadReport(url)
+      loadReport(url, { onProgress: publishProgress })
         .then((loaded) => {
           if (!cancelled) {
             setReport(loaded);
@@ -64,7 +93,7 @@ export function ReportApp({ root }: ReportAppProps) {
     return (
       <>
         <SiteHeader />
-        <p className="main">Loading experiment report…</p>
+        <ReportLoadDialog progress={progress} />
       </>
     );
   }
@@ -92,7 +121,9 @@ function ActiveSection() {
     case "builds":
       return <BuildsWorkbench />;
     case "tasks":
-      return <TaskExplorer />;
+      return <TaskExplorer source="paths" />;
+    case "task-types":
+      return <TaskExplorer source="types" />;
     case "resources":
       return (
         <FamilySection
@@ -105,6 +136,20 @@ function ActiveSection() {
           statistic={selection.statistic}
           series={report.datasets.resourceSeries}
           note="Resource units come from the JSON. Lower memory is not marked better unless the metric direction says so."
+        />
+      );
+    case "kotlin":
+      return (
+        <FamilySection
+          id="kotlin"
+          title="Kotlin Build Reports"
+          family="kotlin"
+          report={report}
+          baseline={baseline}
+          candidate={candidate}
+          statistic={selection.statistic}
+          series={report.datasets.kotlinBuildReportSeries}
+          note="Kotlin compiler metrics from Kotlin Build Reports. Per-build timelines use published series."
         />
       );
     case "runtime":

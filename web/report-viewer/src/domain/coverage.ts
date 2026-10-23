@@ -1,5 +1,5 @@
 import type { ExperimentResult } from "./types";
-import { metricsInFamily, taskPathMetrics } from "./series";
+import { metricsInFamily, taskPathMetrics, taskTypeMetrics } from "./series";
 
 export interface ReportSection {
   id: string;
@@ -49,13 +49,16 @@ export function runtimeSubsections(report: ExperimentResult): ReportSection[] {
 
 export function reportSections(report: ExperimentResult): ReportSection[] {
   const hasBuilds = Object.values(report.datasets.builds).some((items) => items.length > 0);
-  const hasTasks =
+  const hasTaskPaths =
     taskPathMetrics(report).length > 0 || Object.keys(report.datasets.taskSeries).length > 0;
+  const hasTaskTypes = taskTypeMetrics(report).length > 0;
   const runtime = runtimeSubsections(report);
+  const kotlin = runtime.find((section) => section.id === "kotlin");
   return [
     { id: "overview", title: "Overview", available: true },
     { id: "builds", title: "Builds", available: hasBuilds },
-    { id: "tasks", title: "Tasks", available: hasTasks },
+    { id: "tasks", title: "Tasks", available: hasTaskPaths },
+    { id: "task-types", title: "Task types", available: hasTaskTypes },
     {
       id: "resources",
       title: "Resources",
@@ -66,7 +69,12 @@ export function reportSections(report: ExperimentResult): ReportSection[] {
     {
       id: "runtime",
       title: "Runtime",
-      available: runtime.some((section) => section.available),
+      available: runtime.some((section) => section.id !== "kotlin" && section.available),
+    },
+    {
+      id: "kotlin",
+      title: "Kotlin reports",
+      available: kotlin?.available ?? false,
     },
     { id: "diagnostics", title: "Diagnostics", available: true },
     { id: "metrics", title: "Metrics", available: report.metrics.length > 0 },

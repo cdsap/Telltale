@@ -9,13 +9,19 @@ import { formatDelta } from "../../domain/formatting";
 import {
   canPlotSequence,
   searchTaskMetrics,
-  taskPathMetrics,
-  taskPathOf,
+  seriesHasPoints,
+  taskModuleOf,
   taskSeriesByPath,
+  taskSeriesByType,
+  taskTypeOf,
 } from "../../domain/series";
-import { TASK_CATEGORIES } from "../../domain/taskCategories";
 import { formatMetricValue, formatSignedMetricValue } from "../../domain/units";
-import { taskChangeRows, statisticLabel, type TaskChangeRow } from "../../domain/viewModels";
+import {
+  allTaskPathRows,
+  statisticLabel,
+  taskTypeChangeRows,
+  type TaskChangeRow,
+} from "../../domain/viewModels";
 
 function sortRows(
   rows: TaskChangeRow[],
@@ -52,71 +58,118 @@ function sortRows(
   return copy;
 }
 
-export function TaskExplorer() {
+function TimelineIcon() {
+  return (
+    <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
+      <path
+        d="M3 16V4m0 12h14M5 12l3-3 3 2 4-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+interface TaskExplorerProps {
+  source?: "paths" | "types";
+}
+
+export function TaskExplorer({ source = "paths" }: TaskExplorerProps) {
   const { report, baseline, candidate, selection, update } = useDashboard();
+  const isTypes = source === "types";
+  const variantIds = [baseline.id, candidate.id];
   const ranked = useMemo(
-    () => taskChangeRows(report, baseline, candidate, selection.statistic),
-    [baseline, candidate, report, selection.statistic],
+    () =>
+      isTypes
+        ? taskTypeChangeRows(report, baseline, candidate, selection.statistic)
+        : allTaskPathRows(report, baseline, candidate, selection.statistic),
+    [baseline, candidate, isTypes, report, selection.statistic],
   );
   const deferredQuery = useDeferredValue(selection.query);
+  const modules = useMemo(() => {
+    const values = new Set(ranked.map((row) => taskModuleOf(row.path)).filter(Boolean));
+    return [...values].sort((left, right) => left.localeCompare(right));
+  }, [ranked]);
+  const activeModule = modules.includes(selection.module) ? selection.module : "all";
   const filtered = useMemo(() => {
-    const searched = new Set(searchTaskMetrics(taskPathMetrics(report), deferredQuery).map((metric) => metric.id));
+    const searched = new Set(searchTaskMetrics(
+      ranked.map((row) => row.metric),
+      deferredQuery,
+    ).map((metric) => metric.id));
     return ranked.filter((row) => {
       if (!searched.has(row.metric.id)) {
         return false;
       }
-      if (selection.category !== "all" && row.category !== selection.category) {
+      if (!isTypes && activeModule !== "all" && taskModuleOf(row.path) !== activeModule) {
         return false;
       }
       return true;
     });
-  }, [deferredQuery, ranked, report, selection.category]);
+  }, [activeModule, deferredQuery, isTypes, ranked]);
   const sorted = useMemo(
     () => sortRows(filtered, selection.sort, baseline.id, candidate.id),
     [baseline.id, candidate.id, filtered, selection.sort],
+  );
+  const seriesByKey = useMemo(
+    () => (isTypes ? taskSeriesByType(report) : taskSeriesByPath(report)),
+    [isTypes, report],
   );
   const selected =
     sorted.find((row) => row.metric.id === selection.taskId) ??
     ranked.find((row) => row.metric.id === selection.taskId) ??
     null;
-  const seriesByPath = useMemo(() => taskSeriesByPath(report), [report]);
   const inA = ranked.filter((row) => row.baselineValue !== null).length;
   const inB = ranked.filter((row) => row.candidateValue !== null).length;
   const inBoth = ranked.filter((row) => row.baselineValue !== null && row.candidateValue !== null).length;
+  const selectedKey = selected
+    ? isTypes
+      ? taskTypeOf(selected.metric)
+      : selected.path
+    : "";
+  const selectedSeries = selectedKey ? seriesByKey.get(selectedKey) : undefined;
+  const selectedHasTimeline =
+    Boolean(selected) &&
+    canPlotSequence(selected?.metric) &&
+    seriesHasPoints(selectedSeries, variantIds);
 
   return (
     <>
       <section className="wb-panel">
-        <h2>Tasks</h2>
+        <h2>{isTypes ? "Task types" : "Task paths"}</h2>
         <p className="panel-note">
-          {ranked.length} task paths · {inA} with baseline values · {inB} with candidate values ·{" "}
-          {inBoth} in both. Selected statistic: {statisticLabel(selection.statistic)}. Missing values
-          show N/A, never 0 ms.
+          {ranked.length} {isTypes ? "task types" : "task paths"} · {inA} with baseline values · {inB}{" "}
+          with candidate values · {inBoth} in both. Selected statistic:{" "}
+          {statisticLabel(selection.statistic)}. Missing values show N/A, never 0 ms.
         </p>
         <div className="filter-bar">
           <label>
-            Search task path
+            {isTypes ? "Search task type" : "Search task path"}
             <input
               type="search"
               value={selection.query}
               onChange={(event) => update({ query: event.target.value })}
-              placeholder="compileDebugKotlin"
+              placeholder={isTypes ? "KotlinCompile" : "compileDebugKotlin"}
             />
           </label>
-          <label>
-            Category
-            <select
-              value={selection.category}
-              onChange={(event) => update({ category: event.target.value })}
-            >
-              <option value="all">All</option>
-              {TASK_CATEGORIES.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </label>
+          {isTypes ? null : (
+            <label>
+              Module
+              <select
+                value={activeModule}
+                onChange={(event) => update({ module: event.target.value })}
+              >
+                <option value="all">All</option>
+                {modules.map((module) => (
+                  <option key={module} value={module}>
+                    {module === ":" ? ": (root)" : module}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           <label>
             Sort
             <select
@@ -133,12 +186,14 @@ export function TaskExplorer() {
         </div>
         <VirtualTable
           rowCount={sorted.length}
+          rowHeight={52}
+          resetKey={`${source}:${activeModule}:${deferredQuery}:${selection.sort}`}
           empty="No tasks match this search."
           header={
             <thead>
               <tr>
-                <th>Task path</th>
-                <th>Category</th>
+                <th>{isTypes ? "Task type" : "Task path"}</th>
+                {isTypes ? null : <th className="timeline-col">Timeline</th>}
                 <th className="num">n(A)</th>
                 <th className="num">n(B)</th>
                 <th className="num">{statisticLabel(selection.statistic)} A</th>
@@ -153,21 +208,38 @@ export function TaskExplorer() {
             if (!row) {
               return null;
             }
+            const series = seriesByKey.get(row.path);
+            const hasTimeline = !isTypes && canPlotSequence(row.metric) && seriesHasPoints(series, variantIds);
             return (
               <tr
                 key={row.metric.id}
                 className={selection.taskId === row.metric.id ? "is-selected" : undefined}
               >
-                <td className="path">
+                <td className="path" title={row.path}>
                   <button
                     type="button"
-                    className="linkish"
+                    className="task-path-button"
                     onClick={() => update({ taskId: row.metric.id })}
                   >
                     {row.path}
                   </button>
                 </td>
-                <td>{row.category}</td>
+                {isTypes ? null : (
+                  <td className="timeline-col">
+                    {hasTimeline ? (
+                      <button
+                        type="button"
+                        className="timeline-icon"
+                        aria-label={`Show timeline for ${row.path}`}
+                        onClick={() => update({ taskId: row.metric.id })}
+                      >
+                        <TimelineIcon />
+                      </button>
+                    ) : (
+                      <span className="muted">—</span>
+                    )}
+                  </td>
+                )}
                 <td className="num">{row.baselineCount ?? "N/A"}</td>
                 <td className="num">{row.candidateCount ?? "N/A"}</td>
                 <td className="num">
@@ -190,15 +262,15 @@ export function TaskExplorer() {
         />
       </section>
       <ContextDrawer
-        title={selected ? taskPathOf(selected.metric) : "Task"}
-        open={Boolean(selected)}
+        title={selected ? `${selected.path} timeline` : "Task timeline"}
+        open={!isTypes && selectedHasTimeline}
         onClose={() => update({ taskId: null })}
       >
         {selected ? (
           <>
             <p className="panel-note">
-              {selected.category} · sample unit {selected.metric.aggregation?.sampleUnit ?? "task"} ·{" "}
-              {selected.metric.unit}
+              {isTypes ? "Task type" : `Module ${taskModuleOf(selected.path) || "root"}`} · sample
+              unit {selected.metric.aggregation?.sampleUnit ?? "task"} · {selected.metric.unit}
             </p>
             <p>
               {formatMetricValue(selected.baselineValue, selected.metric.unit, selected.metric.valueType).text}
@@ -210,7 +282,7 @@ export function TaskExplorer() {
             <SeriesChart
               title={selected.path}
               variants={[baseline, candidate]}
-              observations={seriesByPath.get(selected.path)?.observations ?? {}}
+              observations={selectedSeries?.observations ?? {}}
               unit={selected.metric.unit}
               valueType={selected.metric.valueType}
               allowSequence={canPlotSequence(selected.metric)}

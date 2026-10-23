@@ -3,3 +3,4 @@ dist
 .DS_Store
 *.log
 public/data/gradle-*.json
+public/data/run-*.json

@@ -1,26 +1,11 @@
-import { DISTRIBUTION_VIEWS, type DistributionView } from "../../app/routes";
 import { useDashboard } from "../../app/DashboardState";
-import { DistributionChart } from "../../components/charts/DistributionChart";
 import { SeriesChart } from "../../components/SeriesChart/SeriesChart";
 import { ChartPanel } from "../../components/workbench/ChartPanel";
-import { ContextDrawer } from "../../components/workbench/ContextDrawer";
 import { derivedStats } from "../../domain/distribution";
-import { formatIsoDate } from "../../domain/formatting";
-import { safeHttpsUrl } from "../../domain/links";
 import { displayLabel } from "../../domain/metrics";
-import { formatDurationMs, formatSignedMetricValue } from "../../domain/units";
-import {
-  buildObservations,
-  deltaFromMedian,
-  durationValues,
-  viewerBuildStats,
-} from "../../domain/viewModels";
-import type {
-  BuildObservation,
-  ExperimentResult,
-  SeriesObservation,
-  Variant,
-} from "../../domain/types";
+import { formatDurationMs } from "../../domain/units";
+import { viewerBuildStats } from "../../domain/viewModels";
+import type { ExperimentResult, SeriesObservation, Variant } from "../../domain/types";
 
 function asSeries(
   variants: Variant[],
@@ -41,14 +26,12 @@ function asSeries(
 }
 
 export function BuildsWorkbench() {
-  const { report, baseline, candidate, selection, update } = useDashboard();
+  const { report, baseline, candidate } = useDashboard();
   const variants = [baseline, candidate];
-  const rows = variants.flatMap((variant) =>
-    buildObservations(report, variant).map((observation, index) => ({ variant, observation, index })),
+  const hasObservations = variants.some(
+    (variant) => (report.datasets.builds[variant.id] ?? []).length > 0,
   );
-  const selected = rows.find((row) => row.observation.observationId === selection.observationId);
-  const distView = selection.distView === "iteration" ? "histogram" : selection.distView;
-  if (rows.length === 0) {
+  if (!hasObservations) {
     return (
       <section className="wb-panel">
         <h2>Builds</h2>
@@ -58,46 +41,16 @@ export function BuildsWorkbench() {
   }
   return (
     <>
-      <div className="chart-grid">
-        <ChartPanel
-          title="Build duration distribution"
-          subtitle="Viewer-derived from raw durationMs. Producer mean/P50/P90 stay on the overview cards."
-        >
-          <div className="segmented" role="group" aria-label="Build chart view">
-            {DISTRIBUTION_VIEWS.filter((item) => item !== "iteration").map((item) => (
-              <button
-                key={item}
-                type="button"
-                aria-pressed={distView === item}
-                onClick={() => update({ distView: item as DistributionView })}
-              >
-                {item === "box" ? "Box + points" : "Histogram"}
-              </button>
-            ))}
-          </div>
-          <DistributionChart
-            title="Build duration"
-            variants={variants}
-            values={{
-              [baseline.id]: durationValues(report, baseline),
-              [candidate.id]: durationValues(report, candidate),
-            }}
-            unit="ms"
-            valueType="duration"
-            view={distView}
-          />
-        </ChartPanel>
-        <ChartPanel title="Duration by execution order">
-          <SeriesChart
-            title="Build duration"
-            variants={variants}
-            observations={asSeries(variants, report, "durationMs")}
-            unit="ms"
-            valueType="duration"
-            allowSequence
-          />
-        </ChartPanel>
-      </div>
+      <ChartPanel title="Duration by execution order">
+        <SeriesChart
+          title="Build duration"
+          variants={variants}
+          observations={asSeries(variants, report, "durationMs")}
+          unit="ms"
+          valueType="duration"
+          allowSequence
+        />
+      </ChartPanel>
       <ChartPanel title="Configuration time by build">
         <SeriesChart
           title="Configuration time"
@@ -141,87 +94,6 @@ export function BuildsWorkbench() {
           </table>
         </div>
       </section>
-      <section className="wb-panel">
-        <h2>Build observations</h2>
-        <div className="table-wrap">
-          <table className="experiment-snapshot-table">
-            <thead>
-              <tr>
-                <th>Variant</th>
-                <th className="num">Build</th>
-                <th>Started</th>
-                <th className="num">Duration</th>
-                <th className="num">Configuration</th>
-                <th className="num">Δ median</th>
-                <th>Scan</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(({ variant, observation, index }) => {
-                const scan = safeHttpsUrl(observation.scanUrl);
-                const selectedRow = observation.observationId === selection.observationId;
-                const medianDelta = deltaFromMedian(
-                  observation.durationMs,
-                  buildObservations(report, variant),
-                );
-                return (
-                  <tr
-                    key={`${variant.id}-${observation.observationId}`}
-                    className={selectedRow ? "is-selected" : undefined}
-                  >
-                    <td>{displayLabel(variant)}</td>
-                    <td className="num">{observation.sequence ?? index + 1}</td>
-                    <td>{formatIsoDate(observation.startedAt)}</td>
-                    <td className="num">
-                      {observation.durationMs == null
-                        ? "N/A"
-                        : formatDurationMs(observation.durationMs).text}
-                    </td>
-                    <td className="num">
-                      {observation.configurationMs == null
-                        ? "N/A"
-                        : formatDurationMs(observation.configurationMs).text}
-                    </td>
-                    <td className="num">
-                      {formatSignedMetricValue(medianDelta, "ms", "duration").text}
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        className="linkish"
-                        onClick={() => update({ observationId: observation.observationId })}
-                      >
-                        {observation.observationId}
-                      </button>
-                      {scan ? (
-                        <>
-                          {" "}
-                          <a href={scan} rel="noreferrer">
-                            scan
-                          </a>
-                        </>
-                      ) : null}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </section>
-      <ContextDrawer
-        title="Build observation"
-        open={Boolean(selected)}
-        onClose={() => update({ observationId: null })}
-      >
-        {selected ? (
-          <BuildDetail
-            variant={selected.variant}
-            observation={selected.observation}
-            siblings={buildObservations(report, selected.variant)}
-          />
-        ) : null}
-      </ContextDrawer>
     </>
   );
 }
@@ -238,49 +110,3 @@ function StatCells({ stats }: { stats: ReturnType<typeof derivedStats> }) {
   );
 }
 
-function BuildDetail({
-  variant,
-  observation,
-  siblings,
-}: {
-  variant: Variant;
-  observation: BuildObservation;
-  siblings: BuildObservation[];
-}) {
-  const scan = safeHttpsUrl(observation.scanUrl);
-  const medianDelta = deltaFromMedian(observation.durationMs, siblings);
-  return (
-    <dl className="glossary">
-      <dt>Observation ID</dt>
-      <dd className="change-path">{observation.observationId}</dd>
-      <dt>Variant</dt>
-      <dd>{displayLabel(variant)}</dd>
-      <dt>Sequence</dt>
-      <dd>{observation.sequence ?? "—"}</dd>
-      <dt>Started</dt>
-      <dd>{formatIsoDate(observation.startedAt)}</dd>
-      <dt>Duration</dt>
-      <dd>
-        {observation.durationMs == null ? "N/A" : formatDurationMs(observation.durationMs).text}
-      </dd>
-      <dt>Configuration</dt>
-      <dd>
-        {observation.configurationMs == null
-          ? "N/A"
-          : formatDurationMs(observation.configurationMs).text}
-      </dd>
-      <dt>Delta from variant median</dt>
-      <dd>{formatSignedMetricValue(medianDelta, "ms", "duration").text}</dd>
-      <dt>Build scan</dt>
-      <dd>
-        {scan ? (
-          <a href={scan} rel="noreferrer">
-            Open scan
-          </a>
-        ) : (
-          "No public scan URL"
-        )}
-      </dd>
-    </dl>
-  );
-}

@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 interface VirtualTableProps {
   rowCount: number;
@@ -7,6 +7,7 @@ interface VirtualTableProps {
   header: ReactNode;
   renderRow: (index: number) => ReactNode;
   empty: string;
+  resetKey?: string;
 }
 
 export function VirtualTable({
@@ -16,8 +17,16 @@ export function VirtualTable({
   header,
   renderRow,
   empty,
+  resetKey,
 }: VirtualTableProps) {
+  const scroller = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
+  useEffect(() => {
+    if (scroller.current) {
+      scroller.current.scrollTop = 0;
+    }
+    setScrollTop(0);
+  }, [resetKey]);
   const start = Math.max(0, Math.floor(scrollTop / rowHeight) - 6);
   const visible = Math.ceil(height / rowHeight) + 12;
   const end = Math.min(rowCount, start + visible);
@@ -33,6 +42,7 @@ export function VirtualTable({
   }
   return (
     <div
+      ref={scroller}
       className="virtual-table"
       style={{ height }}
       onScroll={(event) => setScrollTop(event.currentTarget.scrollTop)}
