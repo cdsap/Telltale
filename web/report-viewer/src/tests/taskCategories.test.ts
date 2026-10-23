@@ -29,4 +29,13 @@ describe("taskCategoryOf", () => {
     expect(taskCategoryOf(metric({ name: ":app:dexBuilderDebug" }))).toBe("Dexing");
     expect(taskCategoryOf(metric({ name: ":app:somethingCustom" }))).toBe("Unclassified");
   });
+
+  it("classifies a series taskType hint even when the metric has none", () => {
+    expect(
+      taskCategoryOf(
+        metric({ name: ":app:compileDebugKotlin", scope: { taskPath: ":app:compileDebugKotlin" } }),
+        "org.jetbrains.kotlin.gradle.tasks.KotlinCompile",
+      ),
+    ).toBe("Kotlin");
+  });
 });

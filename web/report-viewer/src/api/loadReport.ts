@@ -1,7 +1,9 @@
 import { validateReport } from "./validateReport";
 import type { ExperimentResult } from "../domain/types";
 
-export const MAX_REPORT_BYTES = 32 * 1024 * 1024;
+// 50-iteration Android reports are ~90 MiB pretty-printed (~48 MiB compact)
+// because datasets.taskSeries stores one point per build.
+export const MAX_REPORT_BYTES = 128 * 1024 * 1024;
 
 export class ReportLoadError extends Error {
   constructor(message: string) {
@@ -43,18 +45,28 @@ export function resolveReportUrl(rawUrl: string | null | undefined): string {
   return normalized;
 }
 
-export async function loadReport(url: string): Promise<ExperimentResult> {
+export function assertReportByteLength(
+  byteLength: number,
+  limit = MAX_REPORT_BYTES,
+): void {
+  if (byteLength > limit) {
+    throw new ReportLoadError(
+      `Report JSON is ${byteLength} bytes, above the ${limit} byte limit.`,
+    );
+  }
+}
+
+export async function loadReport(
+  url: string,
+  options?: { maxBytes?: number },
+): Promise<ExperimentResult> {
   const safeUrl = resolveReportUrl(url);
   const response = await fetch(safeUrl, { credentials: "same-origin" });
   if (!response.ok) {
     throw new ReportLoadError(`Could not load report data (${response.status}).`);
   }
   const buffer = await response.arrayBuffer();
-  if (buffer.byteLength > MAX_REPORT_BYTES) {
-    throw new ReportLoadError(
-      `Report JSON is ${buffer.byteLength} bytes, above the ${MAX_REPORT_BYTES} byte limit.`,
-    );
-  }
+  assertReportByteLength(buffer.byteLength, options?.maxBytes ?? MAX_REPORT_BYTES);
   const text = new TextDecoder().decode(buffer);
   let parsed: unknown;
   try {

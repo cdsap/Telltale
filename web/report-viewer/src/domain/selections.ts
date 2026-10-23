@@ -22,6 +22,7 @@ export interface DashboardSelection {
   query: string;
   sort: TaskSort;
   category: string;
+  module: string;
   runtimeTab: RuntimeTab;
   distView: DistributionView;
 }
@@ -59,6 +60,7 @@ export function defaultSelection(report: ExperimentResult): DashboardSelection {
     query: "",
     sort: DEFAULT_SORT,
     category: "all",
+    module: "all",
     runtimeTab: DEFAULT_RUNTIME,
     distView: DEFAULT_DIST,
   };
@@ -83,8 +85,14 @@ export function parseHash(hash: string, report: ExperimentResult): DashboardSele
       candidateId = other.id;
     }
   }
+  const parsedTab = RUNTIME_TABS.includes(runtimeTab as RuntimeTab)
+    ? (runtimeTab as RuntimeTab)
+    : defaults.runtimeTab;
+  const parsedSection = isWorkbenchSection(sectionToken) ? sectionToken : defaults.section;
+  const section =
+    parsedSection === "runtime" && parsedTab === "kotlin" ? "kotlin" : parsedSection;
   return {
-    section: isWorkbenchSection(sectionToken) ? sectionToken : defaults.section,
+    section,
     statistic: STATISTICS.includes(statistic as StatisticName)
       ? (statistic as StatisticName)
       : defaults.statistic,
@@ -95,9 +103,8 @@ export function parseHash(hash: string, report: ExperimentResult): DashboardSele
     query: firstQuery(params, "q") ?? "",
     sort: TASK_SORTS.includes(sort as TaskSort) ? (sort as TaskSort) : defaults.sort,
     category: firstQuery(params, "cat") ?? "all",
-    runtimeTab: RUNTIME_TABS.includes(runtimeTab as RuntimeTab)
-      ? (runtimeTab as RuntimeTab)
-      : defaults.runtimeTab,
+    module: firstQuery(params, "mod") ?? "all",
+    runtimeTab: parsedTab,
     distView: DISTRIBUTION_VIEWS.includes(distView as DistributionView)
       ? (distView as DistributionView)
       : defaults.distView,
@@ -130,6 +137,9 @@ export function serializeHash(selection: DashboardSelection, report?: Experiment
   }
   if (selection.category !== "all") {
     params.set("cat", selection.category);
+  }
+  if (selection.module !== "all") {
+    params.set("mod", selection.module);
   }
   if (!defaults || selection.runtimeTab !== defaults.runtimeTab) {
     params.set("runtime", selection.runtimeTab);

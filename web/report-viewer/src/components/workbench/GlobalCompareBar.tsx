@@ -1,11 +1,8 @@
-import { STATISTICS } from "../../app/routes";
 import { useDashboard } from "../../app/DashboardState";
 import { displayLabel } from "../../domain/metrics";
-import type { StatisticName } from "../../domain/types";
-import { statisticLabel } from "../../domain/viewModels";
 
 export function GlobalCompareBar() {
-  const { report, selection, update, reset } = useDashboard();
+  const { report, selection, update } = useDashboard();
   const single = report.variants.length < 2;
   return (
     <div className="workbench-compare">
@@ -37,21 +34,6 @@ export function GlobalCompareBar() {
             ))}
           </select>
         </label>
-        <div className="segmented" role="group" aria-label="Statistic">
-          {STATISTICS.map((name) => (
-            <button
-              key={name}
-              type="button"
-              aria-pressed={selection.statistic === name}
-              onClick={() => update({ statistic: name as StatisticName })}
-            >
-              {statisticLabel(name)}
-            </button>
-          ))}
-        </div>
-        <button type="button" className="wb-btn" onClick={reset}>
-          Reset
-        </button>
       </div>
     </div>
   );

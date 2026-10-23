@@ -116,10 +116,10 @@ export function ExperimentDetails() {
       <section className="wb-panel">
         <h2>Glossary</h2>
         <dl className="glossary">
-          <dt>Mean / P50 / P90</dt>
+          <dt>Average, median, P90</dt>
           <dd>
-            Producer aggregates. P50 is the median. Switching the statistic updates KPI emphasis and
-            rankings, not raw observation charts.
+            Producer aggregates on each metric. Tables and KPI cards use the average. Per-build
+            charts use the raw observations.
           </dd>
           <dt>Sample</dt>
           <dd>

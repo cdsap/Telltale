@@ -2,27 +2,29 @@ import { RUNTIME_TABS, type RuntimeTab } from "../../app/routes";
 import { useDashboard } from "../../app/DashboardState";
 import { FamilySection } from "../family/FamilySection";
 import { runtimeSubsections } from "../../domain/coverage";
+import { aggregateProcessSeries } from "../../domain/series";
 
 const TAB_LABEL: Record<RuntimeTab, string> = {
   processes: "Processes",
-  kotlin: "Kotlin",
+  kotlin: "Kotlin reports",
   gc: "Garbage collection",
 };
 
 export function RuntimeWorkbench() {
   const { report, baseline, candidate, selection, update } = useDashboard();
   const available = runtimeSubsections(report);
-  const active = selection.runtimeTab;
+  const active = selection.runtimeTab === "kotlin" ? "processes" : selection.runtimeTab;
+  const processSeries = aggregateProcessSeries(report.datasets.processSeries);
   return (
     <>
       <section className="wb-panel">
         <h2>Runtime</h2>
         <p className="panel-note">
-          Process, Kotlin compiler, and GC measurements are separate sample types. They are not a
-          JVM timeline unless a timestamped series is published.
+          Process and GC measurements are separate sample types. Per-build timelines use published
+          series when they exist.
         </p>
         <div className="segmented" role="tablist" aria-label="Runtime sections">
-          {RUNTIME_TABS.map((tab) => (
+          {RUNTIME_TABS.filter((tab) => tab !== "kotlin").map((tab) => (
             <button
               key={tab}
               type="button"
@@ -45,28 +47,11 @@ export function RuntimeWorkbench() {
             baseline={baseline}
             candidate={candidate}
             statistic={selection.statistic}
-            series={report.datasets.processSeries}
-            note="Source: Develocity process metrics or custom values when present."
+            series={processSeries}
+            note="Per-PID process series are combined into one timeline per metric."
           />
         ) : (
           <Missing title="Processes" />
-        )
-      ) : null}
-      {active === "kotlin" ? (
-        available.find((item) => item.id === "kotlin")?.available ? (
-          <FamilySection
-            id="kotlin"
-            title="Kotlin"
-            family="kotlin"
-            report={report}
-            baseline={baseline}
-            candidate={candidate}
-            statistic={selection.statistic}
-            series={report.datasets.kotlinBuildReportSeries}
-            note="Kotlin Build Report metrics. Task-family filters live in Tasks."
-          />
-        ) : (
-          <Missing title="Kotlin Build Reports" />
         )
       ) : null}
       {active === "gc" ? (

@@ -1,6 +1,6 @@
 import { compareValues, comparisonTone, statisticValue } from "./comparisons";
 import { diagnosticsStatusLabel } from "./coverage";
-import { derivedStats, finiteValues } from "./distribution";
+import { derivedStats } from "./distribution";
 import { formatDelta, formatPercent } from "./formatting";
 import {
   BUILD_CONFIGURATION_ID,
@@ -10,7 +10,7 @@ import {
   displayLabel,
   metricById,
 } from "./metrics";
-import { taskPathMetrics, taskPathOf } from "./series";
+import { taskPathMetrics, taskPathOf, taskTypeByPath, taskTypeMetrics, taskTypeOf } from "./series";
 import { taskCategoryOf, type TaskCategory } from "./taskCategories";
 import type {
   BuildObservation,
@@ -18,7 +18,10 @@ import type {
   ComparisonTone,
   ExperimentResult,
   Metric,
+  SeriesObservation,
+  Statistic,
   StatisticName,
+  TaskSeries,
   Variant,
 } from "./types";
 import { formatMetricValue } from "./units";
@@ -229,10 +232,73 @@ export function overviewKpis(
 }
 
 export function statisticLabel(statistic: StatisticName): string {
-  if (statistic === "mean") {
-    return "Mean";
+  switch (statistic) {
+    case "p50":
+      return "Median";
+    case "p90":
+      return "P90";
+    default:
+      return "Average";
   }
-  return statistic.toUpperCase();
+}
+
+function metricChangeRow(
+  metric: Metric,
+  path: string,
+  category: TaskCategory,
+  baseline: Variant,
+  candidate: Variant,
+  statistic: StatisticName,
+): TaskChangeRow {
+  const comparison = compareMetric(metric, baseline.id, candidate.id, statistic);
+  const baselineValue = statisticValue(metric.values[baseline.id], statistic);
+  const candidateValue = statisticValue(metric.values[candidate.id], statistic);
+  return {
+    metric,
+    path,
+    category,
+    comparison,
+    tone: comparisonTone(comparison, metric.direction),
+    baselineValue,
+    candidateValue,
+    baselineCount: metric.values[baseline.id]?.count ?? null,
+    candidateCount: metric.values[candidate.id]?.count ?? null,
+    absDelta: Math.abs(comparison.deltaAbsolute ?? 0),
+  };
+}
+
+function statisticFromObservations(
+  observations: SeriesObservation[] | undefined,
+): Statistic {
+  const stats = derivedStats((observations ?? []).map((item) => item.durationMs ?? item.value));
+  return {
+    mean: stats.mean,
+    p50: stats.p50,
+    p90: stats.p90,
+    count: stats.n,
+  };
+}
+
+function metricFromTaskSeries(series: TaskSeries, baselineId: string, candidateId: string): Metric {
+  return {
+    id: series.id,
+    family: "task",
+    category: "Task Path",
+    name: series.path,
+    unit: "ms",
+    valueType: "duration",
+    direction: "lower-is-better",
+    scope: {
+      qualifier: null,
+      taskPath: series.path,
+      taskType: series.taskType,
+    },
+    aggregation: { sampleUnit: "build", method: "viewer-from-series" },
+    values: {
+      [baselineId]: statisticFromObservations(series.observations[baselineId]),
+      [candidateId]: statisticFromObservations(series.observations[candidateId]),
+    },
+  };
 }
 
 export function taskChangeRows(
@@ -241,23 +307,65 @@ export function taskChangeRows(
   candidate: Variant,
   statistic: StatisticName,
 ): TaskChangeRow[] {
+  const types = taskTypeByPath(report);
   return taskPathMetrics(report).map((metric) => {
-    const comparison = compareMetric(metric, baseline.id, candidate.id, statistic);
-    const baselineValue = statisticValue(metric.values[baseline.id], statistic);
-    const candidateValue = statisticValue(metric.values[candidate.id], statistic);
-    return {
+    const path = taskPathOf(metric);
+    return metricChangeRow(
       metric,
-      path: taskPathOf(metric),
-      category: taskCategoryOf(metric),
-      comparison,
-      tone: comparisonTone(comparison, metric.direction),
-      baselineValue,
-      candidateValue,
-      baselineCount: metric.values[baseline.id]?.count ?? null,
-      candidateCount: metric.values[candidate.id]?.count ?? null,
-      absDelta: Math.abs(comparison.deltaAbsolute ?? 0),
-    };
+      path,
+      taskCategoryOf(metric, types.get(path)),
+      baseline,
+      candidate,
+      statistic,
+    );
   });
+}
+
+export function allTaskPathRows(
+  report: ExperimentResult,
+  baseline: Variant,
+  candidate: Variant,
+  statistic: StatisticName,
+): TaskChangeRow[] {
+  const rows = taskChangeRows(report, baseline, candidate, statistic);
+  const seen = new Set(rows.map((row) => row.path));
+  const extra: TaskChangeRow[] = [];
+  for (const series of Object.values(report.datasets.taskSeries)) {
+    if (seen.has(series.path)) {
+      continue;
+    }
+    seen.add(series.path);
+    const metric = metricFromTaskSeries(series, baseline.id, candidate.id);
+    extra.push(
+      metricChangeRow(
+        metric,
+        series.path,
+        taskCategoryOf(metric, series.taskType),
+        baseline,
+        candidate,
+        statistic,
+      ),
+    );
+  }
+  return extra.length === 0 ? rows : [...rows, ...extra];
+}
+
+export function taskTypeChangeRows(
+  report: ExperimentResult,
+  baseline: Variant,
+  candidate: Variant,
+  statistic: StatisticName,
+): TaskChangeRow[] {
+  return taskTypeMetrics(report).map((metric) =>
+    metricChangeRow(
+      metric,
+      taskTypeOf(metric),
+      taskCategoryOf(metric),
+      baseline,
+      candidate,
+      statistic,
+    ),
+  );
 }
 
 export function rankedTaskChanges(
@@ -362,14 +470,6 @@ export function buildObservations(
   variant: Variant,
 ): BuildObservation[] {
   return report.datasets.builds[variant.id] ?? [];
-}
-
-export function durationValues(report: ExperimentResult, variant: Variant): number[] {
-  return finiteValues(buildObservations(report, variant).map((item) => item.durationMs));
-}
-
-export function configurationValues(report: ExperimentResult, variant: Variant): number[] {
-  return finiteValues(buildObservations(report, variant).map((item) => item.configurationMs));
 }
 
 export function viewerBuildStats(report: ExperimentResult, variant: Variant) {

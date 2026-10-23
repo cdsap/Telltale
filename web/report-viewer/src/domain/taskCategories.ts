@@ -45,10 +45,11 @@ function classifyToken(value: string): TaskCategory | null {
   return null;
 }
 
-export function taskCategoryOf(metric: Metric): TaskCategory {
-  const type = metric.scope?.taskType?.trim();
+export function taskCategoryOf(metric: Metric, taskType?: string | null): TaskCategory {
+  const type = (taskType ?? metric.scope?.taskType ?? "").trim();
   if (type) {
-    return classifyToken(type) ?? "Other";
+    const shortName = type.includes(".") ? (type.split(".").at(-1) ?? type) : type;
+    return classifyToken(`${type} ${shortName}`) ?? "Other";
   }
   const fromName = classifyToken(`${taskPathOf(metric)} ${metric.name} ${metric.category}`);
   return fromName ?? "Unclassified";

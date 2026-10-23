@@ -1,0 +1,188 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-10-22T00:00:00Z",
+  "producer": { "name": "test", "version": "1", "revision": null },
+  "report": { "id": "run-gaps", "kind": "caching", "title": "gaps", "status": "complete" },
+  "experiment": {
+    "id": "gaps",
+    "repository": "example/app",
+    "requestedTasks": [":app:assembleDebug"],
+    "mode": "dependencies cache",
+    "isProfiler": false
+  },
+  "execution": {
+    "source": "test",
+    "runId": "1",
+    "runAttempt": 1,
+    "workflowName": "test",
+    "startedAt": "2026-10-22T00:00:00Z",
+    "links": null
+  },
+  "variants": [
+    { "id": "a", "label": "varianta_baseline", "sourceTag": null, "role": "baseline", "buildCount": 2 },
+    { "id": "b", "label": "variantb_candidate", "sourceTag": null, "role": "candidate", "buildCount": 2 }
+  ],
+  "metrics": [
+    {
+      "id": "task.task-path.app-compiledebugkotlin.ms",
+      "family": "task",
+      "category": "Task Path",
+      "name": ":app:compileDebugKotlin",
+      "unit": "ms",
+      "valueType": "duration",
+      "direction": "lower-is-better",
+      "scope": { "taskPath": ":app:compileDebugKotlin" },
+      "aggregation": { "sampleUnit": "task-invocation", "method": null },
+      "values": {
+        "a": { "mean": 100, "p50": 100, "p90": 100, "count": 2 },
+        "b": { "mean": 80, "p50": 80, "p90": 80, "count": 2 }
+      }
+    },
+    {
+      "id": "task.task-path.core-network-compiledebugkotlin.ms",
+      "family": "task",
+      "category": "Task Path",
+      "name": ":core:network:compileDebugKotlin",
+      "unit": "ms",
+      "valueType": "duration",
+      "direction": "lower-is-better",
+      "scope": { "taskPath": ":core:network:compileDebugKotlin" },
+      "aggregation": { "sampleUnit": "task-invocation", "method": null },
+      "values": {
+        "a": { "mean": 40, "p50": 40, "p90": 40, "count": 2 },
+        "b": { "mean": 45, "p50": 45, "p90": 45, "count": 2 }
+      }
+    },
+    {
+      "id": "task.task-type.kotlincompile.ms",
+      "family": "task",
+      "category": "Task Type",
+      "name": "org.jetbrains.kotlin.gradle.tasks.KotlinCompile",
+      "unit": "ms",
+      "valueType": "duration",
+      "direction": "lower-is-better",
+      "scope": { "taskType": "org.jetbrains.kotlin.gradle.tasks.KotlinCompile" },
+      "aggregation": { "sampleUnit": "task-invocation", "method": null },
+      "values": {
+        "a": { "mean": 100, "p50": 100, "p90": 100, "count": 2 },
+        "b": { "mean": 80, "p50": 80, "p90": 80, "count": 2 }
+      }
+    },
+    {
+      "id": "kotlin.kotlin-build-reports.run-compilation.ms",
+      "family": "kotlin",
+      "category": "Kotlin Build Reports",
+      "name": "Run compilation",
+      "unit": "ms",
+      "valueType": "duration",
+      "direction": "lower-is-better",
+      "scope": null,
+      "aggregation": { "sampleUnit": "build", "method": null },
+      "values": {
+        "a": { "mean": 50, "p50": 50, "p90": 50, "count": 2 },
+        "b": { "mean": 40, "p50": 40, "p90": 40, "count": 2 }
+      }
+    },
+    {
+      "id": "resource.build-processes-memory.max.gb",
+      "family": "resource",
+      "category": "Build processes memory",
+      "name": "Max",
+      "unit": "Gb",
+      "valueType": "quantity",
+      "direction": "lower-is-better",
+      "scope": null,
+      "aggregation": { "sampleUnit": "build", "method": null },
+      "values": {
+        "a": { "mean": 4, "p50": 4, "p90": 4, "count": 2 },
+        "b": { "mean": 5, "p50": 5, "p90": 5, "count": 2 }
+      }
+    },
+    {
+      "id": "process.gradle-process-state.gradle-process-usage",
+      "family": "process",
+      "category": "Gradle process state",
+      "name": "Gradle-Process-usage",
+      "unit": "%",
+      "valueType": "quantity",
+      "direction": null,
+      "scope": null,
+      "aggregation": { "sampleUnit": "build", "method": null },
+      "values": {
+        "a": { "mean": 70, "p50": 70, "p90": 70, "count": 2 },
+        "b": { "mean": 60, "p50": 60, "p90": 60, "count": 2 }
+      }
+    }
+  ],
+  "datasets": {
+    "builds": {
+      "a": [{ "observationId": "a1", "sequence": 1, "durationMs": 1000, "configurationMs": 100, "startedAt": null, "scanUrl": null }],
+      "b": [{ "observationId": "b1", "sequence": 1, "durationMs": 900, "configurationMs": 90, "startedAt": null, "scanUrl": null }]
+    },
+    "taskSeries": {
+      "task.path.app-compiledebugkotlin": {
+        "path": ":app:compileDebugKotlin",
+        "taskType": "org.jetbrains.kotlin.gradle.tasks.KotlinCompile",
+        "observations": {
+          "a": [{ "observationId": "a1", "sequence": 1, "durationMs": 100, "outcome": "executed" }],
+          "b": [{ "observationId": "b1", "sequence": 1, "durationMs": 80, "outcome": "executed" }]
+        }
+      },
+      "task.path.app-app-dexbuilderdebug": {
+        "path": ":app:app:dexBuilderDebug",
+        "taskType": "com.android.build.gradle.internal.tasks.DexArchiveBuilderTask",
+        "observations": {
+          "a": [{ "observationId": "a1", "sequence": 1, "durationMs": 12, "outcome": "executed" }],
+          "b": [{ "observationId": "b1", "sequence": 1, "durationMs": 9, "outcome": "executed" }]
+        }
+      }
+    },
+    "resourceSeries": {
+      "resource.build-process-memory-max": {
+        "name": "Build process memory max",
+        "unit": "bytes",
+        "observations": {
+          "a": [{ "observationId": "a1", "sequence": 1, "value": 4 }],
+          "b": [{ "observationId": "b1", "sequence": 1, "value": 5 }]
+        }
+      }
+    },
+    "processSeries": {
+      "process.gradle-process-1-usage": {
+        "name": "Gradle-Process-1-usage",
+        "unit": "%",
+        "observations": {
+          "a": [{ "observationId": "a1", "sequence": 1, "value": 70 }],
+          "b": [{ "observationId": "b1", "sequence": 1, "value": null }]
+        }
+      },
+      "process.gradle-process-2-usage": {
+        "name": "Gradle-Process-2-usage",
+        "unit": "%",
+        "observations": {
+          "a": [{ "observationId": "a1", "sequence": 1, "value": null }],
+          "b": [{ "observationId": "b1", "sequence": 1, "value": 60 }]
+        }
+      }
+    },
+    "gcSeries": {},
+    "kotlinBuildReportSeries": {
+      "kotlin.run-compilation": {
+        "name": "Run compilation",
+        "unit": "ms",
+        "observations": {
+          "a": [{ "observationId": "a1", "sequence": 1, "value": 50 }],
+          "b": [{ "observationId": "b1", "sequence": 1, "value": 40 }]
+        }
+      }
+    }
+  },
+  "diagnostics": { "status": "not-requested", "source": null, "groups": [] },
+  "warnings": [],
+  "completeness": {
+    "requestedVariantIds": ["a", "b"],
+    "observedVariantIds": ["a", "b"],
+    "missingMetricIds": [],
+    "diagnostics": "not-requested"
+  }
+}

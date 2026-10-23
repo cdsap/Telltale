@@ -92,7 +92,9 @@ function ActiveSection() {
     case "builds":
       return <BuildsWorkbench />;
     case "tasks":
-      return <TaskExplorer />;
+      return <TaskExplorer source="paths" />;
+    case "task-types":
+      return <TaskExplorer source="types" />;
     case "resources":
       return (
         <FamilySection
@@ -105,6 +107,20 @@ function ActiveSection() {
           statistic={selection.statistic}
           series={report.datasets.resourceSeries}
           note="Resource units come from the JSON. Lower memory is not marked better unless the metric direction says so."
+        />
+      );
+    case "kotlin":
+      return (
+        <FamilySection
+          id="kotlin"
+          title="Kotlin Build Reports"
+          family="kotlin"
+          report={report}
+          baseline={baseline}
+          candidate={candidate}
+          statistic={selection.statistic}
+          series={report.datasets.kotlinBuildReportSeries}
+          note="Kotlin compiler metrics from Kotlin Build Reports. Per-build timelines use published series."
         />
       );
     case "runtime":

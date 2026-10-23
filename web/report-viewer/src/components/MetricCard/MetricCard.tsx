@@ -3,6 +3,7 @@ import type { Comparison, ComparisonTone, Metric, StatisticName, Variant } from 
 import { compareValues, comparisonTone, statisticValue } from "../../domain/comparisons";
 import { formatDelta } from "../../domain/formatting";
 import { displayLabel } from "../../domain/metrics";
+import { statisticLabel } from "../../domain/viewModels";
 import { axisUnitLabel, formatMetricValue } from "../../domain/units";
 import { percentileBarData } from "../../charts/chartAdapter";
 import { barOptions } from "../../charts/chartTheme";
@@ -33,11 +34,11 @@ export function MetricCard({
   const stats: StatisticName[] = ["mean", "p50", "p90"];
   return (
     <article className="experiment-snapshot">
-      <h2 className="experiment-snapshot-title">{title}</h2>
+      <h3 className="experiment-snapshot-title">{title}</h3>
       <div className="experiment-snapshot-kpi" aria-label={`${title} change`}>
         <div>
           <span className="experiment-snapshot-kpi-label">
-            {statistic === "mean" ? "Mean" : statistic.toUpperCase()} change
+            {statisticLabel(statistic)} change
           </span>
           <strong className={`experiment-snapshot-kpi-value ${toneClass}`}>{delta}</strong>
         </div>

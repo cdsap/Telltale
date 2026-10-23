@@ -18,6 +18,12 @@ describe("URL selection", () => {
     expect(serializeHash(parsed, report)).toContain("stat=p50");
   });
 
+  it("round-trips the task module filter", () => {
+    const parsed = parseHash("#tasks?mod=%3Aapp%3Aapp", report);
+    expect(parsed.module).toBe(":app:app");
+    expect(serializeHash(parsed, report)).toContain("mod=");
+  });
+
   it("ignores unknown sections and metrics without breaking", () => {
     const parsed = parseHash("#not-a-section?stat=nope&baseline=missing", report);
     expect(parsed.section).toBe("overview");
