@@ -35,9 +35,18 @@ def first_file(directory: Path, pattern: str, exclude: str | None = None) -> Pat
     return None
 
 
-def load_report_id(json_path: Path) -> tuple[str, str]:
-    payload = json.loads(json_path.read_text())
-    report = payload.get("report") if isinstance(payload, dict) else None
+def load_experiment_result(json_path: Path) -> dict:
+    try:
+        payload = json.loads(json_path.read_text())
+    except json.JSONDecodeError as exc:
+        raise StageError(f"experiment-result.json is not valid JSON: {exc}") from exc
+    if not isinstance(payload, dict):
+        raise StageError("experiment-result.json is missing report identity")
+    return payload
+
+
+def identity_from_payload(payload: dict) -> tuple[str, str]:
+    report = payload.get("report")
     if not isinstance(report, dict):
         raise StageError("experiment-result.json is missing report identity")
     report_id = str(report.get("id") or "")
@@ -47,6 +56,14 @@ def load_report_id(json_path: Path) -> tuple[str, str]:
     if not schema.startswith("1."):
         raise StageError(f"Unsupported schemaVersion for publication: {schema!r}")
     return report_id, schema
+
+
+def load_report_id(json_path: Path) -> tuple[str, str]:
+    return identity_from_payload(load_experiment_result(json_path))
+
+
+def write_compact_json(path: Path, payload: object) -> None:
+    path.write_text(json.dumps(payload, separators=(",", ":"), ensure_ascii=False) + "\n")
 
 
 def rewrite_viewer_html(
@@ -171,8 +188,12 @@ def stage(args: argparse.Namespace) -> dict:
     for source in results.glob("experiment_results*"):
         if source.is_file():
             shutil.copy2(source, reports_dir / source.name)
-    if json_path.is_file():
-        shutil.copy2(json_path, reports_dir / f"experiment-result-{args.experiment_id}-{args.report_kind}.json")
+    payload = load_experiment_result(json_path) if json_path.is_file() else None
+    if payload is not None:
+        write_compact_json(
+            reports_dir / f"experiment-result-{args.experiment_id}-{args.report_kind}.json",
+            payload,
+        )
     diagnostics = results / "diagnostics-package.json"
     if diagnostics.is_file():
         shutil.copy2(
@@ -185,8 +206,8 @@ def stage(args: argparse.Namespace) -> dict:
     viewer_link = None
     json_link = None
     copied_assets: list[str] = []
-    if json_path.is_file() and viewer_dist is not None:
-        report_id, schema = load_report_id(json_path)
+    if payload is not None and viewer_dist is not None:
+        report_id, schema = identity_from_payload(payload)
         data_dir = site / "static" / "data" / "experiments"
         data_dir.mkdir(parents=True, exist_ok=True)
         published_json = data_dir / f"{report_id}.json"
@@ -197,7 +218,7 @@ def stage(args: argparse.Namespace) -> dict:
                 raise StageError(
                     f"Refusing to overwrite {published_json.name}: existing report.id={existing_id}"
                 )
-        shutil.copy2(json_path, published_json)
+        write_compact_json(published_json, payload)
         json_link = f"{site_base}/data/experiments/{report_id}.json"
         html_url = f"{site_base}/reports/{html_path.name}"
         csv_url = f"{site_base}/reports/{csv_path.name}" if csv_path else None
