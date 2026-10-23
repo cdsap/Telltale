@@ -106,6 +106,32 @@ describe("ReportApp", () => {
     expect(await screen.findByText(/pooled diagnostic samples/i)).toBeInTheDocument();
   });
 
+  it("shows a loading dialog while the report download is in flight", async () => {
+    let release!: () => void;
+    const hold = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        await hold;
+        const body = new TextEncoder().encode(sampleText);
+        return {
+          ok: true,
+          status: 200,
+          arrayBuffer: async () => body.buffer.slice(body.byteOffset, body.byteOffset + body.byteLength),
+        };
+      }),
+    );
+    render(<ReportApp root={mountRoot()} />);
+    expect(await screen.findByRole("dialog", { name: "Loading experiment report" })).toBeInTheDocument();
+    expect(screen.getByRole("progressbar", { name: "Report download" })).toBeInTheDocument();
+    expect(screen.getByText("Downloading report JSON…")).toBeInTheDocument();
+    release();
+    expect(await screen.findByRole("heading", { name: "cpu_test vs cpu2" })).toBeInTheDocument();
+    expect(screen.queryByRole("dialog", { name: "Loading experiment report" })).not.toBeInTheDocument();
+  });
+
   it("shows a validation error for unsupported schema versions", async () => {
     const invalid = JSON.parse(sampleText) as { schemaVersion: string };
     invalid.schemaVersion = "9.0.0";

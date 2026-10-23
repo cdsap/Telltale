@@ -468,6 +468,72 @@
   background: var(--tt-accent-soft);
 }
 
+.load-dialog-root {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.28);
+}
+
+.load-dialog {
+  width: min(420px, 100%);
+  padding: 22px 22px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--wb-radius);
+  background: var(--theme);
+  box-shadow: var(--tt-card-shadow);
+}
+
+.load-dialog h1 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  letter-spacing: -0.03em;
+}
+
+.load-dialog-status {
+  margin: 0 0 14px;
+  color: var(--secondary);
+  font-size: 13px;
+}
+
+.load-progress {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.load-progress-bar {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--tt-accent);
+  transition: width 120ms linear;
+}
+
+.load-progress-bar.is-indeterminate {
+  width: 36%;
+  animation: load-indeterminate 1.1s ease-in-out infinite;
+}
+
+@keyframes load-indeterminate {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+.load-progress-bytes {
+  margin: 10px 0 0;
+  color: var(--secondary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
 .drawer-root[hidden] {
   display: none;
 }
