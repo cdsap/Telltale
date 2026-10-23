@@ -65,7 +65,8 @@ class StagePublishedReportTest(unittest.TestCase):
                     {
                         "schemaVersion": "1.0.0",
                         "report": {"id": "run-1-caching-attempt-1"},
-                    }
+                    },
+                    indent=2,
                 )
             )
             dist.mkdir()
@@ -81,7 +82,16 @@ class StagePublishedReportTest(unittest.TestCase):
             staged = stage(_args(results=str(results), site=str(site), viewer_dist=str(dist)))
             self.assertEqual(staged["report_id"], "run-1-caching-attempt-1")
             self.assertTrue((site / "static" / "reports" / "experiment_results_keep.html").exists())
-            self.assertTrue((site / "static" / "data" / "experiments" / "run-1-caching-attempt-1.json").exists())
+            published = site / "static" / "data" / "experiments" / "run-1-caching-attempt-1.json"
+            self.assertTrue(published.exists())
+            compact = published.read_text()
+            self.assertNotIn("\n  ", compact)
+            self.assertEqual(
+                compact,
+                json.dumps(json.loads(compact), separators=(",", ":"), ensure_ascii=False) + "\n",
+            )
+            archive = site / "static" / "reports" / "experiment-result-cdsap-430-caching.json"
+            self.assertEqual(archive.read_text(), compact)
             self.assertTrue((site / "static" / "experiments" / "run-1-caching-attempt-1" / "index.html").exists())
             post = (site / "content" / "posts" / "2026-10-21-cdsap-430-caching-experiment.md").read_text()
             self.assertIn("viewer_link: /Telltale/experiments/run-1-caching-attempt-1/", post)
