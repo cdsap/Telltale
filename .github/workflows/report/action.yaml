@@ -297,6 +297,7 @@ runs:
           cp -a "${{ github.workspace }}/web/hugo/assets" "$RUNNER_TEMP/telltale-publish/hugo-assets"
         fi
         cp "${{ github.workspace }}/scripts/stage_published_report.py" "$RUNNER_TEMP/telltale-publish/"
+        cp "${{ github.workspace }}/scripts/experiment_snapshot_from_csv.py" "$RUNNER_TEMP/telltale-publish/"
 
     - name: Checkout gh-pages branch
       uses: actions/checkout@v4

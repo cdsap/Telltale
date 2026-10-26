@@ -148,6 +148,41 @@ class StagePublishedReportTest(unittest.TestCase):
             self.assertTrue(copied.is_file())
             self.assertEqual(copied.read_text(), ".experiment-delta-grid{}")
 
+    def test_ignores_openai_analysis_and_uses_snapshot_metrics(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            results = root / "results"
+            site = root / "site"
+            dist = root / "dist"
+            results.mkdir()
+            (results / "experiment_results_old.html").write_text("<html>legacy</html>")
+            (results / "experiment_results_old.csv").write_text("Category,Metric\n")
+            (results / "experiment-result.json").write_text(
+                json.dumps({"schemaVersion": "1.0.0", "report": {"id": "run-metrics"}})
+            )
+            (results / "experiment_results_openai_analysis_old.md").write_text(
+                "The performance analysis of the Gradle build variants reveals a bottleneck."
+            )
+            (results / "experiment_results_openai_title_old.txt").write_text("Ignore this title")
+            (results / "experiment_snapshot.yaml").write_text(
+                'experiment_snapshot:\n  summary: "Build mean -0.48%; Configuration P90 +5.16%."\n'
+                '  insights:\n    - "Build mean and P90 moved in opposite directions."\n'
+            )
+            dist.mkdir()
+            (dist / "index.html").write_text(
+                '<div id="telltale-report" data-report-url="./data/sample.json"></div><script src="./assets/report-viewer.js"></script>'
+            )
+            (dist / "assets").mkdir()
+            (dist / "assets" / "report-viewer.js").write_text("console.log(1)")
+            staged = stage(_args(results=str(results), site=str(site), viewer_dist=str(dist)))
+            post = (site / "content" / "posts" / "2026-10-21-cdsap-430-caching-experiment.md").read_text()
+            self.assertEqual(staged["report_id"], "run-metrics")
+            self.assertIn("Build mean -0.48%", post)
+            self.assertIn("insights:", post)
+            self.assertNotIn("performance analysis", post)
+            self.assertNotIn("Ignore this title", post)
+            self.assertIn("title: \"Gradle 9.8.2\"", post)
+
 
 if __name__ == "__main__":
     unittest.main()

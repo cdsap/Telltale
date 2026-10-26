@@ -138,6 +138,7 @@ class WorkflowsYamlTest(unittest.TestCase):
         )
         self.assertIn("--output-json=experiment-result.json", scripts)
         self.assertIn("stage_published_report.py", scripts)
+        self.assertIn("experiment_snapshot_from_csv.py", scripts)
         self.assertIn("--assets-src", scripts)
         self.assertIn("npm run build", scripts)
 

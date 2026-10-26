@@ -77,6 +77,94 @@ def _series_from_row(
     return ta, tb
 
 
+def percent_change(baseline: float, candidate: float) -> float | None:
+    if baseline == 0:
+        return None
+    return (candidate - baseline) / baseline * 100.0
+
+
+def format_signed_percent(value: float) -> str:
+    return f"{value:+.2f}%"
+
+
+def metric_summary(
+    build_a: dict[str, float],
+    build_b: dict[str, float],
+    cfg_a: dict[str, float] | None = None,
+    cfg_b: dict[str, float] | None = None,
+) -> str:
+    parts: list[str] = []
+    series = [
+        ("Build mean", build_a["mean"], build_b["mean"]),
+        ("Build median", build_a["p50"], build_b["p50"]),
+        ("Build P90", build_a["p90"], build_b["p90"]),
+    ]
+    if cfg_a and cfg_b:
+        series += [
+            ("Configuration mean", cfg_a["mean"], cfg_b["mean"]),
+            ("Configuration median", cfg_a["p50"], cfg_b["p50"]),
+            ("Configuration P90", cfg_a["p90"], cfg_b["p90"]),
+        ]
+    for label, left, right in series:
+        pct = percent_change(left, right)
+        if pct is not None:
+            parts.append(f"{label} {format_signed_percent(pct)}")
+    return "; ".join(parts) + "." if parts else ""
+
+
+def metric_insights(
+    build_a: dict[str, float],
+    build_b: dict[str, float],
+    cfg_a: dict[str, float] | None = None,
+    cfg_b: dict[str, float] | None = None,
+    material_percent: float = 5.0,
+) -> list[str]:
+    lines: list[str] = []
+
+    def disagree(kind: str, left: dict[str, float], right: dict[str, float]) -> None:
+        mean = percent_change(left["mean"], right["mean"])
+        p90 = percent_change(left["p90"], right["p90"])
+        if (
+            mean is not None
+            and p90 is not None
+            and mean != 0
+            and p90 != 0
+            and (mean > 0) != (p90 > 0)
+        ):
+            lines.append(f"{kind} mean and P90 moved in opposite directions.")
+
+    def material(kind: str, stat: str, left: float, right: float) -> None:
+        pct = percent_change(left, right)
+        if pct is not None and abs(pct) >= material_percent:
+            lines.append(f"{kind} {stat} changed {format_signed_percent(pct)}.")
+
+    disagree("Build", build_a, build_b)
+    material("Build", "mean", build_a["mean"], build_b["mean"])
+    material("Build", "median", build_a["p50"], build_b["p50"])
+    material("Build", "P90", build_a["p90"], build_b["p90"])
+    if cfg_a and cfg_b:
+        disagree("Configuration", cfg_a, cfg_b)
+        material("Configuration", "mean", cfg_a["mean"], cfg_b["mean"])
+        material("Configuration", "median", cfg_a["p50"], cfg_b["p50"])
+        material("Configuration", "P90", cfg_a["p90"], cfg_b["p90"])
+    return lines[:3]
+
+
+def summary_from_snapshot_yaml(text: str) -> str | None:
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("summary:"):
+            raw = stripped.split(":", 1)[1].strip()
+            if not raw:
+                return None
+            try:
+                value = json.loads(raw)
+            except json.JSONDecodeError:
+                return raw.strip('"')
+            return value if isinstance(value, str) else None
+    return None
+
+
 def _emit_yaml(
     label_a: str,
     label_b: str,
@@ -116,6 +204,14 @@ def _emit_yaml(
             f"    p50: {fmt_f(cfg_b['p50'], 3)}",
             f"    p90: {fmt_f(cfg_b['p90'], 3)}",
         ]
+    summary = metric_summary(build_a, build_b, cfg_a, cfg_b)
+    if summary:
+        lines.append(f"  summary: {json.dumps(summary)}")
+    insights = metric_insights(build_a, build_b, cfg_a, cfg_b)
+    if insights:
+        lines.append("  insights:")
+        for item in insights:
+            lines.append(f"    - {json.dumps(item)}")
     return "\n".join(lines) + "\n"
 
 

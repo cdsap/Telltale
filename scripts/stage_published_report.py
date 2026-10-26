@@ -9,6 +9,8 @@ import re
 import shutil
 from pathlib import Path
 
+from experiment_snapshot_from_csv import summary_from_snapshot_yaml
+
 REPORT_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 ASSET_PREFIX_RE = re.compile(r"""(?P<attr>src|href)=(?P<quote>['"])(?P<path>\./assets/[^'"]+)(?P=quote)""")
 
@@ -273,15 +275,13 @@ def stage(args: argparse.Namespace) -> dict:
     snap_file = results / "experiment_snapshot.yaml"
     if snap_file.is_file():
         snapshot = snap_file.read_text()
-    analysis = ""
-    analysis_file = first_file(results, "experiment_results_openai_analysis_*")
-    if analysis_file:
-        analysis = analysis_file.read_text()
     title = args.title
-    title_file = first_file(results, "experiment_results_openai_title_*")
-    if title_file:
-        title = title_file.read_text().strip() or title
     summary = args.summary
+    if snapshot:
+        parsed_summary = summary_from_snapshot_yaml(snapshot)
+        if parsed_summary:
+            summary = json.dumps(parsed_summary)
+    analysis = ""
     post_name = f"{args.date}-{args.experiment_id}-{args.report_kind}-experiment.md"
     write_post(
         site / "content" / "posts" / post_name,
