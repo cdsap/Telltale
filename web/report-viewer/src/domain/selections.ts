@@ -11,6 +11,12 @@ import {
 } from "../app/routes";
 import type { ExperimentResult, StatisticName, Variant } from "./types";
 import { variantByRole } from "./metrics";
+import type { SortDirection } from "./tableSort";
+import {
+  DEFAULT_TASK_MIN_DURATION_MS,
+  TASK_CHANGE_FILTERS,
+  type TaskChangeFilter,
+} from "./taskTableFilters";
 
 export interface DashboardSelection {
   section: WorkbenchSection;
@@ -21,16 +27,23 @@ export interface DashboardSelection {
   observationId: string | null;
   query: string;
   sort: TaskSort;
+  sortDir: SortDirection;
   category: string;
   module: string;
   runtimeTab: RuntimeTab;
   distView: DistributionView;
+  taskExtendedStats: boolean;
+  taskFilter: TaskChangeFilter;
+  taskMinDeltaMs: number;
+  taskMinDurationMs: number;
+  taskType: string;
 }
 
 const DEFAULT_STATISTIC: StatisticName = "mean";
 const DEFAULT_SORT: TaskSort = "delta-abs";
+const DEFAULT_SORT_DIR: SortDirection = "desc";
 const DEFAULT_RUNTIME: RuntimeTab = "processes";
-const DEFAULT_DIST: DistributionView = "histogram";
+const DEFAULT_DIST: DistributionView = "iteration";
 
 function firstQuery(params: URLSearchParams, key: string): string | null {
   const value = params.get(key);
@@ -59,10 +72,16 @@ export function defaultSelection(report: ExperimentResult): DashboardSelection {
     observationId: null,
     query: "",
     sort: DEFAULT_SORT,
+    sortDir: DEFAULT_SORT_DIR,
     category: "all",
     module: "all",
     runtimeTab: DEFAULT_RUNTIME,
     distView: DEFAULT_DIST,
+    taskExtendedStats: false,
+    taskFilter: "all",
+    taskMinDeltaMs: 0,
+    taskMinDurationMs: DEFAULT_TASK_MIN_DURATION_MS,
+    taskType: "",
   };
 }
 
@@ -75,8 +94,13 @@ export function parseHash(hash: string, report: ExperimentResult): DashboardSele
   const ids = new Set(report.variants.map((variant) => variant.id));
   const statistic = firstQuery(params, "stat");
   const sort = firstQuery(params, "sort");
+  const sortDir = firstQuery(params, "sortDir");
   const runtimeTab = firstQuery(params, "runtime");
   const distView = firstQuery(params, "dist");
+  const taskFilter = firstQuery(params, "tf");
+  const taskMinDelta = firstQuery(params, "minDelta");
+  const taskExtendedStats = firstQuery(params, "xstats");
+  const taskMinDuration = firstQuery(params, "minDur");
   let baselineId = knownId(ids, firstQuery(params, "baseline"), defaults.baselineId);
   let candidateId = knownId(ids, firstQuery(params, "candidate"), defaults.candidateId);
   if (baselineId === candidateId && report.variants.length > 1) {
@@ -102,12 +126,29 @@ export function parseHash(hash: string, report: ExperimentResult): DashboardSele
     observationId: firstQuery(params, "obs"),
     query: firstQuery(params, "q") ?? "",
     sort: TASK_SORTS.includes(sort as TaskSort) ? (sort as TaskSort) : defaults.sort,
+    sortDir: sortDir === "asc" || sortDir === "desc" ? sortDir : defaults.sortDir,
     category: firstQuery(params, "cat") ?? "all",
     module: firstQuery(params, "mod") ?? "all",
     runtimeTab: parsedTab,
     distView: DISTRIBUTION_VIEWS.includes(distView as DistributionView)
       ? (distView as DistributionView)
       : defaults.distView,
+    taskExtendedStats: taskExtendedStats === "1",
+    taskFilter: TASK_CHANGE_FILTERS.includes(taskFilter as TaskChangeFilter)
+      ? (taskFilter as TaskChangeFilter)
+      : defaults.taskFilter,
+    taskMinDeltaMs: (() => {
+      const parsed = taskMinDelta ? Number(taskMinDelta) : 0;
+      return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+    })(),
+    taskMinDurationMs: (() => {
+      if (taskMinDuration == null) {
+        return defaults.taskMinDurationMs;
+      }
+      const parsed = Number(taskMinDuration);
+      return Number.isFinite(parsed) && parsed >= 0 ? parsed : defaults.taskMinDurationMs;
+    })(),
+    taskType: firstQuery(params, "type") ?? "",
   };
 }
 
@@ -135,6 +176,9 @@ export function serializeHash(selection: DashboardSelection, report?: Experiment
   if (!defaults || selection.sort !== defaults.sort) {
     params.set("sort", selection.sort);
   }
+  if (!defaults || selection.sortDir !== defaults.sortDir) {
+    params.set("sortDir", selection.sortDir);
+  }
   if (selection.category !== "all") {
     params.set("cat", selection.category);
   }
@@ -146,6 +190,21 @@ export function serializeHash(selection: DashboardSelection, report?: Experiment
   }
   if (!defaults || selection.distView !== defaults.distView) {
     params.set("dist", selection.distView);
+  }
+  if (selection.taskExtendedStats) {
+    params.set("xstats", "1");
+  }
+  if (selection.taskFilter !== "all") {
+    params.set("tf", selection.taskFilter);
+  }
+  if (selection.taskMinDeltaMs > 0) {
+    params.set("minDelta", String(selection.taskMinDeltaMs));
+  }
+  if (!defaults || selection.taskMinDurationMs !== defaults.taskMinDurationMs) {
+    params.set("minDur", String(selection.taskMinDurationMs));
+  }
+  if (selection.taskType) {
+    params.set("type", selection.taskType);
   }
   const query = params.toString();
   return `#${selection.section}${query ? `?${query}` : ""}`;

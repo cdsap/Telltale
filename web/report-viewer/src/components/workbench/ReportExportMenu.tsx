@@ -61,14 +61,14 @@ export function ReportExportMenu() {
           {baselineScans ? (
             <li role="none">
               <a role="menuitem" href={baselineScans} rel="noreferrer">
-                {displayLabel(baseline)} scans
+                {`Build Scans · ${displayLabel(baseline)}`}
               </a>
             </li>
           ) : null}
           {candidateScans ? (
             <li role="none">
               <a role="menuitem" href={candidateScans} rel="noreferrer">
-                {displayLabel(candidate)} scans
+                {`Build Scans · ${displayLabel(candidate)}`}
               </a>
             </li>
           ) : null}

@@ -68,6 +68,12 @@ export function DashboardProvider({
   const update = useCallback(
     (patch: Partial<DashboardSelection>) => {
       setSelection((current) => {
+        const unchanged = (Object.keys(patch) as Array<keyof DashboardSelection>).every(
+          (key) => current[key] === patch[key],
+        );
+        if (unchanged) {
+          return current;
+        }
         const next = { ...current, ...patch };
         if (next.baselineId === next.candidateId && report.variants.length > 1) {
           return current;

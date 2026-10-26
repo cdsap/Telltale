@@ -1,12 +1,68 @@
+import { useMemo, useState } from "react";
 import { useDashboard } from "../../app/DashboardState";
+import { VariantCompareSelects } from "../../components/comparison/VariantCompareSelects";
+import { SectionHeader } from "../../components/layout/SectionHeader";
+import { SortableColumnHeader } from "../../components/data/SortableColumnHeader";
 import { WarningBanner } from "../../components/WarningBanner/WarningBanner";
 import { formatIsoDate } from "../../domain/formatting";
+import { variantScanSearchUrl, workflowUrl } from "../../domain/links";
 import { displayLabel } from "../../domain/metrics";
+import {
+  compareNullableNumbers,
+  compareStrings,
+  nextSortDirection,
+  sortDirectionSign,
+  type SortDirection,
+} from "../../domain/tableSort";
+import type { Variant } from "../../domain/types";
+
+type VariantSortColumn = "label" | "role" | "sourceTag" | "buildCount" | "observations";
 
 export function ExperimentDetails() {
   const { report, jsonUrl, legacyCsvUrl, legacyHtmlUrl } = useDashboard();
+  const workflow = workflowUrl(report);
+  const [sortColumn, setSortColumn] = useState<VariantSortColumn>("label");
+  const [sortDir, setSortDir] = useState<SortDirection>("asc");
+  const variants = useMemo(() => {
+    const sign = sortDirectionSign(sortDir);
+    const copy = [...report.variants];
+    copy.sort((left, right) => {
+      let delta = 0;
+      switch (sortColumn) {
+        case "role":
+          delta = compareStrings(left.role ?? "", right.role ?? "");
+          break;
+        case "sourceTag":
+          delta = compareStrings(left.sourceTag ?? "", right.sourceTag ?? "");
+          break;
+        case "buildCount":
+          delta = compareNullableNumbers(left.buildCount, right.buildCount);
+          break;
+        case "observations":
+          delta =
+            (report.datasets.builds[left.id]?.length ?? 0) -
+            (report.datasets.builds[right.id]?.length ?? 0);
+          break;
+        default:
+          delta = compareStrings(displayLabel(left), displayLabel(right));
+          break;
+      }
+      return sign * delta;
+    });
+    return copy;
+  }, [report.datasets.builds, report.variants, sortColumn, sortDir]);
+  const setVariantSort = (column: string) => {
+    const next = column as VariantSortColumn;
+    const defaultDir: SortDirection = next === "label" || next === "role" || next === "sourceTag" ? "asc" : "desc";
+    setSortDir(nextSortDirection(sortColumn, next, sortDir, defaultDir));
+    setSortColumn(next);
+  };
   return (
     <>
+      <SectionHeader
+        title="Details"
+        description="Experiment metadata, versions, conditions, and methodology."
+      />
       <section className="wb-panel">
         <h2>Experiment</h2>
         <dl className="glossary">
@@ -33,27 +89,73 @@ export function ExperimentDetails() {
       </section>
       <section className="wb-panel">
         <h2>Variants</h2>
+        <VariantCompareSelects className="header-compare-panel details-compare" />
         <div className="table-wrap">
           <table className="experiment-snapshot-table">
             <thead>
               <tr>
-                <th>Label</th>
-                <th>Role</th>
-                <th>Source tag</th>
-                <th className="num">buildCount</th>
-                <th className="num">observations</th>
+                <SortableColumnHeader
+                  label="Label"
+                  column="label"
+                  activeColumn={sortColumn}
+                  direction={sortDir}
+                  onSort={setVariantSort}
+                />
+                <SortableColumnHeader
+                  label="Role"
+                  column="role"
+                  activeColumn={sortColumn}
+                  direction={sortDir}
+                  onSort={setVariantSort}
+                />
+                <SortableColumnHeader
+                  label="Source tag"
+                  column="sourceTag"
+                  activeColumn={sortColumn}
+                  direction={sortDir}
+                  onSort={setVariantSort}
+                />
+                <SortableColumnHeader
+                  label="buildCount"
+                  column="buildCount"
+                  activeColumn={sortColumn}
+                  direction={sortDir}
+                  onSort={setVariantSort}
+                  className="num"
+                />
+                <SortableColumnHeader
+                  label="observations"
+                  column="observations"
+                  activeColumn={sortColumn}
+                  direction={sortDir}
+                  onSort={setVariantSort}
+                  className="num"
+                />
+                <th>Build Scans</th>
               </tr>
             </thead>
             <tbody>
-              {report.variants.map((variant) => (
-                <tr key={variant.id}>
-                  <td>{displayLabel(variant)}</td>
-                  <td>{variant.role ?? "—"}</td>
-                  <td className="change-path">{variant.sourceTag ?? "—"}</td>
-                  <td className="num">{variant.buildCount ?? "—"}</td>
-                  <td className="num">{report.datasets.builds[variant.id]?.length ?? "—"}</td>
-                </tr>
-              ))}
+              {variants.map((variant: Variant) => {
+                const scans = variantScanSearchUrl(report, variant);
+                return (
+                  <tr key={variant.id}>
+                    <td>{displayLabel(variant)}</td>
+                    <td>{variant.role ?? "—"}</td>
+                    <td className="change-path">{variant.sourceTag ?? "—"}</td>
+                    <td className="num">{variant.buildCount ?? "—"}</td>
+                    <td className="num">{report.datasets.builds[variant.id]?.length ?? "—"}</td>
+                    <td>
+                      {scans ? (
+                        <a href={scans} rel="noreferrer">
+                          Build Scans
+                        </a>
+                      ) : (
+                        "—"
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -90,6 +192,13 @@ export function ExperimentDetails() {
       <section className="wb-panel">
         <h2>Assets</h2>
         <ul className="coverage-list">
+          {workflow ? (
+            <li>
+              <a href={workflow} rel="noreferrer">
+                Workflow
+              </a>
+            </li>
+          ) : null}
           {jsonUrl ? (
             <li>
               <a href={jsonUrl} download>

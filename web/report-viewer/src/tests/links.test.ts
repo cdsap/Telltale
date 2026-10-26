@@ -31,6 +31,12 @@ describe("report links", () => {
     const url = variantScanSearchUrl(sample, sample.variants[0]);
     expect(url).toContain("https://ge.solutions-team.gradle.com/scans?");
     expect(url).toContain("search.tags=cdsap-431_varianta_cpu_test");
+    const parsed = new URL(url!);
+    const min = Number(parsed.searchParams.get("search.startTimeMin"));
+    const max = Number(parsed.searchParams.get("search.startTimeMax"));
+    const started = Date.parse("2026-10-21T14:08:38.755Z");
+    expect(min).toBe(started - 2 * 24 * 60 * 60 * 1000);
+    expect(max).toBeGreaterThan(min);
   });
 
   it("uses the Telltale workflow run id", () => {

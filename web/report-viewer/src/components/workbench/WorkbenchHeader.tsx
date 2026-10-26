@@ -1,13 +1,22 @@
+import { useState } from "react";
+import { useTheme } from "../../app/theme";
 import { SITE } from "../Shell/site";
 import { useDashboard } from "../../app/DashboardState";
-import { formatIsoDate } from "../../domain/formatting";
-import { experimentHeading } from "../../domain/viewModels";
+import { VariantCompareSelects } from "../comparison/VariantCompareSelects";
+import { displayLabel } from "../../domain/metrics";
+import { experimentHeading, observedBuildCount } from "../../domain/viewModels";
+import { ExperimentLinks } from "./ExperimentLinks";
 import { ReportExportMenu } from "./ReportExportMenu";
 
 export function WorkbenchHeader() {
-  const { report, baseline, candidate, selection, update } = useDashboard();
+  const { report, baseline, candidate, update } = useDashboard();
   const heading = experimentHeading(report, baseline, candidate);
   const warningCount = report.warnings.length;
+  const baselineN = observedBuildCount(report, baseline);
+  const candidateN = observedBuildCount(report, candidate);
+  const [compareOpen, setCompareOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const [copied, setCopied] = useState(false);
   return (
     <header className="workbench-header">
       <div className="workbench-header-inner">
@@ -15,42 +24,57 @@ export function WorkbenchHeader() {
           <p className="workbench-crumb">
             <a href={`${SITE}/posts/`}>Experiments</a>
             {" / "}
-            {heading.title}
+            <span>{heading.comparison}</span>
           </p>
-          <h1 className="workbench-title">{heading.comparison}</h1>
+          <h1 className="workbench-title">{heading.title}</h1>
           <p className="workbench-meta">
-            {report.experiment.repository ?? "repository not recorded"}
-            {report.experiment.requestedTasks.length > 0
-              ? ` · ${report.experiment.requestedTasks.join(", ")}`
-              : ""}
-            {report.execution.runId ? ` · run ${report.execution.runId}` : ""}
-            {report.execution.runAttempt != null ? ` · attempt ${report.execution.runAttempt}` : ""}
-            {report.experiment.mode ? ` · ${report.experiment.mode}` : ""}
-            {` · generated ${formatIsoDate(report.generatedAt)}`}
+            Baseline → {displayLabel(candidate)} · {baselineN ?? "—"} vs {candidateN ?? "—"} builds
+            {report.experiment.repository ? ` · ${report.experiment.repository}` : ""}
           </p>
-          <div className="workbench-status">
-            <span className="status-chip">{report.report.status}</span>
-            <span className="status-chip">diagnostics {report.diagnostics.status}</span>
-            {warningCount > 0 ? (
-              <button
-                type="button"
-                className="status-chip is-warn"
-                onClick={() => update({ ...selection, section: "details" })}
-              >
-                {warningCount} warning{warningCount === 1 ? "" : "s"}
-              </button>
-            ) : (
-              <span className="status-chip">no warnings</span>
-            )}
-          </div>
+          <ExperimentLinks />
         </div>
         <div className="workbench-actions">
+          <button
+            type="button"
+            className="wb-btn"
+            aria-expanded={compareOpen}
+            aria-controls="header-compare-panel"
+            onClick={() => setCompareOpen((open) => !open)}
+          >
+            Compare
+          </button>
+          <button type="button" className="wb-btn" onClick={() => update({ section: "details" })}>
+            Experiment details
+            {warningCount > 0 ? ` (${warningCount})` : ""}
+          </button>
           <ReportExportMenu />
-          <a className="wb-btn" href={`${SITE}/`}>
-            Telltale
-          </a>
+          <button
+            type="button"
+            className="wb-btn"
+            onClick={async () => {
+              await navigator.clipboard?.writeText(window.location.href);
+              setCopied(true);
+              window.setTimeout(() => setCopied(false), 1500);
+            }}
+          >
+            {copied ? "Copied" : "Copy link"}
+          </button>
+          <button
+            type="button"
+            className="wb-btn"
+            aria-label="Toggle theme"
+            onClick={toggleTheme}
+          >
+            {theme === "dark" ? "Light" : "Dark"}
+          </button>
         </div>
       </div>
+      {compareOpen ? (
+        <VariantCompareSelects
+          id="header-compare-panel"
+          className="workbench-compare-inner header-compare-panel"
+        />
+      ) : null}
     </header>
   );
 }

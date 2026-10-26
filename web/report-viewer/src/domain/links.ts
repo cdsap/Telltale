@@ -37,6 +37,19 @@ export function develocityOrigin(report: ExperimentResult): string | null {
   return null;
 }
 
+function scanSearchTimes(report: ExperimentResult, variant: Variant): number[] {
+  const fromBuilds = (report.datasets.builds[variant.id] ?? [])
+    .map((observation) => (observation.startedAt ? Date.parse(observation.startedAt) : Number.NaN))
+    .filter((value) => Number.isFinite(value));
+  if (fromBuilds.length > 0) {
+    return fromBuilds;
+  }
+  const fallbacks = [report.execution.startedAt, report.generatedAt]
+    .map((value) => (value ? Date.parse(value) : Number.NaN))
+    .filter((value) => Number.isFinite(value));
+  return fallbacks;
+}
+
 export function variantScanSearchUrl(
   report: ExperimentResult,
   variant: Variant,
@@ -46,9 +59,7 @@ export function variantScanSearchUrl(
   if (!origin || !tag) {
     return null;
   }
-  const times = (report.datasets.builds[variant.id] ?? [])
-    .map((observation) => (observation.startedAt ? Date.parse(observation.startedAt) : Number.NaN))
-    .filter((value) => Number.isFinite(value));
+  const times = scanSearchTimes(report, variant);
   const params = new URLSearchParams();
   params.set("search.tags", tag);
   if (times.length > 0) {

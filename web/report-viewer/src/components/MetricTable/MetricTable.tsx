@@ -1,9 +1,18 @@
 import { useMemo, useState } from "react";
 import type { ExperimentResult, StatisticName, Variant } from "../../domain/types";
-import { compareValues, comparisonTone, statisticValue } from "../../domain/comparisons";
-import { formatDelta } from "../../domain/formatting";
-import { formatMetricValue } from "../../domain/units";
+import { SectionHeader } from "../layout/SectionHeader";
 import { KEY_METRIC_FAMILIES, displayLabel, familiesIn } from "../../domain/metrics";
+import {
+  MultiStatDeltaCells,
+  MultiStatHeaderGroup,
+  MultiStatValueCells,
+} from "../data/multiStatColumns";
+import { SortableColumnHeader } from "../data/SortableColumnHeader";
+import {
+  sortMetrics,
+  type MetricRowSortColumn,
+} from "../../domain/metricRowSort";
+import { nextSortDirection, type SortDirection } from "../../domain/tableSort";
 
 interface MetricTableProps {
   report: ExperimentResult;
@@ -20,11 +29,13 @@ export function MetricTable({
 }: MetricTableProps) {
   const [query, setQuery] = useState("");
   const [family, setFamily] = useState("key");
+  const [sortColumn, setSortColumn] = useState<MetricRowSortColumn>("delta-mean");
+  const [sortDir, setSortDir] = useState<SortDirection>("desc");
   const families = familiesIn(report);
 
   const rows = useMemo(() => {
     const needle = query.trim().toLowerCase();
-    return report.metrics.filter((metric) => {
+    const filtered = report.metrics.filter((metric) => {
       if (family === "key" && !KEY_METRIC_FAMILIES.has(metric.family)) {
         return false;
       }
@@ -38,12 +49,25 @@ export function MetricTable({
         .toLowerCase()
         .includes(needle);
     });
-  }, [family, query, report.metrics]);
+    return sortMetrics(filtered, baseline, candidate, statistic, sortColumn, sortDir);
+  }, [baseline, candidate, family, query, report.metrics, sortColumn, sortDir, statistic]);
+
+  const setMetricSort = (column: string) => {
+    const next = column as MetricRowSortColumn;
+    const defaultDir: SortDirection =
+      next === "category" || next === "metric" ? "asc" : "desc";
+    setSortDir(nextSortDirection(sortColumn, next, sortDir, defaultDir));
+    setSortColumn(next);
+  };
 
   return (
     <section id="metrics" className="experiment-snapshot">
-      <h2 className="experiment-snapshot-title">All metrics</h2>
-      <div className="controls">
+      <SectionHeader
+        title="Metric catalog"
+        description="Complete metric inventory for this experiment."
+      />
+      <div className="analysis-toolbar">
+        <div className="analysis-toolbar-row">
         <label>
           Search
           <input
@@ -64,40 +88,63 @@ export function MetricTable({
             ))}
           </select>
         </label>
+        </div>
       </div>
       <div className="table-wrap">
         <table className="experiment-snapshot-table metrics-table">
           <thead>
             <tr>
-              <th>Category</th>
-              <th>Metric</th>
-              <th className="num">{displayLabel(baseline)}</th>
-              <th className="num">{displayLabel(candidate)}</th>
-              <th className="num">Δ</th>
+              <SortableColumnHeader
+                label="Category"
+                column="category"
+                activeColumn={sortColumn}
+                direction={sortDir}
+                onSort={setMetricSort}
+              />
+              <SortableColumnHeader
+                label="Metric"
+                column="metric"
+                activeColumn={sortColumn}
+                direction={sortDir}
+                onSort={setMetricSort}
+              />
+              <MultiStatHeaderGroup
+                side="baseline"
+                labelPrefix={displayLabel(baseline)}
+                activeColumn={sortColumn}
+                direction={sortDir}
+                onSort={setMetricSort}
+              />
+              <MultiStatHeaderGroup
+                side="candidate"
+                labelPrefix={displayLabel(candidate)}
+                activeColumn={sortColumn}
+                direction={sortDir}
+                onSort={setMetricSort}
+              />
+              <MultiStatHeaderGroup
+                side="delta"
+                activeColumn={sortColumn}
+                direction={sortDir}
+                onSort={setMetricSort}
+              />
             </tr>
           </thead>
           <tbody>
-            {rows.map((metric) => {
-              const baselineValue = statisticValue(metric.values[baseline.id], statistic);
-              const candidateValue = statisticValue(metric.values[candidate.id], statistic);
-              const comparison = compareValues(baselineValue, candidateValue);
-              const tone = comparisonTone(comparison, metric.direction);
-              const toneClass =
-                tone === "better" ? "is-improvement" : tone === "worse" ? "is-regression" : "";
-              return (
-                <tr key={metric.id}>
-                  <td>{metric.category}</td>
-                  <td className="path">{metric.name}</td>
-                  <td className="num" title={formatMetricValue(baselineValue, metric.unit, metric.valueType).title}>
-                    {formatMetricValue(baselineValue, metric.unit, metric.valueType).text}
-                  </td>
-                  <td className="num" title={formatMetricValue(candidateValue, metric.unit, metric.valueType).title}>
-                    {formatMetricValue(candidateValue, metric.unit, metric.valueType).text}
-                  </td>
-                  <td className={`num delta ${toneClass}`}>{formatDelta(comparison)}</td>
-                </tr>
-              );
-            })}
+            {rows.map((metric) => (
+              <tr key={metric.id}>
+                <td>{metric.category}</td>
+                <td className="path">{metric.name}</td>
+                <MultiStatValueCells metric={metric} variantId={baseline.id} />
+                <MultiStatValueCells metric={metric} variantId={candidate.id} />
+                <MultiStatDeltaCells
+                  metric={metric}
+                  baseline={baseline}
+                  candidate={candidate}
+                  mode="percent"
+                />
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

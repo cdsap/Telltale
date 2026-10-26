@@ -76,7 +76,7 @@ export function sequenceLineData(
   }
   const labels = [...sequences].sort((left, right) => left - right);
   return {
-    labels: labels.map((sequence) => `Build ${sequence}`),
+    labels: labels.map((sequence) => String(sequence)),
     datasets: variants.map((variant, index) => {
       const points = pointsByVariant.get(variant.id) ?? [];
       const bySequence = new Map(points.map((point) => [point.sequence, point.value]));

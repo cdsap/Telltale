@@ -44,6 +44,24 @@ export function displayLabel(variant: Variant): string {
   return variant.label.replace(/^variant[ab]_/i, "");
 }
 
+export function metricDisplayName(metric: Metric): string {
+  if (metric.category && metric.category !== metric.name) {
+    return `${metric.category} · ${metric.name}`;
+  }
+  return metric.name;
+}
+
+export function resourceGroupOf(category: string): "CPU" | "Memory" | "Other" {
+  const value = category.toLowerCase();
+  if (value.includes("cpu")) {
+    return "CPU";
+  }
+  if (value.includes("memory") || /\bmem\b/.test(value)) {
+    return "Memory";
+  }
+  return "Other";
+}
+
 export function compareTitle(baseline: Variant, candidate: Variant): string {
   return `${displayLabel(baseline)} vs ${displayLabel(candidate)}`;
 }

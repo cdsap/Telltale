@@ -9,12 +9,14 @@ import {
   isDiagnosticMetric,
   searchTaskMetrics,
   seriesForMetric,
+  shortTypeName,
   taskModuleOf,
   taskPathMetrics,
   taskSeriesByPath,
   taskTypeMetrics,
 } from "../domain/series";
 import { reportSections } from "../domain/coverage";
+import { resourceGroupOf } from "../domain/metrics";
 import { allTaskPathRows, taskChangeRows } from "../domain/viewModels";
 
 const report = validateReport(
@@ -36,6 +38,17 @@ describe("series and coverage", () => {
     expect(matches.map((metric) => metric.name)).toEqual([":app:app:dexBuilderDebug"]);
   });
 
+  it("shortens fully-qualified task type names", () => {
+    expect(shortTypeName("org.jetbrains.kotlin.gradle.tasks.KotlinCompile")).toBe("KotlinCompile");
+    expect(shortTypeName(":app:compileDebugKotlin")).toBe(":app:compileDebugKotlin");
+  });
+
+  it("groups resource categories by CPU and memory", () => {
+    expect(resourceGroupOf("Build processes CPU")).toBe("CPU");
+    expect(resourceGroupOf("Build processes memory")).toBe("Memory");
+    expect(resourceGroupOf("Disk")).toBe("Other");
+  });
+
   it("derives the module as the task path without the last segment", () => {
     expect(taskModuleOf(":app:app:compileDebugKotlin")).toBe(":app:app");
     expect(taskModuleOf(":core:network:compileDebugKotlin")).toBe(":core:network");
@@ -52,6 +65,7 @@ describe("series and coverage", () => {
   it("hides empty process/kotlin/gc sections on the sample fixture", () => {
     const byId = Object.fromEntries(reportSections(report).map((section) => [section.id, section]));
     expect(byId.tasks.available).toBe(true);
+    expect(byId.configuration.available).toBe(true);
     expect(byId["task-types"].available).toBe(false);
     expect(byId.resources.available).toBe(true);
     expect(byId.diagnostics.available).toBe(true);

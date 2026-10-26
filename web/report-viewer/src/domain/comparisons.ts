@@ -6,6 +6,16 @@ import type {
   StatisticName,
 } from "./types";
 
+/** Minimum absolute percent change treated as a finding. */
+export const MATERIAL_DELTA_PERCENT = 5;
+
+export function isMaterialPercent(
+  deltaPercent: number | null | undefined,
+  threshold = MATERIAL_DELTA_PERCENT,
+): boolean {
+  return typeof deltaPercent === "number" && Number.isFinite(deltaPercent) && Math.abs(deltaPercent) >= threshold;
+}
+
 export function statisticValue(
   stats: Statistic | undefined,
   name: StatisticName,
