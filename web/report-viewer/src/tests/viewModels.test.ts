@@ -75,3 +75,39 @@ describe("overview view models", () => {
     ).toBe(true);
   });
 });
+
+const thresholdReport = validateReport(
+  JSON.parse(readFileSync(resolve("src/tests/fixtures/findings-threshold.json"), "utf8")),
+);
+const quietReport = validateReport(
+  JSON.parse(readFileSync(resolve("src/tests/fixtures/findings-quiet.json"), "utf8")),
+);
+
+describe("investigation findings threshold", () => {
+  it("keeps 5% changes and drops 4.9% and 4% measured rows", () => {
+    const findings = investigationFindings(
+      thresholdReport,
+      thresholdReport.variants[0],
+      thresholdReport.variants[1],
+    );
+    const ids = findings.map((item) => item.id);
+    expect(ids).toContain("configuration-mean");
+    expect(ids).toContain("path-down-task.task-path.app-dexbuilderdebug.ms");
+    expect(ids).toContain("type-down-task.task-type.dexarchivebuilder.ms");
+    expect(ids).toContain("resource-resource.build-processes-cpu.mean.percent");
+    expect(ids).not.toContain("duration-mean");
+    expect(ids.some((id) => id.includes("app-compiledebugkotlin"))).toBe(false);
+    expect(ids.some((id) => id.includes("kotlincompile"))).toBe(false);
+    expect(ids.some((id) => id.includes("memory"))).toBe(false);
+    expect(findings.some((item) => item.section === "configuration")).toBe(true);
+  });
+
+  it("emits no findings when every measured change is under 5%", () => {
+    const findings = investigationFindings(
+      quietReport,
+      quietReport.variants[0],
+      quietReport.variants[1],
+    );
+    expect(findings).toEqual([]);
+  });
+});

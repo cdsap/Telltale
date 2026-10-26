@@ -185,6 +185,7 @@ describe("ReportApp", () => {
       }),
     );
     expect(await screen.findByRole("heading", { name: "Findings" })).toBeInTheDocument();
+    expect(screen.getByText(/Changes of at least 5% in either direction/i)).toBeInTheDocument();
     expect(screen.getByText(/pooled diagnostic samples/i)).toBeInTheDocument();
     expect(screen.queryByText(/Median build duration/i)).not.toBeInTheDocument();
     expect(screen.getByText(/experiment warnings/i)).toBeInTheDocument();
@@ -279,5 +280,43 @@ describe("ReportApp", () => {
     fireEvent.click(nav.getByRole("button", { name: "Runtime" }));
     expect(await screen.findByRole("heading", { name: "Processes" })).toBeInTheDocument();
     expect(screen.getByLabelText("Timeline")).toBeInTheDocument();
+  });
+
+  it("opens Configuration from a 5% findings row and hides sub-5% duration", async () => {
+    const thresholdText = readFileSync(
+      resolve("src/tests/fixtures/findings-threshold.json"),
+      "utf8",
+    );
+    mockReport(thresholdText);
+    render(<ReportApp root={mountRoot()} />);
+    expect(await screen.findByRole("heading", { level: 1, name: "findings-threshold" })).toBeInTheDocument();
+    const nav = within(screen.getAllByRole("navigation", { name: "Report sections" })[0]!);
+    expect(nav.getByRole("button", { name: "Builds" })).toBeInTheDocument();
+    expect(nav.getByRole("button", { name: "Configuration" })).toBeInTheDocument();
+    fireEvent.click(nav.getByRole("button", { name: "Findings" }));
+    expect(await screen.findByRole("heading", { name: "Findings" })).toBeInTheDocument();
+    expect(screen.getByText(/Changes of at least 5% in either direction/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Build duration mean/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/Configuration time mean increased/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /Inspect configuration/i }));
+    expect(await screen.findByRole("heading", { name: "Configuration time" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Build duration" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Per-build measurements" })).not.toBeInTheDocument();
+  });
+
+  it("shows the empty findings copy when nothing moved by 5%", async () => {
+    const quietText = readFileSync(resolve("src/tests/fixtures/findings-quiet.json"), "utf8");
+    mockReport(quietText);
+    render(<ReportApp root={mountRoot()} />);
+    expect(await screen.findByRole("heading", { level: 1, name: "findings-quiet" })).toBeInTheDocument();
+    fireEvent.click(
+      within(screen.getAllByRole("navigation", { name: "Report sections" })[0]!).getByRole("button", {
+        name: "Findings",
+      }),
+    );
+    expect(await screen.findByRole("heading", { name: "Findings" })).toBeInTheDocument();
+    expect(screen.getByText("No changes of 5% or more were derived from this report.")).toBeInTheDocument();
+    expect(screen.queryByText(/mean increased/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/mean decreased/i)).not.toBeInTheDocument();
   });
 });
