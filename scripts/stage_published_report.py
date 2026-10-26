@@ -37,6 +37,53 @@ def first_file(directory: Path, pattern: str, exclude: str | None = None) -> Pat
     return None
 
 
+def find_existing_post(posts_dir: Path, experiment_id: str) -> Path | None:
+    if not posts_dir.is_dir() or not experiment_id:
+        return None
+    needle = f"-{experiment_id}-"
+    matches = sorted(path for path in posts_dir.glob("*.md") if needle in path.name)
+    if not matches:
+        return None
+    if len(matches) > 1:
+        without_viewer = [path for path in matches if "viewer_link:" not in path.read_text()]
+        matches = without_viewer or matches
+    if len(matches) > 1:
+        raise StageError(
+            f"Multiple posts match experiment-id {experiment_id!r}: "
+            + ", ".join(path.name for path in matches)
+        )
+    return matches[0]
+
+
+def attach_viewer_to_post(path: Path, *, viewer_link: str, json_link: str) -> None:
+    text = path.read_text()
+    if not text.startswith("---"):
+        raise StageError(f"{path.name} is missing YAML front matter")
+    parts = text.split("---", 2)
+    if len(parts) < 3:
+        raise StageError(f"{path.name} is missing a closing front matter fence")
+    lines = parts[1].splitlines()
+
+    def upsert(key: str, value: str) -> None:
+        prefix = f"{key}:"
+        replacement = f"{key}: {value}"
+        for index, line in enumerate(lines):
+            if line.startswith(prefix):
+                lines[index] = replacement
+                return
+        insert_at = next((i + 1 for i, line in enumerate(lines) if line.startswith("report_link:")), len(lines))
+        lines.insert(insert_at, replacement)
+
+    upsert("viewer_link", viewer_link)
+    upsert("json_link", json_link)
+    upsert("report_data", json_link)
+    body = parts[2]
+    marker = f"[Interactive report]({viewer_link})"
+    if marker not in body:
+        body = "\n" + marker + "\n" + body.lstrip("\n")
+    path.write_text("---" + "\n".join(lines) + "\n---" + body)
+
+
 def load_experiment_result(json_path: Path) -> dict:
     try:
         payload = json.loads(json_path.read_text())
@@ -282,23 +329,29 @@ def stage(args: argparse.Namespace) -> dict:
         if parsed_summary:
             summary = json.dumps(parsed_summary)
     analysis = ""
-    post_name = f"{args.date}-{args.experiment_id}-{args.report_kind}-experiment.md"
-    write_post(
-        site / "content" / "posts" / post_name,
-        title=title,
-        date=args.date,
-        report_id=report_id or f"{args.experiment_id}-{args.report_kind}",
-        schema=schema,
-        report_kind=args.report_kind,
-        viewer_link=viewer_link,
-        json_link=json_link,
-        html_filename=html_path.name,
-        site_base=site_base,
-        summary=summary,
-        tags=tags,
-        snapshot=snapshot,
-        body=analysis,
-    )
+    posts_dir = site / "content" / "posts"
+    existing_post = find_existing_post(posts_dir, args.experiment_id)
+    if existing_post is not None and viewer_link:
+        attach_viewer_to_post(existing_post, viewer_link=viewer_link, json_link=json_link or "")
+        post_name = existing_post.name
+    else:
+        post_name = f"{args.date}-{args.experiment_id}-{args.report_kind}-experiment.md"
+        write_post(
+            posts_dir / post_name,
+            title=title,
+            date=args.date,
+            report_id=report_id or f"{args.experiment_id}-{args.report_kind}",
+            schema=schema,
+            report_kind=args.report_kind,
+            viewer_link=viewer_link,
+            json_link=json_link,
+            html_filename=html_path.name,
+            site_base=site_base,
+            summary=summary,
+            tags=tags,
+            snapshot=snapshot,
+            body=analysis,
+        )
     result = {
         "report_id": report_id,
         "viewer_url": viewer_link,

@@ -120,6 +120,52 @@ class StagePublishedReportTest(unittest.TestCase):
             with self.assertRaises(StageError):
                 stage(_args(results=str(results), site=str(site), viewer_dist=str(dist)))
 
+    def test_attaches_viewer_to_an_existing_experiment_post(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            results = root / "results"
+            site = root / "site"
+            dist = root / "dist"
+            results.mkdir()
+            (results / "experiment_results_old.html").write_text("<html>legacy</html>")
+            (results / "experiment_results_old.csv").write_text("Category,Metric\n")
+            (results / "experiment-result.json").write_text(
+                json.dumps({"schemaVersion": "1.0.0", "report": {"id": "run-cdsap-309-caching-attempt-1"}})
+            )
+            posts = site / "content" / "posts"
+            posts.mkdir(parents=True)
+            existing = posts / "2026-04-28-cdsap-309-experiment.md"
+            existing.write_text(
+                "---\n"
+                "layout: post\n"
+                'title: "Gradle 9.5.0 vs 9.4.1"\n'
+                "date: 2026-04-28\n"
+                "report_link: /Telltale/reports/experiment_results_20260428174824.html\n"
+                "tags: [\"dependencies cache\"]\n"
+                "experiment_snapshot:\n"
+                '  metric: "Overall build time"\n'
+                "---\n"
+                "[Report 📊](../../reports/experiment_results_20260428174824.html)\n"
+                "## Summary\nOld analysis remains.\n"
+            )
+            dist.mkdir()
+            (dist / "index.html").write_text(
+                '<div id="telltale-report" data-report-url="./data/sample.json"></div><script src="./assets/report-viewer.js"></script>'
+            )
+            (dist / "assets").mkdir()
+            (dist / "assets" / "report-viewer.js").write_text("console.log(1)")
+            args = _args(results=str(results), site=str(site), viewer_dist=str(dist))
+            args.experiment_id = "cdsap-309"
+            staged = stage(args)
+            self.assertEqual(staged["post"], "content/posts/2026-04-28-cdsap-309-experiment.md")
+            self.assertFalse((posts / "2026-10-21-cdsap-309-caching-experiment.md").exists())
+            post = existing.read_text()
+            self.assertIn("viewer_link: /Telltale/experiments/run-cdsap-309-caching-attempt-1/", post)
+            self.assertIn("json_link: /Telltale/data/experiments/run-cdsap-309-caching-attempt-1.json", post)
+            self.assertIn("[Interactive report](/Telltale/experiments/run-cdsap-309-caching-attempt-1/)", post)
+            self.assertIn("Old analysis remains.", post)
+            self.assertIn('title: "Gradle 9.5.0 vs 9.4.1"', post)
+
     def test_copies_hugo_assets_onto_the_site_tree(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
