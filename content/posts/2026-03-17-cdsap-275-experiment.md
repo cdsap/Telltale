@@ -1,14 +1,36 @@
 ---
+
 layout: post
 title: "KGP 2.3.20 vs 2.3.10"
 date: 2026-03-17
 report_link: /Telltale/reports/experiment_results_20260317002315.html
-summary: " 
-The analysis of the Gradle build performance comparison between two Kotlin variants (2.3.10 and 2.3.20) reveals minor differences in build times and task execution. The overall build time for variant B (Kotlin 2.3.20) is slightly higher by approximately 0.76 seconds (0.76% increase). Configuration times are nearly identical with a negligible difference. Notably, the most time-consuming tasks such as `:app:app:mergeExtDexDebug` and `:app:app:hiltJavaCompileDebug` show minimal variation between the two variants.
-
-In terms of CPU and memory usage, both variants reach the maximum CPU usage, but variant B uses slightly more memory (0.03 GB more for the build process). The garbage collection metrics indicate a very close number of total collections between the two variants, suggesting similar memory management efficiency."
+summary: "Build mean +0.77%; Build median -0.21%; Build P90 +1.12%; Configuration mean -0.17%; Configuration median -0.80%; Configuration P90 -3.89%."
 tags: ["dependencies cache"]
 components: ["kotlin"]
+experiment_snapshot:
+  metric: "Overall build time"
+  unit: "seconds"
+  variant_a:
+    label: "2.3.10"
+    mean: 553.994
+    p50: 555.706
+    p90: 578.186
+  variant_b:
+    label: "2.3.20"
+    mean: 558.244
+    p50: 554.566
+    p90: 584.637
+  config_metric: "Configuration time"
+  config_unit: "seconds"
+  config_variant_a:
+    mean: 61.276
+    p50: 61.099
+    p90: 69.528
+  config_variant_b:
+    mean: 61.172
+    p50: 60.613
+    p90: 66.824
+  summary: "Build mean +0.77%; Build median -0.21%; Build P90 +1.12%; Configuration mean -0.17%; Configuration median -0.80%; Configuration P90 -3.89%."
 ---
 [Report 📊](../../reports/experiment_results_20260317002315.html)
 ## Summary

@@ -1,13 +1,37 @@
 ---
+
 layout: post
 title: "Gradle 9.5.0 vs 9.4.1"
 date: 2026-04-28
 report_link: /Telltale/reports/experiment_results_20260428174824.html
-summary: " 
-The analysis of the Gradle build performance data reveals a slight increase in build time in variantb_9.5.0 compared to varianta_9.4.1, with the mean build time increasing by approximately 11.4 seconds (2%). The configuration time also saw an increase, with the mean time rising by about 2 seconds (3.2%). Notably, the most time-consuming tasks across both variants include 'KotlinCompile', 'KspAATask', and 'LinkApplicationAndroidResourcesTask', with minor increases in execution times in variantb_9.5.0.
-
-In terms of resource usage, both CPU and memory usage for all processes and specifically for the build processes show very close figures between the two variants, with no significant deviations. The total garbage collection (GC) counts are nearly identical, indicating stable memory management across builds."
+summary: "Build mean +1.99%; Build median +0.12%; Build P90 +2.98%; Configuration mean +3.25%; Configuration median +1.27%; Configuration P90 +10.32%."
 tags: ["dependencies cache"]
+experiment_snapshot:
+  metric: "Overall build time"
+  unit: "seconds"
+  variant_a:
+    label: "9.4.1"
+    mean: 575.288
+    p50: 577.342
+    p90: 619.129
+  variant_b:
+    label: "9.5.0"
+    mean: 586.719
+    p50: 578.024
+    p90: 637.590
+  config_metric: "Configuration time"
+  config_unit: "seconds"
+  config_variant_a:
+    mean: 61.569
+    p50: 59.097
+    p90: 75.886
+  config_variant_b:
+    mean: 63.573
+    p50: 59.848
+    p90: 83.721
+  summary: "Build mean +1.99%; Build median +0.12%; Build P90 +2.98%; Configuration mean +3.25%; Configuration median +1.27%; Configuration P90 +10.32%."
+  insights:
+    - "Configuration P90 changed +10.32%."
 ---
 [Report 📊](../../reports/experiment_results_20260428174824.html)
 ## Summary
