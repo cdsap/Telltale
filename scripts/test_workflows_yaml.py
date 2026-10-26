@@ -127,6 +127,15 @@ class WorkflowsYamlTest(unittest.TestCase):
         self.assertIn("./.github/workflows/runner-gradle-profiler", profiler_uses)
         self.assertIn("./.github/workflows/report", profiler_uses)
 
+        republish = load_gha(WORKFLOWS / "republish-interactive-report.yaml")
+        self.assertIn("workflow_dispatch", republish["on"])
+        republish_uses = [
+            step.get("uses")
+            for job in republish["jobs"].values()
+            for step in job_steps(job)
+        ]
+        self.assertIn("./.github/workflows/report", republish_uses)
+
     def test_report_action_emits_experiment_result_json(self) -> None:
         report = load_gha(WORKFLOWS / "report" / "action.yaml")
         self.assertIn("ber-release", report["inputs"])

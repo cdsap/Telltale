@@ -1,0 +1,80 @@
+name: Republish interactive report
+
+on:
+  workflow_dispatch:
+    inputs:
+      experiment_id:
+        description: "Existing experiment id, matching the post filename (cdsap-309)"
+        required: true
+      tags:
+        description: "Develocity variant tags, comma-separated"
+        required: true
+      experiment_title:
+        description: "Title stored on the generated JSON report"
+        required: true
+      snapshot_label_a:
+        description: "Optional snapshot label for variant A"
+        required: false
+        default: ""
+      snapshot_label_b:
+        description: "Optional snapshot label for variant B"
+        required: false
+        default: ""
+      report_kind:
+        description: "Report kind slug (caching, no-caching, profiler)"
+        required: true
+        default: "caching"
+      repository:
+        description: "Repository recorded on the experiment (metadata only)"
+        required: true
+        default: "cdsap/Telltale"
+      task:
+        description: "Task recorded on the experiment (metadata only)"
+        required: true
+        default: "assembleDebug"
+      max_builds:
+        description: "Maximum Develocity builds to fetch"
+        required: false
+        default: "200"
+
+run-name: "Republish ${{ github.event.inputs.experiment_id }} interactive report"
+
+jobs:
+  report:
+    name: Republish report
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    concurrency:
+      group: telltale-gh-pages-publish
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/report
+        with:
+          task: "${{ github.event.inputs.task }}"
+          experiment-id: "${{ github.event.inputs.experiment_id }}"
+          tags: "${{ github.event.inputs.tags }}"
+          api-key: ${{ secrets.DV_API_KEY }}
+          url: ${{ secrets.DV_URL }}
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          profile: false
+          mode: "dependencies cache"
+          repository: "${{ github.event.inputs.repository }}"
+          experiment_title: "${{ github.event.inputs.experiment_title }}"
+          taskpathreport: "true"
+          tasktypereport: "true"
+          processreport: "true"
+          gcreport: "true"
+          kotlinreport: "true"
+          resourceusagereport: "true"
+          onlycacheableoutcome: "false"
+          thresholdtaskduration: "1000"
+          max-builds: "${{ github.event.inputs.max_builds }}"
+          deploy_results: "true"
+          open-ai-request: "false"
+          deployment-key: ${{ secrets.GH_BUILD_DEPLOYMENT }}
+          snapshot-label-a: "${{ github.event.inputs.snapshot_label_a }}"
+          snapshot-label-b: "${{ github.event.inputs.snapshot_label_b }}"
+          report-kind: "${{ github.event.inputs.report_kind }}"
