@@ -4,6 +4,9 @@ layout: post
 title: "Gradle 9.5.0 vs 9.4.1"
 date: 2026-04-28
 report_link: /Telltale/reports/experiment_results_20260428174824.html
+report_data: /Telltale/data/experiments/experiment-cdsap-309-caching.json
+json_link: /Telltale/data/experiments/experiment-cdsap-309-caching.json
+viewer_link: /Telltale/experiments/experiment-cdsap-309-caching/
 summary: "Build mean +1.99%; Build median +0.12%; Build P90 +2.98%; Configuration mean +3.25%; Configuration median +1.27%; Configuration P90 +10.32%."
 tags: ["dependencies cache"]
 experiment_snapshot:
@@ -33,6 +36,7 @@ experiment_snapshot:
   insights:
     - "Configuration P90 changed +10.32%."
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-309-caching/)
 [Report 📊](../../reports/experiment_results_20260428174824.html)
 ## Summary
 The analysis of the Gradle build performance data reveals a slight increase in build time in variantb_9.5.0 compared to varianta_9.4.1, with the mean build time increasing by approximately 11.4 seconds (2%). The configuration time also saw an increase, with the mean time rising by about 2 seconds (3.2%). Notably, the most time-consuming tasks across both variants include 'KotlinCompile', 'KspAATask', and 'LinkApplicationAndroidResourcesTask', with minor increases in execution times in variantb_9.5.0.
