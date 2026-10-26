@@ -3,6 +3,7 @@
 {{- $b := $s.variant_b -}}
 {{- $ca := $s.config_variant_a -}}
 {{- $cb := $s.config_variant_b -}}
+{{- $href := partial "experiment-report-href.html" . -}}
 {{- if and $a $b -}}
 {{- $pct := dict
   "mean" (mul (div (sub $b.mean $a.mean) $a.mean) 100.0)
@@ -12,7 +13,7 @@
 <aside class="experiment-snapshot" aria-labelledby="snapshot-heading">
   <h3 id="snapshot-heading" class="experiment-snapshot-title">Latest experiment</h3>
   <p class="experiment-snapshot-compare">
-    <a href="{{ .Permalink }}">{{ $a.label }} vs {{ $b.label }}</a>
+    <a href="{{ $href }}">{{ $a.label }} vs {{ $b.label }}</a>
   </p>
   <div class="experiment-snapshot-kpi" aria-label="Mean change from the baseline">
     <div>
@@ -97,9 +98,7 @@
     </tbody>
   </table>
   {{- end -}}
-  {{- with .Params.report_link }}
-  <p class="experiment-snapshot-more"><a href="{{ . | absURL }}">Open HTML report →</a></p>
-  {{- end }}
+  <p class="experiment-snapshot-more"><a href="{{ $href }}">Open interactive report →</a></p>
 </aside>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>

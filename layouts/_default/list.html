@@ -9,6 +9,10 @@
   {{- $paginator := .Paginate $pages }}
   {{- $latestSnap := false }}
   {{- $snapPosts := where site.RegularPages "Params.experiment_snapshot.variant_a" "!=" nil }}
+  {{- $viewerSnaps := where $snapPosts "Params.viewer_link" "!=" nil }}
+  {{- if gt (len $viewerSnaps) 0 }}
+    {{- $snapPosts = $viewerSnaps }}
+  {{- end }}
   {{- if gt (len $snapPosts) 0 }}
     {{- $latestSnap = index (sort $snapPosts "Date" "desc") 0 }}
   {{- end }}
@@ -27,17 +31,18 @@
     <h2 class="home-layout-posts-heading" id="recent-experiments-heading">Recent experiments</h2>
     <div class="posts home-posts-in-grid">
       {{- range $paginator.Pages }}
+      {{- $href := partial "experiment-report-href.html" . }}
       <article class="post-entry">
         <header class="entry-header">
           <h2>
-            <a href="{{ .Permalink }}">{{ .Title }}</a>
+            <a href="{{ $href }}">{{ .Title }}</a>
           </h2>
         </header>
         <div class="entry-content">
-          {{- if .Params.summary }}
-          <p>{{ .Params.summary | markdownify | safeHTML }}</p>
+          {{- with .Params.experiment_snapshot }}
+          {{- partial "experiment-delta-grid.html" (dict "snapshot" . "compact" true) }}
           {{- else }}
-          <p>{{ .Summary | safeHTML }}</p>
+          <p class="experiment-card-fallback">Open the interactive report for measured build and configuration deltas.</p>
           {{- end }}
         </div>
         <div class="entry-footer">
@@ -103,17 +108,18 @@
 
 <div class="posts">
   {{ range $pages }}
+    {{- $href := partial "experiment-report-href.html" . }}
     <article class="post-entry">
       <header class="entry-header">
         <h2>
-          <a href="{{ .Permalink }}">{{ .Title }}</a>
+          <a href="{{ $href }}">{{ .Title }}</a>
         </h2>
       </header>
       <div class="entry-content">
-        {{- if .Params.summary }}
-        <p>{{ .Params.summary | markdownify | safeHTML }}</p>
+        {{- with .Params.experiment_snapshot }}
+        {{- partial "experiment-delta-grid.html" (dict "snapshot" . "compact" true) }}
         {{- else }}
-        <p>{{ .Summary | safeHTML }}</p>
+        <p>{{ .Summary | plainify | truncate 180 }}</p>
         {{- end }}
       </div>
       <div class="entry-footer">

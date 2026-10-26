@@ -14,7 +14,7 @@
           <th scope="col">Experiment</th>
           <th scope="col">CSV</th>
           <th scope="col">Report</th>
-          <th scope="col">LLM analysis</th>
+          <th scope="col">Build / configuration</th>
         </tr>
       </thead>
       <tbody>
@@ -25,12 +25,23 @@
           {{- with .Params.report_link }}
             {{- $rep := . | absURL }}
             {{- $csv := printf "%s.csv" (strings.TrimSuffix ".html" $rep) }}
+            {{- $href := partial "experiment-report-href.html" $p }}
             <tr>
-              <td><a href="{{ $p.Permalink }}">{{ $p.Title }}</a></td>
+              <td><a href="{{ $href }}">{{ $p.Title }}</a></td>
               <td><a href="{{ $csv }}">CSV</a></td>
-              <td><a href="{{ $rep }}">HTML report</a></td>
-              <td class="experiment-data-llm">
-                {{- with $p.Params.summary }}{{ . | markdownify }}{{ else }}—{{ end -}}
+              <td>
+                {{- with $p.Params.viewer_link }}
+                <a href="{{ . }}">Interactive report</a>
+                {{- else }}
+                <a href="{{ $rep }}">HTML report</a>
+                {{- end }}
+              </td>
+              <td class="experiment-data-metrics">
+                {{- with $p.Params.experiment_snapshot }}
+                {{- partial "experiment-delta-grid.html" (dict "snapshot" . "compact" true) }}
+                {{- else }}
+                —
+                {{- end }}
               </td>
             </tr>
           {{- end }}
