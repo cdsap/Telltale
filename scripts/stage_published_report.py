@@ -259,6 +259,15 @@ def stage(args: argparse.Namespace) -> dict:
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source, destination)
 
+    if getattr(args, "assets_src", None):
+        assets_src = Path(args.assets_src).resolve()
+        if assets_src.is_dir():
+            for source in assets_src.rglob("*"):
+                if source.is_file():
+                    destination = site / "assets" / source.relative_to(assets_src)
+                    destination.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(source, destination)
+
     tags = "gradle-profiler" if args.profile else args.mode or "experiment"
     snapshot = None
     snap_file = results / "experiment_snapshot.yaml"
@@ -312,6 +321,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--site", required=True)
     parser.add_argument("--viewer-dist")
     parser.add_argument("--layouts-src")
+    parser.add_argument("--assets-src")
     parser.add_argument("--site-base", default="/Telltale")
     parser.add_argument("--experiment-id", required=True)
     parser.add_argument("--report-kind", required=True)

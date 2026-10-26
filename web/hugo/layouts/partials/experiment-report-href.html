@@ -1,0 +1,5 @@
+{{- /* Prefer the interactive viewer, then the legacy HTML report, then the Hugo post. */ -}}
+{{- $href := .RelPermalink -}}
+{{- with .Params.report_link }}{{ $href = . }}{{ end -}}
+{{- with .Params.viewer_link }}{{ $href = . }}{{ end -}}
+{{- return $href -}}

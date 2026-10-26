@@ -120,6 +120,34 @@ class StagePublishedReportTest(unittest.TestCase):
             with self.assertRaises(StageError):
                 stage(_args(results=str(results), site=str(site), viewer_dist=str(dist)))
 
+    def test_copies_hugo_assets_onto_the_site_tree(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            results = root / "results"
+            site = root / "site"
+            dist = root / "dist"
+            assets = root / "assets"
+            results.mkdir()
+            (results / "experiment_results_old.html").write_text("<html>legacy</html>")
+            (results / "experiment_results_old.csv").write_text("Category,Metric\n")
+            (results / "experiment-result.json").write_text(
+                json.dumps({"schemaVersion": "1.0.0", "report": {"id": "run-assets"}})
+            )
+            dist.mkdir()
+            (dist / "index.html").write_text(
+                '<div id="telltale-report" data-report-url="./data/sample.json"></div><script src="./assets/report-viewer.js"></script>'
+            )
+            (dist / "assets").mkdir()
+            (dist / "assets" / "report-viewer.js").write_text("console.log(1)")
+            (assets / "css" / "extended").mkdir(parents=True)
+            (assets / "css" / "extended" / "home-experiment-cards.css").write_text(".experiment-delta-grid{}")
+            args = _args(results=str(results), site=str(site), viewer_dist=str(dist))
+            args.assets_src = str(assets)
+            stage(args)
+            copied = site / "assets" / "css" / "extended" / "home-experiment-cards.css"
+            self.assertTrue(copied.is_file())
+            self.assertEqual(copied.read_text(), ".experiment-delta-grid{}")
+
 
 if __name__ == "__main__":
     unittest.main()

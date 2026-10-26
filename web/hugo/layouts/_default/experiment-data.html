@@ -1,0 +1,53 @@
+{{- define "main" -}}
+<article class="experiment-data-page">
+  <header class="page-header">
+    <h1>{{ .Title }}</h1>
+    {{- with .Content }}
+    <div class="experiment-data-intro">{{ . | markdownify }}</div>
+    {{- end }}
+  </header>
+
+  <div class="experiment-data-table-wrap">
+    <table class="experiment-data-table">
+      <thead>
+        <tr>
+          <th scope="col">Experiment</th>
+          <th scope="col">CSV</th>
+          <th scope="col">Report</th>
+          <th scope="col">Build / configuration</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{- $pages := where site.RegularPages "Section" "posts" }}
+        {{- $pages = sort $pages "Date" "desc" }}
+        {{- range $pages }}
+          {{- $p := . }}
+          {{- with .Params.report_link }}
+            {{- $rep := . | absURL }}
+            {{- $csv := printf "%s.csv" (strings.TrimSuffix ".html" $rep) }}
+            {{- $href := partial "experiment-report-href.html" $p }}
+            <tr>
+              <td><a href="{{ $href }}">{{ $p.Title }}</a></td>
+              <td><a href="{{ $csv }}">CSV</a></td>
+              <td>
+                {{- with $p.Params.viewer_link }}
+                <a href="{{ . }}">Interactive report</a>
+                {{- else }}
+                <a href="{{ $rep }}">HTML report</a>
+                {{- end }}
+              </td>
+              <td class="experiment-data-metrics">
+                {{- with $p.Params.experiment_snapshot }}
+                {{- partial "experiment-delta-grid.html" (dict "snapshot" . "compact" true) }}
+                {{- else }}
+                —
+                {{- end }}
+              </td>
+            </tr>
+          {{- end }}
+        {{- end }}
+      </tbody>
+    </table>
+  </div>
+</article>
+{{- end -}}
