@@ -1,0 +1,129 @@
+.experiment-delta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+}
+
+.experiment-delta-grid--compact {
+  gap: 12px;
+}
+
+.experiment-delta-panel {
+  min-width: 0;
+}
+
+.experiment-delta-heading {
+  margin: 0 0 8px;
+  color: var(--secondary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.experiment-delta-bars {
+  display: grid;
+  gap: 5px;
+  margin: 0 0 10px;
+}
+
+.experiment-delta-bar-row {
+  display: grid;
+  grid-template-columns: minmax(3.5rem, 28%) minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.experiment-delta-bar-label {
+  overflow: hidden;
+  color: var(--secondary);
+  font-size: 0.68rem;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.experiment-delta-bar-track {
+  display: block;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--border) 80%, transparent);
+}
+
+.experiment-delta-bar {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+}
+
+.experiment-delta-bar--a { background: var(--tt-accent, #2563eb); }
+.experiment-delta-bar--b { background: color-mix(in srgb, var(--primary) 42%, var(--tt-accent, #2563eb)); }
+
+.experiment-delta-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.experiment-delta-stats li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.experiment-delta-stats span {
+  color: var(--secondary);
+  font-size: 0.68rem;
+}
+
+.experiment-delta-stats strong {
+  color: var(--primary);
+  font-size: 0.92rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+.experiment-delta-stats .is-improvement { color: var(--tt-good, #16805d); }
+.experiment-delta-stats .is-regression { color: var(--tt-bad, #b45309); }
+
+.experiment-delta-insights {
+  grid-column: 1 / -1;
+  margin: 2px 0 0;
+  padding: 0;
+  color: var(--secondary);
+  font-size: 0.8rem;
+  line-height: 1.45;
+  list-style: none;
+}
+
+.experiment-delta-insights li + li { margin-top: 4px; }
+
+.home-posts-in-grid .entry-content {
+  overflow: visible;
+}
+
+.home-posts-in-grid .entry-content p {
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+}
+
+.experiment-card-fallback {
+  margin: 0;
+  color: var(--secondary);
+  font-size: 0.89rem;
+}
+
+.experiment-data-metrics .experiment-delta-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (max-width: 720px) {
+  .experiment-delta-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

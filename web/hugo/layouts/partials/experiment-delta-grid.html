@@ -1,0 +1,111 @@
+{{- $s := .snapshot -}}
+{{- $a := $s.variant_a -}}
+{{- $b := $s.variant_b -}}
+{{- $ca := $s.config_variant_a -}}
+{{- $cb := $s.config_variant_b -}}
+{{- $compact := .compact | default false -}}
+{{- if and $a $b -}}
+{{- $pctMean := 0.0 -}}
+{{- $pctP50 := 0.0 -}}
+{{- $pctP90 := 0.0 -}}
+{{- if ne $a.mean 0.0 }}{{ $pctMean = mul (div (sub $b.mean $a.mean) $a.mean) 100.0 }}{{ end -}}
+{{- if ne $a.p50 0.0 }}{{ $pctP50 = mul (div (sub $b.p50 $a.p50) $a.p50) 100.0 }}{{ end -}}
+{{- if ne $a.p90 0.0 }}{{ $pctP90 = mul (div (sub $b.p90 $a.p90) $a.p90) 100.0 }}{{ end -}}
+{{- $maxBuild := cond (gt $a.mean $b.mean) $a.mean $b.mean -}}
+<div class="experiment-delta-grid{{ if $compact }} experiment-delta-grid--compact{{ end }}">
+  <section class="experiment-delta-panel">
+    <h3 class="experiment-delta-heading">{{ $s.metric | default "Build time" }}</h3>
+    {{- if gt $maxBuild 0.0 -}}
+    <div class="experiment-delta-bars" aria-hidden="true">
+      <span class="experiment-delta-bar-row">
+        <span class="experiment-delta-bar-label">{{ $a.label }}</span>
+        <span class="experiment-delta-bar-track"><span class="experiment-delta-bar experiment-delta-bar--a" style="width: {{ printf "%.1f" (mul (div $a.mean $maxBuild) 100.0) }}%"></span></span>
+      </span>
+      <span class="experiment-delta-bar-row">
+        <span class="experiment-delta-bar-label">{{ $b.label }}</span>
+        <span class="experiment-delta-bar-track"><span class="experiment-delta-bar experiment-delta-bar--b" style="width: {{ printf "%.1f" (mul (div $b.mean $maxBuild) 100.0) }}%"></span></span>
+      </span>
+    </div>
+    {{- end -}}
+    <ul class="experiment-delta-stats">
+      <li>
+        <span>Mean</span>
+        <strong class="{{ if lt $pctMean 0.0 }}is-improvement{{ else if gt $pctMean 0.0 }}is-regression{{ end }}">{{ printf "%+.2f" $pctMean }}%</strong>
+      </li>
+      <li>
+        <span>Median</span>
+        <strong class="{{ if lt $pctP50 0.0 }}is-improvement{{ else if gt $pctP50 0.0 }}is-regression{{ end }}">{{ printf "%+.2f" $pctP50 }}%</strong>
+      </li>
+      <li>
+        <span>P90</span>
+        <strong class="{{ if lt $pctP90 0.0 }}is-improvement{{ else if gt $pctP90 0.0 }}is-regression{{ end }}">{{ printf "%+.2f" $pctP90 }}%</strong>
+      </li>
+    </ul>
+  </section>
+  {{- if and $ca $cb -}}
+  {{- $cfgMean := 0.0 -}}
+  {{- $cfgP50 := 0.0 -}}
+  {{- $cfgP90 := 0.0 -}}
+  {{- if ne $ca.mean 0.0 }}{{ $cfgMean = mul (div (sub $cb.mean $ca.mean) $ca.mean) 100.0 }}{{ end -}}
+  {{- if ne $ca.p50 0.0 }}{{ $cfgP50 = mul (div (sub $cb.p50 $ca.p50) $ca.p50) 100.0 }}{{ end -}}
+  {{- if ne $ca.p90 0.0 }}{{ $cfgP90 = mul (div (sub $cb.p90 $ca.p90) $ca.p90) 100.0 }}{{ end -}}
+  {{- $maxCfg := cond (gt $ca.mean $cb.mean) $ca.mean $cb.mean -}}
+  <section class="experiment-delta-panel">
+    <h3 class="experiment-delta-heading">{{ $s.config_metric | default "Configuration time" }}</h3>
+    {{- if gt $maxCfg 0.0 -}}
+    <div class="experiment-delta-bars" aria-hidden="true">
+      <span class="experiment-delta-bar-row">
+        <span class="experiment-delta-bar-label">{{ $a.label }}</span>
+        <span class="experiment-delta-bar-track"><span class="experiment-delta-bar experiment-delta-bar--a" style="width: {{ printf "%.1f" (mul (div $ca.mean $maxCfg) 100.0) }}%"></span></span>
+      </span>
+      <span class="experiment-delta-bar-row">
+        <span class="experiment-delta-bar-label">{{ $b.label }}</span>
+        <span class="experiment-delta-bar-track"><span class="experiment-delta-bar experiment-delta-bar--b" style="width: {{ printf "%.1f" (mul (div $cb.mean $maxCfg) 100.0) }}%"></span></span>
+      </span>
+    </div>
+    {{- end -}}
+    <ul class="experiment-delta-stats">
+      <li>
+        <span>Mean</span>
+        <strong class="{{ if lt $cfgMean 0.0 }}is-improvement{{ else if gt $cfgMean 0.0 }}is-regression{{ end }}">{{ printf "%+.2f" $cfgMean }}%</strong>
+      </li>
+      <li>
+        <span>Median</span>
+        <strong class="{{ if lt $cfgP50 0.0 }}is-improvement{{ else if gt $cfgP50 0.0 }}is-regression{{ end }}">{{ printf "%+.2f" $cfgP50 }}%</strong>
+      </li>
+      <li>
+        <span>P90</span>
+        <strong class="{{ if lt $cfgP90 0.0 }}is-improvement{{ else if gt $cfgP90 0.0 }}is-regression{{ end }}">{{ printf "%+.2f" $cfgP90 }}%</strong>
+      </li>
+    </ul>
+  </section>
+  {{- end -}}
+</div>
+{{- $insights := $s.insights -}}
+{{- if not $insights -}}
+  {{- $computed := slice -}}
+  {{- if and (ne $pctMean 0.0) (ne $pctP90 0.0) (ne (gt $pctMean 0.0) (gt $pctP90 0.0)) -}}
+    {{- $computed = $computed | append "Build mean and P90 moved in opposite directions." -}}
+  {{- end -}}
+  {{- $absMean := cond (lt $pctMean 0.0) (mul $pctMean -1.0) $pctMean -}}
+  {{- if ge $absMean 5.0 -}}
+    {{- $computed = $computed | append (printf "Build mean changed %+.2f%%." $pctMean) -}}
+  {{- end -}}
+  {{- if and $ca $cb -}}
+    {{- $cfgMean := 0.0 -}}
+    {{- if ne $ca.mean 0.0 }}{{ $cfgMean = mul (div (sub $cb.mean $ca.mean) $ca.mean) 100.0 }}{{ end -}}
+    {{- $absCfg := cond (lt $cfgMean 0.0) (mul $cfgMean -1.0) $cfgMean -}}
+    {{- if ge $absCfg 5.0 -}}
+      {{- $computed = $computed | append (printf "Configuration mean changed %+.2f%%." $cfgMean) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $insights = $computed -}}
+{{- end -}}
+{{- with $insights -}}
+<ul class="experiment-delta-insights">
+  {{- range . }}
+  <li>{{ . }}</li>
+  {{- end }}
+</ul>
+{{- end -}}
+{{- end -}}

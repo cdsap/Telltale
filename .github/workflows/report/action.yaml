@@ -293,6 +293,9 @@ runs:
         mkdir -p "$RUNNER_TEMP/telltale-publish"
         cp -a dist "$RUNNER_TEMP/telltale-publish/viewer-dist"
         cp -a "${{ github.workspace }}/web/hugo/layouts" "$RUNNER_TEMP/telltale-publish/hugo-layouts"
+        if [ -d "${{ github.workspace }}/web/hugo/assets" ]; then
+          cp -a "${{ github.workspace }}/web/hugo/assets" "$RUNNER_TEMP/telltale-publish/hugo-assets"
+        fi
         cp "${{ github.workspace }}/scripts/stage_published_report.py" "$RUNNER_TEMP/telltale-publish/"
 
     - name: Checkout gh-pages branch
@@ -331,6 +334,7 @@ runs:
           --site . \
           --viewer-dist "$RUNNER_TEMP/telltale-publish/viewer-dist" \
           --layouts-src "$RUNNER_TEMP/telltale-publish/hugo-layouts" \
+          --assets-src "$RUNNER_TEMP/telltale-publish/hugo-assets" \
           --site-base /Telltale \
           --experiment-id "${{ inputs.experiment-id }}" \
           --report-kind "${{ inputs.report-kind }}" \
