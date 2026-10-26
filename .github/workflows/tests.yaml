@@ -1,0 +1,49 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  report-viewer:
+    name: Report viewer
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web/report-viewer
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: web/report-viewer/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Test
+        run: npm test
+      - name: Typecheck and build
+        run: npm run build
+
+  workflows:
+    name: Workflow YAML
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install test dependencies
+        run: pip install pyyaml
+      - name: Test workflow YAML and publish staging
+        working-directory: scripts
+        run: python3 -m unittest discover -s . -p "test_*.py" -v
