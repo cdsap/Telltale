@@ -1,16 +1,19 @@
 import type { ExperimentResult, StatisticName, Variant } from "../../domain/types";
-import { comparisonTone } from "../../domain/comparisons";
-import { diagnosticsStatusLabel } from "../../domain/coverage";
-import { compareMetric, displayLabel, metricById } from "../../domain/metrics";
-import { isDiagnosticMetric } from "../../domain/series";
-import { MetricCard } from "../../components/MetricCard/MetricCard";
+import type { DashboardSelection } from "../../domain/selections";
+import { InsightRow } from "../../components/insights/InsightRow";
+import { SectionHeader } from "../../components/layout/SectionHeader";
 import { MetricRows } from "../../components/MetricRows/MetricRows";
+import { diagnosticsStatusLabel } from "../../domain/coverage";
+import { displayLabel, metricById } from "../../domain/metrics";
+import { isDiagnosticMetric } from "../../domain/series";
+import { investigationFindings } from "../../domain/viewModels";
 
 interface DiagnosticsProps {
   report: ExperimentResult;
   baseline: Variant;
   candidate: Variant;
   statistic: StatisticName;
+  onNavigate: (patch: Partial<DashboardSelection>) => void;
 }
 
 export function Diagnostics({
@@ -18,11 +21,37 @@ export function Diagnostics({
   baseline,
   candidate,
   statistic,
+  onNavigate,
 }: DiagnosticsProps) {
   const diagnosticMetrics = report.metrics.filter(isDiagnosticMetric);
   const groups = report.diagnostics.groups;
+  const findings = investigationFindings(report, baseline, candidate);
   return (
     <section id="diagnostics" className="report-block">
+      <SectionHeader
+        title="Findings"
+        description="Changes of at least 5% in either direction. These are observations, not root-cause claims."
+      />
+      {findings.length > 0 ? (
+        <ul className="findings-list">
+          {findings.map((finding) => (
+            <InsightRow
+              key={finding.id}
+              title={finding.title}
+              detail={finding.detail}
+              action={finding.action}
+              onSelect={() =>
+                onNavigate({
+                  section: finding.section,
+                  taskId: finding.taskId ?? null,
+                })
+              }
+            />
+          ))}
+        </ul>
+      ) : (
+        <p className="panel-note">No changes of 5% or more were derived from this report.</p>
+      )}
       <div className="experiment-snapshot">
         <h2 className="experiment-snapshot-title">CPU / JFR</h2>
         <p className="series-note">{diagnosticsStatusLabel(report.diagnostics.status)}</p>
@@ -57,6 +86,7 @@ export function Diagnostics({
           baseline={baseline}
           candidate={candidate}
           statistic={statistic}
+          compact
           caption="Diagnostic metrics"
           empty={
             report.diagnostics.status === "present" || report.diagnostics.status === "partial"
@@ -65,25 +95,6 @@ export function Diagnostics({
           }
         />
       </div>
-      {diagnosticMetrics.length > 0 ? (
-        <div className="snapshot-grid">
-          {diagnosticMetrics.slice(0, 4).map((metric) => {
-            const comparison = compareMetric(metric, baseline.id, candidate.id, statistic);
-            return (
-              <MetricCard
-                key={metric.id}
-                title={metric.name}
-                metric={metric}
-                baseline={baseline}
-                candidate={candidate}
-                statistic={statistic}
-                comparison={comparison}
-                tone={comparisonTone(comparison, metric.direction)}
-              />
-            );
-          })}
-        </div>
-      ) : null}
       <p className="visually-hidden">
         Compared variants: {displayLabel(baseline)} and {displayLabel(candidate)}.
       </p>

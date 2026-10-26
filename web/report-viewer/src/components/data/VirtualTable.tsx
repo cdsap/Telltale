@@ -4,6 +4,7 @@ interface VirtualTableProps {
   rowCount: number;
   rowHeight?: number;
   height?: number;
+  columnCount?: number;
   header: ReactNode;
   renderRow: (index: number) => ReactNode;
   empty: string;
@@ -14,6 +15,7 @@ export function VirtualTable({
   rowCount,
   rowHeight = 40,
   height = 480,
+  columnCount = 12,
   header,
   renderRow,
   empty,
@@ -52,14 +54,14 @@ export function VirtualTable({
         <tbody>
           {start > 0 ? (
             <tr>
-              <td colSpan={12} style={{ height: start * rowHeight, padding: 0, border: 0 }} />
+              <td colSpan={columnCount} style={{ height: start * rowHeight, padding: 0, border: 0 }} />
             </tr>
           ) : null}
           {rows}
           {end < rowCount ? (
             <tr>
               <td
-                colSpan={12}
+                colSpan={columnCount}
                 style={{ height: (rowCount - end) * rowHeight, padding: 0, border: 0 }}
               />
             </tr>

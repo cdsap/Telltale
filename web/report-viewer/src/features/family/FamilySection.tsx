@@ -1,18 +1,20 @@
 import { useMemo, useState } from "react";
 import type { ExperimentResult, NamedSeries, StatisticName, Variant } from "../../domain/types";
-import { compareMetric } from "../../domain/metrics";
-import { comparisonTone } from "../../domain/comparisons";
+import { DistributionChart } from "../../components/charts/DistributionChart";
+import { ComparisonLegend } from "../../components/comparison/ComparisonLegend";
+import { MetricInspector } from "../../components/inspectors/MetricInspector";
+import { SectionHeader } from "../../components/layout/SectionHeader";
+import { MetricRows } from "../../components/MetricRows/MetricRows";
+import { SeriesChart } from "../../components/SeriesChart/SeriesChart";
+import { ChartPanel } from "../../components/workbench/ChartPanel";
+import { metricDisplayName, resourceGroupOf } from "../../domain/metrics";
 import {
   canPlotSequence,
   firstSeriesWithPoints,
-  headlineMetrics,
   metricsInFamily,
   namedSeriesList,
   seriesForMetric,
 } from "../../domain/series";
-import { MetricCard } from "../../components/MetricCard/MetricCard";
-import { MetricRows } from "../../components/MetricRows/MetricRows";
-import { SeriesChart } from "../../components/SeriesChart/SeriesChart";
 
 interface FamilySectionProps {
   id: string;
@@ -37,22 +39,43 @@ export function FamilySection({
   series,
   note,
 }: FamilySectionProps) {
-  const metrics = metricsInFamily(report, family);
+  const metrics = useMemo(() => metricsInFamily(report, family), [family, report]);
   const seriesList = namedSeriesList(series ?? {});
   const variantIds = [baseline.id, candidate.id];
+  const isResource = family === "resource";
+  const categories = useMemo(() => {
+    if (isResource) {
+      return [...new Set(metrics.map((metric) => resourceGroupOf(metric.category)))].sort();
+    }
+    return [...new Set(metrics.map((metric) => metric.category).filter(Boolean))].sort();
+  }, [isResource, metrics]);
   const defaultMetric =
     metrics.find((metric) => series && seriesForMetric(metric, series)) ?? metrics[0];
   const defaultSeries = firstSeriesWithPoints(seriesList, variantIds);
   const [selectedId, setSelectedId] = useState(defaultMetric?.id ?? defaultSeries?.id ?? null);
+  const [query, setQuery] = useState("");
+  const [group, setGroup] = useState("all");
+  const [view, setView] = useState<"order" | "distribution">("order");
   const selected = metrics.find((metric) => metric.id === selectedId) ?? metrics[0];
-  const cards = useMemo(
-    () => headlineMetrics(metrics, baseline, candidate, statistic, 2),
-    [baseline, candidate, metrics, statistic],
-  );
+  const visibleMetrics = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    return metrics.filter((metric) => {
+      if (group !== "all") {
+        const bucket = isResource ? resourceGroupOf(metric.category) : metric.category;
+        if (bucket !== group) {
+          return false;
+        }
+      }
+      if (!needle) {
+        return true;
+      }
+      return `${metricDisplayName(metric)} ${metric.id}`.toLowerCase().includes(needle);
+    });
+  }, [group, isResource, metrics, query]);
   if (metrics.length === 0 && seriesList.length === 0) {
     return (
       <section id={id} className="wb-panel">
-        <h2>{title}</h2>
+        <SectionHeader title={title} />
         <p className="panel-note">
           {title} were not exported in this report. Missing is not zero; this section has no
           measurements to chart.
@@ -66,80 +89,122 @@ export function FamilySection({
     matchedSeries ||
     seriesList.find((item) => item.id === selectedId) ||
     defaultSeries;
+  const chartTitle = selected
+    ? metricDisplayName(selected)
+    : (selectedSeries?.name ?? title);
+  const distributionValues = selectedSeries
+    ? Object.fromEntries(
+        [baseline, candidate].map((variant) => [
+          variant.id,
+          (selectedSeries.observations[variant.id] ?? []).map(
+            (item) => item.value ?? item.durationMs,
+          ),
+        ]),
+      )
+    : {};
   return (
     <section id={id} className="report-block">
-      {cards.length > 0 ? (
-        <div className="snapshot-grid">
-          {cards.map((metric) => {
-            const comparison = compareMetric(metric, baseline.id, candidate.id, statistic);
-            return (
-              <MetricCard
-                key={metric.id}
-                title={
-                  metric.category &&
-                  metric.category !== metric.name &&
-                  metric.category !== title
-                    ? `${metric.category} · ${metric.name}`
-                    : metric.name
-                }
-                metric={metric}
-                baseline={baseline}
-                candidate={candidate}
-                statistic={statistic}
-                comparison={comparison}
-                tone={comparisonTone(comparison, metric.direction)}
-              />
-            );
-          })}
-        </div>
-      ) : null}
-      <div className="experiment-snapshot">
-        <h2 className="experiment-snapshot-title">{title}</h2>
-        {note ? <p className="series-note">{note}</p> : null}
-        {seriesList.length > 0 ? (
-          <label className="series-picker">
-            Timeline
-            <select
-              value={selectedSeries?.id ?? ""}
-              onChange={(event) => setSelectedId(event.target.value)}
-            >
-              {seriesList.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
+      <SectionHeader title={title} description={note} />
+      <div className="analysis-toolbar">
+        <div className="analysis-toolbar-row">
+          <label>
+            Search metrics
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="memory, CPU, GC"
+            />
           </label>
-        ) : null}
-        {selectedSeries ? (
-          <>
-            <p className="experiment-snapshot-metric">
-              {(selected?.name === selectedSeries.name
-                ? selected.name
-                : selectedSeries.name)} by build
-            </p>
+          {categories.length > 1 ? (
+            <label>
+              Group
+              <select value={group} onChange={(event) => setGroup(event.target.value)}>
+                <option value="all">All groups</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          {seriesList.length > 0 ? (
+            <label className="series-picker">
+              Timeline
+              <select
+                value={selectedSeries?.id ?? ""}
+                onChange={(event) => setSelectedId(event.target.value)}
+              >
+                {seriesList.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          {selectedSeries ? (
+            <label>
+              View
+              <select
+                value={view}
+                onChange={(event) => setView(event.target.value as "order" | "distribution")}
+              >
+                <option value="order">Execution order</option>
+                <option value="distribution">Distribution</option>
+              </select>
+            </label>
+          ) : null}
+        </div>
+      </div>
+      {selectedSeries ? (
+        <ChartPanel
+          title={chartTitle}
+          subtitle="Baseline and candidate sequences are independent."
+          legend={<ComparisonLegend baseline={baseline} candidate={candidate} />}
+        >
+          {view === "distribution" ? (
+            <DistributionChart
+              variants={[baseline, candidate]}
+              values={distributionValues}
+              unit={selectedSeries.unit || selected?.unit || ""}
+              valueType={selected?.valueType ?? "quantity"}
+              view="box"
+              title={chartTitle}
+            />
+          ) : (
             <SeriesChart
-              title={selectedSeries.name}
+              title={chartTitle}
               variants={[baseline, candidate]}
               observations={selectedSeries.observations}
               unit={selectedSeries.unit || selected?.unit || ""}
               valueType={selected?.valueType ?? "quantity"}
               allowSequence={selected ? canPlotSequence(selected) : true}
             />
-          </>
-        ) : (
-          <p className="series-note">No per-build series is available for {title}.</p>
-        )}
-        <MetricRows
-          metrics={metrics}
+          )}
+        </ChartPanel>
+      ) : (
+        <p className="series-note">No per-build series is available for {title}.</p>
+      )}
+      {selected ? (
+        <MetricInspector
+          metric={selected}
           baseline={baseline}
           candidate={candidate}
-          statistic={statistic}
-          caption={`${title} metrics`}
-          selectedId={selected?.id}
-          onSelect={series ? (metricId) => setSelectedId(metricId) : undefined}
+          kicker="Selected metric"
         />
-      </div>
+      ) : null}
+      <MetricRows
+        metrics={visibleMetrics}
+        baseline={baseline}
+        candidate={candidate}
+        statistic={statistic}
+        compact
+        caption={`${title} metrics`}
+        selectedId={selected?.id}
+        onSelect={(metricId) => setSelectedId(metricId)}
+      />
     </section>
   );
 }

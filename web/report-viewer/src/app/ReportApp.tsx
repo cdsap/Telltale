@@ -99,31 +99,30 @@ export function ReportApp({ root }: ReportAppProps) {
   }
 
   return (
-    <>
-      <SiteHeader />
-      <DashboardProvider
-        report={report}
-        jsonUrl={root.dataset.reportUrl ?? null}
-        legacyCsvUrl={root.dataset.csvUrl}
-        legacyHtmlUrl={root.dataset.htmlUrl}
-      >
-        <WorkbenchLayout>
-          <ActiveSection />
-        </WorkbenchLayout>
-      </DashboardProvider>
-    </>
+    <DashboardProvider
+      report={report}
+      jsonUrl={root.dataset.reportUrl ?? null}
+      legacyCsvUrl={root.dataset.csvUrl}
+      legacyHtmlUrl={root.dataset.htmlUrl}
+    >
+      <WorkbenchLayout>
+        <ActiveSection />
+      </WorkbenchLayout>
+    </DashboardProvider>
   );
 }
 
 function ActiveSection() {
-  const { report, baseline, candidate, selection } = useDashboard();
+  const { report, baseline, candidate, selection, update } = useDashboard();
   switch (selection.section) {
     case "builds":
       return <BuildsWorkbench />;
+    case "configuration":
+      return <BuildsWorkbench field="configurationMs" />;
     case "tasks":
-      return <TaskExplorer source="paths" />;
+      return <TaskExplorer key="paths" source="paths" />;
     case "task-types":
-      return <TaskExplorer source="types" />;
+      return <TaskExplorer key="types" source="types" />;
     case "resources":
       return (
         <FamilySection
@@ -161,6 +160,7 @@ function ActiveSection() {
           baseline={baseline}
           candidate={candidate}
           statistic={selection.statistic}
+          onNavigate={update}
         />
       );
     case "metrics":

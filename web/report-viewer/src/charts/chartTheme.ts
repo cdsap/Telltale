@@ -10,14 +10,14 @@ function cssVar(name: string, fallback: string): string {
 
 export function variantColors(): [string, string] {
   return [
-    cssVar("--color-variant-a", "rgba(0, 123, 255, 0.85)"),
-    cssVar("--color-variant-b", "rgba(108, 117, 125, 0.85)"),
+    cssVar("--color-variant-a", "#2563EB"),
+    cssVar("--color-variant-b", "#7C3AED"),
   ];
 }
 
-function cartesianOptions(yLabel: string) {
-  const muted = cssVar("--secondary", "rgb(108, 108, 108)");
-  const line = cssVar("--border", "rgb(238, 238, 238)");
+function cartesianOptions(yLabel: string, sparseX = false) {
+  const muted = cssVar("--secondary", "#475569");
+  const line = cssVar("--border", "#E2E8F0");
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -28,23 +28,57 @@ function cartesianOptions(yLabel: string) {
       },
       tooltip: {
         callbacks: {
-          label(context: { parsed: { y: number | null }; dataset: { label?: string } }) {
-            const value = context.parsed.y;
+          title(items: Array<{ label?: string }>) {
+            const label = items[0]?.label ?? "";
+            return /^\d+$/.test(label) ? `Build ${label}` : label;
+          },
+          label(context: { parsed?: { y?: number | null }; dataset?: { label?: string } }) {
+            const value = context.parsed?.y;
             const formatted =
               typeof value === "number"
-                ? value.toLocaleString(undefined, { maximumFractionDigits: 3 })
+                ? value.toLocaleString(undefined, { maximumFractionDigits: 2 })
                 : "N/A";
-            return `${context.dataset.label}: ${formatted} ${yLabel}`;
+            return `${context.dataset?.label ?? ""}: ${formatted} ${yLabel}`;
           },
         },
       },
     },
     scales: {
-      x: { grid: { display: false }, ticks: { color: muted } },
+      x: {
+        grid: { display: false },
+        ticks: {
+          color: muted,
+          maxRotation: 0,
+          minRotation: 0,
+          autoSkip: true,
+          maxTicksLimit: sparseX ? 8 : 12,
+          font: { size: 11 },
+        },
+      },
       y: {
         title: { display: true, text: yLabel, color: muted, font: { size: 11 } },
         grid: { color: line },
-        ticks: { color: muted, font: { size: 10 } },
+        ticks: {
+          color: muted,
+          font: { size: 10 },
+          maxTicksLimit: 6,
+          callback(value: string | number) {
+            if (typeof value !== "number") {
+              return value;
+            }
+            const abs = Math.abs(value);
+            if (abs >= 1_000_000_000) {
+              return `${(value / 1_000_000_000).toFixed(1)}B`;
+            }
+            if (abs >= 1_000_000) {
+              return `${(value / 1_000_000).toFixed(1)}M`;
+            }
+            if (abs >= 10_000) {
+              return `${Math.round(value / 1000)}k`;
+            }
+            return value;
+          },
+        },
         beginAtZero: true,
       },
     },
@@ -53,12 +87,12 @@ function cartesianOptions(yLabel: string) {
 
 export function lineOptions(yLabel: string): ChartOptions<"line"> {
   return {
-    ...cartesianOptions(yLabel),
+    ...cartesianOptions(yLabel, true),
     elements: {
-      point: { radius: 3 },
+      point: { radius: 2, hoverRadius: 5 },
       line: { borderWidth: 2 },
     },
-  };
+  } as ChartOptions<"line">;
 }
 
 export function variantPointStyle(index: number): "circle" | "triangle" {
@@ -70,5 +104,5 @@ export function variantDash(index: number): number[] {
 }
 
 export function barOptions(yLabel: string): ChartOptions<"bar"> {
-  return cartesianOptions(yLabel);
+  return cartesianOptions(yLabel, false) as ChartOptions<"bar">;
 }

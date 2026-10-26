@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { compareValues, comparisonTone } from "../domain/comparisons";
+import { compareValues, comparisonTone, isMaterialPercent } from "../domain/comparisons";
 
 describe("compareValues", () => {
   it("computes absolute and percent delta", () => {
@@ -23,6 +23,16 @@ describe("compareValues", () => {
     const result = compareValues(null, 10);
     expect(result.deltaAbsolute).toBeNull();
     expect(result.deltaPercent).toBeNull();
+  });
+});
+
+describe("isMaterialPercent", () => {
+  it("treats absolute changes of 5% or more as material", () => {
+    expect(isMaterialPercent(5)).toBe(true);
+    expect(isMaterialPercent(-5)).toBe(true);
+    expect(isMaterialPercent(12.8)).toBe(true);
+    expect(isMaterialPercent(4.99)).toBe(false);
+    expect(isMaterialPercent(null)).toBe(false);
   });
 });
 

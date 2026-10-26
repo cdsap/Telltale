@@ -98,6 +98,14 @@ export function taskTypeOf(metric: Metric): string {
   return metric.scope?.taskType ?? metric.name;
 }
 
+export function shortTypeName(typeName: string): string {
+  if (!typeName || typeName.startsWith(":")) {
+    return typeName;
+  }
+  const parts = typeName.split(".");
+  return parts[parts.length - 1] || typeName;
+}
+
 function addDuration(
   left: number | null | undefined,
   right: number | null | undefined,

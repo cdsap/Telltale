@@ -49,6 +49,9 @@ export function runtimeSubsections(report: ExperimentResult): ReportSection[] {
 
 export function reportSections(report: ExperimentResult): ReportSection[] {
   const hasBuilds = Object.values(report.datasets.builds).some((items) => items.length > 0);
+  const hasConfiguration = Object.values(report.datasets.builds).some((items) =>
+    items.some((item) => item.configurationMs != null),
+  );
   const hasTaskPaths =
     taskPathMetrics(report).length > 0 || Object.keys(report.datasets.taskSeries).length > 0;
   const hasTaskTypes = taskTypeMetrics(report).length > 0;
@@ -57,6 +60,7 @@ export function reportSections(report: ExperimentResult): ReportSection[] {
   return [
     { id: "overview", title: "Overview", available: true },
     { id: "builds", title: "Builds", available: hasBuilds },
+    { id: "configuration", title: "Configuration", available: hasConfiguration },
     { id: "tasks", title: "Tasks", available: hasTaskPaths },
     { id: "task-types", title: "Task types", available: hasTaskTypes },
     {

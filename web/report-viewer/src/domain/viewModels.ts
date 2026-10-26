@@ -1,4 +1,5 @@
-import { compareValues, comparisonTone, statisticValue } from "./comparisons";
+import type { WorkbenchSection } from "../app/routes";
+import { compareValues, comparisonTone, isMaterialPercent, statisticValue } from "./comparisons";
 import { diagnosticsStatusLabel } from "./coverage";
 import { derivedStats } from "./distribution";
 import { formatDelta, formatPercent } from "./formatting";
@@ -10,7 +11,19 @@ import {
   displayLabel,
   metricById,
 } from "./metrics";
-import { taskPathMetrics, taskPathOf, taskTypeByPath, taskTypeMetrics, taskTypeOf } from "./series";
+import {
+  DEFAULT_TASK_MIN_DURATION_MS,
+  matchesTaskMinDuration,
+} from "./taskTableFilters";
+import {
+  metricsInFamily,
+  shortTypeName,
+  taskPathMetrics,
+  taskPathOf,
+  taskTypeByPath,
+  taskTypeMetrics,
+  taskTypeOf,
+} from "./series";
 import { taskCategoryOf, type TaskCategory } from "./taskCategories";
 import type {
   BuildObservation,
@@ -24,7 +37,7 @@ import type {
   TaskSeries,
   Variant,
 } from "./types";
-import { formatMetricValue } from "./units";
+import { formatMetricValue, formatSignedMetricValue } from "./units";
 
 export interface KpiModel {
   id: string;
@@ -48,6 +61,15 @@ export interface Finding {
   id: string;
   text: string;
   section: string;
+}
+
+export interface InvestigationFinding {
+  id: string;
+  title: string;
+  detail: string;
+  action: string;
+  section: WorkbenchSection;
+  taskId?: string | null;
 }
 
 export interface TaskChangeRow {
@@ -167,6 +189,65 @@ export function coverageChips(report: ExperimentResult): CoverageChip[] {
   ];
 }
 
+export interface OverviewOutcome {
+  duration: Metric | null;
+  configuration: Metric | null;
+  mean: Comparison;
+  median: Comparison;
+  p90: Comparison;
+  headline: string;
+  summary: string;
+  baselineN: number | null;
+  candidateN: number | null;
+}
+
+export function overviewOutcome(
+  report: ExperimentResult,
+  baseline: Variant,
+  candidate: Variant,
+): OverviewOutcome {
+  const duration = metricById(report, BUILD_DURATION_ID) ?? null;
+  const configuration = metricById(report, BUILD_CONFIGURATION_ID) ?? null;
+  const mean = compareMetric(duration ?? undefined, baseline.id, candidate.id, "mean");
+  const median = compareMetric(duration ?? undefined, baseline.id, candidate.id, "p50");
+  const p90 = compareMetric(duration ?? undefined, baseline.id, candidate.id, "p90");
+  const meanSign = Math.sign(mean.deltaAbsolute ?? 0);
+  const medianSign = Math.sign(median.deltaAbsolute ?? 0);
+  let headline = "Build duration";
+  let summary = "Duration statistics are not available for both variants.";
+  if (duration && mean.deltaAbsolute != null && median.deltaAbsolute != null) {
+    const meanText = formatSignedMetricValue(mean.deltaAbsolute, duration.unit, duration.valueType).text;
+    const medianText = formatSignedMetricValue(
+      median.deltaAbsolute,
+      duration.unit,
+      duration.valueType,
+    ).text;
+    if (meanSign !== 0 && medianSign !== 0 && meanSign !== medianSign) {
+      headline = "Build duration: mixed result";
+      summary = `Mean changed by ${meanText}, while median changed by ${medianText}. This is a descriptive result, not proof of a meaningful regression.`;
+    } else if (meanSign < 0) {
+      headline = "Build duration: candidate faster";
+      summary = `Mean changed by ${meanText}; median changed by ${medianText}.`;
+    } else if (meanSign > 0) {
+      headline = "Build duration: candidate slower";
+      summary = `Mean changed by ${meanText}; median changed by ${medianText}.`;
+    } else {
+      summary = `Mean changed by ${meanText}; median changed by ${medianText}.`;
+    }
+  }
+  return {
+    duration,
+    configuration,
+    mean,
+    median,
+    p90,
+    headline,
+    summary,
+    baselineN: observedBuildCount(report, baseline),
+    candidateN: observedBuildCount(report, candidate),
+  };
+}
+
 export function overviewKpis(
   report: ExperimentResult,
   baseline: Variant,
@@ -183,8 +264,8 @@ export function overviewKpis(
     statistic,
   );
   const p90Cmp = compareMetric(duration ?? undefined, baseline.id, candidate.id, "p90");
-  const baselineBuilds = report.datasets.builds[baseline.id]?.length ?? baseline.buildCount;
-  const candidateBuilds = report.datasets.builds[candidate.id]?.length ?? candidate.buildCount;
+  const baselineBuilds = observedBuildCount(report, baseline);
+  const candidateBuilds = observedBuildCount(report, candidate);
   return [
     {
       id: "duration",
@@ -368,15 +449,19 @@ export function taskTypeChangeRows(
   );
 }
 
+export function rankedByAbsDelta(rows: TaskChangeRow[]): TaskChangeRow[] {
+  return rows
+    .filter((row) => row.comparison.deltaAbsolute !== null)
+    .sort((left, right) => right.absDelta - left.absDelta);
+}
+
 export function rankedTaskChanges(
   report: ExperimentResult,
   baseline: Variant,
   candidate: Variant,
   statistic: StatisticName,
 ): TaskChangeRow[] {
-  return taskChangeRows(report, baseline, candidate, statistic)
-    .filter((row) => row.comparison.deltaAbsolute !== null)
-    .sort((left, right) => right.absDelta - left.absDelta);
+  return rankedByAbsDelta(taskChangeRows(report, baseline, candidate, statistic));
 }
 
 export function splitTaskChanges(rows: TaskChangeRow[], limit = 8): {
@@ -439,8 +524,8 @@ export function overviewFindings(
       section: "builds",
     });
   }
-  const baselineN = report.datasets.builds[baseline.id]?.length ?? baseline.buildCount;
-  const candidateN = report.datasets.builds[candidate.id]?.length ?? candidate.buildCount;
+  const baselineN = observedBuildCount(report, baseline);
+  const candidateN = observedBuildCount(report, candidate);
   findings.push({
     id: "counts",
     text: `Candidate has ${candidateN ?? "an unknown number of"} measured builds, baseline ${baselineN ?? "an unknown number"}.`,
@@ -465,11 +550,170 @@ export function overviewFindings(
   return findings;
 }
 
+function materialChangeRows(rows: TaskChangeRow[]): TaskChangeRow[] {
+  return rankedByAbsDelta(rows.filter((row) => isMaterialPercent(row.comparison.deltaPercent)));
+}
+
+function taskFinding(
+  row: TaskChangeRow,
+  kind: "path" | "type",
+): InvestigationFinding {
+  const increased = (row.comparison.deltaAbsolute ?? 0) > 0;
+  const name = kind === "type" ? shortTypeName(row.path) : row.path;
+  return {
+    id: `${kind}-${increased ? "up" : "down"}-${row.metric.id}`,
+    title: `${name} mean duration ${increased ? "increased" : "decreased"}`,
+    detail: `${formatSignedMetricValue(row.comparison.deltaAbsolute, row.metric.unit, row.metric.valueType).text} (${formatDelta(row.comparison)}) · n ${row.baselineCount ?? "—"}/${row.candidateCount ?? "—"}.`,
+    action: kind === "type" ? "Inspect type" : "Inspect task",
+    section: kind === "type" ? "task-types" : "tasks",
+    taskId: row.metric.id,
+  };
+}
+
+export function investigationFindings(
+  report: ExperimentResult,
+  baseline: Variant,
+  candidate: Variant,
+): InvestigationFinding[] {
+  const findings: InvestigationFinding[] = [];
+  const duration = metricById(report, BUILD_DURATION_ID);
+  const configuration = metricById(report, BUILD_CONFIGURATION_ID);
+  const mean = compareMetric(duration, baseline.id, candidate.id, "mean");
+  const median = compareMetric(duration, baseline.id, candidate.id, "p50");
+  const configurationMean = compareMetric(configuration, baseline.id, candidate.id, "mean");
+  const baselineN = observedBuildCount(report, baseline);
+  const candidateN = observedBuildCount(report, candidate);
+  if (duration && isMaterialPercent(mean.deltaPercent)) {
+    const increased = (mean.deltaAbsolute ?? 0) > 0;
+    findings.push({
+      id: "duration-mean",
+      title: `Build duration mean ${increased ? "increased" : "decreased"}`,
+      detail: `${formatSignedMetricValue(mean.deltaAbsolute, duration.unit, duration.valueType).text} (${formatDelta(mean)}). n ${baselineN ?? "—"}/${candidateN ?? "—"}.`,
+      action: "Inspect builds",
+      section: "builds",
+    });
+  }
+  if (configuration && isMaterialPercent(configurationMean.deltaPercent)) {
+    const increased = (configurationMean.deltaAbsolute ?? 0) > 0;
+    findings.push({
+      id: "configuration-mean",
+      title: `Configuration time mean ${increased ? "increased" : "decreased"}`,
+      detail: `${formatSignedMetricValue(configurationMean.deltaAbsolute, configuration.unit, configuration.valueType).text} (${formatDelta(configurationMean)}). n ${baselineN ?? "—"}/${candidateN ?? "—"}.`,
+      action: "Inspect configuration",
+      section: "configuration",
+    });
+  }
+  if (
+    duration &&
+    mean.deltaAbsolute != null &&
+    median.deltaAbsolute != null &&
+    mean.deltaAbsolute !== 0 &&
+    median.deltaAbsolute !== 0 &&
+    Math.sign(mean.deltaAbsolute) !== Math.sign(median.deltaAbsolute)
+  ) {
+    findings.push({
+      id: "mean-median-disagree",
+      title: "Build duration mean and median moved in opposite directions",
+      detail: `Mean ${formatSignedMetricValue(mean.deltaAbsolute, duration.unit, duration.valueType).text}; median ${formatSignedMetricValue(median.deltaAbsolute, duration.unit, duration.valueType).text}. n ${baselineN ?? "—"}/${candidateN ?? "—"}.`,
+      action: "Inspect builds",
+      section: "builds",
+    });
+  }
+  const impactTasks = materialChangeRows(
+    allTaskPathRows(report, baseline, candidate, "mean").filter((row) =>
+      matchesTaskMinDuration(row, DEFAULT_TASK_MIN_DURATION_MS, baseline.id, candidate.id),
+    ),
+  );
+  const taskSplit = splitTaskChanges(impactTasks, 3);
+  for (const row of [...taskSplit.increases, ...taskSplit.decreases]) {
+    findings.push(taskFinding(row, "path"));
+  }
+  const typeSplit = splitTaskChanges(
+    materialChangeRows(taskTypeChangeRows(report, baseline, candidate, "mean")),
+    1,
+  );
+  for (const row of [...typeSplit.increases, ...typeSplit.decreases]) {
+    findings.push(taskFinding(row, "type"));
+  }
+  const resource = metricsInFamily(report, "resource")
+    .map((metric) => ({
+      metric,
+      comparison: compareMetric(metric, baseline.id, candidate.id, "mean"),
+    }))
+    .filter((item) => isMaterialPercent(item.comparison.deltaPercent))
+    .sort(
+      (left, right) =>
+        Math.abs(right.comparison.deltaPercent ?? 0) - Math.abs(left.comparison.deltaPercent ?? 0),
+    )[0];
+  if (resource) {
+    findings.push({
+      id: `resource-${resource.metric.id}`,
+      title: `${resource.metric.category} ${resource.metric.name} changed`,
+      detail: `${formatSignedMetricValue(resource.comparison.deltaAbsolute, resource.metric.unit, resource.metric.valueType).text} (${formatDelta(resource.comparison)}). Direction is not classified automatically.`,
+      action: "Inspect resources",
+      section: "resources",
+    });
+  }
+  if (report.warnings.length > 0) {
+    findings.push({
+      id: "warnings",
+      title: `${report.warnings.length} experiment warnings`,
+      detail: "Collection or comparability issues may affect how these results should be read.",
+      action: "Open details",
+      section: "details",
+    });
+  }
+  if (report.diagnostics.status !== "present") {
+    findings.push({
+      id: "diagnostics-coverage",
+      title: `Diagnostics ${report.diagnostics.status}`,
+      detail: diagnosticsStatusLabel(report.diagnostics.status),
+      action: "Review coverage",
+      section: "details",
+    });
+  }
+  return findings;
+}
+
+export function observedBuildCount(report: ExperimentResult, variant: Variant): number | null {
+  return report.datasets.builds[variant.id]?.length ?? variant.buildCount ?? null;
+}
+
 export function buildObservations(
   report: ExperimentResult,
-  variant: Variant,
+  variant: { id: string },
 ): BuildObservation[] {
   return report.datasets.builds[variant.id] ?? [];
+}
+
+export function buildFieldSeries(
+  report: ExperimentResult,
+  variants: Array<{ id: string }>,
+  field: "durationMs" | "configurationMs",
+): Record<string, SeriesObservation[]> {
+  const observations: Record<string, SeriesObservation[]> = {};
+  for (const variant of variants) {
+    observations[variant.id] = buildObservations(report, variant).map((item) => ({
+      observationId: item.observationId,
+      sequence: item.sequence,
+      value: item[field],
+      durationMs: item[field],
+      outcome: null,
+    }));
+  }
+  return observations;
+}
+
+export function buildFieldValues(
+  report: ExperimentResult,
+  variants: Array<{ id: string }>,
+  field: "durationMs" | "configurationMs",
+): Record<string, Array<number | null | undefined>> {
+  const values: Record<string, Array<number | null | undefined>> = {};
+  for (const variant of variants) {
+    values[variant.id] = buildObservations(report, variant).map((item) => item[field]);
+  }
+  return values;
 }
 
 export function viewerBuildStats(report: ExperimentResult, variant: Variant) {

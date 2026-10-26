@@ -1,108 +1,156 @@
-import type { WorkbenchSection } from "../../app/routes";
 import { useDashboard } from "../../app/DashboardState";
+import { DistributionChart } from "../../components/charts/DistributionChart";
+import { ComparisonLegend } from "../../components/comparison/ComparisonLegend";
+import { MetricDelta } from "../../components/comparison/MetricDelta";
+import { SectionHeader } from "../../components/layout/SectionHeader";
+import { SeriesChart } from "../../components/SeriesChart/SeriesChart";
 import { ChartPanel } from "../../components/workbench/ChartPanel";
 import { DataCoverage } from "../../components/workbench/DataCoverage";
-import { SummaryKpi } from "../../components/workbench/SummaryKpi";
-import { SeriesChart } from "../../components/SeriesChart/SeriesChart";
 import { formatSignedMetricValue } from "../../domain/units";
 import { formatDelta } from "../../domain/formatting";
+import type { Comparison, Metric } from "../../domain/types";
+import { isMaterialPercent } from "../../domain/comparisons";
 import {
+  buildFieldSeries,
+  buildFieldValues,
   coverageChips,
-  overviewFindings,
-  overviewKpis,
+  overviewOutcome,
   rankedTaskChanges,
   splitTaskChanges,
-  statisticLabel,
 } from "../../domain/viewModels";
-import type { ExperimentResult, SeriesObservation } from "../../domain/types";
-
-function durationSeries(
-  variants: Array<{ id: string }>,
-  report: ExperimentResult,
-): Record<string, SeriesObservation[]> {
-  const observations: Record<string, SeriesObservation[]> = {};
-  for (const variant of variants) {
-    observations[variant.id] = (report.datasets.builds[variant.id] ?? []).map((item) => ({
-      observationId: item.observationId,
-      sequence: item.sequence,
-      value: item.durationMs,
-      durationMs: item.durationMs,
-      outcome: null,
-    }));
-  }
-  return observations;
-}
 
 export function OverviewDashboard() {
   const { report, baseline, candidate, selection, update } = useDashboard();
-  const kpis = overviewKpis(report, baseline, candidate, selection.statistic);
-  const findings = overviewFindings(report, baseline, candidate, selection.statistic);
-  const ranked = rankedTaskChanges(report, baseline, candidate, selection.statistic);
-  const { increases, decreases } = splitTaskChanges(ranked, 6);
+  const outcome = overviewOutcome(report, baseline, candidate);
+  const ranked = rankedTaskChanges(report, baseline, candidate, "mean").filter((row) =>
+    isMaterialPercent(row.comparison.deltaPercent),
+  );
+  const { increases, decreases } = splitTaskChanges(ranked, 5);
+  const variants = [baseline, candidate];
+  const showDistribution = selection.distView !== "iteration";
+  const openTask = (taskId: string) => update({ section: "tasks", taskId });
   return (
     <>
-      <section className="kpi-row" aria-label="Headline comparisons">
-        {kpis.map((kpi) => (
-          <SummaryKpi
-            key={kpi.id}
-            kpi={kpi}
-            section={kpi.id === "coverage" ? "details" : "builds"}
-          />
-        ))}
+      <SectionHeader
+        title="Overview"
+        description="Did the candidate materially change build performance?"
+      />
+      <section className="outcome-strip" aria-label="Experiment outcome">
+        <h2>{outcome.headline}</h2>
+        <p className="panel-note">{outcome.summary}</p>
+        <dl className="outcome-stats">
+          <div>
+            <dt>Mean</dt>
+            <dd>
+              <OutcomeDelta duration={outcome.duration} comparison={outcome.mean} />
+            </dd>
+          </div>
+          <div>
+            <dt>Median</dt>
+            <dd>
+              <OutcomeDelta duration={outcome.duration} comparison={outcome.median} practicalMs={0} />
+            </dd>
+          </div>
+          <div>
+            <dt>P90</dt>
+            <dd>
+              <OutcomeDelta duration={outcome.duration} comparison={outcome.p90} practicalMs={0} />
+            </dd>
+          </div>
+          <div>
+            <dt>Samples</dt>
+            <dd>
+              {outcome.baselineN ?? "—"} / {outcome.candidateN ?? "—"}
+            </dd>
+          </div>
+        </dl>
       </section>
       <ChartPanel
-        title="Duration by execution order"
-        subtitle="Sequence numbers are per variant. Build N for A is not the same execution as Build N for B."
+        title="Build duration"
+        subtitle={
+          showDistribution
+            ? "Each build is one point. Median (solid) and P90 (dashed) are drawn per variant. Sequences are independent."
+            : "Sequence numbers are per variant. Build N for A is not the same execution as Build N for B."
+        }
+        legend={
+          <ComparisonLegend
+            baseline={baseline}
+            candidate={candidate}
+            baselineN={outcome.baselineN}
+            candidateN={outcome.candidateN}
+          />
+        }
+        actions={
+          <div className="segmented" aria-label="Duration view">
+            <button
+              type="button"
+              aria-pressed={showDistribution}
+              onClick={() => update({ distView: "box" })}
+            >
+              Distribution
+            </button>
+            <button
+              type="button"
+              aria-pressed={!showDistribution}
+              onClick={() => update({ distView: "iteration" })}
+            >
+              Execution order
+            </button>
+          </div>
+        }
+      >
+        {showDistribution ? (
+          <DistributionChart
+            variants={variants}
+            values={buildFieldValues(report, variants, "durationMs")}
+            unit="ms"
+            valueType="duration"
+            view={selection.distView === "histogram" ? "histogram" : "box"}
+            title="Build duration"
+          />
+        ) : (
+          <SeriesChart
+            title="Build duration"
+            variants={variants}
+            observations={buildFieldSeries(report, variants, "durationMs")}
+            unit="ms"
+            valueType="duration"
+            allowSequence
+          />
+        )}
+      </ChartPanel>
+      <ChartPanel
+        title="Configuration"
+        size="secondary"
+        subtitle="Supporting phase comparison. Same independent-sample caveat as duration."
       >
         <SeriesChart
-          title="Build duration"
-          variants={[baseline, candidate]}
-          observations={durationSeries([baseline, candidate], report)}
+          title="Configuration time"
+          variants={variants}
+          observations={buildFieldSeries(report, variants, "configurationMs")}
           unit="ms"
           valueType="duration"
           allowSequence
         />
       </ChartPanel>
-      <div className="split-grid">
-        <section className="wb-panel">
-          <h2>Largest task duration changes</h2>
-          <p className="panel-note">
-            Ranked by absolute {statisticLabel(selection.statistic)} delta. Task durations can
-            overlap under Gradle concurrency, so these rows are not wall-clock contributors.
-          </p>
-          <div className="split-grid">
-            <div>
-              <h3>Biggest observed increases</h3>
-              <TaskChangeList
-                rows={increases}
-                onSelect={(taskId) => update({ section: "tasks", taskId })}
-              />
-            </div>
-            <div>
-              <h3>Biggest observed decreases</h3>
-              <TaskChangeList
-                rows={decreases}
-                onSelect={(taskId) => update({ section: "tasks", taskId })}
-              />
-            </div>
+      <section className="wb-panel">
+        <h2>Investigation candidates</h2>
+        <p className="panel-note">
+          Ranked by absolute mean duration delta among tasks that moved by at least 5%. Task
+          durations can overlap under Gradle concurrency, so these rows are not wall-clock
+          contributors.
+        </p>
+        <div className="split-grid">
+          <div>
+            <h3>Largest increases</h3>
+            <TaskChangeList rows={increases} onSelect={openTask} />
           </div>
-        </section>
-        <section className="wb-panel">
-          <h2>Findings</h2>
-          <ul className="findings-list">
-            {findings.map((finding) => (
-              <li key={finding.id}>
-                <button
-                  type="button"
-                  onClick={() => update({ section: finding.section as WorkbenchSection })}
-                >
-                  {finding.text}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
+          <div>
+            <h3>Largest decreases</h3>
+            <TaskChangeList rows={decreases} onSelect={openTask} />
+          </div>
+        </div>
+      </section>
       <section className="wb-panel">
         <h2>Analysis coverage</h2>
         <DataCoverage chips={coverageChips(report)} />
@@ -141,6 +189,29 @@ function TaskChangeList({
         </li>
       ))}
     </ul>
+  );
+}
+
+function OutcomeDelta({
+  duration,
+  comparison,
+  practicalMs,
+}: {
+  duration: Metric | null;
+  comparison: Comparison;
+  practicalMs?: number;
+}) {
+  if (!duration) {
+    return "N/A";
+  }
+  return (
+    <MetricDelta
+      comparison={comparison}
+      unit={duration.unit}
+      valueType={duration.valueType}
+      direction={duration.direction}
+      practicalMs={practicalMs}
+    />
   );
 }
 

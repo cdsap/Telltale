@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap");
 @import "./tokens.css";
 
 html,
@@ -302,6 +302,42 @@ input {
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.025em;
+}
+
+.sortable-th {
+  padding: 0;
+  vertical-align: bottom;
+}
+
+.sortable-th-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  margin: 0;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.sortable-th.num .sortable-th-button {
+  justify-content: flex-end;
+}
+
+.sortable-th-button:hover,
+.sortable-th-button:focus-visible {
+  background: var(--tt-accent-soft);
+  outline: none;
+}
+
+.sortable-th-indicator {
+  color: var(--tt-accent);
+  font-size: 0.75rem;
 }
 
 .experiment-snapshot-table th.num,

@@ -99,6 +99,21 @@
       }
     },
     {
+      "id": "resource.build-processes-cpu.mean.percent",
+      "family": "resource",
+      "category": "Build processes CPU",
+      "name": "Mean",
+      "unit": "%",
+      "valueType": "quantity",
+      "direction": "lower-is-better",
+      "scope": null,
+      "aggregation": { "sampleUnit": "build", "method": null },
+      "values": {
+        "a": { "mean": 40, "p50": 40, "p90": 40, "count": 2 },
+        "b": { "mean": 55, "p50": 55, "p90": 55, "count": 2 }
+      }
+    },
+    {
       "id": "process.gradle-process-state.gradle-process-usage",
       "family": "process",
       "category": "Gradle process state",
