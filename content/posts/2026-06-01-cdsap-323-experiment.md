@@ -3,6 +3,9 @@ layout: post
 title: "JDK 26 with UseCompactObjectHeaders"
 date: 2026-06-01
 report_link: /Telltale/reports/experiment_results_20260601194400.html
+report_data: /Telltale/data/experiments/experiment-cdsap-323-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-323-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-323-caching/
 summary: " 
 The performance comparison between `varianta_main` and `variantb_UseCompactObjectHeaders` reveals minor differences in build and configuration times, with `variantb_UseCompactObjectHeaders` showing a slight improvement in build time by approximately 0.28% (around 1.8 seconds faster). The configuration time is nearly identical between the two variants. Notably, the top three most time-consuming tasks across both variants include `:app:app:mergeExtDexDebug`, `:app:app:hiltJavaCompileDebug`, and `:app:app:compileDebugKotlin`, with `:app:app:mergeExtDexDebug` being the longest at over 18 seconds for both variants. CPU and memory usage are almost identical, with maximum values reaching up to 100% CPU and around 13.87 GB of memory for all processes. The total garbage collection counts are slightly lower in `variantb_UseCompactObjectHeaders`, suggesting marginally better memory management."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 58.185
     p90: 68.326
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-323-caching/)
 [Report 📊](../../reports/experiment_results_20260601194400.html)
 ## Summary
 The performance comparison between `varianta_main` and `variantb_UseCompactObjectHeaders` reveals minor differences in build and configuration times, with `variantb_UseCompactObjectHeaders` showing a slight improvement in build time by approximately 0.28% (around 1.8 seconds faster). The configuration time is nearly identical between the two variants. Notably, the top three most time-consuming tasks across both variants include `:app:app:mergeExtDexDebug`, `:app:app:hiltJavaCompileDebug`, and `:app:app:compileDebugKotlin`, with `:app:app:mergeExtDexDebug` being the longest at over 18 seconds for both variants. CPU and memory usage are almost identical, with maximum values reaching up to 100% CPU and around 13.87 GB of memory for all processes. The total garbage collection counts are slightly lower in `variantb_UseCompactObjectHeaders`, suggesting marginally better memory management.
