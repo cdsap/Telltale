@@ -3,6 +3,9 @@ layout: post
 title: "Gradle 9.8.2 vs 9.8.1"
 date: 2026-10-21
 report_link: /Telltale/reports/experiment_results_20261021030416.html
+report_data: /Telltale/data/experiments/experiment-cdsap-430-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-430-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-430-caching/
 summary: " 
 The performance analysis of the Gradle build variants reveals minor differences in build times and resource usage. The overall build time for `varianta_baseline` averaged 252.3 seconds, slightly longer than `variantb_gradle-9.8.2` at 251.1 seconds. The configuration times are nearly identical, with `varianta_baseline` at 41.2 seconds and `variantb_gradle-9.8.2` at 41.0 seconds. Notably, the P90 build times show a more significant difference, with `variantb_gradle-9.8.2` taking about 10 seconds longer than `varianta_baseline`.
 
@@ -34,6 +37,7 @@ experiment_snapshot:
     p50: 41.233
     p90: 50.570
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-430-caching/)
 [Report 📊](../../reports/experiment_results_20261021030416.html)
 ## Summary
 The performance analysis of the Gradle build variants reveals minor differences in build times and resource usage. The overall build time for `varianta_baseline` averaged 252.3 seconds, slightly longer than `variantb_gradle-9.8.2` at 251.1 seconds. The configuration times are nearly identical, with `varianta_baseline` at 41.2 seconds and `variantb_gradle-9.8.2` at 41.0 seconds. Notably, the P90 build times show a more significant difference, with `variantb_gradle-9.8.2` taking about 10 seconds longer than `varianta_baseline`.
