@@ -3,6 +3,9 @@ layout: post
 title: "AGP 9.2.0 vs 9.1.0"
 date: 2026-04-28
 report_link: /Telltale/reports/experiment_results_20260428193059.html
+report_data: /Telltale/data/experiments/experiment-cdsap-310-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-310-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-310-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals notable improvements in build times and resource utilization between the two variants, `varianta_9.1.0` and `variantb_9.2.0`. The overall build time decreased by 4.45% from an average of 588.322 seconds in `varianta_9.1.0` to 562.176 seconds in `variantb_9.2.0`. Configuration times also saw a slight improvement. The most time-consuming tasks such as `:app:app:mergeExtDexDebug` and `:core:analytics:kspDebugKotlin` showed significant reductions in execution times, contributing to the overall efficiency. Memory usage and CPU utilization during the build process were slightly better in `variantb_9.2.0`. Furthermore, Kotlin Build Reports indicate an increase in code generation lines per second, suggesting enhanced compiler performance in the newer variant."
 tags: ["dependencies cache"]
@@ -31,6 +34,7 @@ experiment_snapshot:
     p50: 59.080
     p90: 67.752
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-310-caching/)
 [Report 📊](../../reports/experiment_results_20260428193059.html)
 ## Summary
 The analysis of the Gradle build performance data reveals notable improvements in build times and resource utilization between the two variants, `varianta_9.1.0` and `variantb_9.2.0`. The overall build time decreased by 4.45% from an average of 588.322 seconds in `varianta_9.1.0` to 562.176 seconds in `variantb_9.2.0`. Configuration times also saw a slight improvement. The most time-consuming tasks such as `:app:app:mergeExtDexDebug` and `:core:analytics:kspDebugKotlin` showed significant reductions in execution times, contributing to the overall efficiency. Memory usage and CPU utilization during the build process were slightly better in `variantb_9.2.0`. Furthermore, Kotlin Build Reports indicate an increase in code generation lines per second, suggesting enhanced compiler performance in the newer variant.
