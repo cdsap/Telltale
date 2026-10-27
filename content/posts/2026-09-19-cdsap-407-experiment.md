@@ -3,6 +3,9 @@ layout: post
 title: "AGP 9.4.1 vs 9.4.0"
 date: 2026-09-19
 report_link: /Telltale/reports/experiment_results_20260919172645.html
+report_data: /Telltale/data/experiments/experiment-cdsap-407-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-407-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-407-caching/
 summary: >-
   The analysis of the Gradle build performance data reveals a slight increase in
   build times when comparing variant B (AGP-9.4.1) to variant A (baseline).
@@ -39,6 +42,7 @@ experiment_snapshot:
     p50: 46.561
     p90: 50.315
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-407-caching/)
 [Report 📊](../../reports/experiment_results_20260919172645.html)
 ## Summary
 The analysis of the Gradle build performance data reveals a slight increase in build times when comparing variant B (AGP-9.4.1) to variant A (baseline). Specifically, the overall build time increased by approximately 3.3% from 252 seconds in variant A to 260 seconds in variant B. The configuration time also saw a minor increase of about 0.8%. Among the most time-consuming tasks, "com.android.build.gradle.internal.tasks.DexMergingTask" and "com.android.build.gradle.internal.tasks.GlobalSyntheticsGeneratorTask" showed notable increases in execution times. Memory and CPU usage for both the main build process and child processes remained relatively stable, with only minor fluctuations observed between the two variants.
