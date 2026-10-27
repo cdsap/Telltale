@@ -3,6 +3,9 @@ layout: post
 title: "AGP 9.3.1 vs 9.3.0"
 date: 2026-07-23
 report_link: /Telltale/reports/experiment_results_20260723215121.html
+report_data: /Telltale/data/experiments/experiment-cdsap-348-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-348-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-348-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals that the transition from `varianta_baseline` to `variantb_agp-9.3.1` shows a slight increase in overall build time by about 1.57 seconds (0.6% increase). The configuration time also increased by 1.1 seconds (2.8% increase). Notably, the `:app:app:mergeExtDexDebug` task remains the most time-consuming across both variants, with a minimal increase in execution time in the newer variant. CPU and memory usage metrics for all processes and specifically for the build processes show very minor differences, indicating no significant change in resource consumption between the two variants."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 40.783
     p90: 46.888
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-348-caching/)
 [Report 📊](../../reports/experiment_results_20260723215121.html)
 ## Summary
 The analysis of the Gradle build performance data reveals that the transition from `varianta_baseline` to `variantb_agp-9.3.1` shows a slight increase in overall build time by about 1.57 seconds (0.6% increase). The configuration time also increased by 1.1 seconds (2.8% increase). Notably, the `:app:app:mergeExtDexDebug` task remains the most time-consuming across both variants, with a minimal increase in execution time in the newer variant. CPU and memory usage metrics for all processes and specifically for the build processes show very minor differences, indicating no significant change in resource consumption between the two variants.
