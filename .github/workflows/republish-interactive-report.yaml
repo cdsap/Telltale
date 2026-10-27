@@ -48,6 +48,10 @@ on:
         description: "Include GC reports"
         required: false
         default: "false"
+      task_path_report:
+        description: "Include per-task-path series (often the bulk of the JSON)"
+        required: false
+        default: "true"
 
 run-name: "Republish ${{ github.event.inputs.experiment_id }} interactive report"
 
@@ -75,7 +79,7 @@ jobs:
           mode: "dependencies cache"
           repository: "${{ github.event.inputs.repository }}"
           experiment_title: "${{ github.event.inputs.experiment_title }}"
-          taskpathreport: "true"
+          taskpathreport: "${{ github.event.inputs.task_path_report }}"
           tasktypereport: "true"
           processreport: "${{ github.event.inputs.process_report }}"
           gcreport: "${{ github.event.inputs.gc_report }}"
