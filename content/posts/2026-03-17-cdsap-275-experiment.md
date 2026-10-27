@@ -4,6 +4,9 @@ layout: post
 title: "KGP 2.3.20 vs 2.3.10"
 date: 2026-03-17
 report_link: /Telltale/reports/experiment_results_20260317002315.html
+report_data: /Telltale/data/experiments/experiment-cdsap-275-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-275-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-275-caching/
 summary: "Build mean +0.77%; Build median -0.21%; Build P90 +1.12%; Configuration mean -0.17%; Configuration median -0.80%; Configuration P90 -3.89%."
 tags: ["dependencies cache"]
 components: ["kotlin"]
@@ -32,6 +35,7 @@ experiment_snapshot:
     p90: 66.824
   summary: "Build mean +0.77%; Build median -0.21%; Build P90 +1.12%; Configuration mean -0.17%; Configuration median -0.80%; Configuration P90 -3.89%."
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-275-caching/)
 [Report 📊](../../reports/experiment_results_20260317002315.html)
 ## Summary
 The analysis of the Gradle build performance comparison between two Kotlin variants (2.3.10 and 2.3.20) reveals minor differences in build times and task execution. The overall build time for variant B (Kotlin 2.3.20) is slightly higher by approximately 0.76 seconds (0.76% increase). Configuration times are nearly identical with a negligible difference. Notably, the most time-consuming tasks such as `:app:app:mergeExtDexDebug` and `:app:app:hiltJavaCompileDebug` show minimal variation between the two variants.
