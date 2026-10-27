@@ -3,6 +3,9 @@ layout: post
 title: "Gradle 9.6.0-rc-1 vs 9.5.1"
 date: 2026-05-28
 report_link: /Telltale/reports/experiment_results_20260528184000.html
+report_data: /Telltale/data/experiments/experiment-cdsap-318-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-318-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-318-caching/
 summary: " 
 The analysis of the Gradle build performance data between two variants, `varianta_9.5.1` and `variantb_9.6.0-rc-1`, reveals several key insights. The overall build time has decreased from 516.886 seconds in `varianta_9.5.1` to 499.350 seconds in `variantb_9.6.0-rc-1`, marking a 3.4% improvement. Configuration time also saw a reduction, decreasing by about 5.1%. The most time-consuming tasks across both variants include `:app:app:mergeExtDexDebug`, `:app:app:hiltJavaCompileDebug`, and `:app:app:compileDebugKotlin`, with `variantb_9.6.0-rc-1` generally showing better performance in these areas.
 
@@ -32,6 +35,7 @@ experiment_snapshot:
     p50: 53.753
     p90: 60.276
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-318-caching/)
 [Report 📊](../../reports/experiment_results_20260528184000.html)
 ## Summary
 The analysis of the Gradle build performance data between two variants, `varianta_9.5.1` and `variantb_9.6.0-rc-1`, reveals several key insights. The overall build time has decreased from 516.886 seconds in `varianta_9.5.1` to 499.350 seconds in `variantb_9.6.0-rc-1`, marking a 3.4% improvement. Configuration time also saw a reduction, decreasing by about 5.1%. The most time-consuming tasks across both variants include `:app:app:mergeExtDexDebug`, `:app:app:hiltJavaCompileDebug`, and `:app:app:compileDebugKotlin`, with `variantb_9.6.0-rc-1` generally showing better performance in these areas.
