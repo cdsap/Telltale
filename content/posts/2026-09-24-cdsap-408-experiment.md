@@ -3,6 +3,9 @@ layout: post
 title: "Gradle 9.8.0 vs 9.7.1"
 date: 2026-09-24
 report_link: /Telltale/reports/experiment_results_20260924183500.html
+report_data: /Telltale/data/experiments/experiment-cdsap-408-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-408-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-408-caching/
 summary: " 
 The performance analysis between two Gradle build variants, `varianta_baseline` and `variantb_gradle-9.8.0`, reveals several key insights. Overall, `variantb_gradle-9.8.0` shows a slight improvement in build time, reducing from an average of 263 seconds in `varianta_baseline` to 258 seconds, a decrease of approximately 1.75%. Configuration times, however, increased slightly in `variantb_gradle-9.8.0` by about 1.68%. Notably, the `com.android.build.gradle.internal.tasks.DexMergingTask` and `:app:app:mergeExtDexDebug` tasks showed significant execution time increases in `variantb_gradle-9.8.0`. CPU and memory usage metrics for both variants are quite similar, with a slight reduction in memory usage observed in the newer variant."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 48.369
     p90: 54.337
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-408-caching/)
 [Report 📊](../../reports/experiment_results_20260924183500.html)
 ## Summary
 The performance analysis between two Gradle build variants, `varianta_baseline` and `variantb_gradle-9.8.0`, reveals several key insights. Overall, `variantb_gradle-9.8.0` shows a slight improvement in build time, reducing from an average of 263 seconds in `varianta_baseline` to 258 seconds, a decrease of approximately 1.75%. Configuration times, however, increased slightly in `variantb_gradle-9.8.0` by about 1.68%. Notably, the `com.android.build.gradle.internal.tasks.DexMergingTask` and `:app:app:mergeExtDexDebug` tasks showed significant execution time increases in `variantb_gradle-9.8.0`. CPU and memory usage metrics for both variants are quite similar, with a slight reduction in memory usage observed in the newer variant.
