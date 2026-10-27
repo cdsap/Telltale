@@ -3,11 +3,15 @@ layout: post
 title: "Kotlin 2.3.10 vs 2.3.0"
 date: 2026-02-05
 report_link: /Telltale/reports/experiment_results_20260205160730.html
+report_data: /Telltale/data/experiments/experiment-cdsap-272-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-272-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-272-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals minor but notable differences between the two variants, `varianta_2.3.0` and `variantb_2.3.10`. The overall build time for `varianta_2.3.0` is slightly higher with an average of 514.136 seconds compared to 511.726 seconds for `variantb_2.3.10`, a difference of about 0.47%. Configuration times also show a slight improvement in `variantb_2.3.10` with an average time of 46.028 seconds versus 47.689 seconds for `varianta_2.3.0`, marking a 3.48% decrease. Task execution times across various types and paths show mixed results with minor variations, indicating specific areas where performance tuning affects outcomes. Memory and CPU usage metrics are closely matched between the variants, with no significant differences observed in maximum values."
 tags: ["dependencies cache"]
 components: ["kotlin"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-272-caching/)
 [Report 📊](../../reports/experiment_results_20260205160730.html)
 ## Summary
 The analysis of the Gradle build performance data reveals minor but notable differences between the two variants, `varianta_2.3.0` and `variantb_2.3.10`. The overall build time for `varianta_2.3.0` is slightly higher with an average of 514.136 seconds compared to 511.726 seconds for `variantb_2.3.10`, a difference of about 0.47%. Configuration times also show a slight improvement in `variantb_2.3.10` with an average time of 46.028 seconds versus 47.689 seconds for `varianta_2.3.0`, marking a 3.48% decrease. Task execution times across various types and paths show mixed results with minor variations, indicating specific areas where performance tuning affects outcomes. Memory and CPU usage metrics are closely matched between the variants, with no significant differences observed in maximum values.
