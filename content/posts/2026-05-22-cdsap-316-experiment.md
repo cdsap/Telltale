@@ -3,6 +3,9 @@ layout: post
 title: "Gradle 9.5.1 vs 9.5.0"
 date: 2026-05-22
 report_link: /Telltale/reports/experiment_results_20260522161744.html
+report_data: /Telltale/data/experiments/experiment-cdsap-316-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-316-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-316-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals that the transition from `varianta_baseline` to `variantb_gradle-9.5.1` has led to a slight reduction in overall build time by approximately 9.5 seconds (3.57%). However, the configuration time has increased slightly by about 1.046 seconds (2.69%). Notably, the task `:app:app:parseDebugLocalResources` showed a significant reduction in execution time, decreasing by about 0.642 seconds (31.41%). Memory usage for all processes decreased from 8.61 GB to 8.31 GB, a reduction of about 3.48%. CPU usage remained maximally utilized at 100% for all processes in both variants."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 38.442
     p90: 45.085
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-316-caching/)
 [Report 📊](../../reports/experiment_results_20260522161744.html)
 ## Summary
 The analysis of the Gradle build performance data reveals that the transition from `varianta_baseline` to `variantb_gradle-9.5.1` has led to a slight reduction in overall build time by approximately 9.5 seconds (3.57%). However, the configuration time has increased slightly by about 1.046 seconds (2.69%). Notably, the task `:app:app:parseDebugLocalResources` showed a significant reduction in execution time, decreasing by about 0.642 seconds (31.41%). Memory usage for all processes decreased from 8.61 GB to 8.31 GB, a reduction of about 3.48%. CPU usage remained maximally utilized at 100% for all processes in both variants.
