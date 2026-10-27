@@ -119,13 +119,13 @@ async function maybeGunzip(
   if (typeof DecompressionStream !== "function") {
     throw new ReportLoadError("This browser cannot decompress gzip report data.");
   }
-  const stream = new ReadableStream<Uint8Array>({
-    start(controller) {
-      controller.enqueue(bytes);
-      controller.close();
-    },
-  }).pipeThrough(new DecompressionStream("gzip"));
-  const buffer = await new Response(stream).arrayBuffer();
+  const ds = new DecompressionStream("gzip");
+  const writer = ds.writable.getWriter();
+  const input = new ArrayBuffer(bytes.byteLength);
+  new Uint8Array(input).set(bytes);
+  await writer.write(input);
+  await writer.close();
+  const buffer = await new Response(ds.readable).arrayBuffer();
   assertReportByteLength(buffer.byteLength, maxDecodedBytes);
   return new Uint8Array(buffer);
 }
