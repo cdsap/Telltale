@@ -136,6 +136,16 @@ class WorkflowsYamlTest(unittest.TestCase):
         ]
         self.assertIn("./.github/workflows/report", republish_uses)
 
+        nxt = load_gha(WORKFLOWS / "republish-next-historical.yaml")
+        self.assertIn("schedule", nxt["on"])
+        self.assertEqual(nxt["on"]["schedule"][0]["cron"], "*/30 * * * *")
+        nxt_uses = [
+            step.get("uses")
+            for job in nxt["jobs"].values()
+            for step in job_steps(job)
+        ]
+        self.assertIn("./.github/workflows/report", nxt_uses)
+
     def test_report_action_emits_experiment_result_json(self) -> None:
         report = load_gha(WORKFLOWS / "report" / "action.yaml")
         self.assertIn("ber-release", report["inputs"])

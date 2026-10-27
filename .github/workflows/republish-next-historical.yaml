@@ -1,0 +1,136 @@
+name: Republish next historical experiment
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+run-name: "Republish next historical experiment"
+
+concurrency:
+  group: republish-next-historical
+  cancel-in-progress: false
+
+jobs:
+  pick:
+    name: Pick next experiment
+    runs-on: ubuntu-latest
+    outputs:
+      experiment_id: ${{ steps.pick.outputs.experiment_id }}
+      tags: ${{ steps.pick.outputs.tags }}
+      experiment_title: ${{ steps.pick.outputs.experiment_title }}
+      snapshot_label_a: ${{ steps.pick.outputs.snapshot_label_a }}
+      snapshot_label_b: ${{ steps.pick.outputs.snapshot_label_b }}
+      report_kind: ${{ steps.pick.outputs.report_kind }}
+      profile: ${{ steps.pick.outputs.profile }}
+      remaining: ${{ steps.pick.outputs.remaining }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: site
+      - id: pick
+        name: Select newest post still missing a viewer
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          extra=()
+          while IFS= read -r id; do
+            [ -n "$id" ] && extra+=(--skip-id "$id")
+          done < <(
+            {
+              gh run list --workflow republish-interactive-report.yaml --status in_progress --limit 20 --json displayTitle --jq '.[].displayTitle'
+              gh run list --workflow republish-interactive-report.yaml --status queued --limit 20 --json displayTitle --jq '.[].displayTitle'
+              gh run list --workflow republish-next-historical.yaml --status in_progress --limit 20 --json displayTitle --jq '.[].displayTitle'
+              gh run list --workflow republish-next-historical.yaml --status queued --limit 20 --json displayTitle --jq '.[].displayTitle'
+            } | grep -oE 'cdsap-[0-9]+' || true
+          )
+          python3 scripts/next_historical_republish.py --site site --github-output "${extra[@]}"
+      - name: Queue summary
+        run: |
+          if [ -z "${{ steps.pick.outputs.experiment_id }}" ]; then
+            echo "No historical experiments left to republish"
+            exit 0
+          fi
+          echo "Next: ${{ steps.pick.outputs.experiment_id }} (${{ steps.pick.outputs.remaining }} remaining including this one)"
+          echo "Tags: ${{ steps.pick.outputs.tags }}"
+
+  report:
+    name: Republish report
+    needs: pick
+    if: needs.pick.outputs.experiment_id != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    concurrency:
+      group: telltale-gh-pages-publish
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/report
+        with:
+          task: assembleDebug
+          experiment-id: "${{ needs.pick.outputs.experiment_id }}"
+          tags: "${{ needs.pick.outputs.tags }}"
+          api-key: ${{ secrets.DV_API_KEY }}
+          url: ${{ secrets.DV_URL }}
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          profile: "${{ needs.pick.outputs.profile }}"
+          mode: "dependencies cache"
+          repository: cdsap/Telltale
+          experiment_title: "${{ needs.pick.outputs.experiment_title }}"
+          taskpathreport: "true"
+          tasktypereport: "true"
+          processreport: "true"
+          gcreport: "true"
+          kotlinreport: "true"
+          resourceusagereport: "true"
+          onlycacheableoutcome: "false"
+          thresholdtaskduration: "1000"
+          max-builds: "200"
+          deploy_results: "true"
+          open-ai-request: "false"
+          deployment-key: ${{ secrets.GH_BUILD_DEPLOYMENT }}
+          snapshot-label-a: "${{ needs.pick.outputs.snapshot_label_a }}"
+          snapshot-label-b: "${{ needs.pick.outputs.snapshot_label_b }}"
+          report-kind: "${{ needs.pick.outputs.report_kind }}"
+
+  mark-failed:
+    name: Skip failed experiment
+    needs: [pick, report]
+    if: failure() && needs.pick.outputs.experiment_id != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: telltale-gh-pages-publish
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          fetch-depth: 0
+      - name: Record skip
+        env:
+          EXPERIMENT_ID: ${{ needs.pick.outputs.experiment_id }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p static/data/experiments
+          skip=static/data/experiments/republish-skip.txt
+          touch "$skip"
+          if grep -qx "$EXPERIMENT_ID" "$skip"; then
+            echo "$EXPERIMENT_ID is already skipped"
+            exit 0
+          fi
+          echo "$EXPERIMENT_ID" >> "$skip"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add "$skip"
+          git commit -m "Skip failed republish for ${EXPERIMENT_ID}"
+          REMOTE="https://x-access-token:${GH_TOKEN}@github.com/cdsap/Telltale.git"
+          git pull --rebase "$REMOTE" gh-pages
+          git push "$REMOTE" gh-pages
