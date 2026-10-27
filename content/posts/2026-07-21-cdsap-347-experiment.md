@@ -3,6 +3,9 @@ layout: post
 title: "AGP 9.3.0 vs 9.2.1"
 date: 2026-07-21
 report_link: /Telltale/reports/experiment_results_20260721235804.html
+report_data: /Telltale/data/experiments/experiment-cdsap-347-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-347-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-347-caching/
 summary: " 
 The performance comparison between `varianta_baseline` and `variantb_agp-9.3.0` shows minor differences in build times and task execution times. The overall build time for `variantb_agp-9.3.0` is slightly higher by about 0.14% (365ms difference). Configuration time also increased by about 3.5% (1.4 seconds difference) in `variantb_agp-9.3.0`. Notably, the `:app:app:kspDebugKotlin` task showed a significant increase in execution time by approximately 10%, indicating a potential area for optimization in `variantb_agp-9.3.0`. Memory usage is slightly higher in `variantb_agp-9.3.0` with a peak of 9.66 GB compared to 9.22 GB in `varianta_baseline`. CPU usage remains maximized at 100% for all processes in both variants."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 41.317
     p90: 46.970
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-347-caching/)
 [Report 📊](../../reports/experiment_results_20260721235804.html)
 ## Summary
 The performance comparison between `varianta_baseline` and `variantb_agp-9.3.0` shows minor differences in build times and task execution times. The overall build time for `variantb_agp-9.3.0` is slightly higher by about 0.14% (365ms difference). Configuration time also increased by about 3.5% (1.4 seconds difference) in `variantb_agp-9.3.0`. Notably, the `:app:app:kspDebugKotlin` task showed a significant increase in execution time by approximately 10%, indicating a potential area for optimization in `variantb_agp-9.3.0`. Memory usage is slightly higher in `variantb_agp-9.3.0` with a peak of 9.66 GB compared to 9.22 GB in `varianta_baseline`. CPU usage remains maximized at 100% for all processes in both variants.
