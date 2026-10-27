@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import gzip
 import hashlib
 import json
 import re
@@ -111,8 +112,32 @@ def load_report_id(json_path: Path) -> tuple[str, str]:
     return identity_from_payload(load_experiment_result(json_path))
 
 
+def compact_json_bytes(payload: object) -> bytes:
+    return (json.dumps(payload, separators=(",", ":"), ensure_ascii=False) + "\n").encode("utf-8")
+
+
 def write_compact_json(path: Path, payload: object) -> None:
-    path.write_text(json.dumps(payload, separators=(",", ":"), ensure_ascii=False) + "\n")
+    raw = compact_json_bytes(payload)
+    if path.name.endswith(".json.gz"):
+        with gzip.open(path, "wb", compresslevel=9) as handle:
+            handle.write(raw)
+        return
+    path.write_bytes(raw)
+
+
+def load_published_report(path: Path) -> dict:
+    if path.name.endswith(".json.gz"):
+        with gzip.open(path, "rt", encoding="utf-8") as handle:
+            payload = json.load(handle)
+    else:
+        payload = json.loads(path.read_text())
+    if not isinstance(payload, dict):
+        raise StageError(f"{path.name} is not a JSON object")
+    return payload
+
+
+def published_report_id(path: Path) -> str:
+    return str((load_published_report(path).get("report") or {}).get("id") or "")
 
 
 def rewrite_viewer_html(
@@ -240,7 +265,7 @@ def stage(args: argparse.Namespace) -> dict:
     payload = load_experiment_result(json_path) if json_path.is_file() else None
     if payload is not None:
         write_compact_json(
-            reports_dir / f"experiment-result-{args.experiment_id}-{args.report_kind}.json",
+            reports_dir / f"experiment-result-{args.experiment_id}-{args.report_kind}.json.gz",
             payload,
         )
     diagnostics = results / "diagnostics-package.json"
@@ -259,16 +284,20 @@ def stage(args: argparse.Namespace) -> dict:
         report_id, schema = identity_from_payload(payload)
         data_dir = site / "static" / "data" / "experiments"
         data_dir.mkdir(parents=True, exist_ok=True)
-        published_json = data_dir / f"{report_id}.json"
-        if published_json.exists():
-            existing = json.loads(published_json.read_text())
-            existing_id = str((existing.get("report") or {}).get("id") or "")
+        published_json = data_dir / f"{report_id}.json.gz"
+        published_plain = data_dir / f"{report_id}.json"
+        for existing_path in (published_json, published_plain):
+            if not existing_path.exists():
+                continue
+            existing_id = published_report_id(existing_path)
             if existing_id and existing_id != report_id:
                 raise StageError(
-                    f"Refusing to overwrite {published_json.name}: existing report.id={existing_id}"
+                    f"Refusing to overwrite {existing_path.name}: existing report.id={existing_id}"
                 )
         write_compact_json(published_json, payload)
-        json_link = f"{site_base}/data/experiments/{report_id}.json"
+        if published_plain.exists():
+            published_plain.unlink()
+        json_link = f"{site_base}/data/experiments/{report_id}.json.gz"
         html_url = f"{site_base}/reports/{html_path.name}"
         csv_url = f"{site_base}/reports/{csv_path.name}" if csv_path else None
         template = (viewer_dist / "index.html").read_text()
@@ -289,7 +318,7 @@ def stage(args: argparse.Namespace) -> dict:
             "report_id": report_id,
             "schema_version": schema,
             "files": {
-                "json": f"data/experiments/{report_id}.json",
+                "json": f"data/experiments/{report_id}.json.gz",
                 "viewer": f"experiments/{report_id}/index.html",
                 "legacy_html": f"reports/{html_path.name}",
                 "legacy_csv": f"reports/{csv_path.name}" if csv_path else None,

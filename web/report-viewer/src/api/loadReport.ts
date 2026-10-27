@@ -4,6 +4,7 @@ import type { ExperimentResult } from "../domain/types";
 // 50-iteration Android reports are ~90 MiB pretty-printed (~48 MiB compact)
 // because datasets.taskSeries stores one point per build.
 export const MAX_REPORT_BYTES = 128 * 1024 * 1024;
+export const MAX_DECODED_REPORT_BYTES = 256 * 1024 * 1024;
 
 export class ReportLoadError extends Error {
   constructor(message: string) {
@@ -103,6 +104,32 @@ function contentLengthBytes(response: Response): number | null {
   return Number.isFinite(total) && total > 0 ? total : null;
 }
 
+function isGzip(bytes: Uint8Array): boolean {
+  return bytes.byteLength >= 2 && bytes[0] === 0x1f && bytes[1] === 0x8b;
+}
+
+async function maybeGunzip(
+  bytes: Uint8Array,
+  maxDecodedBytes: number,
+): Promise<Uint8Array> {
+  if (!isGzip(bytes)) {
+    assertReportByteLength(bytes.byteLength, maxDecodedBytes);
+    return bytes;
+  }
+  if (typeof DecompressionStream !== "function") {
+    throw new ReportLoadError("This browser cannot decompress gzip report data.");
+  }
+  const stream = new ReadableStream<Uint8Array>({
+    start(controller) {
+      controller.enqueue(bytes);
+      controller.close();
+    },
+  }).pipeThrough(new DecompressionStream("gzip"));
+  const buffer = await new Response(stream).arrayBuffer();
+  assertReportByteLength(buffer.byteLength, maxDecodedBytes);
+  return new Uint8Array(buffer);
+}
+
 function concatBytes(chunks: Uint8Array[], byteLength: number): Uint8Array {
   const bytes = new Uint8Array(byteLength);
   let offset = 0;
@@ -177,13 +204,14 @@ export async function loadReport(
     throw new ReportLoadError(`Could not load report data (${response.status}).`);
   }
   const bytes = await readResponseBytes(response, maxBytes, onProgress);
+  const decoded = await maybeGunzip(bytes, MAX_DECODED_REPORT_BYTES);
   onProgress?.({
     phase: "parse",
     loadedBytes: bytes.byteLength,
     totalBytes: bytes.byteLength,
   });
   await yieldToPaint();
-  const text = new TextDecoder().decode(bytes);
+  const text = new TextDecoder().decode(decoded);
   let parsed: unknown;
   try {
     parsed = JSON.parse(text);
