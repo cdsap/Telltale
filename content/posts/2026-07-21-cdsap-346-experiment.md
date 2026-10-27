@@ -3,6 +3,9 @@ layout: post
 title: "Kotlin 2.4.10 vs 2.4.0"
 date: 2026-07-21
 report_link: /Telltale/reports/experiment_results_20260721232414.html
+report_data: /Telltale/data/experiments/experiment-cdsap-346-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-346-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-346-caching/
 summary: " 
 In this build performance comparison between `varianta_baseline` and `variantb_kotlin-2.4.10`, we observed a slight increase in overall build time for `variantb_kotlin-2.4.10` with a mean increase of about 4.83 seconds (1.7% increase). Configuration times also increased by approximately 1 second (2.4% increase) in the newer variant. The task execution times showed mixed results, with some tasks like `:app:app:mergeDebugJavaResource` and `:app:app:hiltJavaCompileDebug` showing improvements in `variantb_kotlin-2.4.10`, whereas others like `:app:app:mergeLibDexDebug` and `:app:app:mergeExtDexDebug` had slightly increased times. CPU and memory usage were relatively stable across both variants with no significant changes observed."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 40.699
     p90: 45.402
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-346-caching/)
 [Report 📊](../../reports/experiment_results_20260721232414.html)
 ## Summary
 In this build performance comparison between `varianta_baseline` and `variantb_kotlin-2.4.10`, we observed a slight increase in overall build time for `variantb_kotlin-2.4.10` with a mean increase of about 4.83 seconds (1.7% increase). Configuration times also increased by approximately 1 second (2.4% increase) in the newer variant. The task execution times showed mixed results, with some tasks like `:app:app:mergeDebugJavaResource` and `:app:app:hiltJavaCompileDebug` showing improvements in `variantb_kotlin-2.4.10`, whereas others like `:app:app:mergeLibDexDebug` and `:app:app:mergeExtDexDebug` had slightly increased times. CPU and memory usage were relatively stable across both variants with no significant changes observed.
