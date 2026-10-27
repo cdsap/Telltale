@@ -3,11 +3,15 @@ layout: post
 title: "Gradle 9.4.0 vs 9.3.1"
 date: 2026-03-04
 report_link: /Telltale/reports/experiment_results_20260304174039.html
+report_data: /Telltale/data/experiments/experiment-cdsap-274-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-274-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-274-caching/
 summary: " 
 The analysis of the Gradle build performance data between variants `9.3.1` and `9.4.0` reveals minor differences in build times and resource usage. The overall build time for variant `9.3.1` averaged 395.328 seconds, slightly longer than the 394.733 seconds for variant `9.4.0`, a marginal improvement of about 0.15%. Configuration times are also nearly identical, with variant `9.3.1` being marginally slower by about 0.29%. In terms of resource usage, both CPU and memory metrics for the build processes are closely matched between the two variants, indicating no significant change in resource efficiency. The most time-consuming tasks across both variants include `:app:app:mergeExtDexDebug`, `:app:app:hiltJavaCompileDebug`, and `:app:app:mergeDebugResources`, with variant `9.4.0` showing slight improvements in execution times for these tasks."
 tags: ["dependencies cache"]
 components: ["gradle"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-274-caching/)
 [Report 📊](../../reports/experiment_results_20260304174039.html)
 ## Summary
 The analysis of the Gradle build performance data between variants `9.3.1` and `9.4.0` reveals minor differences in build times and resource usage. The overall build time for variant `9.3.1` averaged 395.328 seconds, slightly longer than the 394.733 seconds for variant `9.4.0`, a marginal improvement of about 0.15%. Configuration times are also nearly identical, with variant `9.3.1` being marginally slower by about 0.29%. In terms of resource usage, both CPU and memory metrics for the build processes are closely matched between the two variants, indicating no significant change in resource efficiency. The most time-consuming tasks across both variants include `:app:app:mergeExtDexDebug`, `:app:app:hiltJavaCompileDebug`, and `:app:app:mergeDebugResources`, with variant `9.4.0` showing slight improvements in execution times for these tasks.
