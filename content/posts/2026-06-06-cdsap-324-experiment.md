@@ -3,6 +3,9 @@ layout: post
 title: "Kotlin 2.4.0 vs 2.3.21"
 date: 2026-06-06
 report_link: /Telltale/reports/experiment_results_20260606160450.html
+report_data: /Telltale/data/experiments/experiment-cdsap-324-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-324-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-324-caching/
 summary: " 
 The performance comparison between `varianta_baseline` and `variantb_kotlin-2.4.0` reveals notable differences in build times and task execution. The overall build time for `variantb_kotlin-2.4.0` is slightly longer, with a mean increase of about 8.4 seconds (3.1%). Configuration times also show a slight increase in the Kotlin 2.4.0 variant by approximately 1.3 seconds (3.4%). Among the tasks, `com.android.build.gradle.internal.tasks.DexMergingTask` and `:core:checkout:compileDebugKotlin` are the most time-consuming, with noticeable increases in the Kotlin variant. CPU and memory usage across all processes are relatively stable with minor fluctuations, indicating efficient resource management in both variants."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 38.249
     p90: 40.710
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-324-caching/)
 [Report 📊](../../reports/experiment_results_20260606160450.html)
 ## Summary
 The performance comparison between `varianta_baseline` and `variantb_kotlin-2.4.0` reveals notable differences in build times and task execution. The overall build time for `variantb_kotlin-2.4.0` is slightly longer, with a mean increase of about 8.4 seconds (3.1%). Configuration times also show a slight increase in the Kotlin 2.4.0 variant by approximately 1.3 seconds (3.4%). Among the tasks, `com.android.build.gradle.internal.tasks.DexMergingTask` and `:core:checkout:compileDebugKotlin` are the most time-consuming, with noticeable increases in the Kotlin variant. CPU and memory usage across all processes are relatively stable with minor fluctuations, indicating efficient resource management in both variants.
