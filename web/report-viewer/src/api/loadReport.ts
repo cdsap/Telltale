@@ -121,8 +121,8 @@ async function maybeGunzip(
   }
   const ds = new DecompressionStream("gzip");
   const writer = ds.writable.getWriter();
-  const input = new ArrayBuffer(bytes.byteLength);
-  new Uint8Array(input).set(bytes);
+  const input = new Uint8Array(bytes.byteLength);
+  input.set(bytes);
   await writer.write(input);
   await writer.close();
   const buffer = await new Response(ds.readable).arrayBuffer();
