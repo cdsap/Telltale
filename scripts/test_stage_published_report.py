@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import gzip
 import json
 import tempfile
 import unittest
 from pathlib import Path
 
 from stage_published_report import StageError, stage, load_report_id, rewrite_viewer_html
+
+
+def read_gz_json(path: Path) -> str:
+    with gzip.open(path, "rt", encoding="utf-8") as handle:
+        return handle.read()
 
 
 def _args(**overrides):
@@ -42,11 +48,11 @@ class StagePublishedReportTest(unittest.TestCase):
             '<div id="telltale-report" data-report-url="./data/sample.json"></div>\n<script src="./assets/report-viewer.js"></script>',
             report_id="run-1-caching-attempt-1",
             site_base="/Telltale",
-            json_url="/Telltale/data/experiments/run-1-caching-attempt-1.json",
+            json_url="/Telltale/data/experiments/run-1-caching-attempt-1.json.gz",
             html_url="/Telltale/reports/legacy.html",
             csv_url="/Telltale/reports/legacy.csv",
         )
-        self.assertIn('data-report-url="/Telltale/data/experiments/run-1-caching-attempt-1.json"', html)
+        self.assertIn('data-report-url="/Telltale/data/experiments/run-1-caching-attempt-1.json.gz"', html)
         self.assertIn('data-html-url="/Telltale/reports/legacy.html"', html)
         self.assertIn('src="/Telltale/assets/report-viewer/report-viewer.js"', html)
         self.assertNotIn("../", html)
@@ -76,22 +82,29 @@ class StagePublishedReportTest(unittest.TestCase):
             (dist / "assets").mkdir()
             (dist / "assets" / "report-viewer.js").write_text("console.log(1)")
             (dist / "assets" / "report-viewer.css").write_text("body{}")
+            leftover = site / "static" / "data" / "experiments" / "run-1-caching-attempt-1.json"
+            leftover.parent.mkdir(parents=True)
+            leftover.write_text(
+                json.dumps({"schemaVersion": "1.0.0", "report": {"id": "run-1-caching-attempt-1"}})
+            )
             existing = site / "static" / "reports" / "experiment_results_keep.html"
             existing.parent.mkdir(parents=True)
             existing.write_text("keep-me")
             staged = stage(_args(results=str(results), site=str(site), viewer_dist=str(dist)))
             self.assertEqual(staged["report_id"], "run-1-caching-attempt-1")
             self.assertTrue((site / "static" / "reports" / "experiment_results_keep.html").exists())
-            published = site / "static" / "data" / "experiments" / "run-1-caching-attempt-1.json"
+            published = site / "static" / "data" / "experiments" / "run-1-caching-attempt-1.json.gz"
             self.assertTrue(published.exists())
-            compact = published.read_text()
+            self.assertEqual(published.read_bytes()[:2], b"\x1f\x8b")
+            compact = read_gz_json(published)
             self.assertNotIn("\n  ", compact)
             self.assertEqual(
                 compact,
                 json.dumps(json.loads(compact), separators=(",", ":"), ensure_ascii=False) + "\n",
             )
-            archive = site / "static" / "reports" / "experiment-result-cdsap-430-caching.json"
-            self.assertEqual(archive.read_text(), compact)
+            archive = site / "static" / "reports" / "experiment-result-cdsap-430-caching.json.gz"
+            self.assertEqual(read_gz_json(archive), compact)
+            self.assertFalse((site / "static" / "data" / "experiments" / "run-1-caching-attempt-1.json").exists())
             self.assertTrue((site / "static" / "experiments" / "run-1-caching-attempt-1" / "index.html").exists())
             post = (site / "content" / "posts" / "2026-10-21-cdsap-430-caching-experiment.md").read_text()
             self.assertIn("viewer_link: /Telltale/experiments/run-1-caching-attempt-1/", post)
@@ -161,7 +174,7 @@ class StagePublishedReportTest(unittest.TestCase):
             self.assertFalse((posts / "2026-10-21-cdsap-309-caching-experiment.md").exists())
             post = existing.read_text()
             self.assertIn("viewer_link: /Telltale/experiments/run-cdsap-309-caching-attempt-1/", post)
-            self.assertIn("json_link: /Telltale/data/experiments/run-cdsap-309-caching-attempt-1.json", post)
+            self.assertIn("json_link: /Telltale/data/experiments/run-cdsap-309-caching-attempt-1.json.gz", post)
             self.assertIn("[Interactive report](/Telltale/experiments/run-cdsap-309-caching-attempt-1/)", post)
             self.assertIn("Old analysis remains.", post)
             self.assertIn('title: "Gradle 9.5.0 vs 9.4.1"', post)

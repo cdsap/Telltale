@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { gzipSync } from "node:zlib";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   assertReportByteLength,
@@ -26,6 +27,12 @@ describe("resolveReportUrl", () => {
   it("accepts a site-root JSON path used on GitHub Pages", () => {
     expect(resolveReportUrl("/Telltale/data/experiments/run-1-caching-attempt-1.json")).toBe(
       "/Telltale/data/experiments/run-1-caching-attempt-1.json",
+    );
+  });
+
+  it("accepts a gzip JSON path used on GitHub Pages", () => {
+    expect(resolveReportUrl("/Telltale/data/experiments/run-1-caching-attempt-1.json.gz")).toBe(
+      "/Telltale/data/experiments/run-1-caching-attempt-1.json.gz",
     );
   });
 
@@ -72,6 +79,20 @@ describe("loadReport", () => {
       })),
     );
     const report = await loadReport("./data/sample.json");
+    expect(report.schemaVersion).toMatch(/^1\./);
+  });
+
+  it("inflates a gzip JSON payload before parsing", async () => {
+    const body = gzipSync(Buffer.from(sampleText));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({
+        ok: true,
+        status: 200,
+        arrayBuffer: async () => body.buffer.slice(body.byteOffset, body.byteOffset + body.byteLength),
+      })),
+    );
+    const report = await loadReport("./data/sample.json.gz");
     expect(report.schemaVersion).toMatch(/^1\./);
   });
 
