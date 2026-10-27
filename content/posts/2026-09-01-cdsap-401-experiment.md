@@ -3,6 +3,9 @@ layout: post
 title: "AGP 9.4.0 vs 9.3.2"
 date: 2026-09-01
 report_link: /Telltale/reports/experiment_results_20260901164835.html
+report_data: /Telltale/data/experiments/experiment-cdsap-401-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-401-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-401-caching/
 summary: " 
 The performance comparison between `varianta_baseline` and `variantb_agp-9.4.0` reveals marginal differences in build times and task execution times. The overall build time for `variantb_agp-9.4.0` is slightly higher by approximately 0.3 seconds (0.3% increase) compared to `varianta_baseline`. Configuration times are nearly identical, with `variantb_agp-9.4.0` being marginally faster by about 0.45 seconds (1% decrease). Notable task differences include the `GlobalSyntheticsGeneratorTask`, which shows a significant increase in execution time in `variantb_agp-9.4.0` by about 0.2 seconds (3.5% increase). CPU and memory usage across all processes and specifically for the build processes are closely matched between the two variants, with no significant deviations observed."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 44.429
     p90: 50.601
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-401-caching/)
 [Report 📊](../../reports/experiment_results_20260901164835.html)
 ## Summary
 The performance comparison between `varianta_baseline` and `variantb_agp-9.4.0` reveals marginal differences in build times and task execution times. The overall build time for `variantb_agp-9.4.0` is slightly higher by approximately 0.3 seconds (0.3% increase) compared to `varianta_baseline`. Configuration times are nearly identical, with `variantb_agp-9.4.0` being marginally faster by about 0.45 seconds (1% decrease). Notable task differences include the `GlobalSyntheticsGeneratorTask`, which shows a significant increase in execution time in `variantb_agp-9.4.0` by about 0.2 seconds (3.5% increase). CPU and memory usage across all processes and specifically for the build processes are closely matched between the two variants, with no significant deviations observed.
