@@ -3,6 +3,9 @@ layout: post
 title: "Kotlin 2.4.21 vs 2.4.20"
 date: 2026-10-08
 report_link: /Telltale/reports/experiment_results_20261008200341.html
+report_data: /Telltale/data/experiments/experiment-cdsap-410-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-410-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-410-caching/
 summary: " 
 The analysis of the Gradle build performance for the baseline variant (`varianta_baseline`) and the Kotlin 2.4.21 variant (`variantb_kotlin-2.4.21`) reveals several key findings. The overall build time for `variantb_kotlin-2.4.21` is longer by approximately 19.6 seconds (8.2% increase) compared to `varianta_baseline`. Specifically, the P50 and P90 build times show increases of 20.2 seconds (7.8%) and 20.6 seconds (7.5%), respectively. Configuration times also increased slightly in the Kotlin 2.4.21 variant by about 1.3 seconds (3.1%). Task execution times for several key tasks, such as `KotlinCompile` and `DexMergingTask`, have increased in the Kotlin 2.4.21 variant, contributing to the longer build times. Memory usage saw a slight increase in the Kotlin 2.4.21 variant, with a peak usage of 9.65 GB compared to 9.34 GB in the baseline."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 44.926
     p90: 50.580
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-410-caching/)
 [Report 📊](../../reports/experiment_results_20261008200341.html)
 ## Summary
 The analysis of the Gradle build performance for the baseline variant (`varianta_baseline`) and the Kotlin 2.4.21 variant (`variantb_kotlin-2.4.21`) reveals several key findings. The overall build time for `variantb_kotlin-2.4.21` is longer by approximately 19.6 seconds (8.2% increase) compared to `varianta_baseline`. Specifically, the P50 and P90 build times show increases of 20.2 seconds (7.8%) and 20.6 seconds (7.5%), respectively. Configuration times also increased slightly in the Kotlin 2.4.21 variant by about 1.3 seconds (3.1%). Task execution times for several key tasks, such as `KotlinCompile` and `DexMergingTask`, have increased in the Kotlin 2.4.21 variant, contributing to the longer build times. Memory usage saw a slight increase in the Kotlin 2.4.21 variant, with a peak usage of 9.65 GB compared to 9.34 GB in the baseline.
