@@ -3,6 +3,9 @@ layout: post
 title: "Gradle 9.7.0 vs 9.6.1"
 date: 2026-08-06
 report_link: /Telltale/reports/experiment_results_20260806225410.html
+report_data: /Telltale/data/experiments/experiment-cdsap-355-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-355-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-355-caching/
 summary: " 
 The performance comparison between `varianta_baseline` and `variantb_gradle-9.7.0` reveals several key insights. The overall build time for `variantb_gradle-9.7.0` is slightly shorter than `varianta_baseline`, with a mean reduction of 5.609 seconds (1.94% faster). However, the configuration time in `variantb_gradle-9.7.0` has increased, particularly at the P90 level, showing a longer duration by 4.21 seconds (6.24% slower). Notably, task execution times such as `:app:app:mergeExtDexDebug` and `:app:app:hiltJavaCompileDebug` have seen improvements in `variantb_gradle-9.7.0`, suggesting more efficient handling of resource-intensive tasks. CPU and memory usage across all processes remain high and closely matched between the variants, indicating consistent resource demands."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 61.654
     p90: 71.688
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-355-caching/)
 [Report 📊](../../reports/experiment_results_20260806225410.html)
 ## Summary
 The performance comparison between `varianta_baseline` and `variantb_gradle-9.7.0` reveals several key insights. The overall build time for `variantb_gradle-9.7.0` is slightly shorter than `varianta_baseline`, with a mean reduction of 5.609 seconds (1.94% faster). However, the configuration time in `variantb_gradle-9.7.0` has increased, particularly at the P90 level, showing a longer duration by 4.21 seconds (6.24% slower). Notably, task execution times such as `:app:app:mergeExtDexDebug` and `:app:app:hiltJavaCompileDebug` have seen improvements in `variantb_gradle-9.7.0`, suggesting more efficient handling of resource-intensive tasks. CPU and memory usage across all processes remain high and closely matched between the variants, indicating consistent resource demands.
