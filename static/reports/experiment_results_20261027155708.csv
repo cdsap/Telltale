@@ -1,0 +1,146 @@
+Category,Metric,varianta_useMetro_true Mean,variantb_useMetro_false Mean,varianta_useMetro_true P50,variantb_useMetro_false P50,varianta_useMetro_true P90,variantb_useMetro_false P90,Unit
+Build,Build time,120548,139476,121150,138161,124045,146975,ms
+Build,Configuration time,36237,37654,36210,37402,37997,39389,ms
+Gradle process state,Gradle-Process-capacity,4.0,4.0,4.0,4.0,4.0,4.0,
+Gradle process state,Gradle-Process-gcTime,0.06,0.07,0.05,0.07,0.06,0.08,
+Gradle process state,Gradle-Process-max,4.0,4.0,4.0,4.0,4.0,4.0,
+Gradle process state,Gradle-Process-uptime,1.99,2.3,2.0,2.28,2.05,2.43,
+Gradle process state,Gradle-Process-usage,2.25,2.11,2.28,2.15,2.66,2.85,
+Kotlin process state,Kotlin-Process-capacity,4.0,4.0,4.0,4.0,4.0,4.0,
+Kotlin process state,Kotlin-Process-gcTime,0.05,0.04,0.05,0.04,0.05,0.04,
+Kotlin process state,Kotlin-Process-max,4.0,4.0,4.0,4.0,4.0,4.0,
+Kotlin process state,Kotlin-Process-uptime,1.31,1.59,1.32,1.58,1.36,1.68,
+Kotlin process state,Kotlin-Process-usage,0.9,1.02,0.89,1.0,1.07,1.22,
+Task Type,org.jetbrains.kotlin.gradle.plugin.diagnostics.CheckKotlinGradlePluginConfigurationErrors,0,0,0,0,1,1,ms
+Task Type,org.gradle.plugin.devel.tasks.GeneratePluginDescriptors,44,44,44,45,52,51,ms
+Task Type,org.gradle.language.jvm.tasks.ProcessResources,18,19,7,7,46,49,ms
+Task Type,org.jetbrains.kotlin.gradle.tasks.KotlinCompile,6524,5683,5232,3759,12403,12693,ms
+Task Type,org.gradle.api.tasks.compile.JavaCompile,375,786,5,596,733,1856,ms
+Task Type,org.gradle.api.DefaultTask,0,0,0,0,1,1,ms
+Task Type,org.gradle.api.tasks.bundling.Jar,52,54,38,40,93,98,ms
+Task Type,com.android.build.gradle.internal.tasks.AndroidVariantTask,0,0,0,0,1,1,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeNativeDebugMetadataTask,5,5,4,5,9,9,ms
+Task Type,com.android.build.gradle.internal.tasks.AarMetadataTask,15,28,10,12,25,96,ms
+Task Type,GenerateMetroGraphTask,159,,151,,211,,ms
+Task Type,com.android.build.gradle.internal.tasks.ProcessNavigationXmlTask,64,54,12,14,29,47,ms
+Task Type,com.android.build.gradle.internal.tasks.CheckAarMetadataTask,1366,1151,1436,1116,1594,1394,ms
+Task Type,com.android.build.gradle.tasks.CompileNavigationXmlTask,62,59,60,56,86,71,ms
+Task Type,com.google.firebase.crashlytics.buildtools.gradle.tasks.InjectVersionControlInfoTask,11,12,11,12,17,19,ms
+Task Type,com.google.firebase.crashlytics.buildtools.gradle.tasks.InjectMappingFileIdTask,43,44,44,44,61,56,ms
+Task Type,com.android.build.gradle.internal.tasks.ValidateResourcesTask,11,13,11,13,17,20,ms
+Task Type,com.google.gms.googleservices.GoogleServicesTask,21,20,21,21,29,29,ms
+Task Type,com.android.build.gradle.tasks.MergeResources,243,279,36,40,96,109,ms
+Task Type,com.android.build.gradle.tasks.MapSourceSetPathsTask,185,220,177,218,251,287,ms
+Task Type,com.android.build.gradle.internal.res.ParseLibraryResourcesTask,127,116,32,34,60,63,ms
+Task Type,com.android.build.gradle.tasks.CompatibleScreensManifest,30,25,19,22,36,30,ms
+Task Type,com.android.build.gradle.tasks.ExtractDeepLinksTask,10,11,10,10,16,17,ms
+Task Type,com.android.build.gradle.tasks.ProcessLibraryManifest,48,61,28,30,48,49,ms
+Task Type,com.android.build.gradle.tasks.CompileLibraryResourcesTask,19,18,14,15,29,31,ms
+Task Type,com.android.build.gradle.internal.res.GenerateLibraryRFileTask,44,42,35,36,53,52,ms
+Task Type,com.android.build.gradle.tasks.ProcessApplicationManifest,1197,1332,806,890,2159,2419,ms
+Task Type,com.android.build.gradle.tasks.ProcessMultiApkApplicationManifest,341,348,325,347,429,422,ms
+Task Type,com.android.build.gradle.tasks.ProcessPackagedManifestTask,148,282,46,53,802,1197,ms
+Task Type,com.android.build.gradle.tasks.GenerateBuildConfig,30,32,30,31,49,46,ms
+Task Type,com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask,1872,2355,1860,2383,2060,2583,ms
+Task Type,com.android.build.gradle.tasks.JavaPreCompileTask,24,23,9,12,47,50,ms
+Task Type,com.google.protobuf.gradle.ProtobufExtract,66,79,9,10,297,350,ms
+Task Type,com.google.protobuf.gradle.GenerateProtoTask,152,175,155,173,190,225,ms
+Task Type,com.android.build.gradle.tasks.MergeSourceSetFolders,23,28,13,13,36,29,ms
+Task Type,com.android.build.gradle.internal.tasks.CompressAssetsTask,68,82,68,83,86,101,ms
+Task Type,com.android.build.gradle.internal.tasks.BundleLibraryClassesJar,258,47,22,21,628,41,ms
+Task Type,com.android.build.gradle.internal.tasks.L8DexDesugarLibTask,8348,10050,8370,10119,9159,10717,ms
+Task Type,com.android.build.gradle.internal.coverage.JacocoPropertiesTask,32,31,31,31,40,45,ms
+Task Type,com.android.build.gradle.internal.tasks.ProcessJavaResTask,21,24,20,22,32,35,ms
+Task Type,com.android.build.gradle.internal.tasks.CheckDuplicateClassesTask,1254,1010,1205,967,1552,1299,ms
+Task Type,com.android.build.gradle.internal.tasks.DexFileDependenciesTask,17,16,16,17,25,21,ms
+Task Type,com.google.devtools.ksp.gradle.KspAATask,23170,5587,22817,4512,24752,12603,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeNativeLibsTask,30,34,3,3,10,10,ms
+Task Type,com.android.build.gradle.internal.tasks.LibraryJniLibsTask,10,9,8,7,16,15,ms
+Task Type,com.android.build.gradle.internal.tasks.StripDebugSymbolsTask,151,164,140,132,237,333,ms
+Task Type,com.android.build.gradle.internal.tasks.AppMetadataTask,10,8,10,7,15,15,ms
+Task Type,com.android.build.gradle.internal.tasks.SigningConfigVersionsWriterTask,49,46,47,44,64,66,ms
+Task Type,androidx.room.gradle.RoomSchemaCopyTask,8,8,9,8,12,12,ms
+Task Type,com.android.build.gradle.internal.tasks.ValidateSigningTask,2730,2918,2638,2885,3668,3813,ms
+Task Type,com.android.build.gradle.internal.tasks.DexMergingTask,14001,12629,634,554,42605,38124,ms
+Task Type,com.android.build.gradle.tasks.TransformClassesWithAsmTask,639,364,635,130,739,795,ms
+Task Type,com.android.build.gradle.internal.tasks.JacocoTask,315,360,306,330,347,459,ms
+Task Type,com.android.build.gradle.internal.tasks.DexArchiveBuilderTask,849,993,839,979,945,1177,ms
+Task Type,com.android.build.gradle.internal.tasks.MergeJavaResourceTask,2047,2074,2048,2041,2243,2408,ms
+Task Type,com.android.build.gradle.tasks.PackageApplication,530,563,535,541,561,634,ms
+Task Type,com.android.build.gradle.internal.tasks.ListingFileRedirectTask,3,3,3,3,4,4,ms
+Task Path,:build-logic:convention:compileKotlin,12299,12485,12241,12414,12952,12993,ms
+Task Path,:app:checkDemoDebugAarMetadata,1366,1151,1436,1116,1594,1394,ms
+Task Path,:app:parseDemoDebugLocalResources,1920,1700,1205,1204,3752,4083,ms
+Task Path,:app:mergeDemoDebugResources,4203,4845,4220,4782,4625,5254,ms
+Task Path,:app:processDemoDebugMainManifest,1197,1332,806,890,2159,2419,ms
+Task Path,:app:processDemoDebugResources,1872,2355,1860,2383,2060,2583,ms
+Task Path,:core:model:compileKotlin,12391,16079,12301,16059,13236,17030,ms
+Task Path,:core:common:compileKotlin,12412,2535,12315,2390,13252,3215,ms
+Task Path,:core:datastore-proto:compileDemoDebugKotlin,5436,5547,5392,5514,5996,6078,ms
+Task Path,:core:metro:compileDemoDebugKotlin,9439,10656,9354,10460,10292,11684,ms
+Task Path,:core:metro:compileDemoDebugJavaWithJavac,2732,1579,2760,1141,3323,2687,ms
+Task Path,:core:datastore-proto:compileDemoDebugJavaWithJavac,5107,3754,5058,3738,5639,4112,ms
+Task Path,:core:analytics:compileDemoDebugKotlin,2583,2335,2602,2344,2810,2680,ms
+Task Path,:ui-test-hilt-manifest:compileDemoDebugKotlin,3619,2722,3624,2701,3973,2979,ms
+Task Path,:app:l8DexDesugarLibDemoDebug,8348,10050,8370,10119,9159,10717,ms
+Task Path,:core:datastore:compileDemoDebugKotlin,4496,3318,4458,3340,4898,3643,ms
+Task Path,:core:network:compileDemoDebugKotlin,5593,4044,5606,3986,5982,4455,ms
+Task Path,:core:notifications:compileDemoDebugKotlin,3306,1433,3313,1388,3708,1786,ms
+Task Path,:app:checkDemoDebugDuplicateClasses,1254,1010,1205,967,1552,1299,ms
+Task Path,:core:designsystem:compileDemoDebugKotlin,20930,22173,20816,22173,22139,23755,ms
+Task Path,:core:ui:compileDemoDebugKotlin,6578,6512,6608,6449,7636,7243,ms
+Task Path,:core:database:kspDemoDebugKotlin,23170,13137,22817,13094,24752,14021,ms
+Task Path,:core:database:compileDemoDebugKotlin,7447,7176,7621,7138,8764,8078,ms
+Task Path,:app:validateSigningDemoDebug,2730,2918,2638,2885,3668,3813,ms
+Task Path,:core:data:compileDemoDebugKotlin,4211,4342,4262,4303,4873,5074,ms
+Task Path,:core:domain:compileDemoDebugKotlin,1846,2246,1841,2228,2134,3044,ms
+Task Path,:feature:bookmarks:compileDemoDebugKotlin,4201,3239,3988,3178,5520,3879,ms
+Task Path,:feature:settings:compileDemoDebugKotlin,5232,3227,5487,3113,6415,4129,ms
+Task Path,:feature:foryou:compileDemoDebugKotlin,5304,4859,5349,4739,6104,5413,ms
+Task Path,:feature:interests:compileDemoDebugKotlin,3872,3813,3829,3253,4991,5697,ms
+Task Path,:sync:work:compileDemoDebugKotlin,2472,1611,2250,1587,3088,1890,ms
+Task Path,:feature:search:compileDemoDebugKotlin,6334,4463,5856,4273,8784,5770,ms
+Task Path,:feature:topic:compileDemoDebugKotlin,4159,3521,4182,3504,4705,4056,ms
+Task Path,:app:mergeExtDexDemoDebug,41241,37218,41515,37481,43815,39169,ms
+Task Path,:app:compileDemoDebugKotlin,5894,2364,5915,2350,6711,2576,ms
+Task Path,:app:mergeDemoDebugJavaResource,2047,2074,2048,2041,2243,2408,ms
+All processes cpu,Max,100.0,100.0,100.0,100.0,100,100,%
+All processes memory,Max,7.69,8.06,7.69,8.02,8.0,8.45,Gb
+Build process cpu,Max,95.16,95.64,95.0,96.0,96,96,%
+Build processes memory,Max,3.88,4.58,3.85,4.53,4.06,4.91,Gb
+Build child processes cpu,Max,88.14,88.92,88.0,89.0,91,92,%
+Build child processes memory,Max,2.96,2.63,2.95,2.64,3.13,2.74,Gb
+gc-gradle_gc.log,Concurrent Mark Cycle,7.0,9.0,7.0,9.0,7.0,10.0,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (CodeCache GC Threshold),2.0,4.0,3.0,5.0,3.0,5.9,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (Metadata GC Threshold),3.0,4.0,4.0,4.0,4.0,4.0,
+gc-gradle_gc.log,Pause Young (Mixed) (G1 Evacuation Pause),10.0,12.0,11.0,13.0,13.0,15.0,
+gc-gradle_gc.log,Pause Young (Mixed) (G1 Evacuation Pause) (Evacuation Failure: Pinned),1.0,1.0,1.0,1.0,2.0,2.0,
+gc-gradle_gc.log,Pause Young (Mixed) (Metadata GC Threshold),1.0,2.0,2.0,2.0,2.0,2.0,
+gc-gradle_gc.log,Pause Young (Normal) (G1 Evacuation Pause),12.0,12.0,12.0,12.0,15.0,14.0,
+gc-gradle_gc.log,Pause Young (Prepare Mixed) (G1 Evacuation Pause),5.0,7.0,6.0,8.0,6.0,8.0,
+gc-gradle_gc.log,Pause Young (Prepare Mixed) (Metadata GC Threshold),1.0,1.0,1.0,1.0,1.0,1.0,
+gc-gradle_gc.log,total-collections,40.0,47.0,40.0,47.0,44.0,50.9,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (CodeCache GC Threshold) (Evacuation Failure: Pinned),1.0,1.0,1.0,1.0,1.0,2.0,
+gc-gradle_gc.log,Pause Young (Prepare Mixed) (G1 Evacuation Pause) (Evacuation Failure: Pinned),1.0,1.0,1.0,1.0,1.0,2.0,
+gc-gradle_gc.log,Pause Young (Normal) (G1 Evacuation Pause) (Evacuation Failure: Pinned),1.0,1.0,1.0,1.0,2.0,2.0,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (Metadata GC Threshold) (Evacuation Failure: Pinned),1.0,,1.0,,1.0,,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (G1 Humongous Allocation),2.0,1.0,2.0,1.0,2.0,2.7,
+gc-kotlin_gc.log,Concurrent Mark Cycle,6.0,5.0,6.0,5.0,6.0,5.0,
+gc-kotlin_gc.log,Pause Young (Concurrent Start) (CodeCache GC Threshold),1.0,1.0,2.0,1.0,2.0,1.0,
+gc-kotlin_gc.log,Pause Young (Concurrent Start) (Metadata GC Threshold),3.0,4.0,4.0,4.0,4.0,4.0,
+gc-kotlin_gc.log,Pause Young (Mixed) (G1 Evacuation Pause),9.0,8.0,10.0,9.0,12.0,12.0,
+gc-kotlin_gc.log,Pause Young (Mixed) (Metadata GC Threshold),1.0,1.0,1.0,1.0,1.0,2.0,
+gc-kotlin_gc.log,Pause Young (Normal) (G1 Evacuation Pause),7.0,8.0,7.0,8.0,12.0,12.9,
+gc-kotlin_gc.log,Pause Young (Normal) (G1 Evacuation Pause) (Evacuation Failure: Pinned),1.0,1.0,1.0,1.0,1.0,1.0,
+gc-kotlin_gc.log,Pause Young (Prepare Mixed) (G1 Evacuation Pause),3.0,2.0,4.0,3.0,4.0,3.9,
+gc-kotlin_gc.log,Pause Young (Prepare Mixed) (Metadata GC Threshold),1.0,1.0,1.0,1.0,1.0,1.9,
+gc-kotlin_gc.log,total-collections,28.0,27.0,29.0,27.0,31.0,30.0,
+gc-kotlin_gc.log,Pause Young (Mixed) (G1 Evacuation Pause) (Evacuation Failure: Pinned),1.0,1.0,1.0,1.0,1.8,1.0,
+gc-kotlin_gc.log,Pause Young (Concurrent Start) (Metadata GC Threshold) (Evacuation Failure: Pinned),1.0,,1.0,,1.0,,
+gc-kotlin_gc.log,Pause Young (Concurrent Start) (CodeCache GC Threshold) (Evacuation Failure: Pinned),1.0,,1.0,,1.0,,
+gc-kotlin_gc.log,Pause Young (Mixed) (Metadata GC Threshold) (Evacuation Failure: Pinned),1.0,,1.0,,1.0,,
+Task Type,com.android.build.gradle.tasks.ZipMergingTask,,15,,14,,23,
+Task Type,dagger.hilt.android.plugin.task.AggregateDepsTask,,328,,314,,398,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (G1 Evacuation Pause),,1.0,,1.0,,1.0,
+gc-gradle_gc.log,Pause Young (Concurrent Start) (G1 Humongous Allocation) (Evacuation Failure: Pinned),,1.0,,1.0,,1.0,
+gc-kotlin_gc.log,Pause Young (Prepare Mixed) (G1 Evacuation Pause) (Evacuation Failure: Pinned),,1.0,,1.0,,1.0,
