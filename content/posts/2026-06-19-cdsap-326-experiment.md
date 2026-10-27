@@ -3,6 +3,9 @@ layout: post
 title: "Gradle 9.6.0 vs 9.5.1"
 date: 2026-06-19
 report_link: /Telltale/reports/experiment_results_20260619171337.html
+report_data: /Telltale/data/experiments/experiment-cdsap-326-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-326-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-326-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals a slight increase in overall build time when comparing the baseline variant (`varianta_baseline`) to the `variantb_gradle-9.6.0`. Specifically, the mean build time increased by approximately 3.6 seconds (1.3% increase), with the P90 time showing a more significant increase of 11.5 seconds (4.0% increase). Notably, the configuration times slightly decreased in the new variant by about 0.5 seconds. In terms of resource usage, there was a noticeable increase in memory consumption across all processes, with the maximum memory usage rising from 8.35 GB to 9.11 GB (9.1% increase). CPU usage remained maximized at 100% for all processes in both variants."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 39.316
     p90: 43.956
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-326-caching/)
 [Report 📊](../../reports/experiment_results_20260619171337.html)
 ## Summary
 The analysis of the Gradle build performance data reveals a slight increase in overall build time when comparing the baseline variant (`varianta_baseline`) to the `variantb_gradle-9.6.0`. Specifically, the mean build time increased by approximately 3.6 seconds (1.3% increase), with the P90 time showing a more significant increase of 11.5 seconds (4.0% increase). Notably, the configuration times slightly decreased in the new variant by about 0.5 seconds. In terms of resource usage, there was a noticeable increase in memory consumption across all processes, with the maximum memory usage rising from 8.35 GB to 9.11 GB (9.1% increase). CPU usage remained maximized at 100% for all processes in both variants.
