@@ -3,6 +3,9 @@ layout: post
 title: "Gradle 9.7.1 vs 9.7.0"
 date: 2026-08-24
 report_link: /Telltale/reports/experiment_results_20260824114748.html
+report_data: /Telltale/data/experiments/experiment-cdsap-400-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-400-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-400-caching/
 summary: " 
 The performance comparison between `varianta_baseline` and `variantb_gradle-9.7.1` reveals a slight improvement in build times with the newer Gradle version. The overall build time decreased by approximately 8.4 seconds (3.2%) from a mean of 261.671 seconds in the baseline to 253.267 seconds in Gradle 9.7.1. Configuration times also saw a reduction, dropping by about 3 seconds (6.4%) from a mean of 47.111 seconds to 44.089 seconds. The most time-consuming tasks across both variants include `com.android.build.gradle.internal.tasks.DexMergingTask`, `:build-logic:convention:compileKotlin`, and `:core:cart:compileDebugKotlin`, with the newer variant generally showing slight improvements in execution times. CPU and memory usage remained largely consistent between the two variants, with no significant changes observed."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 45.848
     p90: 49.104
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-400-caching/)
 [Report 📊](../../reports/experiment_results_20260824114748.html)
 ## Summary
 The performance comparison between `varianta_baseline` and `variantb_gradle-9.7.1` reveals a slight improvement in build times with the newer Gradle version. The overall build time decreased by approximately 8.4 seconds (3.2%) from a mean of 261.671 seconds in the baseline to 253.267 seconds in Gradle 9.7.1. Configuration times also saw a reduction, dropping by about 3 seconds (6.4%) from a mean of 47.111 seconds to 44.089 seconds. The most time-consuming tasks across both variants include `com.android.build.gradle.internal.tasks.DexMergingTask`, `:build-logic:convention:compileKotlin`, and `:core:cart:compileDebugKotlin`, with the newer variant generally showing slight improvements in execution times. CPU and memory usage remained largely consistent between the two variants, with no significant changes observed.
