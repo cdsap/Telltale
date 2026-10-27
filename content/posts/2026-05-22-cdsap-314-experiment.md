@@ -3,6 +3,9 @@ layout: post
 title: "AGP 9.2.1 vs 9.2.0"
 date: 2026-05-22
 report_link: /Telltale/reports/experiment_results_20260522153945.html
+report_data: /Telltale/data/experiments/experiment-cdsap-314-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-314-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-314-caching/
 summary: " 
 The analysis of the Gradle build performance data between `varianta_baseline` and `variantb_agp-9.2.1` reveals several key insights. The overall build time for `variantb_agp-9.2.1` increased slightly by about 2.77 seconds (1.07%) compared to `varianta_baseline`. Configuration times also saw a notable increase in `variantb_agp-9.2.1` by about 6.54 seconds (16.39%). Among the most time-consuming tasks, `:core:cart:compileDebugKotlin` and `:build-logic:convention:compileKotlin` exhibited the most significant increases in execution times. CPU and memory usage across all processes remained at their maximum capacity for both variants, indicating a high level of resource utilization during the builds."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 41.601
     p90: 61.817
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-314-caching/)
 [Report 📊](../../reports/experiment_results_20260522153945.html)
 ## Summary
 The analysis of the Gradle build performance data between `varianta_baseline` and `variantb_agp-9.2.1` reveals several key insights. The overall build time for `variantb_agp-9.2.1` increased slightly by about 2.77 seconds (1.07%) compared to `varianta_baseline`. Configuration times also saw a notable increase in `variantb_agp-9.2.1` by about 6.54 seconds (16.39%). Among the most time-consuming tasks, `:core:cart:compileDebugKotlin` and `:build-logic:convention:compileKotlin` exhibited the most significant increases in execution times. CPU and memory usage across all processes remained at their maximum capacity for both variants, indicating a high level of resource utilization during the builds.
