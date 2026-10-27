@@ -3,6 +3,9 @@ layout: post
 title: "Gradle 9.8.1 vs 9.8.0"
 date: 2026-10-08
 report_link: /Telltale/reports/experiment_results_20261008163450.html
+report_data: /Telltale/data/experiments/experiment-cdsap-409-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-409-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-409-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals that the transition from `varianta_baseline` to `variantb_gradle-9.8.1` generally results in a slight improvement in build performance. The overall build time decreased by approximately 9 seconds (3.6%) from an average of 255.8 seconds in `varianta_baseline` to 246.6 seconds in `variantb_gradle-9.8.1`. Configuration times also saw a reduction, decreasing by about 1.5 seconds (3.1%). Notably, the `:app:app:mergeExtDexDebug` task showed a significant reduction in execution time, dropping by around 522 seconds (2.9%) in the P90 metric. CPU and memory usage across all processes remained stable with no significant changes, indicating that the performance improvements are likely due to optimizations in the build process rather than changes in resource usage."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 46.401
     p90: 55.794
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-409-caching/)
 [Report 📊](../../reports/experiment_results_20261008163450.html)
 ## Summary
 The analysis of the Gradle build performance data reveals that the transition from `varianta_baseline` to `variantb_gradle-9.8.1` generally results in a slight improvement in build performance. The overall build time decreased by approximately 9 seconds (3.6%) from an average of 255.8 seconds in `varianta_baseline` to 246.6 seconds in `variantb_gradle-9.8.1`. Configuration times also saw a reduction, decreasing by about 1.5 seconds (3.1%). Notably, the `:app:app:mergeExtDexDebug` task showed a significant reduction in execution time, dropping by around 522 seconds (2.9%) in the P90 metric. CPU and memory usage across all processes remained stable with no significant changes, indicating that the performance improvements are likely due to optimizations in the build process rather than changes in resource usage.
