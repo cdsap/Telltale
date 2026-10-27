@@ -3,6 +3,9 @@ layout: post
 title: "Gradle 9.6.1 vs 9.5.1"
 date: 2026-06-26
 report_link: /Telltale/reports/experiment_results_20260626170052.html
+report_data: /Telltale/data/experiments/experiment-cdsap-337-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-337-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-337-caching/
 summary: " 
 The analysis of the Gradle build performance between `varianta_baseline` and `variantb_gradle-9.6.1` reveals several key findings. The overall build time increased from 267.3 seconds in `varianta_baseline` to 280.0 seconds in `variantb_gradle-9.6.1`, marking a 4.8% increase. Configuration time, however, saw a decrease from 40.8 seconds to 39.2 seconds, a reduction of approximately 4.0%. Task execution times varied, with significant increases observed in tasks like `:core:cart:compileDebugKotlin`, which jumped from 8.7 seconds to 14.8 seconds (69.6% increase). Memory usage also increased slightly in `variantb_gradle-9.6.1` with a peak of 8.83 GB compared to 8.45 GB in `varianta_baseline`. CPU usage remained maximized at 100% for all processes in both variants."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 39.204
     p90: 42.921
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-337-caching/)
 [Report 📊](../../reports/experiment_results_20260626170052.html)
 ## Summary
 The analysis of the Gradle build performance between `varianta_baseline` and `variantb_gradle-9.6.1` reveals several key findings. The overall build time increased from 267.3 seconds in `varianta_baseline` to 280.0 seconds in `variantb_gradle-9.6.1`, marking a 4.8% increase. Configuration time, however, saw a decrease from 40.8 seconds to 39.2 seconds, a reduction of approximately 4.0%. Task execution times varied, with significant increases observed in tasks like `:core:cart:compileDebugKotlin`, which jumped from 8.7 seconds to 14.8 seconds (69.6% increase). Memory usage also increased slightly in `variantb_gradle-9.6.1` with a peak of 8.83 GB compared to 8.45 GB in `varianta_baseline`. CPU usage remained maximized at 100% for all processes in both variants.
