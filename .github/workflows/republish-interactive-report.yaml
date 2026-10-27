@@ -36,6 +36,18 @@ on:
         description: "Maximum Develocity builds to fetch"
         required: false
         default: "200"
+      kotlin_build_report:
+        description: "Include Kotlin build reports (can push JSON over GitHub's 100MB limit)"
+        required: false
+        default: "false"
+      process_report:
+        description: "Include process reports"
+        required: false
+        default: "false"
+      gc_report:
+        description: "Include GC reports"
+        required: false
+        default: "false"
 
 run-name: "Republish ${{ github.event.inputs.experiment_id }} interactive report"
 
@@ -65,9 +77,9 @@ jobs:
           experiment_title: "${{ github.event.inputs.experiment_title }}"
           taskpathreport: "true"
           tasktypereport: "true"
-          processreport: "true"
-          gcreport: "true"
-          kotlinreport: "true"
+          processreport: "${{ github.event.inputs.process_report }}"
+          gcreport: "${{ github.event.inputs.gc_report }}"
+          kotlinreport: "${{ github.event.inputs.kotlin_build_report }}"
           resourceusagereport: "true"
           onlycacheableoutcome: "false"
           thresholdtaskduration: "1000"
