@@ -3,6 +3,9 @@ layout: post
 title: "Kotlin 2.4.20 vs 2.4.10"
 date: 2026-09-07
 report_link: /Telltale/reports/experiment_results_20260907203912.html
+report_data: /Telltale/data/experiments/experiment-cdsap-402-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-402-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-402-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals a noticeable increase in build times when comparing the baseline variant (`varianta_baseline`) to the updated Kotlin version (`variantb_kotlin-2.4.20`). Specifically, the overall build time increased by approximately 13.7 seconds (5.5%) from an average of 250.6 seconds in the baseline to 264.3 seconds in the Kotlin 2.4.20 variant. Configuration times also saw a slight increase. The most time-consuming tasks across both variants include Kotlin compilation and various Android build tasks, with significant increases observed particularly in Kotlin compilation tasks in the updated variant. Memory usage saw a slight increase in the updated variant, particularly in build child processes, which aligns with the observed increases in task execution times."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 42.929
     p90: 49.492
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-402-caching/)
 [Report 📊](../../reports/experiment_results_20260907203912.html)
 ## Summary
 The analysis of the Gradle build performance data reveals a noticeable increase in build times when comparing the baseline variant (`varianta_baseline`) to the updated Kotlin version (`variantb_kotlin-2.4.20`). Specifically, the overall build time increased by approximately 13.7 seconds (5.5%) from an average of 250.6 seconds in the baseline to 264.3 seconds in the Kotlin 2.4.20 variant. Configuration times also saw a slight increase. The most time-consuming tasks across both variants include Kotlin compilation and various Android build tasks, with significant increases observed particularly in Kotlin compilation tasks in the updated variant. Memory usage saw a slight increase in the updated variant, particularly in build child processes, which aligns with the observed increases in task execution times.
