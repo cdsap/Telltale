@@ -3,6 +3,9 @@ layout: post
 title: "Kotlin 2.3.21 vs 2.3.20"
 date: 2026-05-23
 report_link: /Telltale/reports/experiment_results_20260523100604.html
+report_data: /Telltale/data/experiments/experiment-cdsap-317-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-317-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-317-caching/
 summary: " 
 The performance comparison between `varianta_baseline` and `variantb_kotlin-2.3.21` reveals several key differences. The overall build time for `variantb_kotlin-2.3.21` is slightly higher, with a mean increase of about 4.4 seconds (1.66% longer). Notably, the configuration time has improved in `variantb_kotlin-2.3.21` by approximately 1.8 seconds (4.4% faster). In task-specific performance, the `:core:cart:compileDebugKotlin` task showed a significant increase in execution time in `variantb_kotlin-2.3.21`, taking about 5.6 seconds longer on average, which is a 65% increase. Memory usage also saw a slight increase in `variantb_kotlin-2.3.21` across all metrics, with a notable increase in build child processes memory by 0.46 GB (14.5% higher)."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 38.566
     p90: 42.180
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-317-caching/)
 [Report 📊](../../reports/experiment_results_20260523100604.html)
 ## Summary
 The performance comparison between `varianta_baseline` and `variantb_kotlin-2.3.21` reveals several key differences. The overall build time for `variantb_kotlin-2.3.21` is slightly higher, with a mean increase of about 4.4 seconds (1.66% longer). Notably, the configuration time has improved in `variantb_kotlin-2.3.21` by approximately 1.8 seconds (4.4% faster). In task-specific performance, the `:core:cart:compileDebugKotlin` task showed a significant increase in execution time in `variantb_kotlin-2.3.21`, taking about 5.6 seconds longer on average, which is a 65% increase. Memory usage also saw a slight increase in `variantb_kotlin-2.3.21` across all metrics, with a notable increase in build child processes memory by 0.46 GB (14.5% higher).
