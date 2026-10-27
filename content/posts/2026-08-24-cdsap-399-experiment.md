@@ -3,6 +3,9 @@ layout: post
 title: "AGP 9.3.2 vs 9.3.1"
 date: 2026-08-24
 report_link: /Telltale/reports/experiment_results_20260824114309.html
+report_data: /Telltale/data/experiments/experiment-cdsap-399-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-399-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-399-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals that the transition from `varianta_baseline` to `variantb_agp-9.3.2` resulted in an overall increase in build times. Specifically, the mean build time increased by approximately 3.7% (from 249.035 seconds to 258.145 seconds), with the P90 build time showing a more pronounced increase of 3.8%. Configuration times also saw a rise, particularly at the P90 metric, which escalated by 23.6%. Among the tasks, `com.android.build.gradle.internal.tasks.GlobalSyntheticsGeneratorTask` and `com.android.build.gradle.internal.tasks.DexMergingTask` showed notable increases in execution time, suggesting areas where performance tuning could be beneficial. CPU and memory usage metrics remained relatively stable across variants, with minor fluctuations observed in the memory usage of build processes."
 tags: ["dependencies cache"]
@@ -30,6 +33,7 @@ experiment_snapshot:
     p50: 45.000
     p90: 60.622
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-399-caching/)
 [Report 📊](../../reports/experiment_results_20260824114309.html)
 ## Summary
 The analysis of the Gradle build performance data reveals that the transition from `varianta_baseline` to `variantb_agp-9.3.2` resulted in an overall increase in build times. Specifically, the mean build time increased by approximately 3.7% (from 249.035 seconds to 258.145 seconds), with the P90 build time showing a more pronounced increase of 3.8%. Configuration times also saw a rise, particularly at the P90 metric, which escalated by 23.6%. Among the tasks, `com.android.build.gradle.internal.tasks.GlobalSyntheticsGeneratorTask` and `com.android.build.gradle.internal.tasks.DexMergingTask` showed notable increases in execution time, suggesting areas where performance tuning could be beneficial. CPU and memory usage metrics remained relatively stable across variants, with minor fluctuations observed in the memory usage of build processes.
