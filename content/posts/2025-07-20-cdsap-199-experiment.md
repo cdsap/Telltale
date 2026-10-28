@@ -3,11 +3,15 @@ layout: post
 title: "Gradle 9.0-rc3 vs  8.14.2"
 date: 2025-07-20
 report_link: /Telltale/reports/experiment_results_20250720231558.html
+report_data: /Telltale/data/experiments/experiment-cdsap-199-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-199-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-199-caching/
 summary: " 
 The detailed analysis of Gradle build performance between two variants reveals marginal differences in build times, with variantb_9.0.0-rc3 generally showing slight improvements over varianta_8.14.2. The mean build time for variantb is approximately 877.819 seconds compared to varianta's 878.069 seconds, indicating a minor reduction. Notable task execution times, such as for `:layer_0:module_0_1:kspDebugKotlin`, show significant increases in variantb, suggesting potential areas for optimization. Memory usage across all processes shows a slight increase in variantb, with a maximum of 13.2 GB compared to 12.84 GB in varianta. CPU usage remains high in both variants, maxing out at 100%. The total garbage collection counts are very close, with 268 for varianta and 269 for variantb, indicating similar memory management behavior."
 tags: ["dependencies cache"]
 components: ["gradle"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-199-caching/)
 [Report 📊](../../reports/experiment_results_20250720231558.html)
 ## Summary
 The detailed analysis of Gradle build performance between two variants reveals marginal differences in build times, with variantb_9.0.0-rc3 generally showing slight improvements over varianta_8.14.2. The mean build time for variantb is approximately 877.819 seconds compared to varianta's 878.069 seconds, indicating a minor reduction. Notable task execution times, such as for `:layer_0:module_0_1:kspDebugKotlin`, show significant increases in variantb, suggesting potential areas for optimization. Memory usage across all processes shows a slight increase in variantb, with a maximum of 13.2 GB compared to 12.84 GB in varianta. CPU usage remains high in both variants, maxing out at 100%. The total garbage collection counts are very close, with 268 for varianta and 269 for variantb, indicating similar memory management behavior.
