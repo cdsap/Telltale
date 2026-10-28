@@ -3,11 +3,15 @@ layout: post
 title: "AGP 9-alpha02"
 date: 2025-08-27
 report_link: /Telltale/reports/experiment_results_20250827171600.html
+report_data: /Telltale/data/experiments/experiment-cdsap-209-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-209-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-209-caching/
 summary: " 
 The performance comparison between two Gradle build variants, `varianta_agp_8.12` and `variantb_agp_9-alpha02`, shows that the newer variant generally improves build performance. The mean build time decreased from 376.749 seconds in `varianta` to 370.775 seconds in `variantb`, a reduction of approximately 1.58%. The P50 and P90 values also show improvements with reductions of 1.58% and 5.44% respectively. Notably, the most time-consuming tasks across both variants include `:core:identity:compileDebugKotlin`, `:core:cart:compileDebugKotlin`, and `:app:app:mergeExtDexDebug`, with `variantb` showing slight improvements in execution times for these tasks. Memory and CPU usage metrics indicate marginal differences, with `variantb` generally using slightly less memory. The total garbage collection counts are very similar between the variants, suggesting stable memory management across builds."
 tags: ["dependencies cache"]
 components: ["agp"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-209-caching/)
 [Report 📊](../../reports/experiment_results_20250827171600.html)
 ## Summary
 The performance comparison between two Gradle build variants, `varianta_agp_8.12` and `variantb_agp_9-alpha02`, shows that the newer variant generally improves build performance. The mean build time decreased from 376.749 seconds in `varianta` to 370.775 seconds in `variantb`, a reduction of approximately 1.58%. The P50 and P90 values also show improvements with reductions of 1.58% and 5.44% respectively. Notably, the most time-consuming tasks across both variants include `:core:identity:compileDebugKotlin`, `:core:cart:compileDebugKotlin`, and `:app:app:mergeExtDexDebug`, with `variantb` showing slight improvements in execution times for these tasks. Memory and CPU usage metrics indicate marginal differences, with `variantb` generally using slightly less memory. The total garbage collection counts are very similar between the variants, suggesting stable memory management across builds.
