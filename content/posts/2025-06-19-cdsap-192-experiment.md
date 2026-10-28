@@ -3,11 +3,15 @@ layout: post
 title: "9.0.0-RC1 vs 8.14.2 - Android project 350 modules"
 date: 2025-06-19
 report_link: /Telltale/reports/experiment_results_20250619015633.html
+report_data: /Telltale/data/experiments/experiment-cdsap-192-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-192-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-192-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals several key insights across different metrics and task types. The overall build times for `varianta_9.0.0-rc1` averaged around 878.54 seconds, slightly slower than `variantb_8.14.2` at 869.71 seconds, showing a minor difference of about 1%. Among the most time-consuming tasks, `:layer_0:module_0_1:compileDebugKotlin` and related Kotlin compilation tasks consistently took longer in `varianta_9.0.0-rc1` compared to `variantb_8.14.2`. Memory usage was slightly higher in `variantb_8.14.2` with a maximum of 12.75 GB compared to 12.67 GB in `varianta_9.0.0-rc1`. CPU usage for all processes hit the maximum of 100% for both variants, indicating full utilization during the build. The total garbage collection counts were slightly higher in `varianta_9.0.0-rc1` for both Gradle and Kotlin processes, suggesting a bit more frequent memory cleanup."
 tags: ["dependencies cache"]
 components: ["gradle"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-192-caching/)
 [Report 📊](../../reports/experiment_results_20250619015633.html)
 ## Summary
 The analysis of the Gradle build performance data reveals several key insights across different metrics and task types. The overall build times for `varianta_9.0.0-rc1` averaged around 878.54 seconds, slightly slower than `variantb_8.14.2` at 869.71 seconds, showing a minor difference of about 1%. Among the most time-consuming tasks, `:layer_0:module_0_1:compileDebugKotlin` and related Kotlin compilation tasks consistently took longer in `varianta_9.0.0-rc1` compared to `variantb_8.14.2`. Memory usage was slightly higher in `variantb_8.14.2` with a maximum of 12.75 GB compared to 12.67 GB in `varianta_9.0.0-rc1`. CPU usage for all processes hit the maximum of 100% for both variants, indicating full utilization during the build. The total garbage collection counts were slightly higher in `varianta_9.0.0-rc1` for both Gradle and Kotlin processes, suggesting a bit more frequent memory cleanup.
