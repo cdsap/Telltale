@@ -3,11 +3,15 @@ layout: post
 title: "KGP 2.2.10 vs 2.2.0"
 date: 2025-08-15
 report_link: /Telltale/reports/experiment_results_20250815221305.html
+report_data: /Telltale/data/experiments/experiment-cdsap-207-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-207-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-207-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals minor differences between the two variants, `varianta_2.2.0` and `variantb_2.2.10`. The overall build time for `varianta_2.2.0` averages around 372.6 seconds, while `variantb_2.2.10` is slightly faster at 370.4 seconds, marking a modest improvement of approximately 0.6%. The most time-consuming tasks across both variants include `:core:identity:compileDebugKotlin`, `:core:contact:compileDebugKotlin`, and `:feature:post:compileDebugKotlin`, with each showing minor time differences between the variants. Memory usage is slightly higher in `variantb_2.2.10` with a peak of 10.94 GB compared to 10.74 GB in `varianta_2.2.0`. CPU usage for both variants reached the maximum capacity of 100%. The Kotlin build reports indicate a slight efficiency improvement in `variantb_2.2.10` in terms of incremental compilation and compiler code generation."
 tags: ["dependencies cache"]
 components: ["kotlin"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-207-caching/)
 [Report 📊](../../reports/experiment_results_20250815221305.html)
 ## Summary
 The analysis of the Gradle build performance data reveals minor differences between the two variants, `varianta_2.2.0` and `variantb_2.2.10`. The overall build time for `varianta_2.2.0` averages around 372.6 seconds, while `variantb_2.2.10` is slightly faster at 370.4 seconds, marking a modest improvement of approximately 0.6%. The most time-consuming tasks across both variants include `:core:identity:compileDebugKotlin`, `:core:contact:compileDebugKotlin`, and `:feature:post:compileDebugKotlin`, with each showing minor time differences between the variants. Memory usage is slightly higher in `variantb_2.2.10` with a peak of 10.94 GB compared to 10.74 GB in `varianta_2.2.0`. CPU usage for both variants reached the maximum capacity of 100%. The Kotlin build reports indicate a slight efficiency improvement in `variantb_2.2.10` in terms of incremental compilation and compiler code generation.
