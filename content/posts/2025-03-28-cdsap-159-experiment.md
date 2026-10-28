@@ -3,11 +3,15 @@ layout: post
 title: "Testing reservedMemoryPerTask 1G in Lint builds"
 date: 2025-03-28
 report_link: /Telltale/reports/experiment_results_20250328210419.html
+report_data: /Telltale/data/experiments/experiment-cdsap-159-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-159-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-159-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals minor differences between the two variants, with variant B showing a slight increase in overall build time by approximately 0.3 seconds (0.3%). Notably, the most time-consuming tasks across both variants include `com.android.build.gradle.internal.lint.AndroidLintAnalysisTask`, `:core:designsystem:compileProdReleaseKotlin`, and `:core:common:lintAnalyzeJvmMain`, with variant B generally performing slightly better in these tasks. Memory and CPU usage are nearly identical for both variants, with no significant differences observed. The total garbage collection counts for Gradle and Kotlin processes are slightly lower in variant B, suggesting marginally better memory management."
 tags: ["dependencies cache"]
 components: ["agp"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-159-caching/)
 [Report 📊](../../reports/experiment_results_20250328210419.html)
 ## Summary
 The analysis of the Gradle build performance data reveals minor differences between the two variants, with variant B showing a slight increase in overall build time by approximately 0.3 seconds (0.3%). Notably, the most time-consuming tasks across both variants include `com.android.build.gradle.internal.lint.AndroidLintAnalysisTask`, `:core:designsystem:compileProdReleaseKotlin`, and `:core:common:lintAnalyzeJvmMain`, with variant B generally performing slightly better in these tasks. Memory and CPU usage are nearly identical for both variants, with no significant differences observed. The total garbage collection counts for Gradle and Kotlin processes are slightly lower in variant B, suggesting marginally better memory management.
