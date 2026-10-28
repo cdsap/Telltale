@@ -3,11 +3,15 @@ layout: post
 title: "CatchUp using Metro on clean builds"
 date: 2025-04-10
 report_link: /Telltale/reports/experiment_results_20250410001215.html
+report_data: /Telltale/data/experiments/experiment-cdsap-171-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-171-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-171-caching/
 summary: " 
 The analysis of the Gradle build performance comparison data between two variants reveals notable differences in build times and task execution times. Variant B (`variantb_z/metro`) shows a faster overall build time with a mean reduction of 20.42 seconds (13.4% faster) compared to Variant A (`varianta_main`). Key tasks such as `com.android.build.gradle.internal.tasks.MapSourceSetPathsTask` and `com.google.devtools.ksp.gradle.KspAATask` also exhibit significant time reductions in Variant B. Memory usage is slightly lower in Variant B across all processes, with a maximum memory usage of 6.9 GB compared to 7.04 GB in Variant A. CPU usage is nearly identical for both variants, maxing out at 100% for all processes."
 tags: ["dependencies cache"]
 components: ["metro"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-171-caching/)
 [Report 📊](../../reports/experiment_results_20250410001215.html)
 ## Summary
 The analysis of the Gradle build performance comparison data between two variants reveals notable differences in build times and task execution times. Variant B (`variantb_z/metro`) shows a faster overall build time with a mean reduction of 20.42 seconds (13.4% faster) compared to Variant A (`varianta_main`). Key tasks such as `com.android.build.gradle.internal.tasks.MapSourceSetPathsTask` and `com.google.devtools.ksp.gradle.KspAATask` also exhibit significant time reductions in Variant B. Memory usage is slightly lower in Variant B across all processes, with a maximum memory usage of 6.9 GB compared to 7.04 GB in Variant A. CPU usage is nearly identical for both variants, maxing out at 100% for all processes.
