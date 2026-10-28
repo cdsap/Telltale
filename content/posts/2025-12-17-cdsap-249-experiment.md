@@ -3,11 +3,15 @@ layout: post
 title: "Kotlin 2.3.0"
 date: 2025-12-17
 report_link: /Telltale/reports/experiment_results_20251217212739.html
+report_data: /Telltale/data/experiments/experiment-cdsap-249-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-249-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-249-caching/
 summary: " 
 The analysis of the Gradle build performance data between two variants, `varianta_2.2.21` and `variantb_2.3.0`, reveals subtle differences in build times and task execution. The overall build time for `varianta_2.2.21` averaged 569.213 seconds, slightly longer than `variantb_2.3.0` at 567.616 seconds, a marginal improvement of about 0.28%. Configuration times also saw a decrease from 54.823 seconds in `varianta_2.2.21` to 52.565 seconds in `variantb_2.3.0`, improving by approximately 4.12%. Notably, the most time-consuming tasks across both variants include `:core:account:kspDebugKotlin`, `:core:analytics:kspDebugKotlin`, and `:core:alarm:compileDebugKotlin`, with minor variations in execution times between the variants. The garbage collection metrics indicate a slight increase in total collections for `variantb_2.3.0`, suggesting a minor increase in memory management activities."
 tags: ["dependencies cache"]
 components: ["kotlin"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-249-caching/)
 [Report 📊](../../reports/experiment_results_20251217212739.html)
 ## Summary
 The analysis of the Gradle build performance data between two variants, `varianta_2.2.21` and `variantb_2.3.0`, reveals subtle differences in build times and task execution. The overall build time for `varianta_2.2.21` averaged 569.213 seconds, slightly longer than `variantb_2.3.0` at 567.616 seconds, a marginal improvement of about 0.28%. Configuration times also saw a decrease from 54.823 seconds in `varianta_2.2.21` to 52.565 seconds in `variantb_2.3.0`, improving by approximately 4.12%. Notably, the most time-consuming tasks across both variants include `:core:account:kspDebugKotlin`, `:core:analytics:kspDebugKotlin`, and `:core:alarm:compileDebugKotlin`, with minor variations in execution times between the variants. The garbage collection metrics indicate a slight increase in total collections for `variantb_2.3.0`, suggesting a minor increase in memory management activities.
