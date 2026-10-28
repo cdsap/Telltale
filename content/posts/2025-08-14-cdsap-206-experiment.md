@@ -3,11 +3,15 @@ layout: post
 title: "AGP 9.0.0-alpha01 vs AGP 8.12"
 date: 2025-08-14
 report_link: /Telltale/reports/experiment_results_20250814234144.html
+report_data: /Telltale/data/experiments/experiment-cdsap-206-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-206-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-206-caching/
 summary: " 
 The analysis of Gradle build performance between two variants, `varianta_agp_8.12` and `variantb_agp_9-alpha01`, reveals a slight increase in overall build time in the newer variant by approximately 0.35 seconds (0.35% increase). The configuration time also shows a minor increase by about 0.09 seconds (2.15% increase). The most time-consuming tasks across both variants include `:core:cart:compileDebugKotlin`, `:core:identity:compileDebugKotlin`, and `:core:contact:compileDebugKotlin`, with marginal differences in execution times between the variants. Memory usage is slightly higher in `variantb_agp_9-alpha01` for all processes and specifically for build child processes. CPU usage remains nearly identical across both variants. The total garbage collection counts are slightly reduced in the newer variant."
 tags: ["dependencies cache"]
 components: ["agp"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-206-caching/)
 [Report 📊](../../reports/experiment_results_20250814234144.html)
 ## Summary
 The analysis of Gradle build performance between two variants, `varianta_agp_8.12` and `variantb_agp_9-alpha01`, reveals a slight increase in overall build time in the newer variant by approximately 0.35 seconds (0.35% increase). The configuration time also shows a minor increase by about 0.09 seconds (2.15% increase). The most time-consuming tasks across both variants include `:core:cart:compileDebugKotlin`, `:core:identity:compileDebugKotlin`, and `:core:contact:compileDebugKotlin`, with marginal differences in execution times between the variants. Memory usage is slightly higher in `variantb_agp_9-alpha01` for all processes and specifically for build child processes. CPU usage remains nearly identical across both variants. The total garbage collection counts are slightly reduced in the newer variant.
