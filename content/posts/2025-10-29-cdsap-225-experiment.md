@@ -3,11 +3,15 @@ layout: post
 title: "Kotlin 2.3.0-beta2"
 date: 2025-10-29
 report_link: /Telltale/reports/experiment_results_20251029180134.html
+report_data: /Telltale/data/experiments/experiment-cdsap-225-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-225-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-225-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals minor differences between the two variants, `varianta_2.2.20` and `variantb_2.3.0-beta2`. The overall build time is slightly reduced in `variantb_2.3.0-beta2` by approximately 0.15% (from 580.709 seconds to 579.848 seconds). Configuration times are nearly identical with a negligible decrease in the newer variant. The most time-consuming tasks across both variants include Kotlin compilation and various Android build tasks, with minor variations in execution times between the two variants. Memory usage and CPU utilization for both the build process and child processes are comparable, with no significant differences observed. The total number of garbage collection operations remains consistent across variants."
 tags: ["dependencies cache"]
 components: ["kotlin"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-225-caching/)
 [Report 📊](../../reports/experiment_results_20251029180134.html)
 ## Summary
 The analysis of the Gradle build performance data reveals minor differences between the two variants, `varianta_2.2.20` and `variantb_2.3.0-beta2`. The overall build time is slightly reduced in `variantb_2.3.0-beta2` by approximately 0.15% (from 580.709 seconds to 579.848 seconds). Configuration times are nearly identical with a negligible decrease in the newer variant. The most time-consuming tasks across both variants include Kotlin compilation and various Android build tasks, with minor variations in execution times between the two variants. Memory usage and CPU utilization for both the build process and child processes are comparable, with no significant differences observed. The total number of garbage collection operations remains consistent across variants.
