@@ -3,11 +3,15 @@ layout: post
 title: "Gradle 9.1.0-RC1 vs 9.0.0"
 date: 2025-08-13
 report_link: /Telltale/reports/experiment_results_20250813182348.html
+report_data: /Telltale/data/experiments/experiment-cdsap-205-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-205-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-205-caching/
 summary: " 
 The analysis of the Gradle build performance between variants `varianta_9.0.0` and `variantb_9.1.0-rc-1` reveals slight differences in build times and resource usage. The overall build time for `varianta_9.0.0` averaged 203.511 seconds, while `variantb_9.1.0-rc-1` was slightly slower at 204.142 seconds, marking a 0.31% increase. Notably, the `:app:app:mergeExtDexDebug` task showed a significant increase in execution time in the newer variant. CPU and memory usage across all processes were nearly maxed out for both variants, with a slight increase in memory usage in `variantb_9.1.0-rc-1`. The total garbage collection events also saw a small rise from 101 to 103 events on average."
 tags: ["dependencies cache"]
 components: ["gradle"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-205-caching/)
 [Report 📊](../../reports/experiment_results_20250813182348.html)
 ## Summary
 The analysis of the Gradle build performance between variants `varianta_9.0.0` and `variantb_9.1.0-rc-1` reveals slight differences in build times and resource usage. The overall build time for `varianta_9.0.0` averaged 203.511 seconds, while `variantb_9.1.0-rc-1` was slightly slower at 204.142 seconds, marking a 0.31% increase. Notably, the `:app:app:mergeExtDexDebug` task showed a significant increase in execution time in the newer variant. CPU and memory usage across all processes were nearly maxed out for both variants, with a slight increase in memory usage in `variantb_9.1.0-rc-1`. The total garbage collection events also saw a small rise from 101 to 103 events on average.
