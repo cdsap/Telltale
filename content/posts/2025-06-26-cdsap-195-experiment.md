@@ -3,11 +3,15 @@ layout: post
 title: "Kotlin 2.2.0 vs 2.1.21, Android 230 modules"
 date: 2025-06-26
 report_link: /Telltale/reports/experiment_results_20250626231622.html
+report_data: /Telltale/data/experiments/experiment-cdsap-195-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-195-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-195-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals subtle yet insightful differences between two Kotlin variants, `varianta_kotlin_2.1.21` and `variantb_kotlin_2.2.0`. The overall build time shows a slight improvement in `variantb` by approximately 0.42 seconds (0.4% faster). Notably, the most time-consuming tasks across variants include `:layer_0:module_0_1:kspDebugKotlin`, `:layer_0:module_0_10:kspDebugKotlin`, and `:layer_0:module_0_12:kspDebugKotlin`, with `variantb` generally showing marginal increases in execution times. CPU and memory usage are closely matched between the variants, with `variantb` showing a slight increase in maximum memory usage by about 0.09 GB. Garbage collection metrics indicate a very similar performance, with total collections slightly lower in `variantb`. The Kotlin Build Reports highlight a faster compiler code generation and analysis in `variantb`, suggesting efficiency improvements in the newer Kotlin version."
 tags: ["dependencies cache"]
 components: ["kotlin"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-195-caching/)
 [Report 📊](../../reports/experiment_results_20250626231622.html)
 ## Summary
 The analysis of the Gradle build performance data reveals subtle yet insightful differences between two Kotlin variants, `varianta_kotlin_2.1.21` and `variantb_kotlin_2.2.0`. The overall build time shows a slight improvement in `variantb` by approximately 0.42 seconds (0.4% faster). Notably, the most time-consuming tasks across variants include `:layer_0:module_0_1:kspDebugKotlin`, `:layer_0:module_0_10:kspDebugKotlin`, and `:layer_0:module_0_12:kspDebugKotlin`, with `variantb` generally showing marginal increases in execution times. CPU and memory usage are closely matched between the variants, with `variantb` showing a slight increase in maximum memory usage by about 0.09 GB. Garbage collection metrics indicate a very similar performance, with total collections slightly lower in `variantb`. The Kotlin Build Reports highlight a faster compiler code generation and analysis in `variantb`, suggesting efficiency improvements in the newer Kotlin version.
