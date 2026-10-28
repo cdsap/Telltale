@@ -3,6 +3,9 @@ layout: post
 title: "AGP 9.0.0-beta01 vs 8.13.1"
 date: 2025-11-13
 report_link: /Telltale/reports/experiment_results_20251113190739.html
+report_data: /Telltale/data/experiments/experiment-cdsap-227-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-227-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-227-caching/
 summary: " 
 The performance analysis between two Gradle build variants, `varianta_agp_9_0_0_beta01` and `variantb_agp_8_13_1`, reveals several key insights. The overall build time for `varianta` is slightly faster, averaging 554.782 seconds compared to `variantb`'s 566.004 seconds, a difference of approximately 2%. Notably, `varianta` also shows a quicker configuration time, averaging 53.077 seconds versus `variantb`'s 59.078 seconds, indicating a 10% improvement.
 
@@ -10,6 +13,7 @@ In task execution, `varianta` generally performs better in CPU and memory usage,
 tags: ["dependencies cache"]
 components: ["agp"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-227-caching/)
 [Report 📊](../../reports/experiment_results_20251113190739.html)
 ## Summary
 The performance analysis between two Gradle build variants, `varianta_agp_9_0_0_beta01` and `variantb_agp_8_13_1`, reveals several key insights. The overall build time for `varianta` is slightly faster, averaging 554.782 seconds compared to `variantb`'s 566.004 seconds, a difference of approximately 2%. Notably, `varianta` also shows a quicker configuration time, averaging 53.077 seconds versus `variantb`'s 59.078 seconds, indicating a 10% improvement.
