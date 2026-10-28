@@ -1,0 +1,14 @@
+{
+  "report_id": "experiment-cdsap-204-caching",
+  "schema_version": "1.0.0",
+  "files": {
+    "json": "data/experiments/experiment-cdsap-204-caching.json.gz",
+    "viewer": "experiments/experiment-cdsap-204-caching/index.html",
+    "legacy_html": "reports/experiment_results_20261028085736.html",
+    "legacy_csv": "reports/experiment_results_20261028085736.csv"
+  },
+  "checksums": {
+    "json": "88b7f681991987fc0bd9f6dc783c185dfd3f296e129161fa58661955bd05607f",
+    "legacy_html": "a4fdfb1979b5e0d358ab87c7bfa6c8e8349dc1e93e0605f79c238bb66d2ef9be"
+  }
+}
