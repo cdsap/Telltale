@@ -3,11 +3,15 @@ layout: post
 title: "KSP 2.2.10 with KSP2 Enabled"
 date: 2025-08-15
 report_link: /Telltale/reports/experiment_results_20250815225634.html
+report_data: /Telltale/data/experiments/experiment-cdsap-208-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-208-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-208-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals that Variant B (`variantb_2.2.10-ksp2`) generally has longer build times compared to Variant A (`varianta_2.2.10`). Specifically, the mean build time for Variant B is approximately 8.2% longer than Variant A, translating to an increase of about 30.3 seconds. This trend is consistent across the P50 and P90 percentiles as well. In task execution, Variant B shows longer times particularly in Kotlin-related tasks, suggesting a possible area for optimization. Memory usage is also higher in Variant B by approximately 15.3%, which could be contributing to the increased build times. The total garbage collection (GC) events are significantly higher in Variant B, indicating more frequent memory management operations which could be impacting performance."
 tags: ["dependencies cache"]
 components: ["kotlin"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-208-caching/)
 [Report 📊](../../reports/experiment_results_20250815225634.html)
 ## Summary
 The analysis of the Gradle build performance data reveals that Variant B (`variantb_2.2.10-ksp2`) generally has longer build times compared to Variant A (`varianta_2.2.10`). Specifically, the mean build time for Variant B is approximately 8.2% longer than Variant A, translating to an increase of about 30.3 seconds. This trend is consistent across the P50 and P90 percentiles as well. In task execution, Variant B shows longer times particularly in Kotlin-related tasks, suggesting a possible area for optimization. Memory usage is also higher in Variant B by approximately 15.3%, which could be contributing to the increased build times. The total garbage collection (GC) events are significantly higher in Variant B, indicating more frequent memory management operations which could be impacting performance.
