@@ -3,11 +3,15 @@ layout: post
 title: "Gradle 9.1.0 vs 9.0.0"
 date: 2025-09-19
 report_link: /Telltale/reports/experiment_results_20250919174643.html
+report_data: /Telltale/data/experiments/experiment-cdsap-217-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-217-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-217-caching/
 summary: " 
 The performance comparison between Gradle versions 9.0.0 and 9.1.0 shows minor differences in build times and resource usage. The mean build time for version 9.0.0 is approximately 467 seconds, slightly faster than the 468 seconds for version 9.1.0, a difference of about 1 second or 0.2%. Configuration times are nearly identical, with version 9.0.0 being marginally quicker by about 0.4%. The most time-consuming tasks across both versions are related to Kotlin compilation and Android resource linking, with minor variations in execution times. CPU and memory usage for both the build process and child processes are similar, with no significant differences exceeding 10%. The total garbage collection counts are also comparable, indicating similar memory management efficiency between the two versions."
 tags: ["dependencies cache"]
 components: ["gradle"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-217-caching/)
 [Report 📊](../../reports/experiment_results_20250919174643.html)
 ## Summary
 The performance comparison between Gradle versions 9.0.0 and 9.1.0 shows minor differences in build times and resource usage. The mean build time for version 9.0.0 is approximately 467 seconds, slightly faster than the 468 seconds for version 9.1.0, a difference of about 1 second or 0.2%. Configuration times are nearly identical, with version 9.0.0 being marginally quicker by about 0.4%. The most time-consuming tasks across both versions are related to Kotlin compilation and Android resource linking, with minor variations in execution times. CPU and memory usage for both the build process and child processes are similar, with no significant differences exceeding 10%. The total garbage collection counts are also comparable, indicating similar memory management efficiency between the two versions.
