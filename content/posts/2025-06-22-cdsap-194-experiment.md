@@ -3,6 +3,9 @@ layout: post
 title: "Parallel vs G1 - 400 modules Project"
 date: 2025-06-22
 report_link: /Telltale/reports/experiment_results_20250622042015.html
+report_data: /Telltale/data/experiments/experiment-cdsap-194-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-194-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-194-caching/
 summary: " 
 The performance comparison between `varianta_parallel` and `variantb_g1` reveals several key insights. The overall build time for `variantb_g1` is longer by approximately 55 seconds (6% increase) compared to `varianta_parallel`. Notably, the `DexMergingTask` and `AggregateDepsTask` show significant time increases in `variantb_g1`, suggesting areas where performance optimizations could be targeted.
 
@@ -12,6 +15,7 @@ The garbage collection logs indicate a similar number of total collections betwe
 tags: ["dependencies cache"]
 components: ["jvm"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-194-caching/)
 [Report 📊](../../reports/experiment_results_20250622042015.html)
 ## Summary
 The performance comparison between `varianta_parallel` and `variantb_g1` reveals several key insights. The overall build time for `variantb_g1` is longer by approximately 55 seconds (6% increase) compared to `varianta_parallel`. Notably, the `DexMergingTask` and `AggregateDepsTask` show significant time increases in `variantb_g1`, suggesting areas where performance optimizations could be targeted.
