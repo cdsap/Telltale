@@ -3,11 +3,15 @@ layout: post
 title: "KGP 2.2.10 vs 2.2.20"
 date: 2025-09-11
 report_link: /Telltale/reports/experiment_results_20250911192755.html
+report_data: /Telltale/data/experiments/experiment-cdsap-216-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-216-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-216-caching/
 summary: " 
 The analysis of the Gradle build performance between variants `2.2.10` and `2.2.20` reveals subtle differences in build times and task execution. The overall build time for variant `2.2.20` is slightly higher by about 3.3 seconds (0.92% increase) compared to variant `2.2.10`. The configuration time also shows a minor increase of 0.63 seconds (1.46% increase) in variant `2.2.20`. Notably, the most time-consuming tasks across both variants include `:app:app:hiltJavaCompileDebug`, `:app:app:mergeExtDexDebug`, and `:core:cart:compileDebugKotlin`, with variant `2.2.20` generally showing a marginal increase in execution times. Memory usage is slightly lower in variant `2.2.20` by about 0.21 GB (2.01% decrease), while CPU usage remains maximized at 100% for both variants. The total garbage collection counts are very close, with variant `2.2.20` having just one more collection than `2.2.10`."
 tags: ["dependencies cache"]
 components: ["kotlin"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-216-caching/)
 [Report 📊](../../reports/experiment_results_20250911192755.html)
 ## Summary
 The analysis of the Gradle build performance between variants `2.2.10` and `2.2.20` reveals subtle differences in build times and task execution. The overall build time for variant `2.2.20` is slightly higher by about 3.3 seconds (0.92% increase) compared to variant `2.2.10`. The configuration time also shows a minor increase of 0.63 seconds (1.46% increase) in variant `2.2.20`. Notably, the most time-consuming tasks across both variants include `:app:app:hiltJavaCompileDebug`, `:app:app:mergeExtDexDebug`, and `:core:cart:compileDebugKotlin`, with variant `2.2.20` generally showing a marginal increase in execution times. Memory usage is slightly lower in variant `2.2.20` by about 0.21 GB (2.01% decrease), while CPU usage remains maximized at 100% for both variants. The total garbage collection counts are very close, with variant `2.2.20` having just one more collection than `2.2.10`.
