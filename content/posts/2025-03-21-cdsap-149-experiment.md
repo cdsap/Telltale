@@ -3,11 +3,15 @@ layout: post
 title: "Comparing -Xms usage in nowinandroid"
 date: 2025-03-21
 report_link: /Telltale/reports/experiment_results_20250321002356.html
+report_data: /Telltale/data/experiments/experiment-cdsap-149-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-149-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-149-caching/
 summary: " 
 The analysis of the Gradle build performance comparison data reveals that the variant `variantb_no_xms` generally takes longer to build than `varianta_using_xms`. The mean build time for `variantb_no_xms` is approximately 3.5% longer than `varianta_using_xms`. The most time-consuming tasks across both variants are `:app:l8DexDesugarLibDemoDebug`, `:app:mergeExtDexDemoDebug`, and `:core:designsystem:compileDemoDebugKotlin`. In terms of CPU and memory usage, both variants reach 100% CPU usage, but `varianta_using_xms` uses more memory. Garbage collection data shows more collections for `variantb_no_xms`."
 tags: ["dependencies cache"]
 components: ["jvm"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-149-caching/)
 [Report 📊](../../reports/experiment_results_20250321002356.html)
 ## Summary
 The analysis of the Gradle build performance comparison data reveals that the variant `variantb_no_xms` generally takes longer to build than `varianta_using_xms`. The mean build time for `variantb_no_xms` is approximately 3.5% longer than `varianta_using_xms`. The most time-consuming tasks across both variants are `:app:l8DexDesugarLibDemoDebug`, `:app:mergeExtDexDemoDebug`, and `:core:designsystem:compileDemoDebugKotlin`. In terms of CPU and memory usage, both variants reach 100% CPU usage, but `varianta_using_xms` uses more memory. Garbage collection data shows more collections for `variantb_no_xms`.
