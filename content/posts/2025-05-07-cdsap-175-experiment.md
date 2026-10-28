@@ -3,11 +3,15 @@ layout: post
 title: "Gradle 8.14 vs 8.13 in an Android Project"
 date: 2025-05-07
 report_link: /Telltale/reports/experiment_results_20250507175828.html
+report_data: /Telltale/data/experiments/experiment-cdsap-175-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-175-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-175-caching/
 summary: " 
 The performance comparison between two Gradle build variants shows a slight improvement in overall build time for variant B (218.791s) compared to variant A (221.317s), with a decrease of about 1.14%. The most time-consuming tasks across both variants include `:app:l8DexDesugarLibDemoDebug`, `:app:mergeExtDexDemoDebug`, and `:core:designsystem:compileDemoDebugKotlin`, with variant B generally showing better performance in these tasks. Memory usage is slightly lower in variant B for all processes and build child processes. The total garbage collection counts are slightly higher in variant B for both Gradle and Kotlin processes."
 tags: ["dependencies cache"]
 components: ["gradle"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-175-caching/)
 [Report 📊](../../reports/experiment_results_20250507175828.html)
 ## Summary
 The performance comparison between two Gradle build variants shows a slight improvement in overall build time for variant B (218.791s) compared to variant A (221.317s), with a decrease of about 1.14%. The most time-consuming tasks across both variants include `:app:l8DexDesugarLibDemoDebug`, `:app:mergeExtDexDemoDebug`, and `:core:designsystem:compileDemoDebugKotlin`, with variant B generally showing better performance in these tasks. Memory usage is slightly lower in variant B for all processes and build child processes. The total garbage collection counts are slightly higher in variant B for both Gradle and Kotlin processes.
