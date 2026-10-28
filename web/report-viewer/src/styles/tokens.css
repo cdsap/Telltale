@@ -3,28 +3,29 @@
   --content-gap: 20px;
   --nav-width: 1024px;
   --header-height: 60px;
-  --theme: #f8fafc;
-  --entry: #ffffff;
-  --primary: #0f172a;
-  --secondary: #475569;
-  --tertiary: #e2e8f0;
-  --content: #0f172a;
-  --border: #e2e8f0;
-  --muted: #64748b;
-  --subtle: #f1f5f9;
+  --theme: rgb(255, 255, 255);
+  --entry: rgb(255, 255, 255);
+  --primary: rgb(30, 30, 30);
+  --secondary: rgb(108, 108, 108);
+  --tertiary: rgb(214, 214, 214);
+  --content: rgb(31, 31, 31);
+  --border: rgb(238, 238, 238);
+  --muted: rgb(108, 108, 108);
+  --subtle: rgb(245, 245, 245);
   --tt-accent: #2563eb;
-  --tt-accent-soft: rgba(37, 99, 235, 0.08);
+  --tt-accent-soft: rgba(37, 99, 235, 0.075);
   --tt-accent-line: rgba(37, 99, 235, 0.22);
-  --tt-good: #15803d;
-  --tt-bad: #b42318;
+  --tt-good: #16805d;
+  --tt-bad: #b45309;
   --tt-warn: #b45309;
-  --tt-card-shadow: none;
+  --tt-card-shadow: 0 6px 30px rgba(25, 35, 65, 0.045);
   --color-variant-a: #2563eb;
   --color-variant-b: #7c3aed;
   --color-variant-a-soft: rgba(37, 99, 235, 0.12);
   --color-variant-b-soft: rgba(124, 58, 237, 0.12);
-  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Oxygen, Ubuntu, Cantarell,
+    "Open Sans", "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --wb-sidebar: 224px;
   --wb-max: 1560px;
   --wb-radius: 10px;
@@ -32,19 +33,26 @@
 }
 
 html.dark,
-body.dark {
-  --theme: #0f172a;
-  --entry: #1e293b;
-  --primary: #e2e8f0;
-  --secondary: #94a3b8;
-  --tertiary: #334155;
-  --content: #e2e8f0;
-  --border: #334155;
-  --muted: #94a3b8;
-  --subtle: #1e293b;
-  --tt-card-shadow: none;
-  --color-variant-a: #60a5fa;
+body.dark,
+.dark {
+  --theme: rgb(29, 30, 32);
+  --entry: rgb(46, 46, 51);
+  --primary: rgb(218, 218, 219);
+  --secondary: rgb(155, 156, 157);
+  --tertiary: rgb(65, 66, 68);
+  --content: rgb(196, 196, 197);
+  --border: rgb(51, 51, 51);
+  --muted: rgb(155, 156, 157);
+  --subtle: rgb(46, 46, 51);
+  --tt-accent: #93b4ff;
+  --tt-accent-soft: rgba(93, 137, 240, 0.11);
+  --tt-accent-line: rgba(147, 180, 255, 0.28);
+  --tt-good: #6ee7b7;
+  --tt-bad: #fbbf75;
+  --tt-warn: #fbbf75;
+  --tt-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --color-variant-a: #93b4ff;
   --color-variant-b: #c4b5fd;
-  --color-variant-a-soft: rgba(96, 165, 250, 0.16);
+  --color-variant-a-soft: rgba(147, 180, 255, 0.16);
   --color-variant-b-soft: rgba(196, 181, 253, 0.16);
 }
