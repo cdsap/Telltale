@@ -3,6 +3,9 @@ layout: post
 title: "Gradle 9.2.1"
 date: 2025-11-18
 report_link: /Telltale/reports/experiment_results_20251118005859.html
+report_data: /Telltale/data/experiments/experiment-cdsap-236-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-236-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-236-caching/
 summary: " 
 The analysis of the Gradle build performance data reveals that the transition from variant A (Gradle 9.2.0) to variant B (Gradle 9.2.1) shows a slight increase in overall build time, with the mean build time increasing by approximately 3 seconds (0.57%). Configuration times are also slightly higher in variant B by about 0.64%. In terms of task execution, the most time-consuming tasks across both variants include `:build-logic:convention:compileKotlin`, `:core:account:kspDebugKotlin`, and `:core:analytics:kspDebugKotlin`, with variant B generally showing a marginal increase in execution times.
 
@@ -10,6 +13,7 @@ CPU and memory usage across all processes and specifically for the build process
 tags: ["dependencies cache"]
 components: ["gradle"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-236-caching/)
 [Report 📊](../../reports/experiment_results_20251118005859.html)
 ## Summary
 The analysis of the Gradle build performance data reveals that the transition from variant A (Gradle 9.2.0) to variant B (Gradle 9.2.1) shows a slight increase in overall build time, with the mean build time increasing by approximately 3 seconds (0.57%). Configuration times are also slightly higher in variant B by about 0.64%. In terms of task execution, the most time-consuming tasks across both variants include `:build-logic:convention:compileKotlin`, `:core:account:kspDebugKotlin`, and `:core:analytics:kspDebugKotlin`, with variant B generally showing a marginal increase in execution times.
