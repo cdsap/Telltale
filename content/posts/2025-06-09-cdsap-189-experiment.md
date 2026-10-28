@@ -3,11 +3,15 @@ layout: post
 title: "Comparing assembleRelease in AGP 8.9 vs 8.10.1 (nowinandroid)"
 date: 2025-06-09
 report_link: /Telltale/reports/experiment_results_20250609225356.html
+report_data: /Telltale/data/experiments/experiment-cdsap-189-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-189-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-189-caching/
 summary: " 
 The performance comparison between two Gradle build variants reveals minor differences in build times and resource usage. The mean build time for `varianta_main` is 515.286 seconds, while `variantb_agp_8_10_1` is slightly longer at 516.571 seconds, marking a 0.25% increase. The most time-consuming tasks include `com.android.build.gradle.internal.tasks.R8Task` and `com.android.build.gradle.internal.tasks.L8DexDesugarLibTask`, with notable differences in execution times between the variants. CPU and memory usage across all processes and specifically for the build processes are nearly identical, with `variantb_agp_8_10_1` showing a slight decrease in memory usage."
 tags: ["dependencies cache"]
 components: ["agp"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-189-caching/)
 [Report 📊](../../reports/experiment_results_20250609225356.html)
 ## Summary
 The performance comparison between two Gradle build variants reveals minor differences in build times and resource usage. The mean build time for `varianta_main` is 515.286 seconds, while `variantb_agp_8_10_1` is slightly longer at 516.571 seconds, marking a 0.25% increase. The most time-consuming tasks include `com.android.build.gradle.internal.tasks.R8Task` and `com.android.build.gradle.internal.tasks.L8DexDesugarLibTask`, with notable differences in execution times between the variants. CPU and memory usage across all processes and specifically for the build processes are nearly identical, with `variantb_agp_8_10_1` showing a slight decrease in memory usage.
