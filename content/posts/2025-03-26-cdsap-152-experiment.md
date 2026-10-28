@@ -3,11 +3,15 @@ layout: post
 title: "Using R8 in a different process with 4gb and G1"
 date: 2025-03-26
 report_link: /Telltale/reports/experiment_results_20250326203450.html
+report_data: /Telltale/data/experiments/experiment-cdsap-152-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-152-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-152-caching/
 summary: " 
 The performance comparison between two Gradle build variants, `varianta_main_r8` and `variantb_r8_different_process`, reveals several key differences. The overall build time for `variantb_r8_different_process` is slightly higher by approximately 10.6 seconds (2.04% increase) compared to `varianta_main_r8`. Notably, `variantb_r8_different_process` shows a significant increase in memory usage, with a maximum of 14.24 GB compared to 11.2 GB for `varianta_main_r8`, marking a 27.14% increase. Additionally, `variantb_r8_different_process` has fewer total garbage collection (GC) events in the Gradle process but more in the Kotlin process, suggesting different memory management behaviors. The `R8Task` and `L8DexDesugarLibTask` are among the most time-consuming tasks, with `variantb_r8_different_process` showing longer execution times, especially in `L8DexDesugarLibTask` where the mean time increased by over 47%."
 tags: ["dependencies cache"]
 components: ["agp"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-152-caching/)
 [Report 📊](../../reports/experiment_results_20250326203450.html)
 ## Summary
 The performance comparison between two Gradle build variants, `varianta_main_r8` and `variantb_r8_different_process`, reveals several key differences. The overall build time for `variantb_r8_different_process` is slightly higher by approximately 10.6 seconds (2.04% increase) compared to `varianta_main_r8`. Notably, `variantb_r8_different_process` shows a significant increase in memory usage, with a maximum of 14.24 GB compared to 11.2 GB for `varianta_main_r8`, marking a 27.14% increase. Additionally, `variantb_r8_different_process` has fewer total garbage collection (GC) events in the Gradle process but more in the Kotlin process, suggesting different memory management behaviors. The `R8Task` and `L8DexDesugarLibTask` are among the most time-consuming tasks, with `variantb_r8_different_process` showing longer execution times, especially in `L8DexDesugarLibTask` where the mean time increased by over 47%.
