@@ -3,11 +3,15 @@ layout: post
 title: "K2 with Kotlin 2.2"
 date: 2025-06-27
 report_link: /Telltale/reports/experiment_results_20250627151715.html
+report_data: /Telltale/data/experiments/experiment-cdsap-196-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-196-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-196-caching/
 summary: " 
 The analysis of Gradle build performance data reveals several key differences between `varianta_kotlin_2.2.0` and `variantb_k2_kotlin_2.2.0`. Notably, the overall build time for variant B is longer by approximately 42.7 seconds (7.3% increase). In task execution, the `:layer_0:module_0_10:kspDebugKotlin` task shows a significant increase in execution time in variant B, suggesting a potential area for optimization. Memory usage is higher in variant B across all processes, with a notable increase in the main build process (up to 6.7 GB in variant B compared to 5.1 GB in variant A). Garbage collection activities also increased in variant B, indicating heavier memory management activities. These findings suggest that variant B may be less efficient in terms of both time and resource usage compared to variant A."
 tags: ["dependencies cache"]
 components: ["kotlin"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-196-caching/)
 [Report 📊](../../reports/experiment_results_20250627151715.html)
 ## Summary
 The analysis of Gradle build performance data reveals several key differences between `varianta_kotlin_2.2.0` and `variantb_k2_kotlin_2.2.0`. Notably, the overall build time for variant B is longer by approximately 42.7 seconds (7.3% increase). In task execution, the `:layer_0:module_0_10:kspDebugKotlin` task shows a significant increase in execution time in variant B, suggesting a potential area for optimization. Memory usage is higher in variant B across all processes, with a notable increase in the main build process (up to 6.7 GB in variant B compared to 5.1 GB in variant A). Garbage collection activities also increased in variant B, indicating heavier memory management activities. These findings suggest that variant B may be less efficient in terms of both time and resource usage compared to variant A.
