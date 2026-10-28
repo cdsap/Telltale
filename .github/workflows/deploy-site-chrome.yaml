@@ -1,0 +1,128 @@
+name: Deploy site chrome
+
+on:
+  workflow_dispatch:
+    inputs:
+      viewer:
+        description: "Publish report-viewer JS/CSS and refresh experiment HTML shells (JSON/gzip stay as they are)"
+        type: boolean
+        default: true
+      hugo:
+        description: "Copy Hugo layouts and assets from this ref"
+        type: boolean
+        default: true
+
+run-name: "Deploy site chrome (viewer=${{ github.event.inputs.viewer }}, hugo=${{ github.event.inputs.hugo }})"
+
+concurrency:
+  group: telltale-gh-pages-publish
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Publish chrome
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        if: ${{ github.event.inputs.viewer == 'true' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: web/report-viewer/package-lock.json
+
+      - name: Build report viewer
+        if: ${{ github.event.inputs.viewer == 'true' }}
+        working-directory: web/report-viewer
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci
+          npm run build
+          mkdir -p "$RUNNER_TEMP/telltale-chrome/viewer-dist"
+          cp -a dist/. "$RUNNER_TEMP/telltale-chrome/viewer-dist/"
+
+      - name: Stage source trees
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/telltale-chrome"
+          cp scripts/stage_site_chrome.py scripts/stage_published_report.py scripts/experiment_snapshot_from_csv.py "$RUNNER_TEMP/telltale-chrome/"
+          if [ "${{ github.event.inputs.hugo }}" = "true" ]; then
+            cp -a web/hugo/layouts "$RUNNER_TEMP/telltale-chrome/hugo-layouts"
+            if [ -d web/hugo/assets ]; then
+              cp -a web/hugo/assets "$RUNNER_TEMP/telltale-chrome/hugo-assets"
+            fi
+          fi
+
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: .
+          fetch-depth: 0
+
+      - name: Publish chrome onto gh-pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          ARGS=(--site . --site-base /Telltale)
+          if [ "${{ github.event.inputs.viewer }}" = "true" ]; then
+            ARGS+=(--viewer-dist "$RUNNER_TEMP/telltale-chrome/viewer-dist")
+          fi
+          if [ "${{ github.event.inputs.hugo }}" = "true" ]; then
+            ARGS+=(--layouts-src "$RUNNER_TEMP/telltale-chrome/hugo-layouts")
+            if [ -d "$RUNNER_TEMP/telltale-chrome/hugo-assets" ]; then
+              ARGS+=(--assets-src "$RUNNER_TEMP/telltale-chrome/hugo-assets")
+            fi
+          fi
+          python3 "$RUNNER_TEMP/telltale-chrome/stage_site_chrome.py" "${ARGS[@]}" | tee "$RUNNER_TEMP/telltale-chrome/staged.json"
+          {
+            echo "## Published site chrome"
+            echo
+            echo '```json'
+            cat "$RUNNER_TEMP/telltale-chrome/staged.json"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Push gh-pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          [[ -d static/assets/report-viewer ]] && git add static/assets/report-viewer
+          [[ -d static/experiments ]] && git add static/experiments
+          [[ -d layouts ]] && git add layouts
+          [[ -d assets ]] && git add assets
+          if git diff --cached --quiet; then
+            echo "No chrome changes to commit"
+            exit 0
+          fi
+          git commit -m "chore: refresh published site chrome"
+          REMOTE="https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          for i in 1 2 3 4 5 6; do
+            git pull --rebase "$REMOTE" gh-pages
+            if git push "$REMOTE" gh-pages; then
+              exit 0
+            fi
+            echo "gh-pages push failed (attempt $i); retrying"
+            sleep $((i * 5))
+          done
+          echo "::error::Failed to push gh-pages after retries"
+          exit 1
+
+      - name: Trigger Hugo deploy
+        shell: bash
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: token ${{ secrets.GH_BUILD_DEPLOYMENT }}" \
+            "https://api.github.com/repos/${{ github.repository }}/dispatches" \
+            -d '{"event_type": "deploy-hugo", "client_payload": {"ref": "gh-pages"}}'
