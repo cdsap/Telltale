@@ -3,6 +3,9 @@ layout: post
 title: "Gradle 9.2.0-rc-1 vs 9.1.0"
 date: 2025-10-03
 report_link: /Telltale/reports/experiment_results_20251003180446.html
+report_data: /Telltale/data/experiments/experiment-cdsap-224-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-224-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-224-caching/
 summary: " 
 The analysis of the Gradle build performance comparison between variant A (Gradle 9.1.0) and variant B (Gradle 9.2.0-rc-1) reveals subtle improvements in build efficiency in the newer version. The overall build time slightly decreased from 544.528 seconds in variant A to 542.012 seconds in variant B, a reduction of approximately 2.516 seconds (0.46%). Similarly, configuration time saw a reduction from 66.133 seconds to 64.152 seconds, improving by 1.981 seconds (3%). The most time-consuming tasks across both variants include `:build-logic:convention:compileKotlin`, `:core:analytics:kspDebugKotlin`, and `:core:calendar:kspDebugKotlin`, with minor variations in execution times between the variants.
 
@@ -10,6 +13,7 @@ CPU and memory usage remained nearly at capacity for both variants, with a maxim
 tags: ["dependencies cache"]
 components: ["gradle"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-224-caching/)
 [Report 📊](../../reports/experiment_results_20251003180446.html)
 ## Summary
 The analysis of the Gradle build performance comparison between variant A (Gradle 9.1.0) and variant B (Gradle 9.2.0-rc-1) reveals subtle improvements in build efficiency in the newer version. The overall build time slightly decreased from 544.528 seconds in variant A to 542.012 seconds in variant B, a reduction of approximately 2.516 seconds (0.46%). Similarly, configuration time saw a reduction from 66.133 seconds to 64.152 seconds, improving by 1.981 seconds (3%). The most time-consuming tasks across both variants include `:build-logic:convention:compileKotlin`, `:core:analytics:kspDebugKotlin`, and `:core:calendar:kspDebugKotlin`, with minor variations in execution times between the variants.
