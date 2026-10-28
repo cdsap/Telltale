@@ -66,7 +66,11 @@ inputs:
   ber-release:
     description: 'BuildExperimentResults release tag providing --output-json'
     required: false
-    default: 'v1.2.1'
+    default: 'v1.2.2'
+  from-instant:
+    description: 'Develocity fromInstant epoch millis (builds before this instant, reverse listing)'
+    required: false
+    default: ''
   edr-release:
     description: 'ExperimentDiagnosticsReport release tag'
     required: false
@@ -216,6 +220,11 @@ runs:
           TITLE_ARGS+=(--report-title "${{ inputs.experiment_title }}")
         fi
 
+        FROM_INSTANT_ARGS=()
+        if [ -n "${{ inputs.from-instant }}" ]; then
+          FROM_INSTANT_ARGS+=(--from-instant "${{ inputs.from-instant }}")
+        fi
+
         ./build-experiment-results --url="$URL" \
           $tasktypereport $resourceusagereport $onlycacheableoutcome $taskpathreport $processreport \
           $kotlinreport $thresholdtaskduration $profile $openai_request $openai_api_key \
@@ -228,6 +237,7 @@ runs:
           --output-json=experiment-result.json \
           $DIAG_FLAGS \
           "${TITLE_ARGS[@]}" \
+          "${FROM_INSTANT_ARGS[@]}" \
           --api-key="$API_KEY"
 
         # Output the results to the GitHub step summary

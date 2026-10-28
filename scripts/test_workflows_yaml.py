@@ -129,16 +129,29 @@ class WorkflowsYamlTest(unittest.TestCase):
 
         republish = load_gha(WORKFLOWS / "republish-interactive-report.yaml")
         self.assertIn("workflow_dispatch", republish["on"])
+        self.assertIn("from_instant", republish["on"]["workflow_dispatch"]["inputs"])
         republish_uses = [
             step.get("uses")
             for job in republish["jobs"].values()
             for step in job_steps(job)
         ]
         self.assertIn("./.github/workflows/report", republish_uses)
+        report_step = next(
+            step
+            for job in republish["jobs"].values()
+            for step in job_steps(job)
+            if step.get("uses") == "./.github/workflows/report"
+        )
+        self.assertEqual(
+            report_step.get("with", {}).get("from-instant"),
+            "${{ github.event.inputs.from_instant }}",
+        )
 
     def test_report_action_emits_experiment_result_json(self) -> None:
         report = load_gha(WORKFLOWS / "report" / "action.yaml")
         self.assertIn("ber-release", report["inputs"])
+        self.assertEqual(report["inputs"]["ber-release"].get("default"), "v1.2.2")
+        self.assertIn("from-instant", report["inputs"])
         self.assertIn("deploy_results", report["inputs"])
         scripts = "\n".join(
             step.get("run", "")
@@ -146,6 +159,7 @@ class WorkflowsYamlTest(unittest.TestCase):
             if isinstance(step, dict) and isinstance(step.get("run"), str)
         )
         self.assertIn("--output-json=experiment-result.json", scripts)
+        self.assertIn("--from-instant", scripts)
         self.assertIn("stage_published_report.py", scripts)
         self.assertIn("experiment_snapshot_from_csv.py", scripts)
         self.assertIn("--assets-src", scripts)

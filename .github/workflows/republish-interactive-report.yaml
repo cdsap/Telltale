@@ -36,6 +36,10 @@ on:
         description: "Maximum Develocity builds to fetch"
         required: false
         default: "200"
+      from_instant:
+        description: "Develocity fromInstant epoch millis (HTML search.startTimeMax for historical experiments)"
+        required: false
+        default: ""
 
 run-name: "Republish ${{ github.event.inputs.experiment_id }} interactive report"
 
@@ -78,3 +82,4 @@ jobs:
           snapshot-label-a: "${{ github.event.inputs.snapshot_label_a }}"
           snapshot-label-b: "${{ github.event.inputs.snapshot_label_b }}"
           report-kind: "${{ github.event.inputs.report_kind }}"
+          from-instant: "${{ github.event.inputs.from_instant }}"
