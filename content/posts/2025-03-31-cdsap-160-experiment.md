@@ -3,11 +3,15 @@ layout: post
 title: "Comparing lintDebug in 300 modules project limiting task parallelization"
 date: 2025-03-31
 report_link: /Telltale/reports/experiment_results_20250331214439.html
+report_data: /Telltale/data/experiments/experiment-cdsap-160-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-160-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-160-caching/
 summary: " 
 The analysis of the Gradle build performance comparison between `varianta_main` and `variantb_lint_2g` reveals several key findings. The overall build time for `variantb_lint_2g` is longer by approximately 73 seconds (7.3% increase) compared to `varianta_main`. In task execution, the most significant difference is observed in the `:layer_0:module_0_1:lintAnalyzeDebug` task, where `variantb_lint_2g` takes about 13.64 seconds longer than `varianta_main`. Memory and CPU usage across all processes are relatively similar between the two variants, with slight variations in peak values. The total garbage collection (GC) count was lower in `variantb_lint_2g` by 73 collections, indicating potentially more efficient memory management."
 tags: ["dependencies cache"]
 components: ["agp"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-160-caching/)
 [Report 📊](../../reports/experiment_results_20250331214439.html)
 ## Summary
 The analysis of the Gradle build performance comparison between `varianta_main` and `variantb_lint_2g` reveals several key findings. The overall build time for `variantb_lint_2g` is longer by approximately 73 seconds (7.3% increase) compared to `varianta_main`. In task execution, the most significant difference is observed in the `:layer_0:module_0_1:lintAnalyzeDebug` task, where `variantb_lint_2g` takes about 13.64 seconds longer than `varianta_main`. Memory and CPU usage across all processes are relatively similar between the two variants, with slight variations in peak values. The total garbage collection (GC) count was lower in `variantb_lint_2g` by 73 collections, indicating potentially more efficient memory management.
