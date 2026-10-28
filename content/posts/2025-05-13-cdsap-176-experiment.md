@@ -3,11 +3,15 @@ layout: post
 title: "Comparing lintDebug in 300 modules project limiting task parallelization (3 workers)"
 date: 2025-05-13
 report_link: /Telltale/reports/experiment_results_20250513012310.html
+report_data: /Telltale/data/experiments/experiment-cdsap-176-caching.json.gz
+json_link: /Telltale/data/experiments/experiment-cdsap-176-caching.json.gz
+viewer_link: /Telltale/experiments/experiment-cdsap-176-caching/
 summary: " 
 The performance comparison between `varianta_main` and `variantb_lint_1.5g` reveals significant differences in build times and resource utilization. `variantb_lint_1.5g` shows a notable reduction in overall build time, clocking in at approximately 1057.511 seconds compared to `varianta_main`'s 1642.304 seconds, marking a decrease of around 35.6%. This variant also uses less memory, with a maximum of 11.64 GB compared to `varianta_main`'s 13.69 GB. However, CPU usage is slightly higher in `variantb_lint_1.5g` for the build process, peaking at 93.95% versus 92.00% in `varianta_main`."
 tags: ["dependencies cache"]
 components: ["agp"]
 ---
+[Interactive report](/Telltale/experiments/experiment-cdsap-176-caching/)
 [Report 📊](../../reports/experiment_results_20250513012310.html)
 ## Summary
 The performance comparison between `varianta_main` and `variantb_lint_1.5g` reveals significant differences in build times and resource utilization. `variantb_lint_1.5g` shows a notable reduction in overall build time, clocking in at approximately 1057.511 seconds compared to `varianta_main`'s 1642.304 seconds, marking a decrease of around 35.6%. This variant also uses less memory, with a maximum of 11.64 GB compared to `varianta_main`'s 13.69 GB. However, CPU usage is slightly higher in `variantb_lint_1.5g` for the build process, peaking at 93.95% versus 92.00% in `varianta_main`.
