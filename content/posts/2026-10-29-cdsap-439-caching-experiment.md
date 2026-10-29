@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "AGP 9.5.0 vs baseline"
+title: "AGP 9.5.0 vs 9.4.1"
 date: 2026-10-29
 report_id: "experiment-cdsap-439-caching"
 report_kind: "caching"
@@ -15,7 +15,7 @@ experiment_snapshot:
   metric: "Overall build time"
   unit: "seconds"
   variant_a:
-    label: "baseline"
+    label: "9.4.1"
     mean: 264.915
     p50: 276.669
     p90: 305.996
