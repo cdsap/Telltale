@@ -165,6 +165,19 @@ class WorkflowsYamlTest(unittest.TestCase):
         self.assertIn("--assets-src", scripts)
         self.assertIn("npm run build", scripts)
 
+    def test_deploy_site_chrome_is_manual_and_skips_experiment_json(self) -> None:
+        chrome = load_gha(WORKFLOWS / "deploy-site-chrome.yaml")
+        self.assertIn("workflow_dispatch", chrome["on"])
+        self.assertNotIn("schedule", chrome["on"])
+        self.assertIn("viewer", chrome["on"]["workflow_dispatch"]["inputs"])
+        self.assertIn("hugo", chrome["on"]["workflow_dispatch"]["inputs"])
+        scripts = all_run_scripts(chrome)
+        self.assertIn("stage_site_chrome.py", scripts)
+        self.assertIn("npm run build", scripts)
+        self.assertIn("deploy-hugo", scripts)
+        self.assertNotIn("build-experiment-results", scripts)
+        self.assertNotIn("experiment-result.json", scripts)
+
     def test_ci_workflow_runs_tsx_and_yaml_tests(self) -> None:
         ci = load_gha(WORKFLOWS / "tests.yaml")
         self.assertIn("pull_request", ci["on"])
