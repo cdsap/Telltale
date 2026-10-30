@@ -236,7 +236,6 @@ jobs:
           mode: "${{ github.event.inputs.mode }}"
           configuration-cache: "${{ github.event.inputs.configuration_cache }}"
           project-isolation: "${{ github.event.inputs.project_isolation }}"
-          configuration-cache-key: "configuration-cache-${{ runner.os }}-${{ github.repository_owner }}-${{ github.run_number }}-${{ matrix.config.index }}"
           configuration-cache-included-builds: "${{ github.event.inputs.configuration_cache_included_builds }}"
           gradle-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
           experiment-id: "${{ github.repository_owner }}-${{ github.run_number }}"

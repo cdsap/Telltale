@@ -43,11 +43,11 @@ inputs:
     description: 'Extra arguments to pass to the Gradle command'
     required: true
   configuration-cache:
-    description: 'Gradle configuration cache behavior: off, disabled, on, on-no-entry, warn, warn-no-entry, read-only, or read-only-no-entry.'
+    description: 'Gradle configuration cache behavior: off, disabled, on, or warn. no-entry and read-only are rejected because profiler warmups and iterations share one checkout and one gradle-args list.'
     required: false
     default: 'off'
   project-isolation:
-    description: 'Gradle Isolated Projects behavior: off, on, on-no-entry, diagnostics, or diagnostics-no-entry.'
+    description: 'Gradle Isolated Projects behavior: off, on, or diagnostics. no-entry is rejected because profiler warmups and iterations share one checkout and one gradle-args list.'
     required: false
     default: 'off'
   cache-url:
@@ -104,6 +104,17 @@ runs:
           exit 1
         fi
 
+        cc="${{ inputs.configuration-cache }}"
+        pi="${{ inputs.project-isolation }}"
+        if [[ "$cc" == *-no-entry || "$cc" == "read-only" ]]; then
+          echo "Gradle Profiler cannot honor $cc: warmups and iterations share one checkout and one gradle-args list. Use on or warn."
+          exit 1
+        fi
+        if [[ "$pi" == *-no-entry ]]; then
+          echo "Gradle Profiler cannot honor project-isolation=$pi: warmups and iterations share one checkout and one gradle-args list. Use on or diagnostics."
+          exit 1
+        fi
+
         case "${{ inputs.configuration-cache }}" in
           "off"|"")
             CONFIGURATION_CACHE_ARGS=()
@@ -111,14 +122,11 @@ runs:
           "disabled")
             CONFIGURATION_CACHE_ARGS=("--no-configuration-cache" "-Dorg.gradle.unsafe.isolated-projects=false")
             ;;
-          "on"|"on-no-entry")
+          "on")
             CONFIGURATION_CACHE_ARGS=("--configuration-cache")
             ;;
-          "warn"|"warn-no-entry")
+          "warn")
             CONFIGURATION_CACHE_ARGS=("--configuration-cache" "--configuration-cache-problems=warn")
-            ;;
-          "read-only"|"read-only-no-entry")
-            CONFIGURATION_CACHE_ARGS=("--configuration-cache" "-Dorg.gradle.configuration-cache.read-only=true")
             ;;
           *)
             echo "Unknown configuration cache option: ${{ inputs.configuration-cache }}"
@@ -130,10 +138,10 @@ runs:
           "off"|"")
             PROJECT_ISOLATION_ARGS=()
             ;;
-          "on"|"on-no-entry")
+          "on")
             PROJECT_ISOLATION_ARGS=("--isolated-projects")
             ;;
-          "diagnostics"|"diagnostics-no-entry")
+          "diagnostics")
             PROJECT_ISOLATION_ARGS=("--isolated-projects" "-Dorg.gradle.unsafe.isolated-projects.diagnostics=true")
             ;;
           *)

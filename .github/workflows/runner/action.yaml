@@ -72,6 +72,10 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Stage Configuration Cache Path Helper
+      run: cp "${{ github.action_path }}/../lib/configuration-cache-paths.sh" "$RUNNER_TEMP/configuration-cache-paths.sh"
+      shell: bash
+
     - name: Checkout Repository
       uses: actions/checkout@v4
       with:
@@ -166,40 +170,11 @@ runs:
 
     - name: Set Configuration Cache Paths
       id: configuration-cache-paths
-      if: steps.gradle-feature-state.outputs.entry_mode == 'restore' && steps.gradle-feature-state.outputs.feature_enabled == 'true' && inputs.configuration-cache-key != ''
-      run: |
-        {
-          echo "paths<<EOF"
-          echo ".gradle/configuration-cache"
-          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/caches/modules-2"
-          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/caches/[0-9]*"
-          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/caches/jars-*"
-          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/init.d"
-
-          IFS=',' read -ra INCLUDED_BUILDS <<< "${{ inputs.configuration-cache-included-builds }}"
-          for included_build in "${INCLUDED_BUILDS[@]}"; do
-            included_build="$(printf '%s' "$included_build" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
-            if [ -z "$included_build" ]; then
-              continue
-            fi
-
-            if [[ "$included_build" == */\* ]]; then
-              parent="${included_build%/*}"
-              if [ -d "$parent" ]; then
-                for child in "$parent"/*; do
-                  if [ -d "$child" ]; then
-                    echo "$child/build"
-                  fi
-                done
-              fi
-            else
-              echo "$included_build/build"
-            fi
-          done
-
-          echo "EOF"
-        } >> "$GITHUB_OUTPUT"
+      if: steps.gradle-feature-state.outputs.entry_mode == 'restore' && steps.gradle-feature-state.outputs.feature_enabled == 'true' && inputs.configuration-cache-key != '' && inputs.mode != 'no caching'
+      run: bash "$RUNNER_TEMP/configuration-cache-paths.sh"
       shell: bash
+      env:
+        INCLUDED_BUILDS_RAW: ${{ inputs.configuration-cache-included-builds }}
 
     - uses: cdsap/build-process-watcher@v0.6.2
       with:
@@ -207,12 +182,13 @@ runs:
         export_to_bigquery: 'true'
 
     - name: Restore Configuration Cache
-      if: steps.gradle-feature-state.outputs.entry_mode == 'restore' && steps.gradle-feature-state.outputs.feature_enabled == 'true' && inputs.configuration-cache-key != ''
+      id: restore-configuration-cache
+      if: steps.gradle-feature-state.outputs.entry_mode == 'restore' && steps.gradle-feature-state.outputs.feature_enabled == 'true' && inputs.configuration-cache-key != '' && inputs.mode != 'no caching'
       uses: actions/cache/restore@v4
       with:
         path: ${{ steps.configuration-cache-paths.outputs.paths }}
         key: ${{ inputs.configuration-cache-key }}
-        fail-on-cache-miss: false
+        fail-on-cache-miss: true
 
     - name: Set Configuration Cache Arguments
       id: configuration-cache-args
@@ -358,11 +334,19 @@ runs:
     - name: Execute Gradle Build
       id: gradle-build
       run: |
+        set -o pipefail
         ./gradlew ${{ inputs.task }} ${{ inputs.extra-args }} ${{ steps.configuration-cache-args.outputs.args }} ${{ steps.project-isolation-args.outputs.args }} \
           -Dscan.tag.${{ inputs.experiment-id }}_${{ inputs.variant-prefix }}${{ inputs.variant }} \
           -Dscan.tag."${{ inputs.mode }}" \
           -Dscan.tag.experiment \
-          -Dscan.tag.${{ inputs.experiment-id }}
+          -Dscan.tag.${{ inputs.experiment-id }} \
+          2>&1 | tee "$RUNNER_TEMP/telltale-gradle.log"
+        if [ "${{ steps.gradle-feature-state.outputs.entry_mode }}" = "restore" ] && [ "${{ inputs.mode }}" != "no caching" ] && [ -n "${{ inputs.configuration-cache-key }}" ]; then
+          if ! grep -Eq "Reusing configuration cache|Configuration cache entry reused" "$RUNNER_TEMP/telltale-gradle.log"; then
+            echo "Expected a configuration-cache hit after restore."
+            exit 1
+          fi
+        fi
       shell: bash
       env:
         DEVELOCITY_ACCESS_KEY: ${{ inputs.api-key }}

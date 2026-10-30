@@ -66,6 +66,10 @@ outputs:
 runs:
   using: 'composite'
   steps:
+    - name: Stage Configuration Cache Path Helper
+      run: cp "${{ github.action_path }}/../lib/configuration-cache-paths.sh" "$RUNNER_TEMP/configuration-cache-paths.sh"
+      shell: bash
+
     - name: Checkout Repository
       uses: actions/checkout@v4
       with:
@@ -220,39 +224,10 @@ runs:
     - name: Set Configuration Cache Paths
       id: configuration-cache-paths
       if: steps.gradle-feature-state.outputs.entry_mode == 'restore' && steps.gradle-feature-state.outputs.feature_enabled == 'true' && inputs.configuration-cache-key != ''
-      run: |
-        {
-          echo "paths<<EOF"
-          echo ".gradle/configuration-cache"
-          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/caches/modules-2"
-          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/caches/[0-9]*"
-          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/caches/jars-*"
-          echo "${GRADLE_USER_HOME:-$HOME/.gradle}/init.d"
-
-          IFS=',' read -ra INCLUDED_BUILDS <<< "${{ inputs.configuration-cache-included-builds }}"
-          for included_build in "${INCLUDED_BUILDS[@]}"; do
-            included_build="$(printf '%s' "$included_build" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
-            if [ -z "$included_build" ]; then
-              continue
-            fi
-
-            if [[ "$included_build" == */\* ]]; then
-              parent="${included_build%/*}"
-              if [ -d "$parent" ]; then
-                for child in "$parent"/*; do
-                  if [ -d "$child" ]; then
-                    echo "$child/build"
-                  fi
-                done
-              fi
-            else
-              echo "$included_build/build"
-            fi
-          done
-
-          echo "EOF"
-        } >> "$GITHUB_OUTPUT"
+      run: bash "$RUNNER_TEMP/configuration-cache-paths.sh"
       shell: bash
+      env:
+        INCLUDED_BUILDS_RAW: ${{ inputs.configuration-cache-included-builds }}
 
     - name: Set Configuration Cache Arguments
       id: configuration-cache-args
@@ -271,7 +246,7 @@ runs:
             echo "args=--configuration-cache --configuration-cache-problems=warn" >> "$GITHUB_OUTPUT"
             ;;
           "read-only"|"read-only-no-entry")
-            echo "args=--configuration-cache -Dorg.gradle.configuration-cache.read-only=true" >> "$GITHUB_OUTPUT"
+            echo "args=--configuration-cache" >> "$GITHUB_OUTPUT"
             ;;
           *)
             echo "Unknown configuration cache option: ${{ inputs.configuration-cache }}"
@@ -330,6 +305,15 @@ runs:
         GRADLE_BUILD_ACTION_CACHE_KEY_JOB: 'seed'
         GRADLE_ENCRYPTION_KEY: ${{ inputs.gradle-encryption-key }}
         CI_URL_CACHE_NODE: ${{ inputs.cache-url }}
+
+    - name: Verify Configuration Cache Entry
+      if: steps.gradle-feature-state.outputs.entry_mode == 'restore' && steps.gradle-feature-state.outputs.feature_enabled == 'true'
+      run: |
+        if [ ! -d .gradle/configuration-cache ] || [ -z "$(ls -A .gradle/configuration-cache 2>/dev/null)" ]; then
+          echo "Prime did not write a configuration-cache entry."
+          exit 1
+        fi
+      shell: bash
 
     - name: Save Configuration Cache
       if: steps.gradle-feature-state.outputs.entry_mode == 'restore' && steps.gradle-feature-state.outputs.feature_enabled == 'true' && inputs.configuration-cache-key != ''

@@ -51,10 +51,10 @@ This section details the inputs for the primary dispatchable workflows: `experim
     - `'on-no-entry'`: Pass `--configuration-cache` without saving or restoring the explicit configuration-cache entry bundle.
     - `'warn'`: Pass `--configuration-cache --configuration-cache-problems=warn` and save/restore the explicit configuration-cache entry bundle in the standard workflow.
     - `'warn-no-entry'`: Pass `--configuration-cache --configuration-cache-problems=warn` without saving or restoring the explicit configuration-cache entry bundle.
-    - `'read-only'`: Pass `--configuration-cache -Dorg.gradle.configuration-cache.read-only=true` and restore the explicit configuration-cache entry bundle in the standard workflow.
-    - `'read-only-no-entry'`: Pass `--configuration-cache -Dorg.gradle.configuration-cache.read-only=true` without restoring the explicit configuration-cache entry bundle.
+    - `'read-only'`: Restore the explicit configuration-cache entry bundle in execution jobs and run with `--configuration-cache -Dorg.gradle.configuration-cache.read-only=true`. The seed job still primes that bundle with writable `--configuration-cache`.
+    - `'read-only-no-entry'`: Pass `--configuration-cache -Dorg.gradle.configuration-cache.read-only=true` without restoring the explicit configuration-cache entry bundle. Seed still primes with writable `--configuration-cache`.
   - Compatibility: `'disabled'` cannot be combined with `project_isolation` values other than `'off'`, because Gradle requires configuration cache when Isolated Projects is enabled.
-  - Reuse behavior: `experiment.yaml` primes `.gradle/configuration-cache` in each seed job with the same Gradle start parameters used by execution jobs, then restores the matching variant entry in execution jobs. If either `configuration_cache` or `project_isolation` ends in `-no-entry`, the standard workflow skips saving and restoring that shared bundle. `experiment-with-gradle-profiler.yaml` adds the selected arguments to the generated scenario so profiler warmups and iterations can reuse configuration in the same checkout.
+  - Reuse behavior: `experiment.yaml` primes `.gradle/configuration-cache` in each seed job with the same Gradle start parameters used by execution jobs (mapping `read-only` to writable `--configuration-cache` so a stored entry exists), then restores the matching variant entry in execution jobs. Restore fails the job on a cache miss, and the execution Gradle log must show a configuration-cache hit. If either `configuration_cache` or `project_isolation` ends in `-no-entry`, or `mode` is `no caching`, the standard workflow skips saving and restoring that shared bundle. `experiment-with-gradle-profiler.yaml` accepts `off`, `disabled`, `on`, and `warn` only; `*-no-entry` and `read-only` are rejected because profiler warmups and iterations share one checkout and one `gradle-args` list.
 - **`project_isolation`**:
   - Description: Controls Gradle Isolated Projects independently of the selected task/dependency cache mode. Values without `-no-entry` save/restore the explicit configuration-cache entry bundle in the standard workflow because Isolated Projects requires configuration cache.
   - `experiment.yaml`: Required: `true`. Default: `'off'`.
@@ -66,9 +66,9 @@ This section details the inputs for the primary dispatchable workflows: `experim
     - `'diagnostics'`: Pass `--isolated-projects -Dorg.gradle.unsafe.isolated-projects.diagnostics=true` and save/restore the explicit configuration-cache entry bundle in the standard workflow.
     - `'diagnostics-no-entry'`: Pass `--isolated-projects -Dorg.gradle.unsafe.isolated-projects.diagnostics=true` without saving or restoring the explicit configuration-cache entry bundle.
 - **`configuration_cache_included_builds`**:
-  - Description: Comma-separated included build paths whose build output directories must be saved and restored with the configuration cache.
+  - Description: Comma-separated included build paths whose build output directories must be saved and restored with the configuration cache. Paths must be relative to the project workspace; shell metacharacters, `..`, and absolute paths are rejected.
   - `experiment.yaml`: Required: `false`. Default: `"buildSrc,build-logic,build-logic/*"`.
-  - Reuse behavior: Each listed path contributes its `build` directory, for example `build-logic` adds `build-logic/build` and `build-logic/*` adds one-level nested outputs such as `build-logic/convention/build`. This preserves included-build classpath outputs referenced by restored configuration-cache entries.
+  - Reuse behavior: Each listed path contributes its `build` directory, for example `build-logic` adds `build-logic/build` and `build-logic/*` adds one-level nested outputs such as `build-logic/convention/build`. This preserves included-build classpath outputs referenced by restored configuration-cache entries. The saved bundle is `.gradle/configuration-cache`, Gradle User Home `init.d`, and those included-build outputs. It does not overlay Gradle User Home `modules-2`, versioned caches, or `jars-*` directories that `setup-gradle` already manages.
 
 **Inputs Specific to `experiment.yaml`:**
 
@@ -204,16 +204,19 @@ This section describes the inputs for the reusable `report/action.yaml` workflow
 This section lists the seed-action inputs that differ from or extend the standard runner. Other runner inputs such as `task`, `variant`, `repository`, `jdk_version`, `jdk_vendor`, `mode`, `extra-args`, and `cache-url` follow the same meaning as `runner/action.yaml`.
 
 - **`configuration-cache`**:
-  - Description: Gradle configuration cache behavior for the seed run (`off`, `disabled`, `on`, `on-no-entry`, `warn`, `warn-no-entry`, `read-only`, or `read-only-no-entry`). `disabled` forces configuration cache off and disables repo-level Isolated Projects with `-Dorg.gradle.unsafe.isolated-projects=false`.
+  - Description: Gradle configuration cache behavior for the seed run (`off`, `disabled`, `on`, `on-no-entry`, `warn`, `warn-no-entry`, `read-only`, or `read-only-no-entry`). `disabled` forces configuration cache off and disables repo-level Isolated Projects with `-Dorg.gradle.unsafe.isolated-projects=false`. `read-only` and `read-only-no-entry` are primed with writable `--configuration-cache` so a stored entry exists for later execution jobs.
   - Required: `false`.
   - Default: `off`.
 - **`configuration-cache-key`**:
   - Description: Variant-specific key used to save `.gradle/configuration-cache` for execution jobs.
   - Required: `false`.
 - **`configuration-cache-included-builds`**:
-  - Description: Comma-separated included build paths whose `build` directories are saved with the configuration cache.
+  - Description: Comma-separated included build paths whose `build` directories are saved with the configuration cache. Paths must be relative to the project workspace.
   - Required: `false`.
   - Default: `buildSrc,build-logic,build-logic/*`.
+- **`gradle-encryption-key`**:
+  - Description: Stable Gradle configuration-cache encryption key. Required when configuration cache or Isolated Projects is enabled. Map this from the `GRADLE_ENCRYPTION_KEY` repository secret so seed and execution jobs decrypt the same entries.
+  - Required: `false`.
 - **`cache-exclude-script`**:
   - Description: Optional script content for excluding specific Gradle User Home cache entries.
   - Required: `false`.
@@ -259,12 +262,15 @@ This section details inputs for the reusable `runner/action.yaml` workflow, whic
   - Required: `false`.
   - Default: `off`.
 - **`configuration-cache-key`**:
-  - Description: Variant-specific key used to restore the configuration cache saved by the seed job.
+  - Description: Variant-specific key used to restore the configuration cache saved by the seed job. Restore is skipped when this key is empty or `mode` is `no caching`. A miss fails the job.
   - Required: `false`.
 - **`configuration-cache-included-builds`**:
-  - Description: Comma-separated included build paths whose `build` directories are restored with the configuration cache.
+  - Description: Comma-separated included build paths whose `build` directories are restored with the configuration cache. Paths must be relative to the project workspace.
   - Required: `false`.
   - Default: `buildSrc,build-logic,build-logic/*`.
+- **`gradle-encryption-key`**:
+  - Description: Stable Gradle configuration-cache encryption key. Required when configuration cache or Isolated Projects is enabled. Map this from the `GRADLE_ENCRYPTION_KEY` repository secret so restored entries can be decrypted.
+  - Required: `false`.
 - **`extra-args`**:
   - Description: Any additional arguments to pass to the Gradle command.
   - Required: `true`.
@@ -321,7 +327,7 @@ This section describes inputs for the reusable `runner-gradle-profiler/action.ya
   - Description: Any additional arguments to pass to the Gradle command.
   - Required: `true`.
 - **`configuration-cache`**:
-  - Description: Gradle configuration cache behavior for the generated scenario (`off`, `disabled`, `on`, `on-no-entry`, `warn`, `warn-no-entry`, `read-only`, or `read-only-no-entry`). `disabled` forces configuration cache off and disables repo-level Isolated Projects with `-Dorg.gradle.unsafe.isolated-projects=false`.
+  - Description: Gradle configuration cache behavior for the generated scenario (`off`, `disabled`, `on`, or `warn`). `disabled` forces configuration cache off and disables repo-level Isolated Projects with `-Dorg.gradle.unsafe.isolated-projects=false`. `*-no-entry` and `read-only` are rejected because profiler warmups and iterations share one checkout and one `gradle-args` list.
   - Required: `false`.
   - Default: `off`.
 - **`cache-url`**:
