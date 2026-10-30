@@ -225,6 +225,7 @@ runs:
           FROM_INSTANT_ARGS+=(--from-instant "${{ inputs.from-instant }}")
         fi
 
+        set +e
         ./build-experiment-results --url="$URL" \
           $tasktypereport $resourceusagereport $onlycacheableoutcome $taskpathreport $processreport \
           $kotlinreport $thresholdtaskduration $profile $openai_request $openai_api_key \
@@ -239,6 +240,19 @@ runs:
           "${TITLE_ARGS[@]}" \
           "${FROM_INSTANT_ARGS[@]}" \
           --api-key="$API_KEY"
+        ber_status=$?
+        set -e
+
+        # HTML/CSV/GHA summary are written before OpenAI. A retired model (gpt-4-turbo
+        # 404) must not discard a finished comparison or skip gh-pages publish.
+        if [ "$ber_status" -ne 0 ]; then
+          if compgen -G "experiment_results_*.csv" > /dev/null && [ -f experiment_results_summary_gha ]; then
+            echo "::warning::BuildExperimentResults exited ${ber_status} after writing reports. OpenAI analysis can fail independently; continuing so artifacts and gh-pages can still publish."
+          else
+            echo "::error::BuildExperimentResults failed with exit ${ber_status} and no usable reports"
+            exit "$ber_status"
+          fi
+        fi
 
         # Output the results to the GitHub step summary
         CONTENT=$(cat experiment_results_summary_gha)
