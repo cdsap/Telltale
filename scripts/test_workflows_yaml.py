@@ -165,6 +165,21 @@ class WorkflowsYamlTest(unittest.TestCase):
         self.assertIn("--assets-src", scripts)
         self.assertIn("npm run build", scripts)
 
+    def test_report_action_continues_when_openai_fails_after_writing_reports(self) -> None:
+        report = load_gha(WORKFLOWS / "report" / "action.yaml")
+        compare = next(
+            step
+            for step in report["runs"]["steps"]
+            if isinstance(step, dict) and step.get("id") == "compareBuilds"
+        )
+        script = compare.get("run")
+        self.assertIsInstance(script, str)
+        self.assertIn("ber_status=$?", script)
+        self.assertIn("experiment_results_*.csv", script)
+        self.assertIn("experiment_results_summary_gha", script)
+        self.assertIn("continuing so artifacts", script.lower())
+        self.assertRegex(script, r"exit \"?\$ber_status\"?")
+
     def test_deploy_site_chrome_is_manual_and_skips_experiment_json(self) -> None:
         chrome = load_gha(WORKFLOWS / "deploy-site-chrome.yaml")
         self.assertIn("workflow_dispatch", chrome["on"])
