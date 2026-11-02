@@ -69,7 +69,41 @@ This workflow executes Gradle tasks across two specified variants (branches) wit
       - `remote task cache + dependencies cache`: Combines remote task caching with dependency caching.
       - `remote task cache - transforms cache`: Caches task outputs remotely, excluding transforms cache.
       - `remote task cache + dependencies cache - transforms cache`: Combines remote task, dependency caching, and excludes transforms.
-      
+
+  - `configuration_cache`:
+    - **Description**: Controls Gradle configuration cache usage independently of the selected task/dependency cache mode. In the standard experiment workflow, the seed job primes `.gradle/configuration-cache` with the same Gradle start parameters used by execution jobs, then saves it plus configured included-build outputs with a variant-specific key. Execution jobs restore that entry before running. In the Gradle Profiler workflow, the option is added to the generated scenario so profiler warmups and iterations can reuse the configuration cache in the same checkout.
+    - **Type**: `choice`
+    - **Default**: `off`
+    - **Options**:
+      - `off`: Do not pass configuration-cache arguments; target repository defaults still apply.
+      - `disabled`: Pass `--no-configuration-cache -Dorg.gradle.unsafe.isolated-projects=false` to force configuration cache off even when the target repository enables Isolated Projects in `gradle.properties`.
+      - `on`: Pass `--configuration-cache` and save/restore the explicit configuration-cache entry bundle in the standard workflow.
+      - `on-no-entry`: Pass `--configuration-cache` without saving or restoring the explicit configuration-cache entry bundle.
+      - `warn`: Pass `--configuration-cache --configuration-cache-problems=warn` and save/restore the explicit configuration-cache entry bundle in the standard workflow.
+      - `warn-no-entry`: Pass `--configuration-cache --configuration-cache-problems=warn` without saving or restoring the explicit configuration-cache entry bundle.
+      - `read-only`: Restore the explicit configuration-cache entry bundle in execution jobs and run with `--configuration-cache -Dorg.gradle.configuration-cache.read-only=true`. The seed job still primes that bundle with writable `--configuration-cache` so a stored entry exists.
+      - `read-only-no-entry`: Pass `--configuration-cache -Dorg.gradle.configuration-cache.read-only=true` without restoring the explicit configuration-cache entry bundle. Seed still primes with writable `--configuration-cache`.
+    - **Entry behavior**: The explicit configuration-cache entry bundle is `.gradle/configuration-cache`, Gradle User Home `init.d`, and configured included-build `build` directories. It is shared by configuration cache and Isolated Projects. If either selected feature value ends in `-no-entry`, or the experiment `mode` is `no caching`, the standard workflow skips saving and restoring that bundle. Execution jobs fail if the restore misses or Gradle does not reuse the restored entry.
+
+  - `project_isolation`:
+    - **Description**: Controls Gradle Isolated Projects independently of the selected task/dependency cache mode. Values without `-no-entry` save/restore the explicit configuration-cache entry bundle in the standard workflow because Isolated Projects requires configuration cache.
+    - **Type**: `choice`
+    - **Default**: `off`
+    - **Options**:
+      - `off`: Do not pass Isolated Projects arguments; target repository defaults still apply.
+      - `on`: Pass `--isolated-projects` and save/restore the explicit configuration-cache entry bundle in the standard workflow.
+      - `on-no-entry`: Pass `--isolated-projects` without saving or restoring the explicit configuration-cache entry bundle.
+      - `diagnostics`: Pass `--isolated-projects -Dorg.gradle.unsafe.isolated-projects.diagnostics=true` and save/restore the explicit configuration-cache entry bundle in the standard workflow.
+      - `diagnostics-no-entry`: Pass `--isolated-projects -Dorg.gradle.unsafe.isolated-projects.diagnostics=true` without saving or restoring the explicit configuration-cache entry bundle.
+
+  - `configuration_cache_included_builds`:
+    - **Description**: Comma-separated included build paths whose `build` directories are saved and restored with the configuration cache. This is needed when a restored configuration-cache entry references compiled included-build outputs, such as `build-logic/build` or `build-logic/convention/build`. Paths must be relative to the project workspace. Shell metacharacters, `..`, and absolute paths are rejected.
+    - **Default**: `buildSrc,build-logic,build-logic/*`
+
+  - `GRADLE_ENCRYPTION_KEY` (repository secret):
+    - **Purpose**: Stable Gradle configuration-cache encryption key shared by seed and execution jobs.
+    - **When Needed**: Required when `configuration_cache` or `project_isolation` is enabled. Gradle encrypts configuration-cache entries; without the same key, execution jobs cannot reuse the seeded entry.
+
   - `os_args`:
     - **Description**: Defines the operating system settings for each variant, specifying which OS image to use during workflow execution. This is useful for testing builds across different environments.
     - **Type**: `string`
@@ -135,6 +169,12 @@ Instead of using agents based on experiment iterations, the Gradle Profiler expe
     - **Description**: Number of iterations for the experiment.
     - **Required**: `false`
     - **Default**: `5`
+  - `configuration_cache`:
+    - **Description**: Controls Gradle configuration cache usage for the generated Gradle Profiler scenario. Use `on` for strict configuration-cache execution, `warn` while evaluating projects with remaining incompatibilities, or `disabled` to force configuration cache off even when the target repository enables Isolated Projects. `*-no-entry` and `read-only` are rejected: profiler warmups and measured iterations share one checkout and one `gradle-args` list, so those modes cannot match the standard workflow.
+    - **Type**: `choice`
+    - **Required**: `false`
+    - **Default**: `off`
+    - **Options**: `off`, `disabled`, `on`, `warn`
   - `os_args`:
     - **Description**: Operating system configurations for variants.
     - **Type**: `string`
@@ -199,6 +239,10 @@ To use these workflows, ensure the following prerequisites are met:
    - **`CI_URL_CACHE_NODE`**:
      - **Purpose**: URL of your remote build cache node (e.g., a Gradle Build Cache node or a Develocity remote cache node URL).
      - **When Needed**: Optional. Used by the workflows if your experiment `mode` involves remote caching (e.g., `remote task cache`, `remote task cache + dependencies cache`). This enables experiments to leverage a shared remote cache.
+
+   - **`GRADLE_ENCRYPTION_KEY`**:
+     - **Purpose**: Stable key Gradle uses to encrypt configuration-cache entries.
+     - **When Needed**: Required when `configuration_cache` or `project_isolation` is enabled. Seed and execution jobs must share the same key so restored entries can be decrypted. Generate a long random value and store it as a repository secret; do not rotate it between the seed job and later execution jobs of the same run.
 
 ## Usage
 
