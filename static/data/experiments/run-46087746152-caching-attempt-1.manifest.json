@@ -1,0 +1,14 @@
+{
+  "report_id": "run-46087746152-caching-attempt-1",
+  "schema_version": "1.0.0",
+  "files": {
+    "json": "data/experiments/run-46087746152-caching-attempt-1.json.gz",
+    "viewer": "experiments/run-46087746152-caching-attempt-1/index.html",
+    "legacy_html": "reports/experiment_results_20261128010626.html",
+    "legacy_csv": "reports/experiment_results_20261128010626.csv"
+  },
+  "checksums": {
+    "json": "a4cca093196323728211ed6f21f5591335ecda5beb841170d5977b8c27f6aa5a",
+    "legacy_html": "2e064410c598cac3b2b06091b544d7d48aacc0bf38cd5b43d1d9617f10278c4a"
+  }
+}
